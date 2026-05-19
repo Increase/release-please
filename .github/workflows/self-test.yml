@@ -1,0 +1,37 @@
+name: self-test
+# Exercises the JS action against this very repository via `uses: ./`. We never
+# want this to run on push (no accidental release PRs against the fork), so the
+# trigger is workflow_dispatch only.
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Which subcommand to run (release-pr, github-release, both).'
+        default: 'release-pr'
+        type: choice
+        options:
+          - release-pr
+          - github-release
+          - both
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - id: release_please
+        uses: ./
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          command: ${{ inputs.command }}
+
+      - name: Print outputs
+        env:
+          OUTPUTS: ${{ toJson(steps.release_please.outputs) }}
+        run: |
+          echo "$OUTPUTS"
