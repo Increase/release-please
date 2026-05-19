@@ -23,9 +23,15 @@ export default defineConfig({
     },
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
+      reporter: ['text-summary', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['src/**/*.d.ts'],
+      exclude: ['src/**/*.d.ts', 'src/bin/**', 'src/main.ts'],
+      thresholds: {
+        lines: 85,
+        functions: 90,
+        branches: 78,
+        statements: 85,
+      },
     },
   },
   ssr: {

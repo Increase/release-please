@@ -21,6 +21,7 @@
     "fix": "biome check --write",
     "start": "node ./build/src/bin/release-please.js",
     "test": "ENVIRONMENT=test vitest run",
+    "test:coverage": "ENVIRONMENT=test vitest run --coverage",
     "test:snapshot": "ENVIRONMENT=test vitest run -u",
     "build:action": "ncc build src/main.ts -o dist --source-map --license licenses.txt --target es2022 --no-cache && node -e \"require('fs').rmSync('dist/src',{recursive:true,force:true});require('fs').rmSync('dist/test',{recursive:true,force:true})\""
   },
