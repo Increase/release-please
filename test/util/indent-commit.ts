@@ -11,14 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {indentCommit} from '../../src/util/indent-commit';
-import {describe, it} from 'mocha';
-import snapshot = require('snap-shot-it');
-
 describe('indentCommit', () => {
   it('handles carriage return', () => {
-    snapshot(
+    expect(
       indentCommit({
         message: `feat: my awesome commit message\r
 * testing one line\r
@@ -30,7 +28,7 @@ describe('indentCommit', () => {
   });
 
   it('only adds lines prefixed with * to CHANGELOG', () => {
-    snapshot(
+    expect(
       indentCommit({
         message: `feat: my awesome commit message
 
@@ -45,7 +43,7 @@ describe('indentCommit', () => {
   });
 
   it('handles multiple lines of multi-line text', () => {
-    snapshot(
+    expect(
       indentCommit({
         message: `feat: my awesome commit message
 * testing one line

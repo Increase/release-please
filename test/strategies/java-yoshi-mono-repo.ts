@@ -11,12 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
+import {FileNotFoundError} from '../../src/errors';
 import {JavaYoshiMonoRepo} from '../../src/strategies/java-yoshi-mono-repo';
-import * as sinon from 'sinon';
 import {
   buildGitHubFileContent,
   assertHasUpdate,
@@ -30,9 +29,6 @@ import {JavaUpdate} from '../../src/updaters/java/java-update';
 import {VersionsManifest} from '../../src/updaters/java/versions-manifest';
 import {CompositeUpdater} from '../../src/updaters/composite';
 
-import snapshot = require('snap-shot-it');
-
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/java-yoshi';
 
 const COMMITS = [
@@ -51,6 +47,42 @@ const UUID_REGEX =
 const ISO_DATE_REGEX =
   /[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z/g; // 2023-01-05T16:42:33.446Z
 
+type GetFileContentsConfig = {
+  versions?: string;
+  changelog?: 'present' | 'absent';
+  repoMetadataPaths?: string[];
+};
+
+function configureGetFileContents(
+  github: GitHub,
+  config: GetFileContentsConfig = {}
+) {
+  const versionsFile = config.versions ?? 'versions.txt';
+  const repoMetadataPaths = new Set(
+    config.repoMetadataPaths ?? ['.repo-metadata.json']
+  );
+  vi.spyOn(github, 'getFileContentsOnBranch').mockImplementation(
+    async (path: string, branch: string) => {
+      if (branch !== 'main') {
+        throw new FileNotFoundError(path);
+      }
+      if (path === 'versions.txt') {
+        return buildGitHubFileContent(fixturesPath, versionsFile);
+      }
+      if (path === 'changelog.json') {
+        if (config.changelog === 'absent') {
+          throw new FileNotFoundError(path);
+        }
+        return buildGitHubFileContent(fixturesPath, 'changelog.json');
+      }
+      if (repoMetadataPaths.has(path)) {
+        return buildGitHubFileContent(fixturesPath, '.repo-metadata.json');
+      }
+      throw new FileNotFoundError(path);
+    }
+  );
+}
+
 describe('JavaYoshiMonoRepo', () => {
   let github: GitHub;
   beforeEach(async () => {
@@ -59,11 +91,10 @@ describe('JavaYoshiMonoRepo', () => {
       repo: 'java-yoshi-test-repo',
       defaultBranch: 'main',
     });
+    vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+    configureGetFileContents(github);
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new JavaYoshiMonoRepo({
@@ -71,14 +102,8 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {changelog: 'absent'});
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -93,14 +118,7 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -119,16 +137,8 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(
-          buildGitHubFileContent(fixturesPath, 'versions-released.txt')
-        );
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {versions: 'versions-released.txt'});
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -152,19 +162,10 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(
-          buildGitHubFileContent(
-            fixturesPath,
-            'versions-with-beta-artifacts.txt'
-          )
-        );
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {
+        versions: 'versions-with-beta-artifacts.txt',
+      });
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -196,14 +197,7 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -220,26 +214,19 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByFilenameAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByFilenameAndRef');
       findFilesStub
         .withArgs('pom.xml', 'main', '.')
-        .resolves(['path1/pom.xml', 'path2/pom.xml']);
+        .mockResolvedValue(['path1/pom.xml', 'path2/pom.xml']);
       findFilesStub
         .withArgs('build.gradle', 'main', '.')
-        .resolves(['path1/build.gradle', 'path2/build.gradle']);
+        .mockResolvedValue(['path1/build.gradle', 'path2/build.gradle']);
       findFilesStub
         .withArgs('dependencies.properties', 'main', '.')
-        .resolves(['dependencies.properties']);
+        .mockResolvedValue(['dependencies.properties']);
       findFilesStub
         .withArgs('README.md', 'main', '.')
-        .resolves(['path1/README.md', 'path2/README.md']);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(['path1/README.md', 'path2/README.md']);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -269,14 +256,7 @@ describe('JavaYoshiMonoRepo', () => {
         component: 'google-cloud-automl',
         extraFiles: ['foo/bar.java', 'src/version.java'],
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -295,28 +275,20 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByFilenameAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByFilenameAndRef');
       findFilesStub
         .withArgs('pom.xml', 'main', '.')
-        .resolves(['path1/pom.xml', 'path2/pom.xml']);
+        .mockResolvedValue(['path1/pom.xml', 'path2/pom.xml']);
       findFilesStub
         .withArgs('build.gradle', 'main', '.')
-        .resolves(['path1/build.gradle', 'path2/build.gradle']);
+        .mockResolvedValue(['path1/build.gradle', 'path2/build.gradle']);
       findFilesStub
         .withArgs('dependencies.properties', 'main', '.')
-        .resolves(['dependencies.properties']);
+        .mockResolvedValue(['dependencies.properties']);
       findFilesStub
         .withArgs('README.md', 'main', '.')
-        .resolves(['path1/README.md', 'path2/README.md']);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(
-          buildGitHubFileContent(fixturesPath, 'versions-released.txt')
-        );
+        .mockResolvedValue(['path1/README.md', 'path2/README.md']);
+      configureGetFileContents(github, {versions: 'versions-released.txt'});
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -345,20 +317,10 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
-      getFileContentsStub
-        .withArgs('foo/.repo-metadata.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, '.repo-metadata.json'));
-      getFileContentsStub
-        .withArgs('changelog.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'changelog.json'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {
+        repoMetadataPaths: ['foo/.repo-metadata.json'],
+      });
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -375,7 +337,7 @@ describe('JavaYoshiMonoRepo', () => {
       const newContent = update.updater.updateContent(
         JSON.stringify({entries: []})
       );
-      snapshot(
+      expect(
         newContent
           .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
           .replace(UUID_REGEX, 'abc-123-efd-qwerty')
@@ -405,20 +367,10 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
-      getFileContentsStub
-        .withArgs('foo/.repo-metadata.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, '.repo-metadata.json'));
-      getFileContentsStub
-        .withArgs('changelog.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'changelog.json'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {
+        repoMetadataPaths: ['foo/.repo-metadata.json'],
+      });
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -435,7 +387,7 @@ describe('JavaYoshiMonoRepo', () => {
       const newContent = update.updater.updateContent(
         JSON.stringify({entries: []})
       );
-      snapshot(
+      expect(
         newContent
           .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
           .replace(UUID_REGEX, 'abc-123-efd-qwerty')
@@ -459,17 +411,8 @@ describe('JavaYoshiMonoRepo', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
-        github,
-        'getFileContentsOnBranch'
-      );
-      getFileContentsStub
-        .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
-      getFileContentsStub
-        .withArgs('changelog.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'changelog.json'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      configureGetFileContents(github, {repoMetadataPaths: []});
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -486,7 +429,7 @@ describe('JavaYoshiMonoRepo', () => {
       const newContent = update.updater.updateContent(
         JSON.stringify({entries: []})
       );
-      snapshot(
+      expect(
         newContent
           .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
           .replace(UUID_REGEX, 'abc-123-efd-qwerty')

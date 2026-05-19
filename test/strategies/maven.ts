@@ -11,10 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {afterEach, beforeEach, describe, it} from 'mocha';
 import {GitHub} from '../../src';
-import * as sinon from 'sinon';
 import {
   assertHasUpdate,
   assertHasUpdates,
@@ -27,10 +26,6 @@ import {Maven} from '../../src/strategies/maven';
 import {PomXml} from '../../src/updaters/java/pom-xml';
 import {TagName} from '../../src/util/tag-name';
 import {Version} from '../../src/version';
-import {expect} from 'chai';
-
-const sandbox = sinon.createSandbox();
-
 const COMMITS = [
   ...buildMockConventionalCommit('fix(deps): update dependency'),
   ...buildMockConventionalCommit('chore: update common templates'),
@@ -44,11 +39,11 @@ describe('Maven', () => {
       repo: 'maven-test-repo',
       defaultBranch: 'main',
     });
+    vi.spyOn(github, 'getFileContentsOnBranch').mockRejectedValue(
+      Object.assign(new Error('not found'), {status: 404})
+    );
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('updates pom.xml files', async () => {
       const strategy = new Maven({
         targetBranch: 'main',
@@ -56,10 +51,10 @@ describe('Maven', () => {
         extraFiles: ['foo/bar.java'],
       });
 
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
-        .withArgs('pom.xml', 'main')
-        .resolves(['pom.xml', 'submodule/pom.xml']);
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
+        .withArgs('pom.xml', 'main', '.')
+        .mockResolvedValue(['pom.xml', 'submodule/pom.xml']);
 
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -88,10 +83,13 @@ describe('Maven', () => {
         extraFiles: ['foo/bar.java'],
       });
 
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
-        .withArgs('pom.xml', 'main')
-        .resolves(['pom.xml', 'submodule/pom.xml']);
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
+        .withArgs('pom.xml', 'main', '.')
+        .mockResolvedValue(['pom.xml', 'submodule/pom.xml']);
+      vi.spyOn(github, 'getFileContentsOnBranch').mockRejectedValue(
+        Object.assign(new Error('not found'), {status: 404})
+      );
 
       const latestRelease = {
         tag: new TagName(Version.parse('2.3.3')),

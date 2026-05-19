@@ -1,0 +1,1919 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CargoWorkspace plugin > run > appends dependency notes to an updated module 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgB",
+            "notes": "### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgE",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgB"
+version = "2.2.3"
+
+[dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgC"
+version = "3.3.4"
+
+[dependencies]
+pkgB = { version = "2.2.3", path = "../pkgB" }
+rustls = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgE"
+version = "3.3.4"
+
+[dependencies]
+
+[target.'cfg(foobar)'.dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "packages/rustC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "packages/rustE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "pkgB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "pkgC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "pkgE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > appends dependency notes to an updated module 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 1.1.2</summary>
+
+Release notes for path: packages/rustA, releaseType: rust
+</details>
+
+<details><summary>@here/pkgB: 2.2.3</summary>
+
+### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+</details>
+
+<details><summary>pkgC: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3
+</details>
+
+<details><summary>pkgE: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": "packages/rustA",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": undefined,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "cachedFileContents": {
+            "content": "W3BhY2thZ2VdCm5hbWUgPSAicGtnQSIKdmVyc2lvbiA9ICIxLjEuMSIKCltkZXBlbmRlbmNpZXNdCnRyYWNpbmcgPSAiMS4wLjAi",
+            "mode": "100644",
+            "parsedContent": "[package]
+name = "pkgA"
+version = "1.1.1"
+
+[dependencies]
+tracing = "1.0.0"",
+            "sha": "d912fe67a3f44efd61ebd88362c0e366",
+          },
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+            "versionsMap": Map {
+              "packages/rustB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "packages/rustC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "packages/rustE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "pkgB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "pkgC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "pkgD" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+              "pkgE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 2,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": "packages/rustB",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "pkgB",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgB"
+version = "2.2.3"
+
+[dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+      ],
+      "version": Version {
+        "build": undefined,
+        "major": 2,
+        "minor": 2,
+        "patch": 3,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": "packages/rustC",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgC"
+version = "3.3.4"
+
+[dependencies]
+pkgB = { version = "2.2.3", path = "../pkgB" }
+rustls = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+      ],
+      "version": Version {
+        "build": undefined,
+        "major": 3,
+        "minor": 3,
+        "patch": 4,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": "packages/rustD",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: packages/rustD, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": undefined,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "cachedFileContents": {
+            "content": "W3BhY2thZ2VdCm5hbWUgPSAicGtnRCIKdmVyc2lvbiA9ICIxLjIuMyIKCltkZXBlbmRlbmNpZXNdCnRyYWNpbmcgPSAiMS4wLjAi",
+            "mode": "100644",
+            "parsedContent": "[package]
+name = "pkgD"
+version = "1.2.3"
+
+[dependencies]
+tracing = "1.0.0"",
+            "sha": "ec62f78352a4326a39f00ae4688a21df",
+          },
+          "createIfMissing": false,
+          "path": "packages/rustD/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgD"
+version = "4.4.5"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+      ],
+      "version": Version {
+        "build": undefined,
+        "major": 4,
+        "minor": 4,
+        "patch": 5,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": "packages/rustE",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "pkgE",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgE"
+version = "3.3.4"
+
+[dependencies]
+
+[target.'cfg(foobar)'.dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+      ],
+      "version": Version {
+        "build": undefined,
+        "major": 3,
+        "minor": 3,
+        "patch": 4,
+        "preRelease": undefined,
+      },
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+Release notes for path: packages/rustA, releaseType: rust
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 4`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 5`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+Release notes for path: packages/rustD, releaseType: rust
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > can skip merging rust packages 6`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > combines rust packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: packages/rustD, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustD/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgD"
+version = "4.4.5"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "pkgD" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > combines rust packages 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 1.1.2</summary>
+
+Release notes for path: packages/rustA, releaseType: rust
+</details>
+
+<details><summary>@here/pkgD: 4.4.5</summary>
+
+Release notes for path: packages/rustD, releaseType: rust
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > handles a single rust package 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "python",
+    },
+    "path": "python",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": undefined,
+            "notes": "Release notes for path: python, releaseType: python",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": undefined,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 0,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > handles a single rust package 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkgA: 1.1.2</summary>
+
+Release notes for path: packages/rustA, releaseType: rust
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > handles glob paths 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: packages/rustD, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustD/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgD"
+version = "4.4.5"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "pkgD" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > handles glob paths 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 1.1.2</summary>
+
+Release notes for path: packages/rustA, releaseType: rust
+</details>
+
+<details><summary>@here/pkgD: 4.4.5</summary>
+
+Release notes for path: packages/rustD, releaseType: rust
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > skips component if not touched 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "pkgB",
+            "notes": "Release notes for path: packages/rustB, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 3,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.3.0",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgB"
+version = "2.3.0"
+
+[dependencies]
+pkgA = { version = "1.1.1", path = "../pkgA" }
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgC"
+version = "3.3.4"
+
+[dependencies]
+pkgB = { version = "2.3.0", path = "../pkgB" }
+rustls = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.3.0",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "packages/rustC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 3,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "pkgC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > skips component if not touched 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkgB: 2.3.0</summary>
+
+Release notes for path: packages/rustB, releaseType: rust
+</details>
+
+<details><summary>pkgC: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.3.0
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`CargoWorkspace plugin > run > walks dependency tree and updates previously untouched packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "rust",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: packages/rustA, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgB",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: packages/rustD, releaseType: rust",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "pkgE",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "packages/rustA/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgA"
+version = "1.1.2"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgB"
+version = "2.2.3"
+
+[dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustB/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgC"
+version = "3.3.4"
+
+[dependencies]
+pkgB = { version = "2.2.3", path = "../pkgB" }
+rustls = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustC/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustD/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgD"
+version = "4.4.5"
+
+[dependencies]
+tracing = "1.0.0"",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/Cargo.toml",
+          "updater": RawContent {
+            "rawContent": "[package]
+name = "pkgE"
+version = "3.3.4"
+
+[dependencies]
+
+[target.'cfg(foobar)'.dependencies]
+pkgA = { version = "1.1.2", path = "../pkgA" }",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "packages/rustE/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "packages/rustB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "packages/rustC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "packages/rustE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "Cargo.lock",
+          "updater": CargoLock {
+            "versionsMap": Map {
+              "pkgA" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "pkgB" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "pkgC" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "pkgD" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+              "pkgE" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`CargoWorkspace plugin > run > walks dependency tree and updates previously untouched packages 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 1.1.2</summary>
+
+Release notes for path: packages/rustA, releaseType: rust
+</details>
+
+<details><summary>pkgB: 2.2.3</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+</details>
+
+<details><summary>pkgC: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgB bumped from 2.2.2 to 2.2.3
+</details>
+
+<details><summary>@here/pkgD: 4.4.5</summary>
+
+Release notes for path: packages/rustD, releaseType: rust
+</details>
+
+<details><summary>pkgE: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.1.1 to 1.1.2
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;

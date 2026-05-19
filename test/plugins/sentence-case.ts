@@ -11,10 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {describe, it} from 'mocha';
+import {describe, it, expect, beforeEach} from 'vitest';
 import {SentenceCase} from '../../src/plugins/sentence-case';
-import {expect} from 'chai';
-
 import {GitHub} from '../../src/github';
 import {buildMockConventionalCommit} from '../helpers';
 import {DEFAULT_RELEASE_PLEASE_MANIFEST} from '../../src/manifest';

@@ -11,10 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import {describe, it} from 'mocha';
-
-import {expect} from 'chai';
 import {parseConventionalCommits, ConventionalCommit} from '../src/commit';
 import {buildCommitFromFixture, buildMockCommit} from './helpers';
 
@@ -26,7 +24,7 @@ describe('parseConventionalCommits', () => {
       buildMockCommit('docs: some documentation'),
     ];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(3);
+    expect(conventionalCommits).lengthOf(3).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.equal('feat');
     expect(conventionalCommits[0].scope).is.null;
     expect(conventionalCommits[1].type).to.equal('fix');
@@ -38,11 +36,11 @@ describe('parseConventionalCommits', () => {
   it('can parse a breaking change', async () => {
     const commits = [buildMockCommit('fix!: some breaking fix')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.equal('fix');
     expect(conventionalCommits[0].scope).is.null;
     expect(conventionalCommits[0].breaking).to.be.true;
-    expect(conventionalCommits[0].notes).lengthOf(1);
+    expect(conventionalCommits[0].notes).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].notes[0].title).to.equal('BREAKING CHANGE');
     expect(conventionalCommits[0].notes[0].text).to.equal('some breaking fix');
   });
@@ -50,7 +48,7 @@ describe('parseConventionalCommits', () => {
   it('can parse multiple commit messages from a single commit', async () => {
     const commits = [buildCommitFromFixture('multiple-messages')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(2);
+    expect(conventionalCommits).lengthOf(2).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.equal('fix');
     expect(conventionalCommits[0].scope).is.null;
     expect(conventionalCommits[1].type).to.equal('feat');
@@ -60,10 +58,10 @@ describe('parseConventionalCommits', () => {
   it('handles BREAKING CHANGE body', async () => {
     const commits = [buildCommitFromFixture('breaking-body')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.eql('feat');
     expect(conventionalCommits[0].breaking).to.be.true;
-    expect(conventionalCommits[0].notes).lengthOf(1);
+    expect(conventionalCommits[0].notes).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].notes[0].title).to.eql('BREAKING CHANGE');
     expect(conventionalCommits[0].notes[0].text).to.eql(
       'this is actually a breaking change'
@@ -73,10 +71,10 @@ describe('parseConventionalCommits', () => {
   it('links bugs', async () => {
     const commits = [buildCommitFromFixture('bug-link')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.eql('fix');
     expect(conventionalCommits[0].breaking).to.be.false;
-    expect(conventionalCommits[0].references).lengthOf(1);
+    expect(conventionalCommits[0].references).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].references[0].prefix).to.eql('#');
     expect(conventionalCommits[0].references[0].issue).to.eql('123');
     expect(conventionalCommits[0].references[0].action).to.eql('Fixes');
@@ -93,7 +91,7 @@ describe('parseConventionalCommits', () => {
     expect(mainCommit).to.not.be.undefined;
     expect(mainCommit!.type).to.eql('fix');
     expect(mainCommit!.breaking).to.be.true;
-    expect(mainCommit!.notes).lengthOf(1);
+    expect(mainCommit!.notes).lengthOf(1).toMatchSnapshot();
     expect(mainCommit!.notes[0].title).to.eql('BREAKING CHANGE');
     expect(mainCommit!.notes[0].text).to.eql(
       'this is actually a breaking change'
@@ -129,27 +127,27 @@ describe('parseConventionalCommits', () => {
   it('includes multi-line breaking changes', async () => {
     const commits = [buildCommitFromFixture('multi-line-breaking-body')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].breaking).to.be.true;
-    expect(conventionalCommits[0].notes).lengthOf(1);
-    expect(conventionalCommits[0].notes[0].text).includes('second line');
-    expect(conventionalCommits[0].notes[0].text).includes('third line');
+    expect(conventionalCommits[0].notes).lengthOf(1).toMatchSnapshot();
+    expect(conventionalCommits[0].notes[0].text).includes('second line').toMatchSnapshot();
+    expect(conventionalCommits[0].notes[0].text).includes('third line').toMatchSnapshot();
   });
 
   it('supports additional markdown for breaking change, if prefixed with list', async () => {
     const commits = [buildCommitFromFixture('multi-line-breaking-body-list')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].breaking).to.be.true;
-    expect(conventionalCommits[0].notes).lengthOf(1);
-    expect(conventionalCommits[0].notes[0].text).includes('deleted API foo');
-    expect(conventionalCommits[0].notes[0].text).includes('deleted API bar');
+    expect(conventionalCommits[0].notes).lengthOf(1).toMatchSnapshot();
+    expect(conventionalCommits[0].notes[0].text).includes('deleted API foo').toMatchSnapshot();
+    expect(conventionalCommits[0].notes[0].text).includes('deleted API bar').toMatchSnapshot();
   });
 
   it('does not include content two newlines after BREAKING CHANGE', async () => {
     const commits = [buildCommitFromFixture('breaking-body-content-after')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].breaking).to.be.true;
     expect(conventionalCommits[0].message).not.include('I should be removed');
   });
@@ -158,7 +156,7 @@ describe('parseConventionalCommits', () => {
   it('removes content before and after BREAKING CHANGE in body', async () => {
     const commits = [buildCommitFromFixture('1257-breaking-change')];
     const conventionalCommits = parseConventionalCommits(commits);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].breaking).to.be.true;
     expect(conventionalCommits[0].notes[0].text).to.equal('my comment');
   });
@@ -171,7 +169,7 @@ describe('parseConventionalCommits', () => {
     );
     expect(metaCommit).to.not.be.undefined;
     expect(metaCommit!.breaking).to.be.false;
-    expect(metaCommit!.notes).lengthOf(1);
+    expect(metaCommit!.notes).lengthOf(1).toMatchSnapshot();
     expect(metaCommit!.notes[0].title).to.eql('RELEASE AS');
     expect(metaCommit!.notes[0].text).to.eql('v3.0.0');
   });
@@ -190,7 +188,7 @@ describe('parseConventionalCommits', () => {
     };
 
     const conventionalCommits = parseConventionalCommits([commit]);
-    expect(conventionalCommits).lengthOf(1);
+    expect(conventionalCommits).lengthOf(1).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.eql('fix');
     expect(conventionalCommits[0].bareMessage).to.eql('some fix');
   });
@@ -210,7 +208,7 @@ describe('parseConventionalCommits', () => {
     };
 
     const conventionalCommits = parseConventionalCommits([commit]);
-    expect(conventionalCommits).lengthOf(2);
+    expect(conventionalCommits).lengthOf(2).toMatchSnapshot();
     expect(conventionalCommits[0].type).to.eql('feat');
     expect(conventionalCommits[0].bareMessage).to.eql('another feature');
     expect(conventionalCommits[1].type).to.eql('fix');

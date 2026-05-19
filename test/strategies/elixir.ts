@@ -11,22 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {Elixir} from '../../src/strategies/elixir';
 import {buildMockConventionalCommit, assertHasUpdate} from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {Changelog} from '../../src/updaters/changelog';
 import {ElixirMixExs} from '../../src/updaters/elixir/elixir-mix-exs';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
-
 describe('Elixir', () => {
   let github: GitHub;
   const commits = [
@@ -41,10 +37,7 @@ describe('Elixir', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Elixir({
@@ -52,7 +45,7 @@ describe('Elixir', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,

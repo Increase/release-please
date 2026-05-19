@@ -11,12 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {CompositeUpdater, mergeUpdates} from '../../src/updaters/composite';
 import {JavaUpdate} from '../../src/updaters/java/java-update';
 import {Version} from '../../src/version';
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {Updater} from '../../src/update';
 import {assertHasUpdate} from '../helpers';
 
@@ -77,7 +76,7 @@ describe('CompositeUpdater', () => {
         },
       ];
       const merged = mergeUpdates(input);
-      expect(merged).lengthOf(2);
+      expect(merged).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(merged, 'path1', CompositeUpdater);
       assertHasUpdate(merged, 'path2', FakeUpdater);
     });
@@ -105,7 +104,7 @@ describe('CompositeUpdater', () => {
         },
       ];
       const merged = mergeUpdates(input);
-      expect(merged).lengthOf(4);
+      expect(merged).lengthOf(4).toMatchSnapshot();
       assertHasUpdate(merged, 'path1', FakeUpdater);
       assertHasUpdate(merged, 'path2', FakeUpdater);
       assertHasUpdate(merged, 'path3', FakeUpdater);

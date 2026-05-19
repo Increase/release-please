@@ -11,12 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, beforeEach} from 'mocha';
-import {expect} from 'chai';
-import nock = require('nock');
-import * as sinon from 'sinon';
-import snapshot = require('snap-shot-it');
+import nock from '../http-mock';
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
 import {GitHub} from '../../src';
@@ -29,7 +26,6 @@ import {PullRequestTitle} from '../../src/util/pull-request-title';
 import {buildGitHubFileRaw} from '../helpers';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/release-notes';
 
 describe('FilePullRequestOverflowHandler', () => {
@@ -43,10 +39,7 @@ describe('FilePullRequestOverflowHandler', () => {
     });
     overflowHandler = new FilePullRequestOverflowHandler(github);
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('handleOverflow', () => {
+    describe('handleOverflow', () => {
     const data = [];
     for (let i = 0; i < 10; i++) {
       data.push({
@@ -55,9 +48,9 @@ describe('FilePullRequestOverflowHandler', () => {
     }
     const body = new PullRequestBody(data);
     it('writes large pull request body contents to a file', async () => {
-      const createFileStub = sandbox
-        .stub(github, 'createFileOnNewBranch')
-        .resolves(
+      const createFileStub = vi
+        .spyOn(github, 'createFileOnNewBranch')
+        .mockResolvedValue(
           'https://github.com/test-owner/test-repo/blob/my-head-branch--release-notes/release-notes.md'
         );
       const newContents = await overflowHandler.handleOverflow(
@@ -73,8 +66,8 @@ describe('FilePullRequestOverflowHandler', () => {
         'next',
         50
       );
-      snapshot(newContents);
-      sinon.assert.calledOnce(createFileStub);
+      expect(newContents).toMatchSnapshot();
+      expect(createFileStub).to.have.been.calledOnce;
     });
     it('ignores small pull request body contents', async () => {
       const newContents = await overflowHandler.handleOverflow(
@@ -102,10 +95,10 @@ describe('FilePullRequestOverflowHandler', () => {
         resolve(fixturesPath, './multiple.txt'),
         'utf8'
       );
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-notes.md', 'my-head-branch--release-notes')
-        .resolves(buildGitHubFileRaw(overflowBody));
+        .mockResolvedValue(buildGitHubFileRaw(overflowBody));
       const pullRequestBody = await overflowHandler.parseOverflow({
         title: 'chore: release main',
         body,
@@ -116,7 +109,7 @@ describe('FilePullRequestOverflowHandler', () => {
         files: [],
       });
       expect(pullRequestBody).to.not.be.undefined;
-      snapshot(pullRequestBody!.toString());
+      expect(pullRequestBody!.toString()).toMatchSnapshot();
     });
     it('ignores small pull request body contents', async () => {
       const body = readFileSync(
@@ -133,7 +126,7 @@ describe('FilePullRequestOverflowHandler', () => {
         files: [],
       });
       expect(pullRequestBody).to.not.be.undefined;
-      snapshot(pullRequestBody!.toString());
+      expect(pullRequestBody!.toString()).toMatchSnapshot();
     });
   });
 });

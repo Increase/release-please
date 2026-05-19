@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {GemfileLock} from '../../src/updaters/ruby/gemfile-lock';
 import {Version} from '../../src/version';
 
@@ -75,7 +73,7 @@ describe('Gemfile.lock', () => {
         gemName: '',
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates version in Gemfile.lock', async () => {
@@ -88,7 +86,7 @@ describe('Gemfile.lock', () => {
         gemName: 'foo',
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates prerelease in Gemfile.lock', async () => {
@@ -101,7 +99,7 @@ describe('Gemfile.lock', () => {
         gemName: 'foo',
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

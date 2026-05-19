@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {DotnetYoshi} from '../../src/strategies/dotnet-yoshi';
-import * as sinon from 'sinon';
 import {
   assertHasUpdate,
   safeSnapshot,
@@ -29,7 +27,6 @@ import {Changelog} from '../../src/updaters/changelog';
 import {PullRequestBody} from '../../src/util/pull-request-body';
 import {Apis} from '../../src/updaters/dotnet/apis';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/dotnet-yoshi';
 
 const COMMITS = [
@@ -51,15 +48,12 @@ describe('DotnetYoshi', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     beforeEach(() => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('apis/apis.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'apis.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'apis.json'));
     });
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
@@ -110,17 +104,17 @@ describe('DotnetYoshi', () => {
         path: 'apis/Google.Cloud.SecurityCenter.V1',
         component: 'Google.Cloud.SecurityCenter.V1',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('apis/apis.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'apis.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'apis.json'));
       const latestRelease = undefined;
       const pullRequest = await strategy.buildReleasePullRequest({
         commits: COMMITS,
         latestRelease,
       });
       const updates = pullRequest!.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       const changelogUpdate = assertHasUpdate(
         updates,
         'apis/Google.Cloud.SecurityCenter.V1/docs/history.md',
@@ -136,17 +130,17 @@ describe('DotnetYoshi', () => {
         path: 'apis/Google.Cloud.Spanner.Admin.Database.V1',
         component: 'Google.Cloud.Spanner.Admin.Database.V1',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('apis/apis.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'apis.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'apis.json'));
       const latestRelease = undefined;
       const pullRequest = await strategy.buildReleasePullRequest({
         commits: COMMITS,
         latestRelease,
       });
       const updates = pullRequest!.updates;
-      expect(updates).lengthOf(1);
+      expect(updates).lengthOf(1).toMatchSnapshot();
       assertNoHasUpdate(
         updates,
         'apis/Google.Cloud.SecurityCenter.V1/docs/history.md'

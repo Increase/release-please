@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {VersionsManifest} from '../../src/updaters/java/versions-manifest';
 import {Version} from '../../src/version';
 
@@ -35,7 +34,7 @@ describe('JavaAuthVersions', () => {
         versionsMap: versions,
       });
       const newContent = javaAuthVersions.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates versions.txt appropriately for SNAPSHOT release', async () => {
@@ -53,7 +52,7 @@ describe('JavaAuthVersions', () => {
         versionsMap: versions,
       });
       const newContent = javaAuthVersions.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates multiple versions in versions.txt', async () => {
@@ -72,7 +71,7 @@ describe('JavaAuthVersions', () => {
         version: Version.parse('0.25.0'),
       });
       const newContent = javaAuthVersions.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

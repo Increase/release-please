@@ -1,7 +1,6 @@
+import {describe, it, expect} from 'vitest';
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 import {PythonReadme} from '../../src/updaters/python/python-readme';
 

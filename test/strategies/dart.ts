@@ -11,25 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {Dart} from '../../src/strategies/dart';
 import {
   buildMockConventionalCommit,
   buildGitHubFileContent,
   assertHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {Changelog} from '../../src/updaters/changelog';
 import {PubspecYaml} from '../../src/updaters/dart/pubspec-yaml';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/dart';
 
 describe('Dart', () => {
@@ -41,10 +38,7 @@ describe('Dart', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     const commits = [
       ...buildMockConventionalCommit(
         'fix(deps): update dependency com.google.cloud:google-cloud-storage to v1.120.0'
@@ -58,7 +52,7 @@ describe('Dart', () => {
         component: 'google-cloud-automl',
         packageName: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
@@ -101,13 +95,13 @@ describe('Dart', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('pubspec.yaml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'pubspec.yaml'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'pubspec.yaml'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -138,7 +132,7 @@ describe('Dart', () => {
         latestRelease,
       });
       const updates = pullRequest!.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
       assertHasUpdate(updates, 'pubspec.yaml', PubspecYaml);
     });

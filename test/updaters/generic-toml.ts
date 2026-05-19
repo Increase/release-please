@@ -11,13 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Version} from '../../src/version';
-import {expect, assert} from 'chai';
+import assert from 'node:assert';
 import {GenericToml} from '../../src/updaters/generic-toml';
 
 const fixturesPath = './test/updaters/fixtures';
@@ -34,7 +33,7 @@ describe('GenericToml', () => {
         Version.parse('v2.3.4')
       );
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('updates deep entry in toml', async () => {
       const oldContent = readFileSync(
@@ -46,7 +45,7 @@ describe('GenericToml', () => {
         Version.parse('v2.3.4')
       );
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('ignores non-matching entry', async () => {
       const oldContent = readFileSync(
@@ -87,7 +86,7 @@ describe('GenericToml', () => {
       );
       const newContent = updater.updateContent(oldContent);
       expect(newContent).not.to.eql(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

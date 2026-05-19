@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
-import {expect} from 'chai';
 import {BaseStrategy} from '../../src/strategies/base';
 import {Update} from '../../src/update';
 import {GitHub} from '../../src/github';
 import {PullRequestBody} from '../../src/util/pull-request-body';
-import snapshot = require('snap-shot-it');
 import {
   dateSafe,
   assertHasUpdate,
@@ -31,8 +28,6 @@ import {GenericXml} from '../../src/updaters/generic-xml';
 import {PomXml} from '../../src/updaters/java/pom-xml';
 import {GenericYaml} from '../../src/updaters/generic-yaml';
 import {GenericToml} from '../../src/updaters/generic-toml';
-
-const sandbox = sinon.createSandbox();
 
 class TestStrategy extends BaseStrategy {
   async buildUpdates(): Promise<Update[]> {
@@ -49,10 +44,7 @@ describe('Strategy', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('should ignore empty commits', async () => {
       const strategy = new TestStrategy({
         targetBranch: 'main',
@@ -78,7 +70,7 @@ describe('Strategy', () => {
       });
       expect(pullRequest).to.not.be.undefined;
       expect(pullRequest?.version?.toString()).to.eql('2.3.4');
-      snapshot(dateSafe(pullRequest!.body.toString()));
+      expect(dateSafe(pullRequest!.body.toString())).toMatchSnapshot();
     });
     it('allows overriding initial version in base constructor', async () => {
       const strategy = new TestStrategy({
@@ -93,7 +85,7 @@ describe('Strategy', () => {
       });
       expect(pullRequest).to.not.be.undefined;
       expect(pullRequest?.version?.toString()).to.eql('0.1.0');
-      snapshot(dateSafe(pullRequest!.body.toString()));
+      expect(dateSafe(pullRequest!.body.toString())).toMatchSnapshot();
     });
     it('updates extra files', async () => {
       const strategy = new TestStrategy({
@@ -214,9 +206,9 @@ describe('Strategy', () => {
       assertHasUpdate(updates!, '3.xml', PomXml);
     });
     it('updates extra glob files', async () => {
-      const findFilesStub = sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['3.xml']);
+      const findFilesStub = vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['3.xml']);
       const strategy = new TestStrategy({
         targetBranch: 'main',
         github,
@@ -240,7 +232,7 @@ describe('Strategy', () => {
       expect(updates).to.be.an('array');
       assertHasUpdate(updates!, '0', Generic);
       assertHasUpdate(updates!, '3.xml', GenericXml);
-      sinon.assert.calledOnceWithExactly(findFilesStub, '**/*.xml', 'main');
+      expect(findFilesStub).to.have.been.calledOnceWith('**/*.xml', 'main');
     });
     it('should pass changelogHost to default buildNotes', async () => {
       const strategy = new TestStrategy({
@@ -257,7 +249,7 @@ describe('Strategy', () => {
       expect(pullRequest?.body.toString()).to.have.string(
         'https://example.com'
       );
-      snapshot(dateSafe(pullRequest!.body.toString()));
+      expect(dateSafe(pullRequest!.body.toString())).toMatchSnapshot();
     });
     it('rejects relative extra files', async () => {
       const extraFiles = [

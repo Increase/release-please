@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {GitHub} from '../../../src/github';
 import {Manifest} from '../../../src/manifest';
 import {Update} from '../../../src/update';
@@ -29,12 +28,10 @@ import {
 import {Version} from '../../../src/version';
 import {CargoToml} from '../../../src/updaters/rust/cargo-toml';
 import {parseCargoManifest} from '../../../src/updaters/rust/common';
-import {expect} from 'chai';
 import {Changelog} from '../../../src/updaters/changelog';
 import {ReleasePleaseManifest} from '../../../src/updaters/release-please-manifest';
 import {CompositeUpdater} from '../../../src/updaters/composite';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/cargo-workspace';
 
 export function buildMockPackageUpdate(
@@ -62,17 +59,14 @@ describe('Plugin compatibility', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('linked-versions and workspace', () => {
+    describe('linked-versions and workspace', () => {
     it('should version bump dependencies together', async () => {
       // Scenario:
       //   - package b depends on a
       //   - package a receives a new feature
       //   - package b version bumps its dependency on a
       //   - package a and b should both use a minor version bump
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -86,7 +80,7 @@ describe('Plugin compatibility', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkgB-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'feat: some feature',
@@ -108,9 +102,7 @@ describe('Plugin compatibility', () => {
           },
         },
       ]);
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [],
         flatten: false,
@@ -130,12 +122,12 @@ describe('Plugin compatibility', () => {
           ],
         ],
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB']);
+        .mockResolvedValue(['packages/rustB']);
       const manifest = new Manifest(
         github,
         'main',
@@ -165,7 +157,7 @@ describe('Plugin compatibility', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       safeSnapshot(pullRequest.body.toString());
       const updater = (
@@ -189,12 +181,12 @@ describe('Plugin compatibility', () => {
         '.release-please-manifest.json',
         CompositeUpdater
       );
-      expect(manifestUpdate.updater).instanceOf(CompositeUpdater);
+      expect(manifestUpdate.updater).instanceOf(CompositeUpdater).toMatchSnapshot();
       const manifestUpdaters = (manifestUpdate.updater as CompositeUpdater)
         .updaters;
       expect(manifestUpdaters).not.empty;
       for (const manifestUpdater of manifestUpdaters) {
-        expect(manifestUpdater).instanceOf(ReleasePleaseManifest);
+        expect(manifestUpdater).instanceOf(ReleasePleaseManifest).toMatchSnapshot();
         const versionsMap = (manifestUpdater as ReleasePleaseManifest)
           .versionsMap;
         expect(versionsMap).to.not.be.undefined;

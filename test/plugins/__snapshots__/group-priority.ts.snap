@@ -1,0 +1,235 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GroupPriority plugin > run > falls back to all pull requests if prioritized group not found 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "java",
+    },
+    "path": "path1",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "component1",
+            "notes": "Release notes for path: path1, releaseType: java",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": "group1",
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 2,
+        "patch": 3,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "java",
+    },
+    "path": "path2",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "component2",
+            "notes": "Release notes for path: path2, releaseType: java",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": "group2",
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 2,
+        "minor": 3,
+        "patch": 4,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "java",
+    },
+    "path": "path3",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "component3",
+            "notes": "Release notes for path: path3, releaseType: java",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": undefined,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 3,
+        "minor": 4,
+        "patch": 5,
+        "preRelease": undefined,
+      },
+    },
+  },
+]
+`;
+
+exports[`GroupPriority plugin > run > prioritizes a group 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "java",
+    },
+    "path": "path1",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "component1",
+            "notes": "Release notes for path: path1, releaseType: java",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": "SNAPSHOT",
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": "snapshot",
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 2,
+        "patch": 3,
+        "preRelease": "SNAPSHOT",
+      },
+    },
+  },
+]
+`;

@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CompositeUpdater > mergeUpdates > can merge multiple updates 1`] = `
+[
+  {
+    "createIfMissing": false,
+    "path": "path1",
+    "updater": CompositeUpdater {
+      "updaters": [
+        FakeUpdater {},
+        FakeUpdater {},
+        FakeUpdater {},
+      ],
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "path2",
+    "updater": FakeUpdater {},
+  },
+]
+`;
+
+exports[`CompositeUpdater > mergeUpdates > ignores disjoint paths 1`] = `
+[
+  {
+    "createIfMissing": false,
+    "path": "path1",
+    "updater": FakeUpdater {},
+  },
+  {
+    "createIfMissing": false,
+    "path": "path2",
+    "updater": FakeUpdater {},
+  },
+  {
+    "createIfMissing": false,
+    "path": "path3",
+    "updater": FakeUpdater {},
+  },
+  {
+    "createIfMissing": false,
+    "path": "path4",
+    "updater": FakeUpdater {},
+  },
+]
+`;

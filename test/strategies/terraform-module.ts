@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {TerraformModule} from '../../src/strategies/terraform-module';
-import * as sinon from 'sinon';
 import {assertHasUpdate, buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
 import {Version} from '../../src/version';
@@ -24,8 +22,6 @@ import {Changelog} from '../../src/updaters/changelog';
 import {ReadMe} from '../../src/updaters/terraform/readme';
 import {ModuleVersion} from '../../src/updaters/terraform/module-version';
 import {MetadataVersion} from '../../src/updaters/terraform/metadata-version';
-
-const sandbox = sinon.createSandbox();
 
 const COMMITS = [
   ...buildMockConventionalCommit(
@@ -46,10 +42,7 @@ describe('TerraformModule', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new TerraformModule({
@@ -57,7 +50,7 @@ describe('TerraformModule', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -72,7 +65,7 @@ describe('TerraformModule', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -92,7 +85,7 @@ describe('TerraformModule', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -108,22 +101,22 @@ describe('TerraformModule', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByFilenameAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByFilenameAndRef');
       findFilesStub
         .withArgs('readme.md', 'main', '.')
-        .resolves(['path1/readme.md', 'path2/readme.md']);
+        .mockResolvedValue(['path1/readme.md', 'path2/readme.md']);
       findFilesStub
         .withArgs('README.md', 'main', '.')
-        .resolves(['README.md', 'path3/README.md']);
+        .mockResolvedValue(['README.md', 'path3/README.md']);
       findFilesStub
         .withArgs('versions.tf', 'main', '.')
-        .resolves(['path1/versions.tf', 'path2/versions.tf']);
+        .mockResolvedValue(['path1/versions.tf', 'path2/versions.tf']);
       findFilesStub
         .withArgs('versions.tf.tmpl', 'main', '.')
-        .resolves(['path1/versions.tf.tmpl', 'path2/versions.tf.tmpl']);
+        .mockResolvedValue(['path1/versions.tf.tmpl', 'path2/versions.tf.tmpl']);
       findFilesStub
         .withArgs('metadata.yaml', 'main', '.')
-        .resolves(['path1/metadata.yaml', 'path2/metadata.yaml']);
+        .mockResolvedValue(['path1/metadata.yaml', 'path2/metadata.yaml']);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,

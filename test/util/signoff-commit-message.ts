@@ -11,11 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {signoffCommitMessage} from '../../src/util/signoff-commit-message';
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
-
 describe('signoffCommitMessage', () => {
   it('appends a signoff to the commit message with signoff user', () => {
     const commitMessage = 'chore: release 1.2.3';

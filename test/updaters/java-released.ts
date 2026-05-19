@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Version} from '../../src/version';
 import {JavaReleased} from '../../src/updaters/java/java-released';
 
@@ -34,7 +33,7 @@ describe('JavaReleased', () => {
         version: Version.parse('v2.3.4'),
       });
       const newContent = pom.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

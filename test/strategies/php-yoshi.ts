@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi, type MockInstance} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {PHPYoshi} from '../../src/strategies/php-yoshi';
-import * as sinon from 'sinon';
 import {assertHasUpdate, buildGitHubFileRaw, dateSafe} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
@@ -25,16 +23,13 @@ import {Changelog} from '../../src/updaters/changelog';
 import {RootComposerUpdatePackages} from '../../src/updaters/php/root-composer-update-packages';
 import {PHPClientVersion} from '../../src/updaters/php/php-client-version';
 import {DefaultUpdater} from '../../src/updaters/default';
-import snapshot = require('snap-shot-it');
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
 import {FileNotFoundError} from '../../src/errors';
 
-const sandbox = sinon.createSandbox();
-
 describe('PHPYoshi', () => {
   let github: GitHub;
-  let getFileStub: sinon.SinonStub;
+  let getFileStub: MockInstance;
   const commits = [
     ...buildMockConventionalCommit(
       'fix(deps): update dependency com.google.cloud:google-cloud-storage to v1.120.0',
@@ -52,34 +47,31 @@ describe('PHPYoshi', () => {
       repo: 'php-yoshi-test-repo',
       defaultBranch: 'main',
     });
-    getFileStub = sandbox.stub(github, 'getFileContentsOnBranch');
+    getFileStub = vi.spyOn(github, 'getFileContentsOnBranch');
     getFileStub
       .withArgs('Client1/VERSION', 'main')
-      .resolves(buildGitHubFileRaw('1.2.3'));
+      .mockResolvedValue(buildGitHubFileRaw('1.2.3'));
     getFileStub
       .withArgs('Client2/VERSION', 'main')
-      .resolves(buildGitHubFileRaw('2.0.0'));
+      .mockResolvedValue(buildGitHubFileRaw('2.0.0'));
     getFileStub
       .withArgs('Client3/VERSION', 'main')
-      .resolves(buildGitHubFileRaw('0.1.2'));
+      .mockResolvedValue(buildGitHubFileRaw('0.1.2'));
     getFileStub
       .withArgs('Client1/composer.json', 'main')
-      .resolves(buildGitHubFileRaw('{"name": "google/client1"}'));
+      .mockResolvedValue(buildGitHubFileRaw('{"name": "google/client1"}'));
     getFileStub
       .withArgs('Client2/composer.json', 'main')
-      .resolves(buildGitHubFileRaw('{"name": "google/client2"}'));
+      .mockResolvedValue(buildGitHubFileRaw('{"name": "google/client2"}'));
     getFileStub
       .withArgs('Client3/composer.json', 'main')
-      .resolves(
+      .mockResolvedValue(
         buildGitHubFileRaw(
           '{"name": "google/client3", "extra": {"component": {"entry": "src/Entry.php"}}}'
         )
       );
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new PHPYoshi({
@@ -92,7 +84,7 @@ describe('PHPYoshi', () => {
         latestRelease,
       });
       expect(release!.version?.toString()).to.eql(expectedVersion);
-      snapshot(dateSafe(release!.body.toString()));
+      expect(dateSafe(release!.body.toString())).toMatchSnapshot();
     });
     it('returns release PR changes with semver patch bump', async () => {
       const expectedVersion = '0.123.5';
@@ -110,7 +102,7 @@ describe('PHPYoshi', () => {
         latestRelease,
       });
       expect(release!.version?.toString()).to.eql(expectedVersion);
-      snapshot(dateSafe(release!.body.toString()));
+      expect(dateSafe(release!.body.toString())).toMatchSnapshot();
     });
     it('includes misc commits', async () => {
       const expectedVersion = '0.123.5';
@@ -134,7 +126,7 @@ describe('PHPYoshi', () => {
         latestRelease,
       });
       expect(release!.version?.toString()).to.eql(expectedVersion);
-      snapshot(dateSafe(release!.body.toString()));
+      expect(dateSafe(release!.body.toString())).toMatchSnapshot();
     });
   });
   describe('buildUpdates', () => {
@@ -187,7 +179,7 @@ describe('PHPYoshi', () => {
       ];
       getFileStub
         .withArgs('.git/VERSION', 'main')
-        .rejects(new FileNotFoundError('.git/VERSION'));
+        .mockRejectedValue(new FileNotFoundError('.git/VERSION'));
       const release = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -221,7 +213,7 @@ describe('PHPYoshi', () => {
       };
       const release = await strategy.buildRelease(mergedPullRequest);
       expect(release).to.not.be.undefined;
-      snapshot(release!.notes);
+      expect(release!.notes).toMatchSnapshot();
       expect(release!.name).to.eql('v0.173.0');
       expect(release!.sha).to.eql('abc123');
       expect(release!.tag.toString()).to.eql('v0.173.0');

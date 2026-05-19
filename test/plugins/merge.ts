@@ -11,25 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
+import {describe, it, expect, beforeEach} from 'vitest';
 import {GitHub} from '../../src/github';
 import {Merge} from '../../src/plugins/merge';
 import {
   CandidateReleasePullRequest,
   DEFAULT_RELEASE_PLEASE_MANIFEST,
 } from '../../src/manifest';
-import {expect} from 'chai';
 import {
   buildMockCandidatePullRequest,
   assertHasUpdate,
   dateSafe,
 } from '../helpers';
-import snapshot = require('snap-shot-it');
 import {RawContent} from '../../src/updaters/raw-content';
 import {CompositeUpdater} from '../../src/updaters/composite';
-
-const sandbox = sinon.createSandbox();
 
 describe('Merge plugin', () => {
   let github: GitHub;
@@ -40,10 +35,7 @@ describe('Merge plugin', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('run', () => {
+    describe('run', () => {
     it('ignores no pull requests', async () => {
       const candidates: CandidateReleasePullRequest[] = [];
       const plugin = new Merge(
@@ -53,7 +45,7 @@ describe('Merge plugin', () => {
         {}
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(0);
+      expect(newCandidates).lengthOf(0).toMatchSnapshot();
     });
 
     it('merges a single pull request', async () => {
@@ -67,7 +59,7 @@ describe('Merge plugin', () => {
         {}
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       expect(newCandidates[0].pullRequest.title.toString()).to.eql(
         'chore: release main'
       );
@@ -108,13 +100,13 @@ describe('Merge plugin', () => {
         {}
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const candidate = newCandidates[0];
       const updates = candidate!.pullRequest.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(updates, 'path1/foo', CompositeUpdater);
       assertHasUpdate(updates, 'path2/foo', RawContent);
-      snapshot(dateSafe(candidate!.pullRequest.body.toString()));
+      expect(dateSafe(candidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
 
     it('merges multiple pull requests as a draft', async () => {
@@ -156,13 +148,13 @@ describe('Merge plugin', () => {
         {}
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const candidate = newCandidates[0];
       const updates = candidate!.pullRequest.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(updates, 'path1/foo', CompositeUpdater);
       assertHasUpdate(updates, 'path2/foo', RawContent);
-      snapshot(dateSafe(candidate!.pullRequest.body.toString()));
+      expect(dateSafe(candidate!.pullRequest.body.toString())).toMatchSnapshot();
       expect(candidate.pullRequest.draft).to.be.true;
     });
 
@@ -203,15 +195,15 @@ describe('Merge plugin', () => {
         {}
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const candidate = newCandidates[0]!;
-      expect(candidate.pullRequest.labels).lengthOf(3);
+      expect(candidate.pullRequest.labels).lengthOf(3).toMatchSnapshot();
       expect(candidate.pullRequest.labels).to.eql([
         'label-a',
         'label-b',
         'label-c',
       ]);
-      snapshot(dateSafe(candidate.pullRequest.body.toString()));
+      expect(dateSafe(candidate.pullRequest.body.toString())).toMatchSnapshot();
     });
   });
 });

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {JsonMap} from '@iarna/toml';
-import * as TOMLParser from '@iarna/toml/lib/toml-parser';
+import TOMLParser from '@iarna/toml/lib/toml-parser';
 
 const taggedValueMarker = Symbol('__TAGGED_VALUE');
 

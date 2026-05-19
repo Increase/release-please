@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`schemas > config file > rejects extra properties 1`] = `
+[
+  {
+    "instancePath": "",
+    "keyword": "additionalProperties",
+    "message": "must NOT have additional properties",
+    "params": {
+      "additionalProperty": "extraField",
+    },
+    "schemaPath": "#/additionalProperties",
+  },
+]
+`;

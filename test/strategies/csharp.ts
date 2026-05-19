@@ -1,23 +1,20 @@
-import {describe, it, afterEach, beforeEach} from 'mocha';
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 import {CSharp} from '../../src/strategies/csharp';
 import {
   buildMockConventionalCommit,
   buildGitHubFileContent,
   assertHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {Changelog} from '../../src/updaters/changelog';
 import {CsProj} from '../../src/updaters/dotnet/csproj';
 import * as assert from 'assert';
 import {MissingRequiredFileError} from '../../src/errors';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/csharp';
 
 describe('CSharp', () => {
@@ -34,10 +31,7 @@ describe('CSharp', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new CSharp({
@@ -46,9 +40,9 @@ describe('CSharp', () => {
         component: 'Acme.TestProject',
         packageName: 'Acme.TestProject',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
@@ -64,9 +58,9 @@ describe('CSharp', () => {
         component: 'Acme.TestProject',
         packageName: 'Acme.TestProject',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'Acme.TestProject'),
         sha: 'abc123',
@@ -94,16 +88,16 @@ describe('CSharp', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
-      const getFileContentsStub = sandbox.stub(
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('TestProject.csproj', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -127,16 +121,16 @@ describe('CSharp', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
-      const getFileContentsStub = sandbox.stub(
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('TestProject.csproj', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -144,7 +138,7 @@ describe('CSharp', () => {
       expect(pullRequest!.version?.toString()).to.eql(expectedVersion);
     });
     it('handles missing csproj file', async () => {
-      sandbox.stub(github, 'findFilesByGlobAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByGlobAndRef').mockResolvedValue([]);
       const strategy = new CSharp({
         targetBranch: 'main',
         github,
@@ -167,9 +161,9 @@ describe('CSharp', () => {
         component: 'Acme.TestProject',
         packageName: 'Acme.TestProject',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
@@ -186,13 +180,13 @@ describe('CSharp', () => {
         targetBranch: 'main',
         github,
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('TestProject.csproj', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'TestProject.csproj'));
       const packageName = await strategy.getDefaultPackageName();
       expect(packageName).to.eql('Acme.TestProject');
     });
@@ -204,9 +198,9 @@ describe('CSharp', () => {
         github,
         packageName: 'Acme.Utilities.Core',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
       const component = await strategy.getBranchComponent();
       expect(component).to.eql('Core');
     });
@@ -216,9 +210,9 @@ describe('CSharp', () => {
         github,
         packageName: 'TestProject',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['TestProject.csproj']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['TestProject.csproj']);
       const component = await strategy.getBranchComponent();
       expect(component).to.eql('TestProject');
     });

@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {GitHub} from '../../../src/github';
 import {Manifest} from '../../../src/manifest';
 import {Update} from '../../../src/update';
@@ -28,9 +27,6 @@ import {
 import {Version} from '../../../src/version';
 import {CargoToml} from '../../../src/updaters/rust/cargo-toml';
 import {parseCargoManifest} from '../../../src/updaters/rust/common';
-import {expect} from 'chai';
-
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/cargo-workspace';
 
 export function buildMockPackageUpdate(
@@ -58,17 +54,14 @@ describe('Plugin compatibility', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('linked-versions and group-pull-request-title-pattern', () => {
+    describe('linked-versions and group-pull-request-title-pattern', () => {
     it('should find release to create', async () => {
       // Scenario:
       //   - package b depends on a
       //   - package a receives a new feature
       //   - package b version bumps its dependency on a
       //   - package a and b should both use a minor version bump
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -82,7 +75,7 @@ describe('Plugin compatibility', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkgA-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'feat: some feature',
@@ -104,9 +97,7 @@ describe('Plugin compatibility', () => {
           },
         },
       ]);
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [],
         flatten: false,
@@ -148,7 +139,7 @@ describe('Plugin compatibility', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       safeSnapshot(pullRequest.body.toString());
       expect(pullRequest.title.toString()).to.equal(
@@ -157,7 +148,7 @@ describe('Plugin compatibility', () => {
 
       console.log('-----------------------------------');
 
-      mockPullRequests(sandbox, github, [
+      mockPullRequests(github, [
         {
           headBranchName: pullRequest.headRefName,
           baseBranchName: 'main',
@@ -170,7 +161,7 @@ describe('Plugin compatibility', () => {
         },
       ]);
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(2);
+      expect(releases).lengthOf(2).toMatchSnapshot();
     });
   });
 });

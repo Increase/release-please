@@ -1,0 +1,390 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`parseConventionalCommits > can override the commit message from BEGIN_COMMIT_OVERRIDE body 1`] = `
+[
+  {
+    "bareMessage": "some fix",
+    "breaking": false,
+    "files": [],
+    "message": "fix: some fix",
+    "notes": [],
+    "pullRequest": {
+      "baseBranchName": "main",
+      "body": "BEGIN_COMMIT_OVERRIDE
+fix: some fix
+END_COMMIT_OVERRIDE",
+      "files": [],
+      "headBranchName": "fix-something",
+      "labels": [],
+      "number": 123,
+      "title": "chore: some commit",
+    },
+    "references": [],
+    "scope": null,
+    "sha": "abf6ba9cbcf43cc79a89c20c8988be1a",
+    "type": "fix",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > can override the commit message from BEGIN_COMMIT_OVERRIDE body with a meta commit 1`] = `
+[
+  {
+    "bareMessage": "another feature",
+    "breaking": false,
+    "files": [],
+    "message": "feat: another feature",
+    "notes": [],
+    "pullRequest": {
+      "baseBranchName": "main",
+      "body": "BEGIN_COMMIT_OVERRIDE
+fix: some fix
+
+feat: another feature
+END_COMMIT_OVERRIDE",
+      "files": [],
+      "headBranchName": "fix-something",
+      "labels": [],
+      "number": 123,
+      "title": "chore: some commit",
+    },
+    "references": [],
+    "scope": null,
+    "sha": "abf6ba9cbcf43cc79a89c20c8988be1a",
+    "type": "feat",
+  },
+  {
+    "bareMessage": "some fix",
+    "breaking": false,
+    "files": [],
+    "message": "fix: some fix",
+    "notes": [],
+    "pullRequest": {
+      "baseBranchName": "main",
+      "body": "BEGIN_COMMIT_OVERRIDE
+fix: some fix
+
+feat: another feature
+END_COMMIT_OVERRIDE",
+      "files": [],
+      "headBranchName": "fix-something",
+      "labels": [],
+      "number": 123,
+      "title": "chore: some commit",
+    },
+    "references": [],
+    "scope": null,
+    "sha": "abf6ba9cbcf43cc79a89c20c8988be1a",
+    "type": "fix",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > can parse a breaking change 1`] = `
+[
+  {
+    "bareMessage": "some breaking fix",
+    "breaking": true,
+    "files": [],
+    "message": "fix!: some breaking fix",
+    "notes": [
+      {
+        "text": "some breaking fix",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "8fbac0d52872792f936dbefcb6242665",
+    "type": "fix",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > can parse a breaking change 2`] = `
+[
+  {
+    "text": "some breaking fix",
+    "title": "BREAKING CHANGE",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > can parse multiple commit messages from a single commit 1`] = `
+[
+  {
+    "bareMessage": "some bugfix",
+    "breaking": false,
+    "files": [],
+    "message": "fix: some bugfix",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "2ec0e9bc0ba7deaf762dae213667bf42",
+    "type": "fix",
+  },
+  {
+    "bareMessage": "some feature",
+    "breaking": false,
+    "files": [],
+    "message": "feat: some feature",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "2ec0e9bc0ba7deaf762dae213667bf42",
+    "type": "feat",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > can parse plain commit messages 1`] = `
+[
+  {
+    "bareMessage": "some feature",
+    "breaking": false,
+    "files": [],
+    "message": "feat: some feature",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "81228f3507ad6f742242474628ff58b2",
+    "type": "feat",
+  },
+  {
+    "bareMessage": "some bugfix",
+    "breaking": false,
+    "files": [],
+    "message": "fix: some bugfix",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "26fff5655027c8e7b799cb450acca568",
+    "type": "fix",
+  },
+  {
+    "bareMessage": "some documentation",
+    "breaking": false,
+    "files": [],
+    "message": "docs: some documentation",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "abbf5480ac552b33404be825a817df2a",
+    "type": "docs",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > captures git trailers 1`] = `
+[
+  {
+    "text": "this is actually a breaking change",
+    "title": "BREAKING CHANGE",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > does not include content two newlines after BREAKING CHANGE 1`] = `
+[
+  {
+    "bareMessage": "upgrade to Node 7",
+    "breaking": true,
+    "files": [],
+    "message": "chore: upgrade to Node 7",
+    "notes": [
+      {
+        "text": "we were on Node 6",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "66925b06f59fc4fdd3031c498e1b0098",
+    "type": "chore",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > handles BREAKING CHANGE body 1`] = `
+[
+  {
+    "bareMessage": "some feature",
+    "breaking": true,
+    "files": [],
+    "message": "feat: some feature",
+    "notes": [
+      {
+        "text": "this is actually a breaking change",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "78abf20625d3ff86d627b5c6e0cacd06",
+    "type": "feat",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > handles BREAKING CHANGE body 2`] = `
+[
+  {
+    "text": "this is actually a breaking change",
+    "title": "BREAKING CHANGE",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > handles Release-As footers 1`] = `
+[
+  {
+    "text": "v3.0.0",
+    "title": "RELEASE AS",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > includes multi-line breaking changes 1`] = `
+[
+  {
+    "bareMessage": "upgrade to Node 7",
+    "breaking": true,
+    "files": [],
+    "message": "chore: upgrade to Node 7",
+    "notes": [
+      {
+        "text": "we were on Node 6 second line third line",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "8916be74596394c27516696b957fd0d7",
+    "type": "chore",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > includes multi-line breaking changes 2`] = `
+[
+  {
+    "text": "we were on Node 6 second line third line",
+    "title": "BREAKING CHANGE",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > includes multi-line breaking changes 3`] = `"we were on Node 6 second line third line"`;
+
+exports[`parseConventionalCommits > includes multi-line breaking changes 4`] = `"we were on Node 6 second line third line"`;
+
+exports[`parseConventionalCommits > links bugs 1`] = `
+[
+  {
+    "bareMessage": "some fix",
+    "breaking": false,
+    "files": [],
+    "message": "fix: some fix",
+    "notes": [],
+    "pullRequest": undefined,
+    "references": [
+      {
+        "action": "Fixes",
+        "issue": "123",
+        "prefix": "#",
+      },
+    ],
+    "scope": null,
+    "sha": "71489e63ad212c54598f5bdcbedec5f6",
+    "type": "fix",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > links bugs 2`] = `
+[
+  {
+    "action": "Fixes",
+    "issue": "123",
+    "prefix": "#",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > removes content before and after BREAKING CHANGE in body 1`] = `
+[
+  {
+    "bareMessage": "some fix (#1234)",
+    "breaking": true,
+    "files": [],
+    "message": "fix: some fix (#1234)",
+    "notes": [
+      {
+        "text": "my comment",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "48ea3ab7c929c1ed2233dc1fbec95f88",
+    "type": "fix",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > supports additional markdown for breaking change, if prefixed with list 1`] = `
+[
+  {
+    "bareMessage": "upgrade to Node 7",
+    "breaking": true,
+    "files": [],
+    "message": "chore: upgrade to Node 7",
+    "notes": [
+      {
+        "text": "we were on Node 6
+    - deleted API foo
+    - deleted API bar",
+        "title": "BREAKING CHANGE",
+      },
+    ],
+    "pullRequest": undefined,
+    "references": [],
+    "scope": null,
+    "sha": "a931c2d29e9849c6989dfd4712226699",
+    "type": "chore",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > supports additional markdown for breaking change, if prefixed with list 2`] = `
+[
+  {
+    "text": "we were on Node 6
+    - deleted API foo
+    - deleted API bar",
+    "title": "BREAKING CHANGE",
+  },
+]
+`;
+
+exports[`parseConventionalCommits > supports additional markdown for breaking change, if prefixed with list 3`] = `
+"we were on Node 6
+    - deleted API foo
+    - deleted API bar"
+`;
+
+exports[`parseConventionalCommits > supports additional markdown for breaking change, if prefixed with list 4`] = `
+"we were on Node 6
+    - deleted API foo
+    - deleted API bar"
+`;

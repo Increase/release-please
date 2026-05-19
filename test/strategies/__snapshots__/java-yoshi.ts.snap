@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`JavaYoshi > buildReleasePullRequest > throws on missing required versions.txt 1`] = `[MissingRequiredFileError: JavaYoshi (googleapis/java-yoshi-test-repo): Missing required file: versions.txt]`;

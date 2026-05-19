@@ -29,6 +29,9 @@ pnpm lint
 pnpm test
 ```
 
+Tests run with [Vitest](https://vitest.dev/) (`vitest run`).
+Update snapshots after intentional output changes with `pnpm test:snap`.
+
 To auto-fix lint and formatting issues, use:
 
 ```bash

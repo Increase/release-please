@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {AppJson} from '../../../src/updaters/expo/app-json';
 import {Version} from '../../../src/version';
 
@@ -33,7 +32,7 @@ describe('AppJson', () => {
         expoSDKVersion: Version.parse('44.0.0'),
       });
       const newContent = packageJson.updateContent(oldContent);
-      snapshot(newContent.replace(/\r\n/g, '\n'));
+      expect(newContent.replace(/\r\n/g, '\n')).toMatchSnapshot();
     });
   });
 });

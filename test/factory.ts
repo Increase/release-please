@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, afterEach} from 'vitest';
 
-import {beforeEach, describe, it} from 'mocha';
 import {
   buildStrategy,
   getReleaserTypes,
@@ -20,7 +20,6 @@ import {
   unregisterReleaseType,
 } from '../src/factory';
 import {GitHub} from '../src/github';
-import {expect} from 'chai';
 import {Simple} from '../src/strategies/simple';
 import {DefaultVersioningStrategy} from '../src/versioning-strategies/default';
 import {AlwaysBumpPatch} from '../src/versioning-strategies/always-bump-patch';
@@ -49,16 +48,16 @@ describe('factory', () => {
         github,
         releaseType: 'simple',
       });
-      expect(strategy).instanceof(Simple);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
 
-      expect(strategy.versioningStrategy).instanceof(DefaultVersioningStrategy);
+      expect(strategy.versioningStrategy).instanceof(DefaultVersioningStrategy).toMatchSnapshot();
       const versioningStrategy =
         strategy.versioningStrategy as DefaultVersioningStrategy;
       expect(versioningStrategy.bumpMinorPreMajor).to.be.false;
       expect(versioningStrategy.bumpPatchForMinorPreMajor).to.be.false;
       expect(strategy.path).to.eql('.');
       expect(await strategy.getComponent()).not.ok;
-      expect(strategy.changelogNotes).instanceof(DefaultChangelogNotes);
+      expect(strategy.changelogNotes).instanceof(DefaultChangelogNotes).toMatchSnapshot();
     });
     it('should build a with configuration', async () => {
       const strategy = await buildStrategy({
@@ -67,8 +66,8 @@ describe('factory', () => {
         bumpMinorPreMajor: true,
         bumpPatchForMinorPreMajor: true,
       });
-      expect(strategy).instanceof(Simple);
-      expect(strategy.versioningStrategy).instanceof(DefaultVersioningStrategy);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
+      expect(strategy.versioningStrategy).instanceof(DefaultVersioningStrategy).toMatchSnapshot();
       const versioningStrategy =
         strategy.versioningStrategy as DefaultVersioningStrategy;
       expect(versioningStrategy.bumpMinorPreMajor).to.be.true;
@@ -92,8 +91,8 @@ describe('factory', () => {
         releaseType: 'simple',
         versioning: 'always-bump-patch',
       });
-      expect(strategy).instanceof(Simple);
-      expect(strategy.versioningStrategy).instanceof(AlwaysBumpPatch);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
+      expect(strategy.versioningStrategy).instanceof(AlwaysBumpPatch).toMatchSnapshot();
     });
     it('should build with a service pack versioning strategy', async () => {
       const strategy = await buildStrategy({
@@ -101,7 +100,7 @@ describe('factory', () => {
         releaseType: 'simple',
         versioning: 'service-pack',
       });
-      expect(strategy).instanceof(Simple);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
       expect(strategy.versioningStrategy).instanceof(
         ServicePackVersioningStrategy
       );
@@ -112,8 +111,8 @@ describe('factory', () => {
         releaseType: 'simple',
         changelogType: 'github',
       });
-      expect(strategy).instanceof(Simple);
-      expect(strategy.changelogNotes).instanceof(GitHubChangelogNotes);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
+      expect(strategy.changelogNotes).instanceof(GitHubChangelogNotes).toMatchSnapshot();
     });
     it('should build a ruby strategy', async () => {
       const strategy = await buildStrategy({
@@ -121,7 +120,7 @@ describe('factory', () => {
         releaseType: 'ruby',
         versionFile: 'src/version.rb',
       });
-      expect(strategy).instanceof(Ruby);
+      expect(strategy).instanceof(Ruby).toMatchSnapshot();
       expect((strategy as Ruby).versionFile).to.eql('src/version.rb');
     });
     it('should build a java-yoshi strategy', async () => {
@@ -132,14 +131,14 @@ describe('factory', () => {
         bumpPatchForMinorPreMajor: true,
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
       });
-      expect(strategy).instanceof(JavaYoshi);
+      expect(strategy).instanceof(JavaYoshi).toMatchSnapshot();
       expect((strategy as JavaYoshi).extraFiles).to.eql([
         'path1/foo1.java',
         'path2/foo2.java',
       ]);
-      expect(strategy.versioningStrategy).instanceof(JavaSnapshot);
+      expect(strategy.versioningStrategy).instanceof(JavaSnapshot).toMatchSnapshot();
       const versioningStrategy = strategy.versioningStrategy as JavaSnapshot;
-      expect(versioningStrategy.strategy).instanceof(DefaultVersioningStrategy);
+      expect(versioningStrategy.strategy).instanceof(DefaultVersioningStrategy).toMatchSnapshot();
       const innerVersioningStrategy =
         versioningStrategy.strategy as DefaultVersioningStrategy;
       expect(innerVersioningStrategy.bumpMinorPreMajor).to.be.true;
@@ -151,14 +150,14 @@ describe('factory', () => {
         releaseType: 'java-backport',
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
       });
-      expect(strategy).instanceof(JavaYoshi);
+      expect(strategy).instanceof(JavaYoshi).toMatchSnapshot();
       expect((strategy as JavaYoshi).extraFiles).to.eql([
         'path1/foo1.java',
         'path2/foo2.java',
       ]);
-      expect(strategy.versioningStrategy).instanceof(JavaSnapshot);
+      expect(strategy.versioningStrategy).instanceof(JavaSnapshot).toMatchSnapshot();
       const versioningStrategy = strategy.versioningStrategy as JavaSnapshot;
-      expect(versioningStrategy.strategy).instanceof(AlwaysBumpPatch);
+      expect(versioningStrategy.strategy).instanceof(AlwaysBumpPatch).toMatchSnapshot();
     });
     it('should build a java-lts strategy', async () => {
       const strategy = await buildStrategy({
@@ -166,12 +165,12 @@ describe('factory', () => {
         releaseType: 'java-lts',
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
       });
-      expect(strategy).instanceof(JavaYoshi);
+      expect(strategy).instanceof(JavaYoshi).toMatchSnapshot();
       expect((strategy as JavaYoshi).extraFiles).to.eql([
         'path1/foo1.java',
         'path2/foo2.java',
       ]);
-      expect(strategy.versioningStrategy).instanceof(JavaSnapshot);
+      expect(strategy.versioningStrategy).instanceof(JavaSnapshot).toMatchSnapshot();
       const versioningStrategy = strategy.versioningStrategy as JavaSnapshot;
       expect(versioningStrategy.strategy).instanceof(
         ServicePackVersioningStrategy
@@ -185,14 +184,14 @@ describe('factory', () => {
         bumpPatchForMinorPreMajor: true,
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
       });
-      expect(strategy).instanceof(JavaYoshi);
+      expect(strategy).instanceof(JavaYoshi).toMatchSnapshot();
       expect((strategy as JavaYoshi).extraFiles).to.eql([
         'path1/foo1.java',
         'path2/foo2.java',
       ]);
-      expect(strategy.versioningStrategy).instanceof(JavaSnapshot);
+      expect(strategy.versioningStrategy).instanceof(JavaSnapshot).toMatchSnapshot();
       const versioningStrategy = strategy.versioningStrategy as JavaSnapshot;
-      expect(versioningStrategy.strategy).instanceof(DependencyManifest);
+      expect(versioningStrategy.strategy).instanceof(DependencyManifest).toMatchSnapshot();
       const innerVersioningStrategy =
         versioningStrategy.strategy as DependencyManifest;
       expect(innerVersioningStrategy.bumpMinorPreMajor).to.be.true;
@@ -207,7 +206,7 @@ describe('factory', () => {
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
         skipSnapshot: true,
       });
-      expect(strategy).instanceof(Java);
+      expect(strategy).instanceof(Java).toMatchSnapshot();
       const javaStrategy = strategy as Java;
       expect(javaStrategy.extraFiles).to.eql([
         'path1/foo1.java',
@@ -221,7 +220,7 @@ describe('factory', () => {
         releaseType: 'simple',
         extraFiles: ['path1/foo1.java', 'path2/foo2.java'],
       });
-      expect(strategy).instanceof(Simple);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
       expect((strategy as Simple).extraFiles).to.eql([
         'path1/foo1.java',
         'path2/foo2.java',
@@ -239,7 +238,7 @@ describe('factory', () => {
         releaseType: 'simple',
         versionFile: 'foo/bar',
       });
-      expect(strategy).instanceof(Simple);
+      expect(strategy).instanceof(Simple).toMatchSnapshot();
       expect((strategy as Simple).versionFile).to.eql('foo/bar');
     });
   });

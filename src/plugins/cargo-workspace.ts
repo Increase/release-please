@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {CandidateReleasePullRequest, ROOT_PROJECT_PATH} from '../manifest';
+import type {CandidateReleasePullRequest} from '../manifest';
+import {ROOT_PROJECT_PATH} from '../manifest-constants';
 import {
   WorkspacePlugin,
   DependencyGraph,

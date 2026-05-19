@@ -26,7 +26,7 @@ import {PullRequestBody} from '../util/pull-request-body';
 import {VersioningStrategy} from '../versioning-strategy';
 import {DefaultVersioningStrategy} from '../versioning-strategies/default';
 import {JavaAddSnapshot} from '../versioning-strategies/java-add-snapshot';
-import {DEFAULT_SNAPSHOT_LABELS} from '../manifest';
+import {DEFAULT_SNAPSHOT_LABELS} from '../manifest-constants';
 import {JavaReleased} from '../updaters/java/java-released';
 import {mergeUpdates} from '../updaters/composite';
 import {logger as defaultLogger} from '../util/logger';

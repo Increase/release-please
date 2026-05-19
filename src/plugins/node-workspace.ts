@@ -18,7 +18,7 @@ import {
   RawManifest as PackageJson,
 } from '@lerna/package';
 import {GitHub} from '../github';
-import {CandidateReleasePullRequest, RepositoryConfig} from '../manifest';
+import type {CandidateReleasePullRequest, RepositoryConfig} from '../manifest';
 import {Version, VersionsMap} from '../version';
 import {RawContent} from '../updaters/raw-content';
 import {PullRequestTitle} from '../util/pull-request-title';
