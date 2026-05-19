@@ -6,6 +6,13 @@
 > 👇 Changelogs from googleapis/release-please before Stainless fork
 
 
+## [0.2.2](https://github.com/Increase/release-please/compare/v0.2.1...v0.2.2) (2026-05-19)
+
+
+### Tests
+
+* migrate test suite from Mocha to Vitest ([#4](https://github.com/Increase/release-please/issues/4)) ([7db3c90](https://github.com/Increase/release-please/commit/7db3c901cfd395a1b027ce982659658e4283bf7f))
+
 ## [0.2.1](https://github.com/Increase/release-please/compare/v0.2.0...v0.2.1) (2026-05-19)
 
 
