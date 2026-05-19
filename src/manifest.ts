@@ -61,8 +61,6 @@ import {
   DEFAULT_SNAPSHOT_LABELS,
   SNOOZE_LABEL,
   DEFAULT_PRERELEASE_LABELS,
-  DEFAULT_CUSTOM_VERSION_LABEL,
-  MANIFEST_PULL_REQUEST_TITLE_PATTERN,
 } from './manifest-constants';
 
 export type {ExtraFile} from './manifest-constants';
