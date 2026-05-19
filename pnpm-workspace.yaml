@@ -3,3 +3,19 @@
 # so deny it explicitly to silence ERR_PNPM_IGNORED_BUILDS under --frozen-lockfile.
 allowBuilds:
   msw: false
+
+# Force-patch transitive deps flagged by `pnpm audit`. Each entry resolves a
+# specific advisory and can be dropped once the parent package ships a fix.
+overrides:
+  handlebars: ^4.7.9
+  brace-expansion@<1.1.13: ^1.1.13
+  brace-expansion@>=2.0.0 <2.0.3: ^2.0.3
+  undici@<6.24.0: ^6.24.0
+  '@tootallnate/once': ^3.0.1
+  # `code-suggester` and `@lerna/*` pin older diff/minimatch/cross-spawn with
+  # known ReDoS advisories; force patched lines that stay API-compatible.
+  diff@<5.2.2: ^5.2.2
+  minimatch@<3.1.2: ^3.1.2
+  minimatch@>=4.0.0 <9.0.5: ^9.0.5
+  cross-spawn@<7.0.5: ^7.0.5
+  underscore: ^1.13.7
