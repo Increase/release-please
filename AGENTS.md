@@ -30,7 +30,7 @@ pnpm test
 ```
 
 Tests run with [Vitest](https://vitest.dev/) (`vitest run`).
-Update snapshots after intentional output changes with `pnpm test:snap`.
+Update snapshots after intentional output changes with `pnpm test:snapshot`.
 
 To auto-fix lint and formatting issues, use:
 
