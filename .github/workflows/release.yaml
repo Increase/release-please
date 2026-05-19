@@ -1,4 +1,4 @@
-name: Create GitHub releases
+name: Create GitHub Releases
 
 on:
   push:
@@ -8,10 +8,12 @@ on:
 jobs:
   create-releases:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -26,18 +28,16 @@ jobs:
           git pull origin release --rebase=false --ff-only
           git merge --no-ff main
 
-      - uses: actions/setup-node@v3
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - run: npm i -g --force corepack && corepack enable
-      # Note: actions/setup-node doesn't yet provide parameters for corepack, we need to run it again after enabling it
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
+          node-version: "24"
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Clean
         run: rm -rf ./build

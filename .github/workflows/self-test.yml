@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: 'Which subcommand to run (release-pr, github-release, both).'
-        default: 'release-pr'
+        description: "Which subcommand to run (release-pr, github-release, both)."
+        default: "release-pr"
         type: choice
         options:
           - release-pr
@@ -23,7 +23,7 @@ jobs:
       pull-requests: write
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - id: release_please
         uses: ./
         with:
