@@ -20,7 +20,7 @@
 # (contents, pull-requests, issues: write)
 # and — unlike GITHUB_TOKEN — events fired from PRs/commits it opens
 # do trigger downstream workflows.
-name: release
+name: Release
 on:
   push:
     branches: [main]

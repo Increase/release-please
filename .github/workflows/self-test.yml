@@ -1,7 +1,7 @@
 # Exercises the JS action against this very repository via `uses: ./`.
 # We never want this to run on push (no accidental release PRs against the fork),
 # so the trigger is workflow_dispatch only.
-name: self-test
+name: Self Test
 on:
   workflow_dispatch:
     inputs:
@@ -14,7 +14,7 @@ on:
           - github-release
           - both
 jobs:
-  smoke:
+  dry-run:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,13 +31,14 @@ jobs:
 
       - uses: actions/checkout@v6
 
-      - id: release_please
+      - name: Run release-please
+        id: release_please
         uses: ./
         with:
           token: ${{ steps.app-token.outputs.token }}
           command: ${{ inputs.command }}
 
-      - name: Print outputs
+      - name: Print release-please outputs
         env:
           OUTPUTS: ${{ toJson(steps.release_please.outputs) }}
         run: |
