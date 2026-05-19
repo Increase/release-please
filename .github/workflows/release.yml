@@ -1,0 +1,146 @@
+name: release
+
+# Two-stage flow that keeps `main` source-only and ships built dist/ on a
+# long-lived `release` branch:
+#
+#   1. `release-please` job: build the action in-tree (so `uses: ./` works
+#      without dist/ committed to main), run the action against this repo,
+#      which either opens/updates a release PR or — once a release PR is
+#      merged — cuts a GitHub Release and tags vX.Y.Z on main.
+#
+#   2. `publish-bundle` job (only when step 1 actually cut a release): sync
+#      `main` into the `release` branch, force-add the freshly built dist/,
+#      push, and re-point the new vX.Y.Z tag at the release-branch commit
+#      so `uses: Increase/release-please@vX.Y.Z` resolves to a ref that
+#      contains `dist/index.js`.
+#
+# The `Increase Releases` GitHub App is the identity for every write here:
+# its installation token has the scopes release-please needs (contents,
+# pull-requests, issues: write) and — unlike GITHUB_TOKEN — events fired
+# from PRs/commits it opens do trigger downstream workflows.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialize against ourselves so two pushes in quick succession can't race
+# on the release branch.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      releases_created: ${{ steps.release_please.outputs.releases_created }}
+      tag_name: ${{ steps.release_please.outputs.tag_name }}
+      version: ${{ steps.release_please.outputs.version }}
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.INCREASE_RELEASES_CLIENT_ID }}
+          private-key: ${{ secrets.INCREASE_RELEASES_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v6
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build dist/ in this runner's checkout so `uses: ./` finds it. We
+      # never commit this build to main; the publish-bundle job below
+      # rebuilds on the release branch and commits there.
+      - name: Build action bundle
+        run: pnpm build:action
+
+      - id: release_please
+        uses: ./
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          command: both
+
+  publish-bundle:
+    needs: release-please
+    if: needs.release-please.outputs.releases_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.INCREASE_RELEASES_CLIENT_ID }}
+          private-key: ${{ secrets.INCREASE_RELEASES_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      # Look up the App bot's numeric user id so commit attribution uses the
+      # canonical `<id>+<slug>[bot]@users.noreply.github.com` form. This
+      # makes the commits show up in the GitHub UI as authored by the App.
+      - name: Resolve bot identity
+        id: bot
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          slug="${{ steps.app-token.outputs.app-slug }}"
+          user_id=$(gh api "users/${slug}[bot]" --jq .id)
+          echo "slug=${slug}" >> "$GITHUB_OUTPUT"
+          echo "user_id=${user_id}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure git as the App bot
+        run: |
+          git config user.name "${{ steps.bot.outputs.slug }}[bot]"
+          git config user.email "${{ steps.bot.outputs.user_id }}+${{ steps.bot.outputs.slug }}[bot]@users.noreply.github.com"
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build action bundle
+        run: pnpm build:action
+
+      - name: Sync release branch with main and ship dist/
+        env:
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin release >/dev/null 2>&1; then
+            git fetch origin release
+            git checkout release
+            git merge --no-ff main -m "chore: merge main into release for ${TAG}"
+          else
+            git checkout -b release main
+          fi
+          git add -f dist/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: build dist/ for ${TAG}"
+          fi
+          git push origin release
+          # Re-point the release tag to the release-branch commit (which has
+          # dist/) so `uses: Increase/release-please@${TAG}` resolves to a
+          # SHA that contains the bundled action.
+          git tag -f "${TAG}" HEAD
+          git push -f origin "${TAG}"

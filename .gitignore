@@ -2,6 +2,7 @@ node_modules
 coverage
 .DS_Store
 build/
+dist/
 system-test/fixtures/gh/*
 .coverage
 __pycache__
