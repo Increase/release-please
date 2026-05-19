@@ -64,7 +64,20 @@ include `Release-As: x.y.z` in a commit body on the default branch.
 
 The fork exposes a JavaScript action at the repository root.
 Consumers pin to the floating major-version tag,
-which moves with each patch/minor release:
+which moves with each patch/minor release.
+
+The action must be authenticated with a token minted by the
+Increase Releases GitHub App,
+not `GITHUB_TOKEN`.
+PRs and commits opened by `GITHUB_TOKEN`
+do not trigger downstream workflows
+(a GitHub safety feature),
+which breaks CI on the release PR.
+The App's installation token does trigger them,
+and its commits are attributed to `increase-releases[bot]`.
+
+Install the Increase Releases App on your repository,
+then add a workflow like:
 
 ```yaml
 # .github/workflows/release.yml
@@ -81,23 +94,26 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
-      issues: write
+      contents: read
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.INCREASE_RELEASES_CLIENT_ID }}
+          private-key: ${{ secrets.INCREASE_RELEASES_PRIVATE_KEY }}
+
       - uses: increase/release-please@v0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 ```
 
-`GITHUB_TOKEN` is sufficient for most repositories.
-Note that PRs opened by `GITHUB_TOKEN`
-do **not** trigger downstream workflows
-(this is a GitHub safety feature, not a bug),
-so if your release PR needs CI to run on it,
-authenticate with a GitHub App installation token instead.
-See [`.github/workflows/self-test.yml`](.github/workflows/self-test.yml)
-for the App-token pattern used by this repository.
+`INCREASE_RELEASES_CLIENT_ID` (org variable)
+and `INCREASE_RELEASES_PRIVATE_KEY` (org secret)
+are available org-wide on `Increase/*` repositories.
+The job's own `permissions:` only needs `contents: read`
+because the App token carries the write scopes
+release-please needs
+(`contents`, `pull-requests`, `issues`).
 
 The complete list of action inputs and outputs
 is in [`action.yml`](action.yml).
