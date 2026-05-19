@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.6](https://github.com/Increase/release-please/compare/v0.2.5...v0.2.6) (2026-05-19)
+
+
+### Chores
+
+* floating major tag, coverage gate, consumer docs ([#23](https://github.com/Increase/release-please/issues/23)) ([6495b08](https://github.com/Increase/release-please/commit/6495b0876050f0d25ac0accb59bc2e0b98846986))
+
+
+### Continuous Integration
+
+* add Dependabot config for npm and github-actions ([#22](https://github.com/Increase/release-please/issues/22)) ([6abcc76](https://github.com/Increase/release-please/commit/6abcc76f17c43dd3e8df923d1dacbcc9884eb09f))
+
 ## [0.2.5](https://github.com/Increase/release-please/compare/v0.2.4...v0.2.5) (2026-05-19)
 
 
