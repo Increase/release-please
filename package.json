@@ -5,20 +5,21 @@
   "description": "Generate release PRs based on the conventionalcommits.org spec",
   "main": "./build/src/index.js",
   "types": "build/src/index.d.ts",
-  "bin": "./build/src/bin/release-please.js",
+  "bin": {
+    "release-please": "./build/src/bin/release-please.js"
+  },
   "packageManager": "pnpm@11.1.3",
   "engines": {
     "node": ">=24.0.0",
     "pnpm": ">=11"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "prepare": "tsc --project tsconfig.build.json",
-    "prepack": "tsc --project tsconfig.build.json",
+    "build": "tsc",
+    "prepare": "pnpm run build",
     "lint": "biome check",
     "format": "biome format --write",
     "fix": "biome check --write",
-    "start": "ts-node ./src/bin/release-please.ts",
+    "start": "node ./build/src/bin/release-please.js",
     "test": "ENVIRONMENT=test vitest run",
     "test:snap": "ENVIRONMENT=test vitest run -u",
     "build:action": "ncc build src/main.ts -o dist --source-map --license licenses.txt --target es2022 --no-cache && node -e \"require('fs').rmSync('dist/src',{recursive:true,force:true});require('fs').rmSync('dist/test',{recursive:true,force:true})\""
