@@ -18,7 +18,8 @@
     "fix": "gts fix",
     "start": "ts-node ./src/bin/release-please.ts",
     "test": "cross-env ENVIRONMENT=test mocha --require test/_fetch-polyfill.js",
-    "test:snap": "SNAPSHOT_UPDATE=1 LC_ALL=en pnpm test"
+    "test:snap": "SNAPSHOT_UPDATE=1 LC_ALL=en pnpm test",
+    "build:action": "ncc build src/main.ts -o dist --source-map --license licenses.txt --target es2022 --no-cache && node -e \"require('fs').rmSync('dist/src',{recursive:true,force:true});require('fs').rmSync('dist/test',{recursive:true,force:true})\""
   },
   "files": [
     "build/src",
@@ -43,6 +44,7 @@
     }
   },
   "devDependencies": {
+    "@actions/core": "^1.10.1",
     "@octokit/types": "^9.0.0",
     "@types/chai": "^4.3.6",
     "@types/diff": "^5.0.2",
@@ -60,6 +62,7 @@
     "@types/sinon": "^10.0.17",
     "@types/xmldom": "^0.1.31",
     "@types/yargs": "^17.0.0",
+    "@vercel/ncc": "^0.38.4",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "c8": "^8.0.0",

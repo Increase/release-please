@@ -1,0 +1,68 @@
+name: "release-please"
+description: "Increase fork of release-please — open release PRs and tag releases"
+branding:
+  icon: "git-pull-request"
+  color: "blue"
+
+inputs:
+  token:
+    description: "GitHub token with contents:write, pull-requests:write, issues:write"
+    required: true
+  config-file:
+    description: "Path to release-please-config.json relative to repo root"
+    default: "release-please-config.json"
+  manifest-file:
+    description: "Path to .release-please-manifest.json relative to repo root"
+    default: ".release-please-manifest.json"
+  target-branch:
+    description: "Branch to open the release PR against (defaults to the calling workflow ref)"
+    default: ""
+  changes-branch:
+    description: "Branch to read commits from (Stainless changes-branch feature). Only applies to release-pr."
+    default: ""
+  command:
+    description: 'Which subcommand(s) to run: "release-pr", "github-release", or "both" (default).'
+    default: "both"
+  repo-url:
+    description: "Override repository URL. Defaults to the calling repository."
+    default: ""
+
+outputs:
+  releases_created:
+    description: "'true' if at least one GitHub release was created in this run."
+  paths_released:
+    description: "JSON-encoded array of repository paths that had a release created."
+  release_pr:
+    description: "JSON-serialized release pull request (the first one if multiple); empty string when none was opened or updated."
+  pr:
+    description: "Alias for release_pr, kept for parity with googleapis/release-please-action."
+  release_created:
+    description: "'true' if the root path had a release created (single-package convenience)."
+  id:
+    description: "Numeric id of the GitHub release created for the root path."
+  name:
+    description: "Display name of the GitHub release created for the root path."
+  tag_name:
+    description: "Tag name of the GitHub release created for the root path (e.g. v0.2.0)."
+  sha:
+    description: "Commit SHA the release tag points at."
+  url:
+    description: "URL of the GitHub release."
+  draft:
+    description: "'true' if the release was created as a draft."
+  upload_url:
+    description: "Upload URL for attaching release assets."
+  path:
+    description: "Path within the repository for which the release was created."
+  version:
+    description: "Version released for the root path (e.g. 0.2.0)."
+  major:
+    description: "Major component of the released version."
+  minor:
+    description: "Minor component of the released version."
+  patch:
+    description: "Patch component of the released version."
+
+runs:
+  using: "node24"
+  main: "dist/index.js"
