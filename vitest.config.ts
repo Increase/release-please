@@ -12,6 +12,7 @@ export default defineConfig({
       'test/setup.ts',
       'test/msw.ts',
       'test/http-mock.ts',
+      'test/vitest-env.d.ts',
     ],
     globals: true,
     environment: 'node',

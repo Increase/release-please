@@ -12,9 +12,9 @@
     "pnpm": ">=11"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "prepare": "tsc --project tsconfig.json",
-    "prepack": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.build.json",
+    "prepare": "tsc --project tsconfig.build.json",
+    "prepack": "tsc --project tsconfig.build.json",
     "lint": "biome check",
     "format": "biome format --write",
     "fix": "biome check --write",
