@@ -1,0 +1,5 @@
+# pnpm 11+ reads pnpm-specific settings from here instead of package.json.
+# msw ships a best-effort postinstall that already swallows its own errors,
+# so deny it explicitly to silence ERR_PNPM_IGNORED_BUILDS under --frozen-lockfile.
+allowBuilds:
+  msw: false
