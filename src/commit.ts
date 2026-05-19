@@ -301,7 +301,7 @@ function toConventionalChangelogFormat(
           )) {
             commits.push(commit);
           }
-        } catch (err) {
+        } catch (_err) {
           // Footer does not appear to be an additional commit.
         }
       }

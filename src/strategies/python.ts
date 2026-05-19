@@ -170,7 +170,7 @@ export class Python extends BaseStrategy {
         this.changesBranch
       );
       return parsePyProject(content.parsedContent);
-    } catch (e) {
+    } catch (_e) {
       return null;
     }
   }

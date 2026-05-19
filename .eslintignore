@@ -1,8 +1,0 @@
-**/node_modules
-**/coverage
-test/fixtures
-build/
-dist/
-docs/
-protos/
-__snapshots__/

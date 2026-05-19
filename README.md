@@ -1,8 +1,8 @@
 <img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google Cloud Platform logo" title="Google Cloud Platform" align="right" height="96" width="96"/>
 
-# [Stainless' Release Please](https://github.com/stainless-api/release-please)
+# [Increase's Release Please](https://github.com/increase/release-please)
 
-> Note: this is a fork of [release-please](https://github.com/googleapis/release-please) with changes specific to Stainless use cases.
+> Note: this is a fork of [release-please](https://github.com/stainless-api/release-please) with changes specific to Increase's use cases.
 
 Release Please automates CHANGELOG generation, the creation of GitHub releases,
 and version bumps for your projects.
@@ -18,8 +18,6 @@ management.
 
 Rather than continuously releasing what's landed to your default branch,
 release-please maintains Release PRs:
-
-<img width="400" src="/screen.png">
 
 These Release PRs are kept up-to-date as additional work is merged. When you're
 ready to tag a release, simply merge the release PR. Both squash-merge and

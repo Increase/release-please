@@ -153,7 +153,7 @@ export class Rust extends BaseStrategy {
         this.addPath(path),
         this.changesBranch
       );
-    } catch (e) {
+    } catch (_e) {
       return null;
     }
   }

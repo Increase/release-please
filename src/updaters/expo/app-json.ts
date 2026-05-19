@@ -69,7 +69,7 @@ export class AppJson extends DefaultUpdater {
       let expoMajorVersion = 0;
       try {
         expoMajorVersion = this.expoSDKVersion.major;
-      } catch (e) {
+      } catch (_e) {
         // Rethrow with a nice error message.
         throw new Error(
           'Unable to determine the Expo SDK version for this project. Make sure that the expo package is installed for your project.'
