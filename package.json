@@ -15,7 +15,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepare": "pnpm run build",
     "lint": "biome check",
     "format": "biome format --write",
     "fix": "biome check --write",
