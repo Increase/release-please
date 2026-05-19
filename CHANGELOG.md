@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/Increase/release-please/compare/v0.2.4...v0.2.5) (2026-05-19)
+
+
+### Continuous Integration
+
+* rebuild dist/ after release-branch checkout ([#20](https://github.com/Increase/release-please/issues/20)) ([89cedfb](https://github.com/Increase/release-please/commit/89cedfb2f4da42696a05e3bea6d979c0141e9520))
+
 ## [0.2.4](https://github.com/Increase/release-please/compare/v0.2.3...v0.2.4) (2026-05-19)
 
 
