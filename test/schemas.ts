@@ -25,6 +25,11 @@ addFormats(ajv);
 
 describe('schemas', () => {
   describe('manifest file', () => {
+    it('is a valid JSON Schema', () => {
+      expect(ajv.validateSchema(manifestSchema)).to.be.true;
+      expect(ajv.errors).to.be.null;
+    });
+
     const manifestValidator = ajv.compile(manifestSchema);
     for (const manifestFile of readdirSync(resolve(fixturesPath, 'versions'))) {
       it(`validates ${manifestFile}`, () => {
@@ -41,6 +46,11 @@ describe('schemas', () => {
   });
 
   describe('config file', () => {
+    it('is a valid JSON Schema', () => {
+      expect(ajv.validateSchema(configSchema)).to.be.true;
+      expect(ajv.errors).to.be.null;
+    });
+
     const configValidator = ajv.compile(configSchema);
     for (const manifestFile of readdirSync(resolve(fixturesPath, 'config'))) {
       it(`validates ${manifestFile}`, () => {
