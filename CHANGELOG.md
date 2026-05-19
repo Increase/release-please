@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.4](https://github.com/Increase/release-please/compare/v0.2.3...v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* use default imports for chalk and figures ([#15](https://github.com/Increase/release-please/issues/15)) ([3667374](https://github.com/Increase/release-please/commit/3667374d969f3bba48f792aa7c84d83cb371deaa))
+
+
+### Chores
+
+* add .editorconfig for non-Biome file types ([#10](https://github.com/Increase/release-please/issues/10)) ([ed9d59e](https://github.com/Increase/release-please/commit/ed9d59e96150b8dbbdca12178337101fb2eccea6))
+* clear pnpm audit advisories via direct bumps and overrides ([#19](https://github.com/Increase/release-please/issues/19)) ([5be4a2b](https://github.com/Increase/release-please/commit/5be4a2b66da0df16c386ceb7bfcb3df263f15b1d))
+* drop prepare hook from package.json ([#11](https://github.com/Increase/release-please/issues/11)) ([3b04b3f](https://github.com/Increase/release-please/commit/3b04b3fe5c2f60996b3d8a3188a7630141fc6414))
+* drop unused node-fetch dependency ([#9](https://github.com/Increase/release-please/issues/9)) ([4a1b876](https://github.com/Increase/release-please/commit/4a1b87637dca70ee45793f6adc4ff53fa56a24c1))
+* modernize tsconfig and bump typescript to 5.9 ([#14](https://github.com/Increase/release-please/issues/14)) ([34574f1](https://github.com/Increase/release-please/commit/34574f1d24099c4ed0cad2e711d2e761acc12716))
+* re-enable biome rules deferred during migration ([#16](https://github.com/Increase/release-please/issues/16)) ([ce04121](https://github.com/Increase/release-please/commit/ce041217c06453851a573656beb7065d539d3aac))
+
+
+### Continuous Integration
+
+* add concurrency cancellation and explicit type-check step ([#13](https://github.com/Increase/release-please/issues/13)) ([8b0c67a](https://github.com/Increase/release-please/commit/8b0c67ac8ff35b36eff4748e950dafac4a34829d))
+* build action bundle in self-test workflow ([#18](https://github.com/Increase/release-please/issues/18)) ([3579822](https://github.com/Increase/release-please/commit/357982204df1278247b6f3f828130ccc2d54682e))
+* bump actions/create-github-app-token to v3 ([#17](https://github.com/Increase/release-please/issues/17)) ([82a3f99](https://github.com/Increase/release-please/commit/82a3f993d548f17f23134b5ddd9a9e5227fc4c87))
+
 ## [0.2.3](https://github.com/Increase/release-please/compare/v0.2.2...v0.2.3) (2026-05-19)
 
 
