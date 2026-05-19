@@ -1,6 +1,7 @@
 {
   "name": "@increase/release-please",
   "version": "0.2.0",
+  "private": true,
   "description": "Generate release PRs based on the conventionalcommits.org spec",
   "main": "./build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -33,7 +34,7 @@
     "release",
     "conventional-commits"
   ],
-  "author": "Stainless Team",
+  "author": "Increase",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/increase/release-please/issues"
