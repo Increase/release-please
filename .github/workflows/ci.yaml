@@ -3,6 +3,12 @@ on:
   pull_request:
   merge_group:
 
+# Cancel previous in-progress runs on the same PR
+# so the freshest commit always wins.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,6 +31,9 @@ jobs:
 
       - name: Lint code
         run: pnpm lint
+
+      - name: Type-check
+        run: pnpm typecheck
 
       - name: Run tests
         run: pnpm test
