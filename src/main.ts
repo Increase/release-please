@@ -46,7 +46,11 @@ interface ActionInputs {
 }
 
 function parseCommand(value: string): Command {
-  if (value === 'release-pr' || value === 'github-release' || value === 'both') {
+  if (
+    value === 'release-pr' ||
+    value === 'github-release' ||
+    value === 'both'
+  ) {
     return value;
   }
   throw new Error(
@@ -96,8 +100,7 @@ async function buildManifest(
   inputs: ActionInputs,
   manifestOptions: ManifestOptions
 ): Promise<Manifest> {
-  const targetBranch =
-    inputs.targetBranch || github.repository.defaultBranch;
+  const targetBranch = inputs.targetBranch || github.repository.defaultBranch;
   return Manifest.fromManifest(
     github,
     targetBranch,
@@ -143,7 +146,9 @@ async function runReleasePr(
     const manifest = await buildManifest(github, inputs, manifestOptions);
     const pulls = await manifest.createPullRequests();
     core.info(
-      `release-pr finished: ${pulls.filter(Boolean).length} pull request(s) created or updated`
+      `release-pr finished: ${
+        pulls.filter(Boolean).length
+      } pull request(s) created or updated`
     );
     return pulls;
   } finally {
@@ -160,7 +165,9 @@ async function runGithubRelease(
     const manifest = await buildManifest(github, inputs, {});
     const releases = await manifest.createReleases();
     core.info(
-      `github-release finished: ${releases.filter(Boolean).length} release(s) created`
+      `github-release finished: ${
+        releases.filter(Boolean).length
+      } release(s) created`
     );
     return releases;
   } finally {

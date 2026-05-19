@@ -1,7 +1,7 @@
 timeout: 5000
-node-option:
-  - no-experimental-fetch
-require: ts-node/register
+require:
+  - ts-node/register
+  - test/setup.js
 recursive: true
 extension:
   - ts

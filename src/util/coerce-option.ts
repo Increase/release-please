@@ -22,7 +22,7 @@ export function coerceOption(option: string): string {
       const stat: Stats = statSync(option);
       if (stat.isDirectory()) return option;
       else return readFileSync(option, 'utf8').trim();
-    } catch (err) {
+    } catch (_err) {
       // simply fallback to returning the original option.
     }
   }

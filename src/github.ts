@@ -58,7 +58,6 @@ import {HttpProxyAgent} from 'http-proxy-agent';
 import {PullRequestOverflowHandler} from './util/pull-request-overflow-handler';
 import {retry} from '@octokit/plugin-retry';
 import {throttling} from '@octokit/plugin-throttling';
-import {Agent} from 'http';
 import {Version} from './version';
 
 // Extract some types from the `request` package.
@@ -267,7 +266,7 @@ export class GitHub {
   static createDefaultAgent(
     baseUrl: string,
     defaultProxy?: ProxyOption
-  ): Agent | undefined {
+  ) {
     if (!defaultProxy) {
       return undefined;
     }

@@ -6,6 +6,32 @@
 > 👇 Changelogs from googleapis/release-please before Stainless fork
 
 
+## [0.2.1](https://github.com/Increase/release-please/compare/v0.2.0...v0.2.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* satisfy prettier formatting and ignore dist/ in eslint ([604efce](https://github.com/Increase/release-please/commit/604efce7bc733511507d804f541c3d584874eefe))
+
+
+### Chores
+
+* credit Google, Stainless, and Increase in LICENSE ([5a7458c](https://github.com/Increase/release-please/commit/5a7458c9e346b236f8823e98112474d4a7cd4233))
+* mark package as private and credit Increase as author ([6b218c0](https://github.com/Increase/release-please/commit/6b218c08d44226c091a8b506d8473eb466ec73dd))
+* modernize tooling for the Increase fork ([d22f6b7](https://github.com/Increase/release-please/commit/d22f6b7a39259265c908fa98168e9ad44c137766))
+
+
+### Documentation
+
+* add AGENTS.md with commit and pre-commit guidance ([fe51f97](https://github.com/Increase/release-please/commit/fe51f978c9e8424ee19898e3a5bcd4dba2abdfcf))
+* remove upstream documentation ([ccaca51](https://github.com/Increase/release-please/commit/ccaca511255cdf35ddca98a5a43948ebd09988f4))
+* rewrite README for the Increase fork ([4dae19e](https://github.com/Increase/release-please/commit/4dae19ea224fac0d672fbcf1d57f173bd8a8579e))
+
+
+### Continuous Integration
+
+* simplify release workflows ([386940c](https://github.com/Increase/release-please/commit/386940cca12de564b697b3f0e7ea8cd2565a8482))
+
 ## [0.2.0](https://github.com/Increase/release-please/compare/v0.1.0...v0.2.0) (2026-05-19)
 
 
