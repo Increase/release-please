@@ -254,7 +254,12 @@ export class GitHub {
     this.octokit = options.octokitAPIs.octokit;
     this.request = options.octokitAPIs.request;
     this.graphql = options.octokitAPIs.graphql;
-    this.fileCache = new RepositoryFileCache(this.octokit, this.repository);
+    this.fileCache = new RepositoryFileCache(
+      this.octokit as unknown as ConstructorParameters<
+        typeof RepositoryFileCache
+      >[0],
+      this.repository
+    );
     this.logger = options.logger ?? defaultLogger;
     this.useGraphql = options.useGraphql ?? true;
     this.graphqlRetries = options.graphqlRetries ?? 5;
@@ -272,16 +277,10 @@ export class GitHub {
     }
 
     const {host, port} = defaultProxy;
+    const isHttp = new URL(baseUrl).protocol.replace(':', '') === 'http';
+    const proxyUrl = `${isHttp ? 'http' : 'https'}://${host}:${port}`;
 
-    return new URL(baseUrl).protocol.replace(':', '') === 'http'
-      ? new HttpProxyAgent({
-          host,
-          port,
-        })
-      : new HttpsProxyAgent({
-          host,
-          port,
-        });
+    return isHttp ? new HttpProxyAgent(proxyUrl) : new HttpsProxyAgent(proxyUrl);
   }
 
   /**
@@ -322,7 +321,6 @@ export class GitHub {
         },
         retry: {
           retries: options.retries ?? 0,
-          retryAfter: 3, // 3 seconds
         },
         throttle: {
           enabled: throttlingRetries > 0,
@@ -743,7 +741,11 @@ export class GitHub {
         ref: sha,
       }
     )) {
-      for (const f of resp.data.files || []) {
+      const data = resp.data as unknown as
+        | {files?: {filename?: string}[]}
+        | {filename?: string}[];
+      const respFiles = Array.isArray(data) ? data : data.files || [];
+      for (const f of respFiles) {
         if (f.filename) {
           files.push(f.filename);
         }
@@ -1328,7 +1330,7 @@ export class GitHub {
 
       // add labels, autorelease labels are needed for the github-release command
       await addLabels(
-        this.octokit,
+        this.octokit as unknown as Parameters<typeof addLabels>[0],
         {
           repo: this.repository.repo,
           owner: this.repository.owner,
@@ -1385,7 +1387,7 @@ export class GitHub {
       const tree = generateTreeObjects(changes);
 
       const treeSha = await createTree(
-        this.octokit,
+        this.octokit as unknown as Parameters<typeof createTree>[0],
         this.repository,
         refSHA,
         tree
@@ -2264,7 +2266,10 @@ export class GitHub {
             });
             metaB = commit.data.commit;
             filesBMap = new Map(
-              getChangedFiles(commit.data.files).map(file => [file.sha, file])
+              getChangedFiles(commit.data.files).map(file => [
+                file.sha ?? '',
+                file,
+              ])
             );
             cacheOfBranchBCommitMetadataPerCommitSha.set(shaB, metaB);
             cacheOfBranchBFilesPerCommitSha.set(shaB, filesBMap);
@@ -2282,7 +2287,7 @@ export class GitHub {
           foundInB =
             metaA.message === metaB.message &&
             filesA.every(fileA => {
-              const fileB = filesBMap?.get(fileA.sha);
+              const fileB = filesBMap?.get(fileA.sha ?? '');
               if (!fileB) return false;
               return (
                 fileA.filename === fileB.filename &&
@@ -2479,7 +2484,12 @@ export class GitHub {
   }
 
   invalidateFileCache() {
-    this.fileCache = new RepositoryFileCache(this.octokit, this.repository);
+    this.fileCache = new RepositoryFileCache(
+      this.octokit as unknown as ConstructorParameters<
+        typeof RepositoryFileCache
+      >[0],
+      this.repository
+    );
   }
 
   private async queryPullRequestId(
