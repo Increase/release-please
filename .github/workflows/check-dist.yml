@@ -1,0 +1,50 @@
+name: check-dist
+# Standard "ncc rebuild stayed in sync" gate for JavaScript actions,
+# modelled on the workflow shipped by actions/javascript-action
+# and used by googleapis/release-please-action.
+# If a contributor edits src/main.ts but forgets to rerun `pnpm build:action`,
+# this fails the PR with a diff.
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "dist/**"
+      - "action.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.json"
+      - ".github/workflows/check-dist.yml"
+  merge_group:
+  workflow_dispatch:
+
+jobs:
+  check-dist:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Rebuild dist/
+        run: pnpm build:action
+
+      - name: Verify dist/ is up to date
+        run: |
+          if [ -n "$(git status --porcelain dist/)" ]; then
+            echo "::error::dist/ is out of date. Run \`pnpm build:action\` and commit the changes."
+            git status dist/
+            git --no-pager diff dist/
+            exit 1
+          fi

@@ -1,0 +1,46 @@
+name: self-test
+# Exercises the JS action against this very repository via `uses: ./`. We never
+# want this to run on push (no accidental release PRs against the fork), so the
+# trigger is workflow_dispatch only.
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Which subcommand to run (release-pr, github-release, both)."
+        default: "release-pr"
+        type: choice
+        options:
+          - release-pr
+          - github-release
+          - both
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # Mint a short-lived installation token for the Increase Releases GitHub
+      # App. Using App auth (instead of a PAT) means commits/PRs opened by the
+      # action are authored by `increase-releases[bot]` and trigger downstream
+      # workflows, both of which `GITHUB_TOKEN` cannot do.
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.INCREASE_RELEASES_CLIENT_ID }}
+          private-key: ${{ secrets.INCREASE_RELEASES_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v6
+
+      - id: release_please
+        uses: ./
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          command: ${{ inputs.command }}
+
+      - name: Print outputs
+        env:
+          OUTPUTS: ${{ toJson(steps.release_please.outputs) }}
+        run: |
+          echo "$OUTPUTS"
