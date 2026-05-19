@@ -1,0 +1,2307 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven3",
+            "notes": "Release notes for path: maven3, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "maven4",
+            "notes": "### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven3/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>maven3: 3.3.4</summary>
+
+Release notes for path: maven3, releaseType: maven
+</details>
+
+<details><summary>maven4: 4.4.5</summary>
+
+### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate 3`] = `
+[
+  {
+    "component": "maven3",
+    "notes": "Release notes for path: maven3, releaseType: maven",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 3,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "maven4",
+    "notes": "### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+    "version": Version {
+      "build": undefined,
+      "major": 4,
+      "minor": 4,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate with special updater 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven3",
+            "notes": "Release notes for path: maven3, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "maven4",
+            "notes": "### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven3/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              RawContent {
+                "rawContent": "some content",
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate with special updater 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>maven3: 3.3.4</summary>
+
+Release notes for path: maven3, releaseType: maven
+</details>
+
+<details><summary>maven4: 4.4.5</summary>
+
+### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > appends to existing candidate with special updater 3`] = `
+[
+  {
+    "component": "maven3",
+    "notes": "Release notes for path: maven3, releaseType: maven",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 3,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "maven4",
+    "notes": "### Dependencies
+
+* Updated foo to v3
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+    "version": Version {
+      "build": undefined,
+      "major": 4,
+      "minor": 4,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > can consider all artifacts 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "simple",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "multi1",
+            "notes": "Release notes for path: multi1, releaseType: java-yoshi",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:my-bom",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:multi1-bom bumped to 1.1.2,
+    * com.google.example:multi1-sub1 bumped to 2.2.3,
+    * com.google.example:multi1-sub2 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 2,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "multi1/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:multi1-parent" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:multi1-bom" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:multi1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:multi1-sub1" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:multi1-sub2" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:my-bom" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 2,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "multi1/bom/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": undefined,
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "multi1/primary/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": undefined,
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "multi1/sub1/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": undefined,
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "multi1/sub2/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": undefined,
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "bom/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:multi1-parent" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:multi1-bom" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:multi1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:multi1-sub1" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:multi1-sub2" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:my-bom" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 2,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "bom/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:multi1-bom bumped to 1.1.2,
+    * com.google.example:multi1-sub1 bumped to 2.2.3,
+    * com.google.example:multi1-sub2 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 2,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "multi1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "bom" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > can consider all artifacts 2`] = `
+[
+  {
+    "component": "multi1",
+    "notes": "Release notes for path: multi1, releaseType: java-yoshi",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:my-bom",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:multi1-bom bumped to 1.1.2,
+    * com.google.example:multi1-sub1 bumped to 2.2.3,
+    * com.google.example:multi1-sub2 bumped to 3.3.4",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 2,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > can consider all artifacts 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>multi1: 1.1.2</summary>
+
+Release notes for path: multi1, releaseType: java-yoshi
+</details>
+
+<details><summary>com.google.example:my-bom: 1.2.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:multi1-bom bumped to 1.1.2,
+    * com.google.example:multi1-sub1 bumped to 2.2.3,
+    * com.google.example:multi1-sub2 bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > can consider all artifacts 4`] = `
+"<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <groupId>com.google.example</groupId>
+  <artifactId>my-bom</artifactId>
+  <version>1.2.4</version>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.example</groupId>
+        <artifactId>multi1-bom</artifactId>
+        <version>1.1.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.google.example</groupId>
+        <artifactId>multi1-sub1</artifactId>
+        <version>2.2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.example</groupId>
+        <artifactId>multi1-sub2</artifactId>
+        <version>3.3.4</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.example</groupId>
+        <artifactId>multi2-sub1</artifactId>
+        <version>5.5.5</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.example</groupId>
+        <artifactId>multi2-sub2</artifactId>
+        <version>6.6.6</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>"
+`;
+
+exports[`MavenWorkspace plugin > run > handles a single maven package 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven4",
+            "notes": "Release notes for path: maven4, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > handles a single maven package 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>maven4: 4.4.5</summary>
+
+Release notes for path: maven4, releaseType: maven
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > handles a single maven package 3`] = `
+[
+  {
+    "component": "maven4",
+    "notes": "Release notes for path: maven4, releaseType: maven",
+    "version": Version {
+      "build": undefined,
+      "major": 4,
+      "minor": 4,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > skips pom files not configured for release 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven1",
+            "notes": "Release notes for path: maven1, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven2",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven3",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven4",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven1/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven2/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven2/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven3/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven3/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > skips pom files not configured for release 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>maven1: 1.1.2</summary>
+
+Release notes for path: maven1, releaseType: maven
+</details>
+
+<details><summary>com.google.example:maven2: 2.2.3</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2
+</details>
+
+<details><summary>com.google.example:maven3: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3
+</details>
+
+<details><summary>com.google.example:maven4: 4.4.5</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > skips pom files not configured for release 3`] = `
+[
+  {
+    "component": "maven1",
+    "notes": "Release notes for path: maven1, releaseType: maven",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven2",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+    "version": Version {
+      "build": undefined,
+      "major": 2,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven3",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 3,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven4",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+    "version": Version {
+      "build": undefined,
+      "major": 4,
+      "minor": 4,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > skips updating manifest with snapshot versions 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven1",
+            "notes": "Release notes for path: maven1, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": "SNAPSHOT",
+            },
+          },
+          {
+            "component": "maven2",
+            "notes": "Release notes for path: maven2, releaseType: maven
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2-SNAPSHOT",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": "SNAPSHOT",
+            },
+          },
+          {
+            "component": "maven3",
+            "notes": "Release notes for path: maven3, releaseType: maven
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3-SNAPSHOT",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": "SNAPSHOT",
+            },
+          },
+          {
+            "component": "maven4",
+            "notes": "Release notes for path: maven4, releaseType: maven
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4-SNAPSHOT",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": "SNAPSHOT",
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven1/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": "SNAPSHOT",
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven2/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 2,
+                  "minor": 2,
+                  "patch": 3,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": "SNAPSHOT",
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 2,
+                  "minor": 2,
+                  "patch": 3,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven3/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": "SNAPSHOT",
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 3,
+                  "minor": 3,
+                  "patch": 4,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": "SNAPSHOT",
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": "SNAPSHOT",
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 4,
+                  "minor": 4,
+                  "patch": 5,
+                  "preRelease": "SNAPSHOT",
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > walks dependency tree and updates previously untouched packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "maven",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "maven1",
+            "notes": "Release notes for path: maven1, releaseType: maven",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven2",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven3",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "com.google.example:maven4",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "maven1/pom.xml",
+          "updater": CompositeUpdater {
+            "updaters": [
+              PomXml {
+                "dependencyVersions": undefined,
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+              PomXml {
+                "dependencyVersions": Map {
+                  "com.google.example:maven1" => Version {
+                    "build": undefined,
+                    "major": 1,
+                    "minor": 1,
+                    "patch": 2,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven2" => Version {
+                    "build": undefined,
+                    "major": 2,
+                    "minor": 2,
+                    "patch": 3,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven3" => Version {
+                    "build": undefined,
+                    "major": 3,
+                    "minor": 3,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "com.google.example:maven4" => Version {
+                    "build": undefined,
+                    "major": 4,
+                    "minor": 4,
+                    "patch": 5,
+                    "preRelease": undefined,
+                  },
+                },
+                "version": Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 2,
+                  "preRelease": undefined,
+                },
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven2/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven2/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven3/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven3/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/pom.xml",
+          "updater": PomXml {
+            "dependencyVersions": Map {
+              "com.google.example:maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "com.google.example:maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "maven4/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "maven1" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "maven2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "maven3" => Version {
+                "build": undefined,
+                "major": 3,
+                "minor": 3,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "maven4" => Version {
+                "build": undefined,
+                "major": 4,
+                "minor": 4,
+                "patch": 5,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`MavenWorkspace plugin > run > walks dependency tree and updates previously untouched packages 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>maven1: 1.1.2</summary>
+
+Release notes for path: maven1, releaseType: maven
+</details>
+
+<details><summary>com.google.example:maven2: 2.2.3</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2
+</details>
+
+<details><summary>com.google.example:maven3: 3.3.4</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3
+</details>
+
+<details><summary>com.google.example:maven4: 4.4.5</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`MavenWorkspace plugin > run > walks dependency tree and updates previously untouched packages 3`] = `
+[
+  {
+    "component": "maven1",
+    "notes": "Release notes for path: maven1, releaseType: maven",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven2",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven1 bumped to 1.1.2",
+    "version": Version {
+      "build": undefined,
+      "major": 2,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven3",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven2 bumped to 2.2.3",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 3,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "com.google.example:maven4",
+    "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+    * com.google.example:maven3 bumped to 3.3.4",
+    "version": Version {
+      "build": undefined,
+      "major": 4,
+      "minor": 4,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+]
+`;

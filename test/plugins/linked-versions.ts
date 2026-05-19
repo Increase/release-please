@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {GitHub} from '../../src/github';
 import {Manifest} from '../../src/manifest';
 import {Update} from '../../src/update';
@@ -26,9 +25,6 @@ import {
 import {Version} from '../../src/version';
 import {CargoToml} from '../../src/updaters/rust/cargo-toml';
 import {parseCargoManifest} from '../../src/updaters/rust/common';
-import {expect} from 'chai';
-
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/cargo-workspace';
 
 export function buildMockPackageUpdate(
@@ -56,7 +52,7 @@ describe('LinkedVersions plugin', () => {
       defaultBranch: 'main',
     });
 
-    mockReleases(sandbox, github, [
+    mockReleases(github, [
       {
         id: 1,
         sha: 'abc123',
@@ -82,7 +78,7 @@ describe('LinkedVersions plugin', () => {
         url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg1-v1.0.0',
       },
     ]);
-    mockCommits(sandbox, github, [
+    mockCommits(github, [
       {
         sha: 'aaaaaa',
         message: 'fix: some bugfix',
@@ -130,10 +126,7 @@ describe('LinkedVersions plugin', () => {
       },
     ]);
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  it('should sync versions pull requests', async () => {
+    it('should sync versions pull requests', async () => {
     const manifest = new Manifest(
       github,
       'target-branch',
@@ -167,7 +160,7 @@ describe('LinkedVersions plugin', () => {
       }
     );
     const pullRequests = await manifest.buildPullRequests([], []);
-    expect(pullRequests).lengthOf(1);
+    expect(pullRequests).lengthOf(1).toMatchSnapshot();
     const pullRequest = pullRequests[0];
     const packageData2 = pullRequest.body.releaseData.find(
       data => data.component === 'pkg2'
@@ -215,7 +208,7 @@ describe('LinkedVersions plugin', () => {
       }
     );
     const pullRequests = await manifest.buildPullRequests([], []);
-    expect(pullRequests).lengthOf(2);
+    expect(pullRequests).lengthOf(2).toMatchSnapshot();
     const singlePullRequest = pullRequests[0];
     safeSnapshot(singlePullRequest.body.toString());
 
@@ -316,7 +309,7 @@ describe('LinkedVersions plugin', () => {
       }
     );
     const pullRequests = await manifest.buildPullRequests([], []);
-    expect(pullRequests).lengthOf(2);
+    expect(pullRequests).lengthOf(2).toMatchSnapshot();
     const groupPullRequest1 = pullRequests[1];
     const packageData1 = groupPullRequest1.body.releaseData.find(
       data => data.component === 'pkg1'

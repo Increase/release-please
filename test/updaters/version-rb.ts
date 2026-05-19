@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import {expect} from 'chai';
 import {readFileSync} from 'fs';
-import {describe, it} from 'mocha';
 import {resolve} from 'path';
 import {VersionRB} from '../../src/updaters/ruby/version-rb';
 import {Version} from '../../src/version';
-import snapshot = require('snap-shot-it');
-
 const fixturesPath = './test/updaters/fixtures';
 
 describe('version.rb', () => {
@@ -70,7 +67,7 @@ describe('version.rb', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates content with single quotes in version.rb', async () => {
@@ -84,7 +81,7 @@ describe('version.rb', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates long patch versions in version.rb', async () => {
@@ -96,7 +93,7 @@ describe('version.rb', () => {
         version: Version.parse('0.6.11'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates prerelease versions in version.rb', async () => {
@@ -108,7 +105,7 @@ describe('version.rb', () => {
         version: Version.parse('10.0.0-alpha1'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

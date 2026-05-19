@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {Python} from '../../src/strategies/python';
-import * as sinon from 'sinon';
 import {buildGitHubFileContent, assertHasUpdate} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {PythonFileWithVersion} from '../../src/updaters/python/python-file-with-version';
@@ -27,11 +25,9 @@ import {SetupCfg} from '../../src/updaters/python/setup-cfg';
 import {SetupPy} from '../../src/updaters/python/setup-py';
 import {Changelog} from '../../src/updaters/changelog';
 import {ChangelogJson} from '../../src/updaters/changelog-json';
-import snapshot = require('snap-shot-it');
 import {PullRequestBody} from '../../src/util/pull-request-body';
 import {PythonReadme} from '../../src/updaters/python/python-readme';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/python';
 
 const UUID_REGEX =
@@ -58,10 +54,7 @@ describe('Python', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Python({
@@ -69,10 +62,10 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(buildGitHubFileContent(fixturesPath, 'setup.py'));
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'setup.py'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -87,10 +80,10 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(buildGitHubFileContent(fixturesPath, 'setup.py'));
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'setup.py'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -110,10 +103,10 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(buildGitHubFileContent(fixturesPath, 'setup.py'));
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'setup.py'));
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -151,12 +144,12 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent('./test/updaters/fixtures', 'pyproject.toml')
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -172,15 +165,15 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent(
             './test/updaters/fixtures',
             'README-python-pre.md'
           )
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
         latestRelease: await strategy.buildRelease({
@@ -205,12 +198,12 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(buildGitHubFileContent(fixturesPath, 'setup.py'));
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
-        .resolves(['src/version.py']);
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'setup.py'));
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
+        .mockResolvedValue(['src/version.py']);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -237,17 +230,17 @@ describe('Python', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('changelog.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'changelog.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'changelog.json'));
       getFileContentsStub
         .withArgs('setup.py', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'setup.py'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'setup.py'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -259,7 +252,7 @@ describe('Python', () => {
       const newContent = update.updater.updateContent(
         JSON.stringify({entries: []})
       );
-      snapshot(
+      expect(
         newContent
           .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
           .replace(UUID_REGEX, 'abc-123-efd-qwerty')

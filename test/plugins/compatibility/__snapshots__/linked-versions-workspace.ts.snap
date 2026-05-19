@@ -1,0 +1,465 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 1`] = `
+[
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkgA",
+          "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkgB",
+          "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkgB:** Synchronize my group versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.0.0 to 1.1.0",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some feature",
+        "breaking": false,
+        "files": [
+          "packages/rustA/foo",
+        ],
+        "message": "feat: some feature",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "feat",
+      },
+      {
+        "bareMessage": "1.1.0",
+        "breaking": false,
+        "files": undefined,
+        "message": "Release-As: 1.1.0",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "",
+        "type": "Release-As",
+      },
+      {
+        "bareMessage": "Synchronize my group versions",
+        "breaking": false,
+        "files": undefined,
+        "message": "chore(pkgB): Synchronize my group versions",
+        "notes": [
+          {
+            "text": "1.1.0",
+            "title": "RELEASE AS",
+          },
+        ],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": "pkgB",
+        "sha": "",
+        "type": "chore",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--main",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "main",
+      "component": undefined,
+      "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+      "pullRequestTitlePattern": "chore: release \${branch}",
+      "targetBranch": "main",
+      "version": undefined,
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "packages/rustA/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/rustA/Cargo.toml",
+        "updater": RawContent {
+          "rawContent": "[package]
+name = "pkgA"
+version = "1.1.0"",
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/rustA/Cargo.lock",
+        "updater": CargoLock {
+          "versionsMap": Map {
+            "pkgA" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+            "pkgB" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "packages/rustA" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 0,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {},
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "packages/rustB" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 0,
+                  "preRelease": undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "Cargo.lock",
+        "updater": CargoLock {
+          "versionsMap": Map {
+            "pkgA" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+            "pkgB" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "packages/rustB/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkgB:** Synchronize my group versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.0.0 to 1.1.0",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/rustB/Cargo.toml",
+        "updater": RawContent {
+          "rawContent": "[package]
+name = "pkgB"
+version = "1.1.0"
+
+[dependencies]
+pkgA = { version = "1.1.0", path = "../pkgA" }",
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/rustB/Cargo.lock",
+        "updater": CargoLock {
+          "versionsMap": Map {
+            "pkgA" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+            "pkgB" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkgA: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (1983-10-10)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkgB: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkgB:** Synchronize my group versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pkgA bumped from 1.0.0 to 1.1.0
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 3`] = `
+CompositeUpdater {
+  "updaters": [
+    ReleasePleaseManifest {
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+      "versionsMap": Map {
+        "packages/rustA" => Version {
+          "build": undefined,
+          "major": 1,
+          "minor": 1,
+          "patch": 0,
+          "preRelease": undefined,
+        },
+      },
+    },
+    ReleasePleaseManifest {
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+      "versionsMap": Map {},
+    },
+    ReleasePleaseManifest {
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+      "versionsMap": Map {
+        "packages/rustB" => Version {
+          "build": undefined,
+          "major": 1,
+          "minor": 1,
+          "patch": 0,
+          "preRelease": undefined,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 4`] = `
+ReleasePleaseManifest {
+  "version": Version {
+    "build": undefined,
+    "major": 1,
+    "minor": 1,
+    "patch": 0,
+    "preRelease": undefined,
+  },
+  "versionsMap": Map {
+    "packages/rustA" => Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+}
+`;
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 5`] = `
+ReleasePleaseManifest {
+  "version": Version {
+    "build": undefined,
+    "major": 1,
+    "minor": 1,
+    "patch": 0,
+    "preRelease": undefined,
+  },
+  "versionsMap": Map {},
+}
+`;
+
+exports[`Plugin compatibility > linked-versions and workspace > should version bump dependencies together 6`] = `
+ReleasePleaseManifest {
+  "version": Version {
+    "build": undefined,
+    "major": 1,
+    "minor": 1,
+    "patch": 0,
+    "preRelease": undefined,
+  },
+  "versionsMap": Map {
+    "packages/rustB" => Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+}
+`;

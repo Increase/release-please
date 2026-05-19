@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {GitHub} from './github';
-import {CandidateReleasePullRequest, RepositoryConfig} from './manifest';
+import type {CandidateReleasePullRequest, RepositoryConfig} from './manifest';
 import {Strategy} from './strategy';
 import {Commit, ConventionalCommit} from './commit';
 import {Release} from './release';

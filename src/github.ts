@@ -45,7 +45,7 @@ import {Repository} from './repository';
 import {ReleasePullRequest} from './release-pull-request';
 import {Update} from './update';
 import {Release} from './release';
-import {ROOT_PROJECT_PATH} from './manifest';
+import {ROOT_PROJECT_PATH} from './manifest-constants';
 import {signoffCommitMessage} from './util/signoff-commit-message';
 import {
   RepositoryFileCache,
@@ -367,7 +367,7 @@ export class GitHub {
       request: request.defaults({
         baseUrl: apiUrl,
         headers: {
-          'user-agent': `@stainless-api/release-please/${
+          'user-agent': `@increase/release-please/${
             options.version?.toString() || '0.0.0-dev'
           }`,
           Authorization: `token ${options.token}`,
@@ -379,7 +379,7 @@ export class GitHub {
           agent: this.createDefaultAgent(graphqlUrl, options.proxy),
         },
         headers: {
-          'user-agent': `@stainless-api/release-please/${
+          'user-agent': `@increase/release-please/${
             options.version?.toString() || '0.0.0-dev'
           }`,
           Authorization: `token ${options.token}`,

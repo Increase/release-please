@@ -11,20 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {PHP} from '../../src/strategies/php';
-import * as sinon from 'sinon';
 import {assertHasUpdate} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
 import {Version} from '../../src/version';
 import {Changelog} from '../../src/updaters/changelog';
 // import {RootComposerUpdatePackages} from '../../src/updaters/php/root-composer-update-packages';
-
-const sandbox = sinon.createSandbox();
 
 const COMMITS = [
   ...buildMockConventionalCommit(
@@ -45,10 +41,7 @@ describe('PHP', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new PHP({
@@ -96,7 +89,7 @@ describe('PHP', () => {
       });
       const updates = release!.updates;
       // Stainless EDIT: we removed updates to the composer.json file
-      expect(updates).lengthOf(1);
+      expect(updates).lengthOf(1).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
 
       // Original:

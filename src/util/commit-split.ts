@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Commit} from '../commit';
-import {ROOT_PROJECT_PATH} from '../manifest';
+import {ROOT_PROJECT_PATH} from '../manifest-constants';
 import {normalizePaths} from './commit-utils';
 
 export interface CommitSplitOptions {

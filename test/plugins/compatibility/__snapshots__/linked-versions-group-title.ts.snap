@@ -1,0 +1,611 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Plugin compatibility > linked-versions and group-pull-request-title-pattern > should find release to create 1`] = `
+[
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "primary",
+          "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkgA",
+          "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some feature",
+        "breaking": false,
+        "files": [
+          "packages/nodeA/foo",
+        ],
+        "message": "feat: some feature",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "feat",
+      },
+      {
+        "bareMessage": "some feature",
+        "breaking": false,
+        "files": [
+          "packages/nodeA/foo",
+        ],
+        "message": "feat: some feature",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "feat",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--main",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "main",
+      "component": "primary",
+      "matchPattern": /\\^chore: Release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+      "pullRequestTitlePattern": "chore: Release\${component} \${version}",
+      "targetBranch": "main",
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+    },
+    "updates": [
+      {
+        "createIfMissing": false,
+        "path": "package-lock.json",
+        "updater": PackageLockJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "npm-shrinkwrap.json",
+        "updater": PackageLockJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "samples/package.json",
+        "updater": SamplesPackageJson {
+          "packageName": "primary",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "package.json",
+        "updater": PackageJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/mcp-server/src/server.ts",
+        "updater": McpServer {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "changelog.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ChangelogJson {
+              "artifactName": "primary",
+              "commits": [
+                {
+                  "bareMessage": "some feature",
+                  "breaking": false,
+                  "files": [
+                    "packages/nodeA/foo",
+                  ],
+                  "message": "feat: some feature",
+                  "notes": [],
+                  "pullRequest": undefined,
+                  "references": [],
+                  "scope": null,
+                  "sha": "aaaaaa",
+                  "type": "feat",
+                },
+              ],
+              "language": "JAVASCRIPT",
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": undefined,
+            },
+            ChangelogJson {
+              "artifactName": "pkgA",
+              "commits": [
+                {
+                  "bareMessage": "some feature",
+                  "breaking": false,
+                  "files": [
+                    "packages/nodeA/foo",
+                  ],
+                  "message": "feat: some feature",
+                  "notes": [],
+                  "pullRequest": undefined,
+                  "references": [],
+                  "scope": null,
+                  "sha": "aaaaaa",
+                  "type": "feat",
+                },
+              ],
+              "language": "JAVASCRIPT",
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": undefined,
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "." => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 0,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 0,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "packages/nodeA" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 1,
+                  "patch": 0,
+                  "preRelease": undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/nodeA/package-lock.json",
+        "updater": PackageLockJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/nodeA/npm-shrinkwrap.json",
+        "updater": PackageLockJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/nodeA/samples/package.json",
+        "updater": SamplesPackageJson {
+          "packageName": "pkgA",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "packages/nodeA/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/nodeA/package.json",
+        "updater": PackageJson {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "packages/nodeA/packages/mcp-server/src/server.ts",
+        "updater": McpServer {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 1,
+            "patch": 0,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`Plugin compatibility > linked-versions and group-pull-request-title-pattern > should find release to create 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>primary: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (1983-10-10)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkgA: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (1983-10-10)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`Plugin compatibility > linked-versions and group-pull-request-title-pattern > should find release to create 3`] = `
+[
+  {
+    "draft": undefined,
+    "name": "primary: v1.1.0",
+    "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+    "path": ".",
+    "prerelease": undefined,
+    "pullRequest": {
+      "baseBranchName": "main",
+      "body": ":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>primary: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkgA: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "files": [
+        "package-lock.json",
+        "npm-shrinkwrap.json",
+        "samples/package.json",
+        "CHANGELOG.md",
+        "package.json",
+        "packages/mcp-server/src/server.ts",
+        "changelog.json",
+        ".release-please-manifest.json",
+        "packages/nodeA/package-lock.json",
+        "packages/nodeA/npm-shrinkwrap.json",
+        "packages/nodeA/samples/package.json",
+        "packages/nodeA/CHANGELOG.md",
+        "packages/nodeA/package.json",
+        "packages/nodeA/packages/mcp-server/src/server.ts",
+      ],
+      "headBranchName": "release-please--branches--main",
+      "labels": [
+        "autorelease: pending",
+      ],
+      "number": 1234,
+      "sha": "cccccc",
+      "title": "chore: Release primary 1.1.0",
+    },
+    "sha": "cccccc",
+    "tag": TagName {
+      "component": "primary",
+      "includeV": true,
+      "separator": "-",
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "draft": undefined,
+    "name": "pkgA: v1.1.0",
+    "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+    "path": "packages/nodeA",
+    "prerelease": undefined,
+    "pullRequest": {
+      "baseBranchName": "main",
+      "body": ":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>primary: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkgA: 1.1.0</summary>
+
+## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
+
+
+### Features
+
+* some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "files": [
+        "package-lock.json",
+        "npm-shrinkwrap.json",
+        "samples/package.json",
+        "CHANGELOG.md",
+        "package.json",
+        "packages/mcp-server/src/server.ts",
+        "changelog.json",
+        ".release-please-manifest.json",
+        "packages/nodeA/package-lock.json",
+        "packages/nodeA/npm-shrinkwrap.json",
+        "packages/nodeA/samples/package.json",
+        "packages/nodeA/CHANGELOG.md",
+        "packages/nodeA/package.json",
+        "packages/nodeA/packages/mcp-server/src/server.ts",
+      ],
+      "headBranchName": "release-please--branches--main",
+      "labels": [
+        "autorelease: pending",
+      ],
+      "number": 1234,
+      "sha": "cccccc",
+      "title": "chore: Release primary 1.1.0",
+    },
+    "sha": "cccccc",
+    "tag": TagName {
+      "component": "pkgA",
+      "includeV": true,
+      "separator": "-",
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+    },
+  },
+]
+`;

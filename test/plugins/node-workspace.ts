@@ -11,16 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {GitHub} from '../../src/github';
 import {NodeWorkspace} from '../../src/plugins/node-workspace';
 import {
   CandidateReleasePullRequest,
   DEFAULT_RELEASE_PLEASE_MANIFEST,
 } from '../../src/manifest';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 import {Update} from '../../src/update';
 import {PackageJson} from '../../src/updaters/node/package-json';
@@ -34,12 +32,10 @@ import {
   buildGitHubFileRaw,
 } from '../helpers';
 import {RawContent} from '../../src/updaters/raw-content';
-import snapshot = require('snap-shot-it');
 import {ManifestPlugin} from '../../src/plugin';
 import {Changelog} from '../../src/updaters/changelog';
 import {ReleasePleaseManifest} from '../../src/updaters/release-please-manifest';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/node-workspace';
 
 export function buildMockPackageUpdate(
@@ -77,7 +73,7 @@ function buildMockChangelogUpdate(
 }
 
 function assertHasVersionUpdate(update: Update, expectedVersion: string) {
-  expect(update.updater).instanceof(RawContent);
+  expect(update.updater).instanceof(RawContent).toMatchSnapshot();
   const updater = update.updater as RawContent;
   const data = JSON.parse(updater.rawContent);
   expect(data.version).to.eql(expectedVersion);
@@ -115,10 +111,7 @@ describe('NodeWorkspace plugin', () => {
       }
     );
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('run', () => {
+    describe('run', () => {
     it('does nothing for non-node strategies', async () => {
       const candidates: CandidateReleasePullRequest[] = [
         buildMockCandidatePullRequest('python', 'python', '1.0.0'),
@@ -150,14 +143,14 @@ describe('NodeWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(2);
+      expect(newCandidates).lengthOf(2).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
       expect(nodeCandidate).to.not.be.undefined;
       const updates = nodeCandidate!.pullRequest.updates;
       assertHasUpdate(updates, 'node1/package.json');
-      snapshot(dateSafe(nodeCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(nodeCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('respects version prefix', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -187,7 +180,7 @@ describe('NodeWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
@@ -201,7 +194,7 @@ describe('NodeWorkspace plugin', () => {
         RawContent
       );
       const updater = update.updater as RawContent;
-      snapshot(updater.rawContent);
+      expect(updater.rawContent).toMatchSnapshot();
     });
     it('combines node packages', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -222,9 +215,7 @@ describe('NodeWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['package.json', 'node1/package.json', 'node4/package.json'],
         flatten: false,
@@ -247,7 +238,7 @@ describe('NodeWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
@@ -256,7 +247,7 @@ describe('NodeWorkspace plugin', () => {
       assertHasUpdate(updates, 'package.json');
       assertHasUpdate(updates, 'node1/package.json');
       assertHasUpdate(updates, 'node4/package.json');
-      snapshot(dateSafe(nodeCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(nodeCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('walks dependency tree and updates previously untouched packages', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -273,9 +264,7 @@ describe('NodeWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'node1/package.json',
@@ -288,7 +277,7 @@ describe('NodeWorkspace plugin', () => {
         targetBranch: 'main',
       });
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
@@ -322,7 +311,7 @@ describe('NodeWorkspace plugin', () => {
       expect(updater.versionsMap?.get('node2')?.toString()).to.eql('2.2.3');
       expect(updater.versionsMap?.get('node3')?.toString()).to.eql('1.1.2');
       expect(updater.versionsMap?.get('node5')?.toString()).to.eql('1.0.1');
-      snapshot(dateSafe(nodeCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(nodeCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('appends dependency notes to an updated module', async () => {
       const existingNotes =
@@ -352,9 +341,7 @@ describe('NodeWorkspace plugin', () => {
           notes: existingNotes,
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'node1/package.json',
@@ -367,7 +354,7 @@ describe('NodeWorkspace plugin', () => {
         targetBranch: 'main',
       });
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
@@ -386,13 +373,13 @@ describe('NodeWorkspace plugin', () => {
         '1.1.2'
       );
       assertNoHasUpdate(updates, 'node4/package.json');
-      snapshot(dateSafe(nodeCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(nodeCandidate!.pullRequest.body.toString())).toMatchSnapshot();
       const update = assertHasUpdate(updates, 'node1/CHANGELOG.md', Changelog);
-      snapshot((update.updater as Changelog).changelogEntry);
+      expect((update.updater as Changelog).changelogEntry).toMatchSnapshot();
       const update2 = assertHasUpdate(updates, 'node2/CHANGELOG.md', Changelog);
-      snapshot((update2.updater as Changelog).changelogEntry);
+      expect((update2.updater as Changelog).changelogEntry).toMatchSnapshot();
       const update3 = assertHasUpdate(updates, 'node3/CHANGELOG.md', Changelog);
-      snapshot((update3.updater as Changelog).changelogEntry);
+      expect((update3.updater as Changelog).changelogEntry).toMatchSnapshot();
     });
     it('should ignore peer dependencies', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -403,9 +390,7 @@ describe('NodeWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['node1/package.json', 'plugin1/package.json'],
         flatten: false,
@@ -425,7 +410,7 @@ describe('NodeWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const nodeCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'node'
       );
@@ -433,7 +418,7 @@ describe('NodeWorkspace plugin', () => {
       const updates = nodeCandidate!.pullRequest.updates;
       assertHasUpdate(updates, 'node1/package.json');
       assertNoHasUpdate(updates, 'plugin1/package.json');
-      snapshot(dateSafe(nodeCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(nodeCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
   });
 });

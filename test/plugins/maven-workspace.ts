@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {MavenWorkspace} from '../../src/plugins/maven-workspace';
 import {GitHub} from '../../src/github';
 import {ManifestPlugin} from '../../src/plugin';
@@ -29,14 +28,12 @@ import {
   assertHasUpdate,
   assertHasUpdates,
 } from '../helpers';
-import {expect} from 'chai';
 import {Update} from '../../src/update';
 import {Version} from '../../src/version';
 import {PomXml} from '../../src/updaters/java/pom-xml';
 import {RawContent} from '../../src/updaters/raw-content';
 import {ReleasePleaseManifest} from '../../src/updaters/release-please-manifest';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/maven-workspace';
 
 describe('MavenWorkspace plugin', () => {
@@ -71,10 +68,7 @@ describe('MavenWorkspace plugin', () => {
       }
     );
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('run', () => {
+    describe('run', () => {
     it('handles a single maven package', async () => {
       const candidates: CandidateReleasePullRequest[] = [
         buildMockCandidatePullRequest('maven4', 'maven', '4.4.5', {
@@ -84,9 +78,7 @@ describe('MavenWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -97,19 +89,19 @@ describe('MavenWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
           'maven4/pom.xml',
         ]);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
-      expect(newCandidates[0].pullRequest.body.releaseData).length(1);
+      expect(newCandidates[0].pullRequest.body.releaseData).length(1).toMatchSnapshot();
     });
     it('appends to existing candidate', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -127,9 +119,7 @@ describe('MavenWorkspace plugin', () => {
           notes: '### Dependencies\n\n* Updated foo to v3',
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -140,19 +130,19 @@ describe('MavenWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
           'maven4/pom.xml',
         ]);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
-      expect(newCandidates[0].pullRequest.body.releaseData).length(2);
+      expect(newCandidates[0].pullRequest.body.releaseData).length(2).toMatchSnapshot();
     });
     it('appends to existing candidate with special updater', async () => {
       const customUpdater = new RawContent('some content');
@@ -179,9 +169,7 @@ describe('MavenWorkspace plugin', () => {
           notes: '### Dependencies\n\n* Updated foo to v3',
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -192,19 +180,19 @@ describe('MavenWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
           'maven4/pom.xml',
         ]);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
-      expect(newCandidates[0].pullRequest.body.releaseData).length(2);
+      expect(newCandidates[0].pullRequest.body.releaseData).length(2).toMatchSnapshot();
       assertHasUpdates(
         newCandidates[0].pullRequest.updates,
         'maven4/pom.xml',
@@ -227,9 +215,7 @@ describe('MavenWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -240,19 +226,19 @@ describe('MavenWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
           'maven4/pom.xml',
         ]);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
-      expect(newCandidates[0].pullRequest.body.releaseData).length(4);
+      expect(newCandidates[0].pullRequest.body.releaseData).length(4).toMatchSnapshot();
     });
     it('skips pom files not configured for release', async () => {
       plugin = new MavenWorkspace(
@@ -280,10 +266,10 @@ describe('MavenWorkspace plugin', () => {
           considerAllArtifacts: false,
         }
       );
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
@@ -298,9 +284,7 @@ describe('MavenWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -312,9 +296,9 @@ describe('MavenWorkspace plugin', () => {
         targetBranch: 'main',
       });
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
-      expect(newCandidates[0].pullRequest.body.releaseData).length(4);
+      expect(newCandidates[0].pullRequest.body.releaseData).length(4).toMatchSnapshot();
     });
     it('can consider all artifacts', async () => {
       plugin = new MavenWorkspace(
@@ -367,9 +351,7 @@ describe('MavenWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'bom/pom.xml',
@@ -387,10 +369,10 @@ describe('MavenWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'bom/pom.xml',
           'multi1/pom.xml',
           'multi1/bom/pom.xml',
@@ -404,8 +386,8 @@ describe('MavenWorkspace plugin', () => {
           'multi2/sub2/pom.xml',
         ]);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
-      expect(newCandidates[0].pullRequest.body.releaseData).length(2);
+      expect(newCandidates).length(1).toMatchSnapshot();
+      expect(newCandidates[0].pullRequest.body.releaseData).length(2).toMatchSnapshot();
       safeSnapshot(newCandidates[0].pullRequest.body.toString());
       const bomUpdate = assertHasUpdate(
         newCandidates[0].pullRequest.updates,
@@ -437,10 +419,10 @@ describe('MavenWorkspace plugin', () => {
           },
         }
       );
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('pom.xml', 'main')
-        .resolves([
+        .mockResolvedValue([
           'maven1/pom.xml',
           'maven2/pom.xml',
           'maven3/pom.xml',
@@ -488,9 +470,7 @@ describe('MavenWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'maven1/pom.xml',
@@ -502,7 +482,7 @@ describe('MavenWorkspace plugin', () => {
         targetBranch: 'main',
       });
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).length(1);
+      expect(newCandidates).length(1).toMatchSnapshot();
       const update = assertHasUpdate(
         newCandidates[0].pullRequest.updates,
         '.release-please-manifest.json',

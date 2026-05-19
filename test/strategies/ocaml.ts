@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {OCaml} from '../../src/strategies/ocaml';
-import * as sinon from 'sinon';
 import {
   assertHasUpdate,
   assertNoHasUpdate,
@@ -30,7 +28,6 @@ import {EsyJson} from '../../src/updaters/ocaml/esy-json';
 import {Opam} from '../../src/updaters/ocaml/opam';
 import {DuneProject} from '../../src/updaters/ocaml/dune-project';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/ocaml';
 
 const COMMITS = [
@@ -52,10 +49,7 @@ describe('OCaml', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new OCaml({
@@ -63,7 +57,7 @@ describe('OCaml', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -78,7 +72,7 @@ describe('OCaml', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -98,14 +92,14 @@ describe('OCaml', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
         latestRelease,
       });
       const updates = release!.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
       assertHasUpdate(updates, 'dune-project', DuneProject);
     });
@@ -116,17 +110,15 @@ describe('OCaml', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByExtensionAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByExtensionAndRef');
       findFilesStub
         .withArgs('json', 'main', '.')
-        .resolves(['esy.json', 'other.json']);
-      findFilesStub.withArgs('opam', 'main', '.').resolves(['sample.opam']);
+        .mockResolvedValue(['esy.json', 'other.json']);
+      findFilesStub.withArgs('opam', 'main', '.').mockResolvedValue(['sample.opam']);
       findFilesStub
         .withArgs('opam.locked', 'main', '.')
-        .resolves(['sample.opam.locked']);
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+        .mockResolvedValue(['sample.opam.locked']);
+      stubFilesFromFixtures({github,
         targetBranch: 'main',
         fixturePath: fixturesPath,
         files: ['esy.json', 'other.json', 'sample.opam', 'sample.opam.locked'],
@@ -137,7 +129,7 @@ describe('OCaml', () => {
         latestRelease,
       });
       const updates = release!.updates;
-      expect(updates).lengthOf(5);
+      expect(updates).lengthOf(5).toMatchSnapshot();
       assertHasUpdate(updates, 'esy.json', EsyJson);
       assertNoHasUpdate(updates, 'other.json');
       assertHasUpdate(updates, 'sample.opam', Opam);

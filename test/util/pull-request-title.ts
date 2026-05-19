@@ -11,13 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {
   generateMatchPattern,
   PullRequestTitle,
 } from '../../src/util/pull-request-title';
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 import {MANIFEST_PULL_REQUEST_TITLE_PATTERN} from '../../src/manifest';
 

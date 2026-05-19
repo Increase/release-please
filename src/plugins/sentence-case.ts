@@ -14,7 +14,7 @@
 
 import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
 import {GitHub} from '../github';
-import {RepositoryConfig} from '../manifest';
+import type {RepositoryConfig} from '../manifest';
 import {ConventionalCommit} from '../commit';
 
 // A list of words that should not be converted to uppercase:

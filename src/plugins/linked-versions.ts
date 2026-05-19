@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
-import {RepositoryConfig, CandidateReleasePullRequest} from '../manifest';
+import type {RepositoryConfig, CandidateReleasePullRequest} from '../manifest';
 import {GitHub} from '../github';
 import {Strategy} from '../strategy';
 import {Commit, parseConventionalCommits} from '../commit';

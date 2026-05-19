@@ -13,11 +13,8 @@
 // limitations under the License.
 
 import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
-import {
-  CandidateReleasePullRequest,
-  RepositoryConfig,
-  ROOT_PROJECT_PATH,
-} from '../manifest';
+import type {CandidateReleasePullRequest, RepositoryConfig} from '../manifest';
+import {ROOT_PROJECT_PATH} from '../manifest-constants';
 import {logger as defaultLogger, Logger} from '../util/logger';
 import {VersionsMap, Version} from '../version';
 import {Merge} from './merge';

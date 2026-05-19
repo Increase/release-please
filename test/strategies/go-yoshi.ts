@@ -11,23 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {GoYoshi} from '../../src/strategies/go-yoshi';
-import * as sinon from 'sinon';
 import {assertHasUpdate, buildGitHubFileContent, dateSafe} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
 import {Version} from '../../src/version';
 import {Changelog} from '../../src/updaters/changelog';
-import snapshot = require('snap-shot-it');
 import {VersionGo} from '../../src/updaters/go/version-go';
 import {GithubImportsGo} from '../../src/updaters/go/github-imports-go';
 import {GoModUpdater} from '../../src/updaters/go/go-mod';
-
-const sandbox = sinon.createSandbox();
 
 const COMMITS = [
   ...buildMockConventionalCommit(
@@ -46,17 +41,14 @@ describe('GoYoshi', () => {
       defaultBranch: 'main',
     });
 
-    sandbox
-      .stub(github, 'findFilesByGlobAndRef')
+    vi
+      .spyOn(github, 'findFilesByGlobAndRef')
       .withArgs('**/*.go', 'main')
-      .resolves(['file-with-imports-v2.go'])
+      .mockResolvedValue(['file-with-imports-v2.go'])
       .withArgs('**/*.md', 'main')
-      .resolves([]);
+      .mockResolvedValue([]);
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new GoYoshi({
@@ -113,15 +105,15 @@ describe('GoYoshi', () => {
         github,
         component: 'iam',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent(
             './test/updaters/fixtures/go',
             'file-with-imports-v2.go'
           )
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -137,15 +129,15 @@ describe('GoYoshi', () => {
         github,
         component: 'iam',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent(
             './test/updaters/fixtures/go',
             'file-with-imports-v2.go'
           )
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -157,10 +149,10 @@ describe('GoYoshi', () => {
   });
   describe('buildReleasePullRequest', () => {
     it('filters out submodule commits', async () => {
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('go.mod', 'main')
-        .resolves(['go.mod', 'internal/go.mod', 'logging/go.mod']);
+        .mockResolvedValue(['go.mod', 'internal/go.mod', 'logging/go.mod']);
       const strategy = new GoYoshi({
         targetBranch: 'main',
         github,
@@ -175,13 +167,13 @@ describe('GoYoshi', () => {
       const pullRequest = await strategy.buildReleasePullRequest({commits});
       const pullRequestBody = pullRequest!.body.toString();
       expect(pullRequestBody).to.not.include('logging');
-      snapshot(dateSafe(pullRequestBody));
+      expect(dateSafe(pullRequestBody)).toMatchSnapshot();
     });
     it('filters out touched files not matching submodule commits', async () => {
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('go.mod', 'main')
-        .resolves(['go.mod', 'internal/go.mod', 'logging/go.mod']);
+        .mockResolvedValue(['go.mod', 'internal/go.mod', 'logging/go.mod']);
       const strategy = new GoYoshi({
         targetBranch: 'main',
         github,
@@ -199,7 +191,7 @@ describe('GoYoshi', () => {
       const pullRequestBody = pullRequest!.body.toString();
       expect(pullRequestBody).to.not.include('access');
       expect(pullRequestBody).to.include('iam');
-      snapshot(dateSafe(pullRequestBody));
+      expect(dateSafe(pullRequestBody)).toMatchSnapshot();
     });
 
     it('combines google-api-go-client autogenerated PR', async () => {
@@ -208,9 +200,9 @@ describe('GoYoshi', () => {
         repo: 'google-api-go-client',
         defaultBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
-        .resolves(['file-with-imports-v2.go']);
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
+        .mockResolvedValue(['file-with-imports-v2.go']);
 
       const strategy = new GoYoshi({
         targetBranch: 'main',
@@ -232,7 +224,7 @@ describe('GoYoshi', () => {
       ];
       const pullRequest = await strategy.buildReleasePullRequest({commits});
       const pullRequestBody = pullRequest!.body.toString();
-      snapshot(dateSafe(pullRequestBody));
+      expect(dateSafe(pullRequestBody)).toMatchSnapshot();
     });
   });
   describe('getIgnoredSubModules', () => {
@@ -261,10 +253,10 @@ describe('GoYoshi', () => {
       expect(ignoredSubModules.size).to.eql(0);
     });
     it('fetches the list of submodules', async () => {
-      sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('go.mod', 'main')
-        .resolves([
+        .mockResolvedValue([
           'storage/go.mod',
           'go.mod',
           'internal/foo/go.mod',

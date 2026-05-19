@@ -67,8 +67,14 @@ so consumers reference it with `uses: increase/release-please@<sha>`.
 See [`.github/workflows/self-test.yml`](.github/workflows/self-test.yml)
 for an example invocation against this repository itself.
 
-The CLI is also available via `pnpm start -- <command>`;
-run with `--help` for the full list of commands and options.
+The CLI is also available locally after `pnpm install` compiles `src/` to `build/`:
+
+```bash
+pnpm start -- --help
+# or: pnpm exec release-please -- --help
+```
+
+Run `pnpm build` first if lifecycle scripts were skipped (`pnpm install --ignore-scripts`).
 
 ## Configuration
 

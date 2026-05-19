@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {Rust} from '../../src/strategies/rust';
-import * as sinon from 'sinon';
 import {buildGitHubFileContent, assertHasUpdate, dateSafe} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
@@ -24,10 +22,6 @@ import {Version} from '../../src/version';
 import {Changelog} from '../../src/updaters/changelog';
 import {CargoLock} from '../../src/updaters/rust/cargo-lock';
 import {CargoToml} from '../../src/updaters/rust/cargo-toml';
-import snapshot = require('snap-shot-it');
-
-const sandbox = sinon.createSandbox();
-
 const COMMITS = [
   ...buildMockConventionalCommit(
     'fix(deps): update dependency com.google.cloud:google-cloud-storage to v1.120.0'
@@ -48,10 +42,7 @@ describe('Rust', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Rust({
@@ -97,19 +88,19 @@ describe('Rust', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo-crate1.toml'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo-crate1.toml'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits: COMMITS,
         latestRelease,
       });
       expect(pullRequest!.version?.toString()).to.eql(expectedVersion);
-      snapshot(dateSafe(pullRequest!.body.toString()));
+      expect(dateSafe(pullRequest!.body.toString())).toMatchSnapshot();
     });
   });
 });
@@ -124,22 +115,19 @@ describe('Rust Crate', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildUpdates', () => {
+    describe('buildUpdates', () => {
     it('builds common files', async () => {
       const strategy = new Rust({
         targetBranch: 'main',
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo.toml'))
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo.toml'))
         .withArgs('Cargo.lock', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo.lock'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo.lock'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -167,20 +155,17 @@ describe('Rust Workspace', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildUpdates', () => {
+    describe('buildUpdates', () => {
     it('builds common files', async () => {
       const strategy = new Rust({
         targetBranch: 'main',
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo-workspace.toml'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo-workspace.toml'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -198,14 +183,14 @@ describe('Rust Workspace', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo-workspace.toml'))
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo-workspace.toml'))
         .withArgs('crates/crate1/Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo-crate1.toml'))
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo-crate1.toml'))
         .withArgs('crates/crate2/Cargo.toml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Cargo-crate2.toml'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Cargo-crate2.toml'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,

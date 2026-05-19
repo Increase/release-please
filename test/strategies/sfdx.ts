@@ -11,27 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {Sfdx} from '../../src/strategies/sfdx';
 import {
   buildMockConventionalCommit,
   buildGitHubFileContent,
   assertHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {Changelog} from '../../src/updaters/changelog';
 import {SfdxProjectJson} from '../../src/updaters/sfdx/sfdx-project-json';
 import * as assert from 'assert';
 import {MissingRequiredFileError, FileNotFoundError} from '../../src/errors';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/sfdx';
 
 describe('Sfdx', () => {
@@ -48,10 +45,7 @@ describe('Sfdx', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Sfdx({
@@ -102,13 +96,13 @@ describe('Sfdx', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('sfdx-project.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'sfdx-project.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'sfdx-project.json'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -132,13 +126,13 @@ describe('Sfdx', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('sfdx-project.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'sfdx-project.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'sfdx-project.json'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -146,9 +140,9 @@ describe('Sfdx', () => {
       expect(pullRequest!.version?.toString()).to.eql(expectedVersion);
     });
     it('handles missing sfdx-project.json', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .rejects(new FileNotFoundError('stub/path'));
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockRejectedValue(new FileNotFoundError('stub/path'));
       const strategy = new Sfdx({
         targetBranch: 'main',
         github,
@@ -171,7 +165,7 @@ describe('Sfdx', () => {
         component: 'google-cloud-automl',
         packageName: 'google-cloud-automl-pkg',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
