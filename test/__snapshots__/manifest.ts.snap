@@ -5,16 +5,12 @@ exports[`Manifest > buildPullRequests > should allow creating multiple pull requ
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -147,16 +143,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -311,7 +303,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`Manifest > buildPullRequests > should allow creating multiple pull requests 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -323,19 +315,15 @@ exports[`Manifest > buildPullRequests > should allow creating multiple pull requ
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should allow creating multiple pull requests 3`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -347,15 +335,11 @@ exports[`Manifest > buildPullRequests > should allow creating multiple pull requ
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should allow customizing commit-search-depth 1`] = `
@@ -363,16 +347,12 @@ exports[`Manifest > buildPullRequests > should allow customizing commit-search-d
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -595,16 +575,12 @@ exports[`Manifest > buildPullRequests > should allow customizing pull request ti
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "root",
@@ -811,7 +787,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`Manifest > buildPullRequests > should allow customizing pull request title with root package 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -836,15 +812,11 @@ exports[`Manifest > buildPullRequests > should allow customizing pull request ti
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should allow customizing pull request title without root package 1`] = `
@@ -852,16 +824,12 @@ exports[`Manifest > buildPullRequests > should allow customizing pull request ti
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -979,16 +947,12 @@ exports[`Manifest > buildPullRequests > should allow customizing release-search-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -1211,16 +1175,12 @@ exports[`Manifest > buildPullRequests > should allow forcing release-as on a sin
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -1353,16 +1313,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -1521,16 +1477,12 @@ exports[`Manifest > buildPullRequests > should allow forcing release-as on entir
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -1663,16 +1615,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -1831,16 +1779,12 @@ exports[`Manifest > buildPullRequests > should allow overriding commit message 1
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -1983,7 +1927,7 @@ END_COMMIT_OVERRIDE",
 `;
 
 exports[`Manifest > buildPullRequests > should allow overriding commit message 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1995,15 +1939,11 @@ exports[`Manifest > buildPullRequests > should allow overriding commit message 2
 * real fix message ([def456](https://github.com/fake-owner/fake-repo/commit/def456))
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should allow specifying a bootstrap sha 1`] = `
@@ -2011,16 +1951,12 @@ exports[`Manifest > buildPullRequests > should allow specifying a bootstrap sha 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -2168,16 +2104,12 @@ exports[`Manifest > buildPullRequests > should allow specifying a last release s
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -2330,16 +2262,12 @@ exports[`Manifest > buildPullRequests > should always use PR title version when 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -2472,16 +2400,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -2640,16 +2564,12 @@ exports[`Manifest > buildPullRequests > should fallback to tagged version 1`] = 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -2872,16 +2792,12 @@ exports[`Manifest > buildPullRequests > should find the component from config 1`
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -3104,16 +3020,12 @@ exports[`Manifest > buildPullRequests > should handle extra files 1`] = `
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "a",
@@ -3542,16 +3454,12 @@ exports[`Manifest > buildPullRequests > should handle mixing componentless confi
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -3752,7 +3660,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`Manifest > buildPullRequests > should handle mixing componentless configs 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -3777,15 +3685,11 @@ exports[`Manifest > buildPullRequests > should handle mixing componentless confi
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should handle multiple package repository 1`] = `
@@ -3793,16 +3697,12 @@ exports[`Manifest > buildPullRequests > should handle multiple package repositor
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -4003,7 +3903,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`Manifest > buildPullRequests > should handle multiple package repository 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -4028,15 +3928,11 @@ exports[`Manifest > buildPullRequests > should handle multiple package repositor
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`Manifest > buildPullRequests > should ignore multiple package release commits 1`] = `[]`;
@@ -4046,16 +3942,12 @@ exports[`Manifest > buildPullRequests > should not update manifest if unpublishe
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -4116,16 +4008,12 @@ exports[`Manifest > buildPullRequests > should read latest version from manifest
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -5885,16 +5773,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -7794,16 +7678,12 @@ exports[`Manifest > buildPullRequests > should report issue via PR comment if la
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -7936,16 +7816,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -8104,16 +7980,12 @@ exports[`Manifest > buildPullRequests > should use latest version from tag if gi
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -8484,16 +8356,12 @@ exports[`Manifest > buildPullRequests > should use version from existing PR titl
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -8626,16 +8494,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -8878,16 +8742,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg3",
@@ -9178,16 +9038,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg4",
@@ -9398,16 +9254,12 @@ exports[`Manifest > buildPullRequests > should warn end user via PR comment if v
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg1",
@@ -9540,16 +9392,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "pkg2",
@@ -9708,15 +9556,11 @@ exports[`Manifest > buildPullRequests > with basic config > allows customizing p
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "header": "No beep boop for you",
       "releaseData": [
         {
@@ -9853,16 +9697,12 @@ exports[`Manifest > buildPullRequests > with basic config > allows customizing p
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -9998,16 +9838,12 @@ exports[`Manifest > buildPullRequests > with basic config > allows customizing p
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10143,16 +9979,12 @@ exports[`Manifest > buildPullRequests > with basic config > should create a draf
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10288,16 +10120,12 @@ exports[`Manifest > buildPullRequests > with basic config > should create a draf
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10433,16 +10261,12 @@ exports[`Manifest > buildPullRequests > with basic config > should handle single
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10578,16 +10402,12 @@ exports[`Manifest > buildPullRequests > with basic config > should honour the ma
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10723,16 +10543,12 @@ exports[`Manifest > buildPullRequests > with basic config > should identify prer
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -10889,16 +10705,12 @@ exports[`Manifest > buildPullRequests > with multiple components > should allow 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "b",
@@ -11118,16 +10930,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "d",
@@ -11267,16 +11075,12 @@ exports[`Manifest > buildPullRequests > with multiple components > should allow 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "b",
@@ -11496,16 +11300,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -11645,16 +11445,12 @@ exports[`Manifest > buildPullRequests > with multiple components > should allow 
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "b",
@@ -11789,16 +11585,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "c",
@@ -11933,16 +11725,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "d",
@@ -12082,16 +11870,12 @@ exports[`Manifest > buildPullRequests > without commits > should delegate to str
   {
     "body": PullRequestBody {
       "extra": undefined,
-      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+      "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-      "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+      "header": ":sparkles: Increase prepared a new release",
       "releaseData": [
         {
           "component": "",
@@ -12246,15 +12030,11 @@ exports[`Manifest > buildReleases > should allow skipping releases 1`] = `
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -12326,15 +12106,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -12406,15 +12182,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -12470,15 +12242,11 @@ exports[`Manifest > buildReleases > should build draft releases 1`] = `
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [],
       "headBranchName": "release-please/branches/main",
       "labels": [
@@ -12529,15 +12297,11 @@ exports[`Manifest > buildReleases > should build draft releases manifest wide 1`
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [],
       "headBranchName": "release-please/branches/main",
       "labels": [
@@ -12588,15 +12352,11 @@ exports[`Manifest > buildReleases > should build prerelease releases from beta 1
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],
@@ -12649,15 +12409,11 @@ exports[`Manifest > buildReleases > should build prerelease releases from non-pr
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],
@@ -12710,15 +12466,11 @@ exports[`Manifest > buildReleases > should build prerelease releases from pre-ma
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],
@@ -12772,15 +12524,11 @@ exports[`Manifest > buildReleases > should build prerelease releases when forceP
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],
@@ -12969,15 +12717,11 @@ exports[`Manifest > buildReleases > should handle a mixed manifest release 1`] =
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13033,15 +12777,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13116,15 +12856,11 @@ exports[`Manifest > buildReleases > should handle a multiple manifest release 1`
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13196,15 +12932,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13276,15 +13008,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13356,15 +13084,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13492,15 +13216,11 @@ exports[`Manifest > buildReleases > should handle a single manifest release 1`] 
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [],
       "headBranchName": "release-please/branches/main",
       "labels": [
@@ -13788,15 +13508,11 @@ exports[`Manifest > buildReleases > should handle overflowing release notes 1`] 
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13868,15 +13584,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -13948,15 +13660,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -14028,15 +13736,11 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "packages/bot-config-utils/package.json",
         "packages/label-utils/package.json",
@@ -14092,15 +13796,11 @@ exports[`Manifest > buildReleases > should not build prerelease releases from no
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],
@@ -14153,15 +13853,11 @@ exports[`Manifest > buildReleases > should not build prerelease releases from pr
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
       "files": [
         "",
       ],

@@ -10,16 +10,12 @@ exports[`CargoWorkspace plugin > run > appends dependency notes to an updated mo
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgA",
@@ -248,7 +244,7 @@ pkgA = { version = "1.1.2", path = "../pkgA" }",
 `;
 
 exports[`CargoWorkspace plugin > run > appends dependency notes to an updated module 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -286,15 +282,11 @@ Release notes for path: packages/rustA, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 1`] = `
@@ -307,16 +299,12 @@ exports[`CargoWorkspace plugin > run > can skip merging rust packages 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgA",
@@ -466,16 +454,12 @@ tracing = "1.0.0"",
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "pkgB",
@@ -557,16 +541,12 @@ tracing = "1.0.0"",
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "pkgC",
@@ -648,16 +628,12 @@ rustls = "1.0.0"",
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgD",
@@ -728,16 +704,12 @@ tracing = "1.0.0"",
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "pkgE",
@@ -816,26 +788,22 @@ pkgA = { version = "1.1.2", path = "../pkgA" }",
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
 Release notes for path: packages/rustA, releaseType: rust
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 3`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -846,19 +814,15 @@ exports[`CargoWorkspace plugin > run > can skip merging rust packages 3`] = `
     * pkgA bumped from 1.1.1 to 1.1.2
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 4`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -869,38 +833,30 @@ exports[`CargoWorkspace plugin > run > can skip merging rust packages 4`] = `
     * pkgB bumped from 2.2.2 to 2.2.3
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 5`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
 Release notes for path: packages/rustD, releaseType: rust
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > can skip merging rust packages 6`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -911,15 +867,11 @@ exports[`CargoWorkspace plugin > run > can skip merging rust packages 6`] = `
     * pkgA bumped from 1.1.1 to 1.1.2
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > combines rust packages 1`] = `
@@ -932,16 +884,12 @@ exports[`CargoWorkspace plugin > run > combines rust packages 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgA",
@@ -1042,7 +990,7 @@ tracing = "1.0.0"",
 `;
 
 exports[`CargoWorkspace plugin > run > combines rust packages 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1057,15 +1005,11 @@ Release notes for path: packages/rustD, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > handles a single rust package 1`] = `
@@ -1078,16 +1022,12 @@ exports[`CargoWorkspace plugin > run > handles a single rust package 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": undefined,
@@ -1134,16 +1074,12 @@ For a better experience, it is recommended to use either rebase-merge or squash-
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "pkgA",
@@ -1214,7 +1150,7 @@ tracing = "1.0.0"",
 `;
 
 exports[`CargoWorkspace plugin > run > handles a single rust package 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1224,15 +1160,11 @@ Release notes for path: packages/rustA, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > handles glob paths 1`] = `
@@ -1245,16 +1177,12 @@ exports[`CargoWorkspace plugin > run > handles glob paths 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgA",
@@ -1355,7 +1283,7 @@ tracing = "1.0.0"",
 `;
 
 exports[`CargoWorkspace plugin > run > handles glob paths 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1370,15 +1298,11 @@ Release notes for path: packages/rustD, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > skips component if not touched 1`] = `
@@ -1391,16 +1315,12 @@ exports[`CargoWorkspace plugin > run > skips component if not touched 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "pkgB",
@@ -1533,7 +1453,7 @@ rustls = "1.0.0"",
 `;
 
 exports[`CargoWorkspace plugin > run > skips component if not touched 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1552,15 +1472,11 @@ Release notes for path: packages/rustB, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`CargoWorkspace plugin > run > walks dependency tree and updates previously untouched packages 1`] = `
@@ -1573,16 +1489,12 @@ exports[`CargoWorkspace plugin > run > walks dependency tree and updates previou
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "@here/pkgA",
@@ -1865,7 +1777,7 @@ pkgA = { version = "1.1.2", path = "../pkgA" }",
 `;
 
 exports[`CargoWorkspace plugin > run > walks dependency tree and updates previously untouched packages 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1907,13 +1819,9 @@ Release notes for path: packages/rustD, releaseType: rust
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
