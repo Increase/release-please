@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "biome check",
+    "typecheck": "tsc --noEmit",
     "format": "biome format --write",
     "fix": "biome check --write",
     "start": "node ./build/src/bin/release-please.js",
