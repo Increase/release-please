@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as chalk from 'chalk';
-import * as figures from 'figures';
+import chalk from 'chalk';
+import figures from 'figures';
 
 const errorPrefix = chalk.red(figures.cross);
 const warnPrefix = chalk.yellow(figures.warning);
@@ -61,9 +61,9 @@ export class CheckpointLogger implements Logger {
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export let logger: Logger =
-  process.env['LOG_LEVEL'] === 'trace'
+  process.env.LOG_LEVEL === 'trace'
     ? new CheckpointLogger(true, true)
-    : ['info', 'error', 'warn'].includes(process.env['LOG_LEVEL'] || '')
+    : ['info', 'error', 'warn'].includes(process.env.LOG_LEVEL || '')
     ? new CheckpointLogger()
     : // default to debug logs
       new CheckpointLogger(true);

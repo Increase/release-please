@@ -103,6 +103,7 @@ export class BranchName {
       )}`
     );
   }
+  // biome-ignore lint/complexity/noUselessConstructor: signature is load-bearing for `new branchNameClass(branchName)` in fromBranchName().
   constructor(_branchName: string) {}
 
   static matches(_branchName: string): boolean {
@@ -144,8 +145,8 @@ class AutoreleaseBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(AUTORELEASE_PATTERN);
     if (match?.groups) {
-      this.component = match.groups['component'];
-      this.version = Version.parse(match.groups['version']);
+      this.component = match.groups.component;
+      this.version = Version.parse(match.groups.version);
     }
   }
   toString(): string {
@@ -172,7 +173,7 @@ class V12DefaultBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(V12_DEFAULT_PATTERN);
     if (match?.groups) {
-      this.targetBranch = match.groups['branch'];
+      this.targetBranch = match.groups.branch;
     }
   }
   toString(): string {
@@ -196,8 +197,8 @@ class V12ComponentBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(V12_COMPONENT_PATTERN);
     if (match?.groups) {
-      this.targetBranch = match.groups['branch'];
-      this.component = match.groups['component'];
+      this.targetBranch = match.groups.branch;
+      this.component = match.groups.component;
     }
   }
   toString(): string {
@@ -215,8 +216,8 @@ class DefaultBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(DEFAULT_PATTERN);
     if (match?.groups) {
-      this.targetBranch = match.groups['branch'];
-      this.changesBranch = match.groups['changes'];
+      this.targetBranch = match.groups.branch;
+      this.changesBranch = match.groups.changes;
     }
   }
   toString(): string {
@@ -237,9 +238,9 @@ class ComponentBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(COMPONENT_PATTERN);
     if (match?.groups) {
-      this.targetBranch = match.groups['branch'];
-      this.changesBranch = match.groups['changes'];
-      this.component = match.groups['component'];
+      this.targetBranch = match.groups.branch;
+      this.changesBranch = match.groups.changes;
+      this.component = match.groups.component;
     }
   }
   toString(): string {
@@ -260,9 +261,9 @@ class GroupBranchName extends BranchName {
     super(branchName);
     const match = branchName.match(GROUP_PATTERN);
     if (match?.groups) {
-      this.targetBranch = match.groups['branch'];
-      this.changesBranch = match.groups['changes'];
-      this.component = match.groups['group'];
+      this.targetBranch = match.groups.branch;
+      this.changesBranch = match.groups.changes;
+      this.component = match.groups.group;
     }
   }
   toString(): string {

@@ -48,11 +48,11 @@ describe('CommitSplit', () => {
       packagePaths: ['pkg5', 'pkg6/pkg5'],
     });
     const splitCommits = commitSplit.split(commits);
-    expect(splitCommits['pkg1']).to.be.undefined;
-    expect(splitCommits['pkg2']).to.be.undefined;
-    expect(splitCommits['pkg3']).to.be.undefined;
-    expect(splitCommits['pkg4']).to.be.undefined;
-    expect(splitCommits['pkg5']).lengthOf(1).toMatchSnapshot();
+    expect(splitCommits.pkg1).to.be.undefined;
+    expect(splitCommits.pkg2).to.be.undefined;
+    expect(splitCommits.pkg3).to.be.undefined;
+    expect(splitCommits.pkg4).to.be.undefined;
+    expect(splitCommits.pkg5).lengthOf(1).toMatchSnapshot();
     expect(splitCommits['pkg6/pkg5']).lengthOf(1).toMatchSnapshot();
   });
   it('handles nested folders', () => {
@@ -72,7 +72,7 @@ describe('CommitSplit', () => {
       packagePaths: ['core', 'core/subpackage'],
     });
     const splitCommits = commitSplit.split(commits);
-    expect(splitCommits['core']).lengthOf(1).toMatchSnapshot();
+    expect(splitCommits.core).lengthOf(1).toMatchSnapshot();
     expect(splitCommits['core/subpackage']).lengthOf(1).toMatchSnapshot();
   });
   describe('including empty commits', () => {
@@ -81,10 +81,10 @@ describe('CommitSplit', () => {
         includeEmpty: true,
       });
       const splitCommits = commitSplit.split(commits);
-      expect(splitCommits['pkg1']).lengthOf(3).toMatchSnapshot();
-      expect(splitCommits['pkg2']).lengthOf(2).toMatchSnapshot();
-      expect(splitCommits['pkg3']).lengthOf(2).toMatchSnapshot();
-      expect(splitCommits['pkg4']).to.be.undefined;
+      expect(splitCommits.pkg1).lengthOf(3).toMatchSnapshot();
+      expect(splitCommits.pkg2).lengthOf(2).toMatchSnapshot();
+      expect(splitCommits.pkg3).lengthOf(2).toMatchSnapshot();
+      expect(splitCommits.pkg4).to.be.undefined;
     });
     it('should separate commits with limited list of paths', () => {
       const commitSplit = new CommitSplit({
@@ -92,10 +92,10 @@ describe('CommitSplit', () => {
         packagePaths: ['pkg1', 'pkg4'],
       });
       const splitCommits = commitSplit.split(commits);
-      expect(splitCommits['pkg1']).lengthOf(3).toMatchSnapshot();
-      expect(splitCommits['pkg2']).to.be.undefined;
-      expect(splitCommits['pkg3']).to.be.undefined;
-      expect(splitCommits['pkg4']).lengthOf(1).toMatchSnapshot();
+      expect(splitCommits.pkg1).lengthOf(3).toMatchSnapshot();
+      expect(splitCommits.pkg2).to.be.undefined;
+      expect(splitCommits.pkg3).to.be.undefined;
+      expect(splitCommits.pkg4).lengthOf(1).toMatchSnapshot();
     });
   });
 
@@ -105,10 +105,10 @@ describe('CommitSplit', () => {
         includeEmpty: false,
       });
       const splitCommits = commitSplit.split(commits);
-      expect(splitCommits['pkg1']).lengthOf(2).toMatchSnapshot();
-      expect(splitCommits['pkg2']).lengthOf(1).toMatchSnapshot();
-      expect(splitCommits['pkg3']).lengthOf(1).toMatchSnapshot();
-      expect(splitCommits['pkg4']).to.be.undefined;
+      expect(splitCommits.pkg1).lengthOf(2).toMatchSnapshot();
+      expect(splitCommits.pkg2).lengthOf(1).toMatchSnapshot();
+      expect(splitCommits.pkg3).lengthOf(1).toMatchSnapshot();
+      expect(splitCommits.pkg4).to.be.undefined;
     });
     it('should separate commits with limited list of paths', () => {
       const commitSplit = new CommitSplit({
@@ -116,10 +116,10 @@ describe('CommitSplit', () => {
         packagePaths: ['pkg1', 'pkg4'],
       });
       const splitCommits = commitSplit.split(commits);
-      expect(splitCommits['pkg1']).lengthOf(2).toMatchSnapshot();
-      expect(splitCommits['pkg2']).to.be.undefined;
-      expect(splitCommits['pkg3']).to.be.undefined;
-      expect(splitCommits['pkg4']).to.be.undefined;
+      expect(splitCommits.pkg1).lengthOf(2).toMatchSnapshot();
+      expect(splitCommits.pkg2).to.be.undefined;
+      expect(splitCommits.pkg3).to.be.undefined;
+      expect(splitCommits.pkg4).to.be.undefined;
     });
   });
 });

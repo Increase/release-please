@@ -854,9 +854,9 @@ export const parser = yargs()
     type: 'boolean',
   })
   .middleware(argv => {
-    if (argv.trace || process.env['LOG_LEVEL'] === 'trace') {
+    if (argv.trace || process.env.LOG_LEVEL === 'trace') {
       setLogger(new CheckpointLogger(true, true));
-    } else if (argv.debug || process.env['LOG_LEVEL'] === 'debug') {
+    } else if (argv.debug || process.env.LOG_LEVEL === 'debug') {
       setLogger(new CheckpointLogger(true));
     }
   })
@@ -948,7 +948,7 @@ export const handleError: HandleError = (err: ErrorObject) => {
   const errorLogger = handleError.logger ?? logger;
   const command = ya?._?.length ? ya._[0] : '';
   if (err.status) {
-    status = '' + err.status;
+    status = `${err.status}`;
   }
   errorLogger.error(
     `command ${command} failed${status ? ` with status ${status}` : ''}`

@@ -51,9 +51,8 @@ export class CommitExclude {
     packagePath: string
   ): boolean {
     return (
-      !commit.files ||
       !commit.files
-        .filter(file => this.isRelevant(file, packagePath))
+        ?.filter(file => this.isRelevant(file, packagePath))
         .every(file => excludePaths.some(path => this.isRelevant(file, path)))
     );
   }

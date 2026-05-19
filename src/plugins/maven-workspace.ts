@@ -25,7 +25,7 @@ import {Version, VersionsMap} from '../version';
 import type {CandidateReleasePullRequest, RepositoryConfig} from '../manifest';
 import * as dom from '@xmldom/xmldom';
 import * as xpath from 'xpath';
-import {dirname} from 'path';
+import {dirname} from 'node:path';
 import {PomXml, parseDependencyNode} from '../updaters/java/pom-xml';
 import {Changelog} from '../updaters/changelog';
 import {ReleasePullRequest} from '../release-pull-request';

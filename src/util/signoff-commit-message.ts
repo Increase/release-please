@@ -37,5 +37,5 @@ export function signoffCommitMessage(
     );
   }
 
-  return commitMessage + `\n\nSigned-off-by: ${signoffUser}`;
+  return `${commitMessage}\n\nSigned-off-by: ${signoffUser}`;
 }

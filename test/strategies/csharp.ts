@@ -11,7 +11,7 @@ import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
 import {Changelog} from '../../src/updaters/changelog';
 import {CsProj} from '../../src/updaters/dotnet/csproj';
-import * as assert from 'assert';
+import * as assert from 'node:assert';
 import {MissingRequiredFileError} from '../../src/errors';
 
 nock.disableNetConnect();

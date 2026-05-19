@@ -3,6 +3,12 @@ on:
   pull_request:
   merge_group:
 
+# Cancel previous in-progress runs on the same PR
+# so the freshest commit always wins.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,5 +32,19 @@ jobs:
       - name: Lint code
         run: pnpm lint
 
+      - name: Type-check
+        run: pnpm typecheck
+
       - name: Run tests
         run: pnpm test
+
+      # Builds dist/index.js the way release.yml does, then require()s it
+      # to catch module-load-time crashes (e.g. CJS/ESM interop issues
+      # that only manifest in the ncc-bundled output, not under vitest).
+      # We exit 0 immediately after the synchronous require returns,
+      # before main()'s async catch handler can set process.exitCode.
+      - name: Build action bundle
+        run: pnpm build:action
+
+      - name: Smoke-test action bundle
+        run: node -e "require('./dist/index.js'); process.exit(0);"

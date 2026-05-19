@@ -54,7 +54,7 @@ export class PyProjectToml extends DefaultUpdater {
 
     if (!project?.version) {
       // Throw warning if the version is dynamically generated.
-      if (project?.dynamic && project.dynamic.includes('version')) {
+      if (project?.dynamic?.includes('version')) {
         const msg =
           "dynamic version found in 'pyproject.toml'. Skipping update.";
         logger.warn(msg);

@@ -222,7 +222,7 @@ export class JavaYoshiMonoRepo extends Java {
         for (const path of Object.keys(splitCommits)) {
           const repoMetadata = await this.getRepoMetadata(path);
           const artifactName = repoMetadata
-            ? repoMetadata['distribution_name']
+            ? repoMetadata.distribution_name
             : null;
           if (repoMetadata && artifactName) {
             this.logger.info(`Found artifact ${artifactName} for ${path}`);
@@ -330,7 +330,7 @@ function isStableArtifact(artifact: string): boolean {
   }
 
   const versionMatch = match[1].match(VERSION_REGEX);
-  if (versionMatch && versionMatch[1]) {
+  if (versionMatch?.[1]) {
     // The version is not stable (probably alpha/beta/rc)
     return false;
   }

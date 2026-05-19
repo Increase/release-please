@@ -137,7 +137,7 @@ function toConventionalChangelogFormat(
         .slice(1)
         .join('\n')
         .trim();
-      migrationMessage.text = '**Migration:** ' + migrationMessage.text;
+      migrationMessage.text = `**Migration:** ${migrationMessage.text}`;
       headerCommit.notes.push(migrationMessage);
     }
   }

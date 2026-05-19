@@ -32,11 +32,11 @@ import {
   assertNoHasUpdate,
   mockReleaseData,
 } from './helpers';
-import * as assert from 'assert';
+import * as assert from 'node:assert';
 import {Version} from '../src/version';
 import {PullRequest} from '../src/pull-request';
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import * as pluginFactory from '../src/factories/plugin-factory';
 import {SentenceCase} from '../src/plugins/sentence-case';
 import {NodeWorkspace} from '../src/plugins/node-workspace';
@@ -335,7 +335,7 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest['groupPullRequestTitlePattern']).to.eql(
+      expect(manifest.groupPullRequestTitlePattern).to.eql(
         'chore${scope}: release${component} v${version}'
       );
       expect(
@@ -514,9 +514,9 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest['labels']).to.deep.equal(['custom: pending']);
-      expect(manifest['releaseLabels']).to.deep.equal(['custom: tagged']);
-      expect(manifest['prereleaseLabels']).to.deep.equal([
+      expect(manifest.labels).to.deep.equal(['custom: pending']);
+      expect(manifest.releaseLabels).to.deep.equal(['custom: tagged']);
+      expect(manifest.prereleaseLabels).to.deep.equal([
         'custom: pre-release',
       ]);
     });
@@ -545,7 +545,7 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest['reviewers']).to.deep.equal(['sam', 'frodo']);
+      expect(manifest.reviewers).to.deep.equal(['sam', 'frodo']);
     });
 
     it('should read extra labels from manifest', async () => {

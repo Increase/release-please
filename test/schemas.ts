@@ -15,8 +15,8 @@ import {describe, it, expect} from 'vitest';
 
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
-import {readdirSync} from 'fs';
-import {resolve} from 'path';
+import {readdirSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {configSchema, manifestSchema} from '../src/index';
 
 const fixturesPath = './test/fixtures/manifest';

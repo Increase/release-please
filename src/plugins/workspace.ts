@@ -478,7 +478,7 @@ export abstract class WorkspacePlugin<T> extends ManifestPlugin {
   }
 }
 
-const DEPENDENCY_HEADER = new RegExp('### Dependencies');
+const DEPENDENCY_HEADER = /### Dependencies/;
 export function appendDependenciesSectionToChangelog(
   changelog: string,
   notes: string,
