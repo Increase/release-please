@@ -25,7 +25,7 @@ import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
 import {Changelog} from '../../src/updaters/changelog';
 import {SfdxProjectJson} from '../../src/updaters/sfdx/sfdx-project-json';
-import * as assert from 'assert';
+import * as assert from 'node:assert';
 import {MissingRequiredFileError, FileNotFoundError} from '../../src/errors';
 
 nock.disableNetConnect();

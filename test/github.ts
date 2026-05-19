@@ -16,19 +16,19 @@ import {describe, it, expect, beforeEach, vi, type MockInstance} from 'vitest';
 import nock, {type Scope} from './http-mock';
 nock.disableNetConnect();
 
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {GH_API_URL, GitHub, GitHubRelease} from '../src/github';
 import {PullRequest} from '../src/pull-request';
 import {TagName} from '../src/util/tag-name';
 import {Version} from '../src/version';
-import assert = require('assert');
+import assert = require('node:assert');
 import {
   DuplicateReleaseError,
   GitHubAPIError,
   FileNotFoundError,
 } from '../src/errors';
-import {fail} from 'assert';
+import {fail} from 'node:assert';
 import {PullRequestBody} from '../src/util/pull-request-body';
 import {PullRequestTitle} from '../src/util/pull-request-title';
 import {HttpsProxyAgent} from 'https-proxy-agent';
@@ -766,7 +766,7 @@ describe('GitHub', () => {
     let githubCreateReleaseSpy: MockInstance;
     beforeEach(async () => {
       githubCreateReleaseSpy = vi.spyOn(
-        github['octokit'].repos,
+        github.octokit.repos,
         'createRelease'
       );
     });

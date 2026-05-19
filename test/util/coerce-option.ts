@@ -14,7 +14,7 @@
 import {describe, it, expect} from 'vitest';
 
 import {coerceOption} from '../../src/util/coerce-option';
-import {resolve} from 'path';
+import {resolve} from 'node:path';
 const fixturesPath = './test/fixtures';
 
 describe('coerceOption', () => {

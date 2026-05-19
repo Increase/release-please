@@ -23,8 +23,8 @@ import {Changelog} from '../../src/updaters/changelog';
 import {RootComposerUpdatePackages} from '../../src/updaters/php/root-composer-update-packages';
 import {PHPClientVersion} from '../../src/updaters/php/php-client-version';
 import {DefaultUpdater} from '../../src/updaters/default';
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {FileNotFoundError} from '../../src/errors';
 
 describe('PHPYoshi', () => {

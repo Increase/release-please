@@ -141,9 +141,6 @@ export class PHPYoshi extends BaseStrategy {
         );
       } catch (err) {
         if (err instanceof FileNotFoundError) {
-          // if the updated path has no VERSION, assume this isn't a
-          // module that needs updating.
-          continue;
         } else {
           throw err;
         }
