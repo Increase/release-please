@@ -35,8 +35,8 @@ jobs:
       - name: Type-check
         run: pnpm typecheck
 
-      - name: Run tests
-        run: pnpm test
+      - name: Run tests with coverage
+        run: pnpm test:coverage
 
       # Builds dist/index.js the way release.yml does, then require()s it
       # to catch module-load-time crashes (e.g. CJS/ESM interop issues

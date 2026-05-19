@@ -1,6 +1,6 @@
 {
   "name": "@increase/release-please",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": true,
   "description": "Generate release PRs based on the conventionalcommits.org spec",
   "main": "./build/src/index.js",
@@ -21,7 +21,8 @@
     "fix": "biome check --write",
     "start": "node ./build/src/bin/release-please.js",
     "test": "ENVIRONMENT=test vitest run",
-    "test:snap": "ENVIRONMENT=test vitest run -u",
+    "test:coverage": "ENVIRONMENT=test vitest run --coverage",
+    "test:snapshot": "ENVIRONMENT=test vitest run -u",
     "build:action": "ncc build src/main.ts -o dist --source-map --license licenses.txt --target es2022 --no-cache && node -e \"require('fs').rmSync('dist/src',{recursive:true,force:true});require('fs').rmSync('dist/test',{recursive:true,force:true})\""
   },
   "files": [
