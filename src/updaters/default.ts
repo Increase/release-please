@@ -43,6 +43,6 @@ export class DefaultUpdater implements Updater {
    * @returns {string} The updated content
    */
   updateContent(_content: string): string {
-    return this.version + '\n';
+    return `${this.version}\n`;
   }
 }

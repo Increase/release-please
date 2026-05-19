@@ -73,12 +73,12 @@ export class PullRequestTitle {
     const match = title.match(matchPattern);
     if (match?.groups) {
       return new PullRequestTitle({
-        version: match.groups['version']
-          ? Version.parse(match.groups['version'])
+        version: match.groups.version
+          ? Version.parse(match.groups.version)
           : undefined,
-        component: match.groups['component'],
-        changesBranch: match.groups['changesBranch'],
-        targetBranch: match.groups['branch'],
+        component: match.groups.component,
+        changesBranch: match.groups.changesBranch,
+        targetBranch: match.groups.branch,
         pullRequestTitlePattern,
         logger,
       });

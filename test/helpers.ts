@@ -13,9 +13,9 @@
 // limitations under the License.
 import {expect, vi, type MockInstance} from 'vitest';
 
-import {readFileSync, readdirSync, statSync} from 'fs';
-import {resolve, posix} from 'path';
-import * as crypto from 'crypto';
+import {readFileSync, readdirSync, statSync} from 'node:fs';
+import {resolve, posix} from 'node:path';
+import * as crypto from 'node:crypto';
 import {
   Commit,
   ConventionalCommit,
@@ -169,7 +169,7 @@ export function stubFilesFromFixtures(options: StubFiles) {
   const overlap = inlineFiles.filter(f => files.includes(f[0]));
   if (overlap.length > 0) {
     throw new Error(
-      'Overlap between files and inlineFiles: ' + JSON.stringify(overlap)
+      `Overlap between files and inlineFiles: ${JSON.stringify(overlap)}`
     );
   }
   const targetBranch = options.targetBranch ?? 'main';

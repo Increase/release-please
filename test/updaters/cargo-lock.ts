@@ -13,8 +13,8 @@
 // limitations under the License.
 import {describe, it, expect} from 'vitest';
 
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {CargoLock} from '../../src/updaters/rust/cargo-lock';
 import {parseCargoLockfile} from '../../src/updaters/rust/common';
 

@@ -31,8 +31,8 @@ export class PubspecYaml extends DefaultUpdater {
 
     if (oldVersion) {
       buildNumber = oldVersion[2];
-      const parsedBuild = parseInt(buildNumber);
-      if (!isNaN(parsedBuild)) {
+      const parsedBuild = parseInt(buildNumber, 10);
+      if (!Number.isNaN(parsedBuild)) {
         buildNumber = `+${parsedBuild + 1}`;
         logger.info(
           `updating from ${oldVersion[1]}+${oldVersion[2]} to ${this.version}${buildNumber}`

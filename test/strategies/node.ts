@@ -28,7 +28,7 @@ import {SamplesPackageJson} from '../../src/updaters/node/samples-package-json';
 import {Changelog} from '../../src/updaters/changelog';
 import {PackageJson} from '../../src/updaters/node/package-json';
 import {ChangelogJson} from '../../src/updaters/changelog-json';
-import * as assert from 'assert';
+import * as assert from 'node:assert';
 import {MissingRequiredFileError, FileNotFoundError} from '../../src/errors';
 import {McpServer} from '../../src/updaters/node/mcp-server';
 

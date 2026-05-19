@@ -41,7 +41,7 @@ export class ReleasePleaseConfig implements Updater {
     } else {
       parsed = {packages: {}};
     }
-    parsed['$schema'] = parsed['$schema'] ?? SCHEMA_URL;
+    parsed.$schema = parsed.$schema ?? SCHEMA_URL;
     parsed.packages[this.path] = releaserConfigToJsonConfig(this.config);
     if (content) {
       return jsonStringify(parsed, content);

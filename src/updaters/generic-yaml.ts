@@ -58,7 +58,7 @@ export class GenericYaml implements Updater {
       const nodes = jp.apply(data, this.jsonpath, _val => {
         return this.version.toString();
       });
-      if (nodes && nodes.length) {
+      if (nodes?.length) {
         modified = true;
       }
     });

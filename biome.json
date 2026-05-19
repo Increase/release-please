@@ -46,32 +46,21 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noBannedTypes": "off",
-        "noThisInStatic": "off",
-        "noUselessConstructor": "off",
-        "noUselessContinue": "off",
-        "noUselessUndefinedInitialization": "off",
-        "noUselessTernary": "off",
-        "useLiteralKeys": "off",
-        "useOptionalChain": "off",
-        "useRegexLiterals": "off"
+        "noBannedTypes": "off"
       },
       "correctness": {
-        "noUnusedPrivateClassMembers": "off",
         "noUnusedVariables": {
           "level": "error",
           "options": {
             "ignoreRestSiblings": true
           }
-        },
-        "useParseIntRadix": "off"
+        }
       },
       "suspicious": {
         "noAssignInExpressions": "off",
         "noExplicitAny": "off",
-        "noGlobalIsNan": "off",
-        "noImplicitAnyLet": "off",
         "noExportsInTest": "off",
+        "noImplicitAnyLet": "off",
         "noShadowRestrictedNames": "off",
         "noTemplateCurlyInString": "off",
         "noUnsafeDeclarationMerging": "off",
@@ -79,8 +68,6 @@
       },
       "style": {
         "noNonNullAssertion": "off",
-        "useNodejsImportProtocol": "off",
-        "useTemplate": "off",
         "useImportType": "off"
       }
     }

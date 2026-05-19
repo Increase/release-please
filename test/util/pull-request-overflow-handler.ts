@@ -14,8 +14,8 @@
 import {describe, it, expect, beforeEach} from 'vitest';
 
 import nock from '../http-mock';
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {GitHub} from '../../src';
 import {
   PullRequestOverflowHandler,

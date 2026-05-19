@@ -92,7 +92,6 @@ function ensureHandler(method: HttpMethod, url: string, state: RouteState): void
 
 class Interceptor {
   private optional = false;
-  private bodyMatcher?: (body: unknown) => boolean;
   private repeatCount = 1;
   hitCount = 0;
 

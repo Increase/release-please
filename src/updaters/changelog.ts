@@ -49,7 +49,7 @@ export class Changelog extends DefaultUpdater {
     } else {
       const before = content.slice(0, lastEntryIndex);
       const after = content.slice(lastEntryIndex);
-      return `${before}\n${this.changelogEntry}\n${after}`.trim() + '\n';
+      return `${`${before}\n${this.changelogEntry}\n${after}`.trim()}\n`;
     }
   }
   private header() {

@@ -82,9 +82,9 @@ describe('commit-exclude', () => {
     const commitExclude = new CommitExclude(config);
     const newCommitsPerPath = commitExclude.excludeCommits(commitsPerPath);
     expect(newCommitsPerPath['.'].length).to.equal(3);
-    expect(newCommitsPerPath['pkg1'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg2'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg3'].length).to.equal(2);
+    expect(newCommitsPerPath.pkg1.length).to.equal(1);
+    expect(newCommitsPerPath.pkg2.length).to.equal(1);
+    expect(newCommitsPerPath.pkg3.length).to.equal(2);
   });
 
   it('should not exclude only if all files are from excluded path', () => {
@@ -95,9 +95,9 @@ describe('commit-exclude', () => {
     const commitExclude = new CommitExclude(config);
     const newCommitsPerPath = commitExclude.excludeCommits(commitsPerPath);
     expect(newCommitsPerPath['.'].length).to.equal(2);
-    expect(newCommitsPerPath['pkg1'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg2'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg3'].length).to.equal(1);
+    expect(newCommitsPerPath.pkg1.length).to.equal(1);
+    expect(newCommitsPerPath.pkg2.length).to.equal(1);
+    expect(newCommitsPerPath.pkg3.length).to.equal(1);
   });
 
   it('should exclude if all files are from excluded path', () => {
@@ -107,9 +107,9 @@ describe('commit-exclude', () => {
     const commitExclude = new CommitExclude(config);
     const newCommitsPerPath = commitExclude.excludeCommits(commitsPerPath);
     expect(newCommitsPerPath['.'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg1'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg2'].length).to.equal(1);
-    expect(newCommitsPerPath['pkg3'].length).to.equal(2);
+    expect(newCommitsPerPath.pkg1.length).to.equal(1);
+    expect(newCommitsPerPath.pkg2.length).to.equal(1);
+    expect(newCommitsPerPath.pkg3.length).to.equal(2);
   });
 
   it('should make decision only on relevant files', () => {
@@ -130,7 +130,7 @@ describe('commit-exclude', () => {
     };
     const commitExclude = new CommitExclude(config);
     const newCommitsPerPath = commitExclude.excludeCommits(commits);
-    expect(newCommitsPerPath['a'].length).to.equal(1);
-    expect(newCommitsPerPath['d'].length).to.equal(0);
+    expect(newCommitsPerPath.a.length).to.equal(1);
+    expect(newCommitsPerPath.d.length).to.equal(0);
   });
 });

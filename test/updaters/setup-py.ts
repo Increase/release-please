@@ -13,8 +13,8 @@
 // limitations under the License.
 import {describe, it, expect} from 'vitest';
 
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {SetupPy} from '../../src/updaters/python/setup-py';
 import {Version} from '../../src/version';
 

@@ -35,7 +35,7 @@ import {RawContent} from '../../src/updaters/raw-content';
 import {CargoToml} from '../../src/updaters/rust/cargo-toml';
 import {parseCargoManifest} from '../../src/updaters/rust/common';
 import {ConfigurationError} from '../../src/errors';
-import assert = require('assert');
+import assert = require('node:assert');
 
 const fixturesPath = './test/fixtures/plugins/cargo-workspace';
 

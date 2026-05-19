@@ -22,8 +22,8 @@ export interface CargoManifest {
   workspace?: CargoWorkspace;
 
   dependencies?: CargoDependencies;
-  ['dev-dependencies']?: CargoDependencies;
-  ['build-dependencies']?: CargoDependencies;
+  'dev-dependencies'?: CargoDependencies;
+  'build-dependencies'?: CargoDependencies;
   target?: TargetDependencies;
 }
 
@@ -33,8 +33,8 @@ export interface CargoManifest {
 export interface TargetDependencies {
   [key: string]: {
     dependencies?: CargoDependencies;
-    ['dev-dependencies']?: CargoDependencies;
-    ['build-dependencies']?: CargoDependencies;
+    'dev-dependencies'?: CargoDependencies;
+    'build-dependencies'?: CargoDependencies;
   };
 }
 

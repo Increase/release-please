@@ -1010,7 +1010,7 @@ export class Manifest {
     }
     this.logger.info(
       `found ${openPullRequests.length} open release pull requests: ${
-        '\n' + openPullRequests.map(pr => `  - #${pr.number}: '${pr.title}'`)
+        `\n${openPullRequests.map(pr => `  - #${pr.number}: '${pr.title}'`)}`
       }`
     );
     return openPullRequests;
@@ -1044,7 +1044,7 @@ export class Manifest {
     }
     this.logger.info(
       `found ${snoozedPullRequests.length} snoozed release pull requests: ${
-        '\n' + snoozedPullRequests.map(pr => `  - #${pr.number}: '${pr.title}'`)
+        `\n${snoozedPullRequests.map(pr => `  - #${pr.number}: '${pr.title}'`)}`
       }`
     );
     return snoozedPullRequests;
@@ -1629,7 +1629,7 @@ function extractReleaserConfig(
     releaseType: config['release-type'],
     bumpMinorPreMajor: config['bump-minor-pre-major'],
     bumpPatchForMinorPreMajor: config['bump-patch-for-minor-pre-major'],
-    versioning: config['versioning'],
+    versioning: config.versioning,
     changelogSections: config['changelog-sections'],
     changelogPath: config['changelog-path'],
     changelogHost: config['changelog-host'],
@@ -1638,7 +1638,7 @@ function extractReleaserConfig(
     draft: config.draft,
     prerelease: config.prerelease,
     draftPullRequest: config['draft-pull-request'],
-    component: config['component'],
+    component: config.component,
     packageName: config['package-name'],
     versionFile: config['version-file'],
     extraFiles: config['extra-files'],
@@ -1649,7 +1649,7 @@ function extractReleaserConfig(
     pullRequestHeader: config['pull-request-header'],
     tagSeparator: config['tag-separator'],
     separatePullRequests: config['separate-pull-requests'],
-    labels: config['label']?.split(','),
+    labels: config.label?.split(','),
     releaseLabels: config['release-label']?.split(','),
     prereleaseLabels: config['prerelease-label']?.split(','),
     extraLabels: config['extra-label']?.split(','),
@@ -1690,7 +1690,7 @@ async function parseConfig(
       repositoryConfig[path].releaseAs = releaseAs;
     }
   }
-  const configLabel = config['label'];
+  const configLabel = config.label;
   const configReleaseLabel = config['release-label'];
   const configPreReleaseLabel = config['prerelease-label'];
   const configSnapshotLabel = config['snapshot-label'];
@@ -1700,7 +1700,7 @@ async function parseConfig(
     alwaysLinkLocal: config['always-link-local'],
     separatePullRequests: config['separate-pull-requests'],
     groupPullRequestTitlePattern: config['group-pull-request-title-pattern'],
-    plugins: config['plugins'],
+    plugins: config.plugins,
     labels: configLabel?.split(','),
     releaseLabels: configReleaseLabel?.split(','),
     prereleaseLabels: configPreReleaseLabel?.split(','),

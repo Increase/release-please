@@ -16,7 +16,7 @@ import {PullRequestBody} from './pull-request-body';
 import {GitHub} from '../github';
 import {PullRequest} from '../pull-request';
 import {Logger, logger as defaultLogger} from './logger';
-import {URL} from 'url';
+import {URL} from 'node:url';
 import {ReleasePullRequest} from '../release-pull-request';
 import {FileNotFoundError} from '../errors';
 

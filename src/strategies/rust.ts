@@ -26,7 +26,6 @@ import {Update} from '../update';
 
 export class Rust extends BaseStrategy {
   private packageManifest?: CargoManifest | null;
-  private workspaceManifest?: CargoManifest | null;
 
   protected async buildUpdates(
     options: BuildUpdatesOptions

@@ -15,7 +15,7 @@
 import {ConventionalCommit} from '../commit';
 import {logger as defaultLogger, Logger} from '../util/logger';
 import {DefaultUpdater, UpdateOptions} from './default';
-import {randomUUID} from 'crypto';
+import {randomUUID} from 'node:crypto';
 
 const BREAKING_CHANGE_TITLE = 'BREAKING CHANGE';
 const COMMIT_PREFIX = /^[^:]+: ?/;
@@ -74,7 +74,7 @@ export class ChangelogJson extends DefaultUpdater {
       // this logic removes this suffix and prepends it to the
       // issues array.
       const match = message.match(PR_SUFFIX_REGEX);
-      if (match && match.groups?.pr) {
+      if (match?.groups?.pr) {
         message = message.replace(match[0], '');
         issues.add(match.groups.pr);
       }

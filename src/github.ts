@@ -310,7 +310,7 @@ export class GitHub {
         baseUrl: apiUrl,
         auth: options.token,
         request: {
-          agent: this.createDefaultAgent(apiUrl, options.proxy),
+          agent: GitHub.createDefaultAgent(apiUrl, options.proxy),
         },
         log: {
           // octokit debug logs include all requests, too noisy for our debug level
@@ -376,7 +376,7 @@ export class GitHub {
       graphql: graphql.defaults({
         baseUrl: graphqlUrl,
         request: {
-          agent: this.createDefaultAgent(graphqlUrl, options.proxy),
+          agent: GitHub.createDefaultAgent(graphqlUrl, options.proxy),
         },
         headers: {
           'user-agent': `@increase/release-please/${
@@ -487,7 +487,7 @@ export class GitHub {
     options: CommitIteratorOptions = {}
   ) {
     const maxResults = options.maxResults ?? Number.MAX_SAFE_INTEGER;
-    let cursor: string | undefined = undefined;
+    let cursor: string | undefined ;
     let results = 0;
     while (results < maxResults) {
       const response: CommitHistory | null = await this.mergeCommitsGraphQL(
@@ -840,7 +840,7 @@ export class GitHub {
     status: 'OPEN' | 'CLOSED' | 'MERGED' = 'MERGED',
     maxResults: number = Number.MAX_SAFE_INTEGER
   ): AsyncGenerator<PullRequest, void, void> {
-    let cursor: string | undefined = undefined;
+    let cursor: string | undefined ;
     let results = 0;
     while (results < maxResults) {
       const response: PullRequestHistory | null =
@@ -1000,7 +1000,7 @@ export class GitHub {
           headBranchName: pullRequest.headRefName,
           labels: (pullRequest.labels?.nodes || []).map(l => l.name),
           title: pullRequest.title,
-          body: pullRequest.body + '',
+          body: `${pullRequest.body}`,
           files: (pullRequest.files?.nodes || []).map(node => node.path),
         };
       }),
@@ -1027,7 +1027,7 @@ export class GitHub {
   private async *releaseIteratorGraphql(options: ReleaseIteratorOptions) {
     const maxResults = options.maxResults ?? Number.MAX_SAFE_INTEGER;
     let results = 0;
-    let cursor: string | undefined = undefined;
+    let cursor: string | undefined ;
     while (true) {
       const response: ReleaseHistory | null = await this.releaseGraphQL(cursor);
       if (!response) {
@@ -2432,7 +2432,7 @@ export class GitHub {
   }) {
     const maxAttempts = 10;
 
-    let notFoundError: FileNotFoundError | undefined = undefined;
+    let notFoundError: FileNotFoundError | undefined ;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       this.logger.debug(
         `Checking if file ${filePath} on branch ${branch} is up to date on GitHub (attempt ${

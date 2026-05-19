@@ -73,7 +73,7 @@ export class NodeWorkspace extends WorkspacePlugin<Package> {
     options: NodeWorkspaceOptions = {}
   ) {
     super(github, targetBranch, manifestPath, repositoryConfig, options);
-    this.alwaysLinkLocal = options.alwaysLinkLocal === false ? false : true;
+    this.alwaysLinkLocal = options.alwaysLinkLocal !==false;
   }
   protected async buildAllPackages(
     candidates: CandidateReleasePullRequest[]

@@ -23,7 +23,7 @@ export class GithubImportsGo extends DefaultUpdater {
       (_, prefix, __, ___, path) =>
         `"${prefix ?? ''}github.com/${this.repository.owner}/${
           this.repository.repo
-        }${this.version.major < 2 ? '' : '/v' + this.version.major.toString()}${
+        }${this.version.major < 2 ? '' : `/v${this.version.major.toString()}`}${
           path ?? ''
         }"`
     );

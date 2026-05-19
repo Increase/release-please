@@ -13,8 +13,8 @@
 // limitations under the License.
 import {describe, it, expect} from 'vitest';
 
-import {readFileSync} from 'fs';
-import {resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {PackageJson} from '../../src/updaters/node/package-json';
 import {Version} from '../../src/version';
 const fixturesPath = './test/updaters/fixtures';
