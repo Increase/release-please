@@ -123,10 +123,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build action bundle
-        run: pnpm build:action
-
-      - name: Sync release branch with main and ship dist/
+      # Switch to the release branch first; checkout would otherwise overwrite
+      # a pre-built dist/ with the previous release's tracked dist/ files.
+      - name: Sync release branch with main
         env:
           TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
@@ -138,6 +137,16 @@ jobs:
           else
             git checkout -b release main
           fi
+
+      # Build against the merged source so dist/ reflects this release's code.
+      - name: Build action bundle
+        run: pnpm build:action
+
+      - name: Commit and push dist/
+        env:
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          set -euo pipefail
           git add -f dist/
           if ! git diff --cached --quiet; then
             git commit -m "chore: build dist/ for ${TAG}"
