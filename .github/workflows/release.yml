@@ -42,6 +42,7 @@ jobs:
       releases_created: ${{ steps.release_please.outputs.releases_created }}
       tag_name: ${{ steps.release_please.outputs.tag_name }}
       version: ${{ steps.release_please.outputs.version }}
+      major: ${{ steps.release_please.outputs.major }}
     steps:
       - uses: actions/create-github-app-token@v3
         id: app-token
@@ -157,3 +158,9 @@ jobs:
           # SHA that contains the bundled action.
           git tag -f "${TAG}" HEAD
           git push -f origin "${TAG}"
+          # Also move the floating major-version tag (e.g. v0, v1) to the
+          # same commit so consumers can pin `uses: Increase/release-please@v0`
+          # and pick up patch/minor releases automatically.
+          MAJOR_TAG="v${{ needs.release-please.outputs.major }}"
+          git tag -f "${MAJOR_TAG}" HEAD
+          git push -f origin "${MAJOR_TAG}"
