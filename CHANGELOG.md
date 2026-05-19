@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.3](https://github.com/Increase/release-please/compare/v0.2.2...v0.2.3) (2026-05-19)
+
+
+### Chores
+
+* rebrand release PR body from Stainless to Increase ([#6](https://github.com/Increase/release-please/issues/6)) ([d1d9341](https://github.com/Increase/release-please/commit/d1d9341a3ac4f95870238e1adb570b050c50097a))
+
+
+### Documentation
+
+* compact CHANGELOG to fork history only ([#7](https://github.com/Increase/release-please/issues/7)) ([32a0724](https://github.com/Increase/release-please/commit/32a07246f712888be623de3a9dac12a2c2a99a20))
+
 ## [0.2.2](https://github.com/Increase/release-please/compare/v0.2.1...v0.2.2) (2026-05-19)
 
 
