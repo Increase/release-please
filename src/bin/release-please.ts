@@ -15,7 +15,7 @@
 // limitations under the License.
 
 import {coerceOption} from '../util/coerce-option';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import {GitHub, GH_API_URL, GH_GRAPHQL_URL} from '../github';
 import {Manifest, ManifestOptions, ROOT_PROJECT_PATH} from '../manifest';
 import {ChangelogSection, buildChangelogSections} from '../changelog-notes';
@@ -836,7 +836,7 @@ async function buildGitHub(argv: GitHubArgs): Promise<GitHub> {
   return github;
 }
 
-export const parser = yargs
+export const parser = yargs()
   .command(createReleasePullRequestCommand)
   .command(createReleaseCommand)
   .command(createManifestPullRequestCommand)

@@ -11,13 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
 import {PullRequestBody} from '../../src/util/pull-request-body';
-import snapshot = require('snap-shot-it');
 import {Version} from '../../src/version';
 
 const fixturesPath = './test/fixtures/release-notes';
@@ -32,27 +30,27 @@ describe('PullRequestBody', () => {
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(4);
+      expect(releaseData).lengthOf(4).toMatchSnapshot();
       expect(releaseData[0].component).to.eql(
         '@google-automations/bot-config-utils'
       );
       expect(releaseData[0].version?.toString()).to.eql('3.2.0');
-      expect(releaseData[0].notes).matches(/^### Features/);
+      expect(releaseData[0].notes).matches(/^### Features/).toMatchSnapshot();
       expect(releaseData[1].component).to.eql(
         '@google-automations/label-utils'
       );
       expect(releaseData[1].version?.toString()).to.eql('1.1.0');
-      expect(releaseData[1].notes).matches(/^### Features/);
+      expect(releaseData[1].notes).matches(/^### Features/).toMatchSnapshot();
       expect(releaseData[2].component).to.eql(
         '@google-automations/object-selector'
       );
       expect(releaseData[2].version?.toString()).to.eql('1.1.0');
-      expect(releaseData[2].notes).matches(/^### Features/);
+      expect(releaseData[2].notes).matches(/^### Features/).toMatchSnapshot();
       expect(releaseData[3].component).to.eql(
         '@google-automations/datastore-lock'
       );
       expect(releaseData[3].version?.toString()).to.eql('2.1.0');
-      expect(releaseData[3].notes).matches(/^### Features/);
+      expect(releaseData[3].notes).matches(/^### Features/).toMatchSnapshot();
     });
     it('should parse multiple components mixed with componentless', () => {
       const body = readFileSync(
@@ -62,15 +60,15 @@ describe('PullRequestBody', () => {
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(2);
+      expect(releaseData).lengthOf(2).toMatchSnapshot();
       expect(releaseData[0].component).to.be.undefined;
       expect(releaseData[0].version?.toString()).to.eql('3.2.0');
-      expect(releaseData[0].notes).matches(/^### Features/);
+      expect(releaseData[0].notes).matches(/^### Features/).toMatchSnapshot();
       expect(releaseData[1].component).to.eql(
         '@google-automations/label-utils'
       );
       expect(releaseData[1].version?.toString()).to.eql('1.1.0');
-      expect(releaseData[1].notes).matches(/^### Features/);
+      expect(releaseData[1].notes).matches(/^### Features/).toMatchSnapshot();
     });
     it('should parse single component from legacy manifest release', () => {
       const body = readFileSync(
@@ -80,20 +78,20 @@ describe('PullRequestBody', () => {
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(1);
+      expect(releaseData).lengthOf(1).toMatchSnapshot();
       expect(releaseData[0].component).to.eql('@google-cloud/release-brancher');
       expect(releaseData[0].version?.toString()).to.eql('1.3.1');
-      expect(releaseData[0].notes).matches(/^### Bug Fixes/);
+      expect(releaseData[0].notes).matches(/^### Bug Fixes/).toMatchSnapshot();
     });
     it('should parse standalone release', () => {
       const body = readFileSync(resolve(fixturesPath, './single.txt'), 'utf8');
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(1);
+      expect(releaseData).lengthOf(1).toMatchSnapshot();
       expect(releaseData[0].component).to.be.undefined;
       expect(releaseData[0].version?.toString()).to.eql('3.2.7');
-      expect(releaseData[0].notes).matches(/^### \[3\.2\.7\]/);
+      expect(releaseData[0].notes).matches(/^### \[3\.2\.7\]/).toMatchSnapshot();
     });
     it('should parse legacy PHP body', () => {
       const body = readFileSync(
@@ -103,10 +101,10 @@ describe('PullRequestBody', () => {
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(109);
+      expect(releaseData).lengthOf(109).toMatchSnapshot();
       expect(releaseData[0].component).to.eql('google/cloud-access-approval');
       expect(releaseData[0].version?.toString()).to.eql('0.3.0');
-      expect(releaseData[0].notes).matches(/Database operations/);
+      expect(releaseData[0].notes).matches(/Database operations/).toMatchSnapshot();
     });
 
     it('can parse initial release pull rqeuest body', () => {
@@ -117,10 +115,10 @@ describe('PullRequestBody', () => {
       const pullRequestBody = PullRequestBody.parse(body);
       expect(pullRequestBody).to.not.be.undefined;
       const releaseData = pullRequestBody!.releaseData;
-      expect(releaseData).lengthOf(1);
+      expect(releaseData).lengthOf(1).toMatchSnapshot();
       expect(releaseData[0].component).to.be.undefined;
       expect(releaseData[0].version?.toString()).to.eql('0.1.0');
-      expect(releaseData[0].notes).matches(/initial generation/);
+      expect(releaseData[0].notes).matches(/initial generation/).toMatchSnapshot();
     });
   });
   describe('toString', () => {
@@ -138,7 +136,7 @@ describe('PullRequestBody', () => {
         },
       ];
       const pullRequestBody = new PullRequestBody(data);
-      snapshot(pullRequestBody.toString());
+      expect(pullRequestBody.toString()).toMatchSnapshot();
     });
 
     it('can handle a single entries', () => {
@@ -150,7 +148,7 @@ describe('PullRequestBody', () => {
         },
       ];
       const pullRequestBody = new PullRequestBody(data);
-      snapshot(pullRequestBody.toString());
+      expect(pullRequestBody.toString()).toMatchSnapshot();
     });
 
     it('can handle a single entries forced components', () => {
@@ -162,7 +160,7 @@ describe('PullRequestBody', () => {
         },
       ];
       const pullRequestBody = new PullRequestBody(data, {useComponents: true});
-      snapshot(pullRequestBody.toString());
+      expect(pullRequestBody.toString()).toMatchSnapshot();
     });
 
     it('can handle a custom header and footer', () => {
@@ -182,7 +180,7 @@ describe('PullRequestBody', () => {
         header: 'My special header!!!',
         footer: 'A custom footer',
       });
-      snapshot(pullRequestBody.toString());
+      expect(pullRequestBody.toString()).toMatchSnapshot();
     });
 
     it('can parse the generated output', () => {
@@ -223,7 +221,7 @@ describe('PullRequestBody', () => {
         },
       ];
       const pullRequestBody = new PullRequestBody(data);
-      snapshot(pullRequestBody.toString());
+      expect(pullRequestBody.toString()).toMatchSnapshot();
     });
   });
 });

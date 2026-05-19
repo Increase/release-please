@@ -1,10 +1,8 @@
+import {describe, it, expect} from 'vitest';
 import {readFileSync} from 'fs';
-import {describe, it} from 'mocha';
 import {resolve} from 'path';
 import {RubyReadMeUpdater} from '../../src/updaters/ruby/readme';
 import {Version} from '../../src/version';
-import snapshot = require('snap-shot-it');
-
 const fixturesPath = './test/updaters/fixtures';
 
 describe('Ruby README.md', () => {
@@ -21,7 +19,7 @@ describe('Ruby README.md', () => {
           version: Version.parse(ver),
         });
         const newContent = version.updateContent(oldContent);
-        snapshot(newContent);
+        expect(newContent).toMatchSnapshot();
       });
     }
   });

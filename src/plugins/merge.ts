@@ -13,12 +13,11 @@
 // limitations under the License.
 
 import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
+import type {CandidateReleasePullRequest, RepositoryConfig} from '../manifest';
 import {
-  CandidateReleasePullRequest,
-  RepositoryConfig,
   MANIFEST_PULL_REQUEST_TITLE_PATTERN,
   ROOT_PROJECT_PATH,
-} from '../manifest';
+} from '../manifest-constants';
 import {PullRequestTitle} from '../util/pull-request-title';
 import {PullRequestBody, ReleaseData} from '../util/pull-request-body';
 import {BranchName} from '../util/branch-name';

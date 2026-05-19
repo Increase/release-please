@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Version} from '../../src/version';
 import {GenericXml} from '../../src/updaters/generic-xml';
-import {expect} from 'chai';
-
 const fixturesPath = './test/updaters/fixtures';
 
 describe('GenericXml', () => {
@@ -34,7 +31,7 @@ describe('GenericXml', () => {
         Version.parse('v2.3.4')
       );
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('ignores non-matching entry', async () => {
       const oldContent = readFileSync(
@@ -55,7 +52,7 @@ describe('GenericXml', () => {
       ).replace(/\r\n/g, '\n');
       const updater = new GenericXml('//Project/@Sdk', Version.parse('v2.3.4'));
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

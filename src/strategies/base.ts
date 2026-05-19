@@ -17,13 +17,13 @@ import {GitHub} from '../github';
 import {VersioningStrategy} from '../versioning-strategy';
 import {Repository} from '../repository';
 import {ChangelogNotes, ChangelogSection} from '../changelog-notes';
+import type {ExtraFile} from '../manifest-constants';
 import {
   ROOT_PROJECT_PATH,
   MANIFEST_PULL_REQUEST_TITLE_PATTERN,
-  ExtraFile,
   DEFAULT_CUSTOM_VERSION_LABEL,
   DEFAULT_RELEASE_PLEASE_MANIFEST,
-} from '../manifest';
+} from '../manifest-constants';
 import {DefaultVersioningStrategy} from '../versioning-strategies/default';
 import {DefaultChangelogNotes} from '../changelog-notes/default';
 import {Update} from '../update';

@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {ChangelogJson} from '../../src/updaters/changelog-json';
 import {Version} from '../../src/version';
 import {parseConventionalCommits} from '../../src/commit';
@@ -40,7 +39,7 @@ describe('changelog.json', () => {
       language: 'JAVA',
     });
     const newContent = changelogJson.updateContent(oldContent);
-    snapshot(
+    expect(
       newContent
         .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
         .replace(UUID_REGEX, 'abc-123-efd-qwerty')
@@ -62,7 +61,7 @@ describe('changelog.json', () => {
       commits: conventionalCommits,
     });
     const newContent = changelogJson.updateContent(oldContent);
-    snapshot(
+    expect(
       newContent
         .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
         .replace(UUID_REGEX, 'abc-123-efd-qwerty')
@@ -87,7 +86,7 @@ describe('changelog.json', () => {
       commits: conventionalCommits,
     });
     const newContent = changelogJson.updateContent(oldContent);
-    snapshot(
+    expect(
       newContent
         .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
         .replace(UUID_REGEX, 'abc-123-efd-qwerty')

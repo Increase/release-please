@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {Go} from '../../src/strategies/go';
-import * as sinon from 'sinon';
 import {assertHasUpdate, buildGitHubFileContent} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
@@ -24,8 +22,6 @@ import {Version} from '../../src/version';
 import {Changelog} from '../../src/updaters/changelog';
 import {GithubImportsGo} from '../../src/updaters/go/github-imports-go';
 import {GoModUpdater} from '../../src/updaters/go/go-mod';
-
-const sandbox = sinon.createSandbox();
 
 const COMMITS = [
   ...buildMockConventionalCommit(
@@ -48,17 +44,14 @@ describe('Go', () => {
       defaultBranch: 'main',
     });
 
-    sandbox
-      .stub(github, 'findFilesByGlobAndRef')
+    vi
+      .spyOn(github, 'findFilesByGlobAndRef')
       .withArgs('**/*.go', 'main')
-      .resolves(['file-with-imports-v2.go'])
+      .mockResolvedValue(['file-with-imports-v2.go'])
       .withArgs('**/*.md', 'main')
-      .resolves([]);
+      .mockResolvedValue([]);
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Go({
@@ -114,15 +107,15 @@ describe('Go', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent(
             './test/updaters/fixtures/go',
             'file-with-imports-v2.go'
           )
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('1.0.0'), 'some-go-package'),
         sha: 'abc123',
@@ -141,15 +134,15 @@ describe('Go', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .resolves(
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockResolvedValue(
           buildGitHubFileContent(
             './test/updaters/fixtures/go',
             'file-with-imports-v2.go'
           )
         );
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(Version.parse('1.0.0'), 'some-go-package'),
         sha: 'abc123',

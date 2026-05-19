@@ -33,7 +33,7 @@ import {Dart} from './strategies/dart';
 import {Node} from './strategies/node';
 import {Expo} from './strategies/expo';
 import {GitHub} from './github';
-import {ReleaserConfig} from './manifest';
+import type {ReleaserConfig} from './manifest';
 import {AlwaysBumpPatch} from './versioning-strategies/always-bump-patch';
 import {ServicePackVersioningStrategy} from './versioning-strategies/service-pack';
 import {DependencyManifest} from './versioning-strategies/dependency-manifest';

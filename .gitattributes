@@ -2,3 +2,7 @@
 *.js text eol=lf
 protos/* linguist-generated
 **/api-extractor.json  linguist-language=JSON-with-Comments
+
+# Vitest snapshots (large, generated; collapsed in GitHub PR diffs)
+**/__snapshots__/** linguist-generated
+*.snap linguist-generated

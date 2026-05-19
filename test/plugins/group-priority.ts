@@ -11,8 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {describe, it, beforeEach} from 'mocha';
-import {expect} from 'chai';
+import {describe, it, expect, beforeEach} from 'vitest';
 import {GitHub} from '../../src/github';
 import {GroupPriority} from '../../src/plugins/group-priority';
 import {
@@ -52,7 +51,7 @@ describe('GroupPriority plugin', () => {
         }),
       ];
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       expect(newCandidates[0].path).to.eql('path1');
     });
     it('falls back to all pull requests if prioritized group not found', async () => {
@@ -77,7 +76,7 @@ describe('GroupPriority plugin', () => {
         }),
       ];
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(3);
+      expect(newCandidates).lengthOf(3).toMatchSnapshot();
     });
   });
 });

@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import * as sinon from 'sinon';
 import {GitHub} from '../../src/github';
 import {
   CandidateReleasePullRequest,
@@ -32,15 +31,12 @@ import {
 import {Version} from '../../src/version';
 import {ManifestPlugin} from '../../src/plugin';
 import {CargoWorkspace} from '../../src/plugins/cargo-workspace';
-import {expect} from 'chai';
-import snapshot = require('snap-shot-it');
 import {RawContent} from '../../src/updaters/raw-content';
 import {CargoToml} from '../../src/updaters/rust/cargo-toml';
 import {parseCargoManifest} from '../../src/updaters/rust/common';
 import {ConfigurationError} from '../../src/errors';
 import assert = require('assert');
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/plugins/cargo-workspace';
 
 export function buildMockPackageUpdate(
@@ -85,10 +81,7 @@ describe('CargoWorkspace plugin', () => {
       }
     );
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('run', () => {
+    describe('run', () => {
     it('rejects if not a workspace', async () => {});
     it('rejects if no workspace members', async () => {});
     it('does nothing for non-rust strategies', async () => {
@@ -111,9 +104,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['packages/rustA/Cargo.toml'],
         flatten: false,
@@ -135,12 +126,12 @@ describe('CargoWorkspace plugin', () => {
           },
         }
       );
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA']);
+        .mockResolvedValue(['packages/rustA']);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(2);
+      expect(newCandidates).lengthOf(2).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -148,7 +139,7 @@ describe('CargoWorkspace plugin', () => {
       const updates = rustCandidate!.pullRequest.updates;
       assertHasUpdate(updates, 'packages/rustA/Cargo.toml');
       assertHasUpdate(updates, 'Cargo.lock');
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('combines rust packages', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -171,9 +162,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['packages/rustA/Cargo.toml', 'packages/rustD/Cargo.toml'],
         flatten: false,
@@ -185,12 +174,12 @@ describe('CargoWorkspace plugin', () => {
           ],
         ],
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustD', 'main')
-        .resolves(['packages/rustD']);
+        .mockResolvedValue(['packages/rustD']);
       plugin = new CargoWorkspace(
         github,
         'main',
@@ -205,7 +194,7 @@ describe('CargoWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -213,7 +202,7 @@ describe('CargoWorkspace plugin', () => {
       const updates = rustCandidate!.pullRequest.updates;
       assertHasUpdate(updates, 'packages/rustA/Cargo.toml');
       assertHasUpdate(updates, 'packages/rustD/Cargo.toml');
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('handles glob paths', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -236,19 +225,17 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['packages/rustA/Cargo.toml', 'packages/rustD/Cargo.toml'],
         flatten: false,
         targetBranch: 'main',
         inlineFiles: [['Cargo.toml', '[workspace]\nmembers = ["packages/*"]']],
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/*', 'main')
-        .resolves(['packages/rustA', 'packages/rustD']);
+        .mockResolvedValue(['packages/rustA', 'packages/rustD']);
       plugin = new CargoWorkspace(
         github,
         'main',
@@ -263,7 +250,7 @@ describe('CargoWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -271,7 +258,7 @@ describe('CargoWorkspace plugin', () => {
       const updates = rustCandidate!.pullRequest.updates;
       assertHasUpdate(updates, 'packages/rustA/Cargo.toml');
       assertHasUpdate(updates, 'packages/rustD/Cargo.toml');
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('walks dependency tree and updates previously untouched packages', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -294,9 +281,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'Cargo.toml',
@@ -309,20 +294,20 @@ describe('CargoWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB'])
+        .mockResolvedValue(['packages/rustB'])
         .withArgs('packages/rustC', 'main')
-        .resolves(['packages/rustC'])
+        .mockResolvedValue(['packages/rustC'])
         .withArgs('packages/rustD', 'main')
-        .resolves(['packages/rustD'])
+        .mockResolvedValue(['packages/rustD'])
         .withArgs('packages/rustE', 'main')
-        .resolves(['packages/rustE']);
+        .mockResolvedValue(['packages/rustE']);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -333,7 +318,7 @@ describe('CargoWorkspace plugin', () => {
       assertHasUpdate(updates, 'packages/rustC/Cargo.toml', RawContent);
       assertHasUpdate(updates, 'packages/rustD/Cargo.toml', RawContent);
       assertHasUpdate(updates, 'packages/rustE/Cargo.toml', RawContent);
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('can skip merging rust packages', async () => {
       // This is the same setup as 'walks dependency tree and updates previously untouched packages'
@@ -357,9 +342,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'Cargo.toml',
@@ -372,18 +355,18 @@ describe('CargoWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB'])
+        .mockResolvedValue(['packages/rustB'])
         .withArgs('packages/rustC', 'main')
-        .resolves(['packages/rustC'])
+        .mockResolvedValue(['packages/rustC'])
         .withArgs('packages/rustD', 'main')
-        .resolves(['packages/rustD'])
+        .mockResolvedValue(['packages/rustD'])
         .withArgs('packages/rustE', 'main')
-        .resolves(['packages/rustE']);
+        .mockResolvedValue(['packages/rustE']);
       plugin = new CargoWorkspace(
         github,
         'main',
@@ -401,7 +384,7 @@ describe('CargoWorkspace plugin', () => {
         }
       );
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(5);
+      expect(newCandidates).lengthOf(5).toMatchSnapshot();
       for (const newCandidate of newCandidates) {
         safeSnapshot(newCandidate.pullRequest.body.toString());
       }
@@ -430,9 +413,7 @@ describe('CargoWorkspace plugin', () => {
           notes: existingNotes,
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'Cargo.toml',
@@ -445,20 +426,20 @@ describe('CargoWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB'])
+        .mockResolvedValue(['packages/rustB'])
         .withArgs('packages/rustC', 'main')
-        .resolves(['packages/rustC'])
+        .mockResolvedValue(['packages/rustC'])
         .withArgs('packages/rustD', 'main')
-        .resolves(['packages/rustD'])
+        .mockResolvedValue(['packages/rustD'])
         .withArgs('packages/rustE', 'main')
-        .resolves(['packages/rustE']);
+        .mockResolvedValue(['packages/rustE']);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -468,7 +449,7 @@ describe('CargoWorkspace plugin', () => {
       assertHasUpdate(updates, 'packages/rustB/Cargo.toml', RawContent);
       assertHasUpdate(updates, 'packages/rustC/Cargo.toml', RawContent);
       assertHasUpdate(updates, 'packages/rustE/Cargo.toml', RawContent);
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('skips component if not touched', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -482,9 +463,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: [
           'Cargo.toml',
@@ -497,20 +476,20 @@ describe('CargoWorkspace plugin', () => {
         flatten: false,
         targetBranch: 'main',
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB'])
+        .mockResolvedValue(['packages/rustB'])
         .withArgs('packages/rustC', 'main')
-        .resolves(['packages/rustC'])
+        .mockResolvedValue(['packages/rustC'])
         .withArgs('packages/rustD', 'main')
-        .resolves(['packages/rustD'])
+        .mockResolvedValue(['packages/rustD'])
         .withArgs('packages/rustE', 'main')
-        .resolves(['packages/rustE']);
+        .mockResolvedValue(['packages/rustE']);
       const newCandidates = await plugin.run(candidates);
-      expect(newCandidates).lengthOf(1);
+      expect(newCandidates).lengthOf(1).toMatchSnapshot();
       const rustCandidate = newCandidates.find(
         candidate => candidate.config.releaseType === 'rust'
       );
@@ -520,7 +499,7 @@ describe('CargoWorkspace plugin', () => {
       assertNoHasUpdate(updates, 'packages/rustA/Cargo.toml');
       assertNoHasUpdate(updates, 'packages/rustE/Cargo.toml');
       assertHasUpdate(updates, 'packages/rustB/Cargo.toml', RawContent);
-      snapshot(dateSafe(rustCandidate!.pullRequest.body.toString()));
+      expect(dateSafe(rustCandidate!.pullRequest.body.toString())).toMatchSnapshot();
     });
     it('handles packages without version', async () => {
       const candidates: CandidateReleasePullRequest[] = [
@@ -534,9 +513,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['packages/rustA/Cargo.toml'],
         flatten: false,
@@ -552,12 +529,12 @@ describe('CargoWorkspace plugin', () => {
           ],
         ],
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB']);
+        .mockResolvedValue(['packages/rustB']);
       plugin = new CargoWorkspace(
         github,
         'main',
@@ -594,9 +571,7 @@ describe('CargoWorkspace plugin', () => {
           ],
         }),
       ];
-      stubFilesFromFixtures({
-        sandbox,
-        github,
+      stubFilesFromFixtures({github,
         fixturePath: fixturesPath,
         files: ['packages/rustA/Cargo.toml'],
         flatten: false,
@@ -612,12 +587,12 @@ describe('CargoWorkspace plugin', () => {
           ],
         ],
       });
-      sandbox
-        .stub(github, 'findFilesByGlobAndRef')
+      vi
+        .spyOn(github, 'findFilesByGlobAndRef')
         .withArgs('packages/rustA', 'main')
-        .resolves(['packages/rustA'])
+        .mockResolvedValue(['packages/rustA'])
         .withArgs('packages/rustB', 'main')
-        .resolves(['packages/rustB']);
+        .mockResolvedValue(['packages/rustB']);
       plugin = new CargoWorkspace(
         github,
         'main',

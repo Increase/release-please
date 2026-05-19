@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, afterEach} from 'vitest';
 
-import {beforeEach, describe, it} from 'mocha';
 import {PluginType, RepositoryConfig} from '../../src/manifest';
 import {
   buildPlugin,
@@ -20,7 +20,6 @@ import {
   registerPlugin,
   unregisterPlugin,
 } from '../../src/factories/plugin-factory';
-import {expect} from 'chai';
 import {LinkedVersions} from '../../src/plugins/linked-versions';
 import {ManifestPlugin} from '../../src/plugin';
 import {GitHub} from '../../src';
@@ -81,7 +80,7 @@ describe('PluginFactory', () => {
         manifestPath: '.manifest.json',
       });
       expect(plugin).to.not.be.undefined;
-      expect(plugin).instanceof(LinkedVersions);
+      expect(plugin).instanceof(LinkedVersions).toMatchSnapshot();
     });
     it('should build a group-priority config', () => {
       const plugin = buildPlugin({
@@ -95,7 +94,7 @@ describe('PluginFactory', () => {
         manifestPath: '.manifest.json',
       });
       expect(plugin).to.not.be.undefined;
-      expect(plugin).instanceof(GroupPriority);
+      expect(plugin).instanceof(GroupPriority).toMatchSnapshot();
     });
   });
   describe('getPluginTypes', () => {

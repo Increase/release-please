@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Apis} from '../../../src/updaters/dotnet/apis';
 import {Version} from '../../../src/version';
 
@@ -33,7 +32,7 @@ describe('Apis', () => {
         Version.parse('2.12.0')
       );
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

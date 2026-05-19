@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi, type MockInstance} from 'vitest';
 
-import {describe, it, beforeEach, afterEach} from 'mocha';
 import {
   DEFAULT_CUSTOM_VERSION_LABEL,
   DEFAULT_RELEASE_PLEASE_MANIFEST,
@@ -20,7 +20,6 @@ import {
   ManifestConfig,
 } from '../src/manifest';
 import {GitHub, ReleaseOptions} from '../src/github';
-import * as sinon from 'sinon';
 import {
   buildGitHubFileContent,
   buildGitHubFileRaw,
@@ -33,7 +32,6 @@ import {
   assertNoHasUpdate,
   mockReleaseData,
 } from './helpers';
-import {expect} from 'chai';
 import * as assert from 'assert';
 import {Version} from '../src/version';
 import {PullRequest} from '../src/pull-request';
@@ -46,8 +44,6 @@ import {CargoWorkspace} from '../src/plugins/cargo-workspace';
 import {PullRequestTitle} from '../src/util/pull-request-title';
 import {PullRequestBody} from '../src/util/pull-request-body';
 import {RawContent} from '../src/updaters/raw-content';
-import {TagName} from '../src/util/tag-name';
-import snapshot = require('snap-shot-it');
 import {
   DuplicateReleaseError,
   FileNotFoundError,
@@ -55,22 +51,20 @@ import {
   GitHubAPIError,
 } from '../src/errors';
 import {RequestError} from '@octokit/request-error';
-import nock = require('nock');
+import nock from './http-mock';
 import {LinkedVersions} from '../src/plugins/linked-versions';
 import {MavenWorkspace} from '../src/plugins/maven-workspace';
 import {GraphqlResponseError} from '@octokit/graphql';
 
 nock.disableNetConnect();
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures';
 
-function mockPullRequests(
-  github: GitHub,
+function mockPullRequests(github: GitHub,
   openPullRequests: PullRequest[],
   mergedPullRequests: PullRequest[] = [],
   closedPullRequests: PullRequest[] = []
-): sinon.SinonStub {
+): MockInstance {
   async function* fakeGenerator() {
     for (const pullRequest of openPullRequests) {
       yield pullRequest;
@@ -86,14 +80,20 @@ function mockPullRequests(
       yield pullRequest;
     }
   }
-  return sandbox
-    .stub(github, 'pullRequestIterator')
-    .withArgs(sinon.match.string, 'OPEN')
-    .returns(fakeGenerator())
-    .withArgs(sinon.match.string, 'MERGED')
-    .returns(mergedGenerator())
-    .withArgs(sinon.match.string, 'CLOSED')
-    .returns(closedGenerator());
+  return vi.spyOn(github, 'pullRequestIterator').mockImplementation(
+    (_targetBranch, status) => {
+      if (status === 'OPEN') {
+        return fakeGenerator();
+      }
+      if (status === 'MERGED') {
+        return mergedGenerator();
+      }
+      if (status === 'CLOSED') {
+        return closedGenerator();
+      }
+      return (async function* () {})();
+    }
+  );
 }
 
 function mockCreateRelease(
@@ -106,46 +106,42 @@ function mockCreateRelease(
     prerelease?: boolean;
     duplicate?: boolean;
   }[]
-): sinon.SinonStub {
-  const releaseStub = sandbox.stub(github, 'createRelease');
-  for (const {id, sha, tagName, draft, duplicate} of releases) {
-    const stub = releaseStub.withArgs(
-      sinon.match.has(
-        'tag',
-        sinon.match((tag: TagName) => tag.toString() === tagName)
-      )
-    );
-    if (duplicate) {
-      stub.rejects(
-        new DuplicateReleaseError(
-          new RequestError('dup', 400, {
-            response: {
-              headers: {},
-              status: 400,
-              url: '',
-              data: '',
-            },
-            request: {
-              headers: {},
-              method: 'POST',
-              url: '',
-            },
-          }),
-          tagName
-        )
-      );
-    } else {
-      stub.resolves({
-        id,
-        tagName,
-        sha,
-        url: 'https://path/to/release',
-        notes: 'some release notes',
-        draft,
+): MockInstance {
+  return vi.spyOn(github, 'createRelease').mockImplementation(async release => {
+    const tagName = release.tag.toString();
+    const config = releases.find(r => r.tagName === tagName);
+    if (!config) {
+      throw Object.assign(new Error(`Unexpected createRelease for ${tagName}`), {
+        release,
       });
     }
-  }
-  return releaseStub;
+    if (config.duplicate) {
+      throw new DuplicateReleaseError(
+        new RequestError('dup', 400, {
+          response: {
+            headers: {},
+            status: 400,
+            url: '',
+            data: '',
+          },
+          request: {
+            headers: {},
+            method: 'POST',
+            url: '',
+          },
+        }),
+        tagName
+      );
+    }
+    return {
+      id: config.id,
+      tagName: config.tagName,
+      sha: config.sha,
+      url: 'https://path/to/release',
+      notes: 'some release notes',
+      draft: config.draft,
+    };
+  });
 }
 
 function pullRequestBody(path: string): string {
@@ -165,23 +161,19 @@ describe('Manifest', () => {
       token: 'fake-token',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-
-  describe('fromManifest', () => {
+    describe('fromManifest', () => {
     it('should parse config and manifest from repository', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -191,21 +183,21 @@ describe('Manifest', () => {
         github,
         github.repository.defaultBranch
       );
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(8);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(8);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(8).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(8).toMatchSnapshot();
     });
     it('should fetch config and manifest from changes-branch when specified', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -218,21 +210,21 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(8);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(8);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(8).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(8).toMatchSnapshot();
     });
     it('should limit manifest loading to the given path', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -246,24 +238,24 @@ describe('Manifest', () => {
         {changesBranch: 'next'},
         'packages/gcf-utils'
       );
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         manifest.repositoryConfig['packages/gcf-utils'].releaseType
       ).to.eql('node');
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(8);
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(8).toMatchSnapshot();
     });
     it('should override release-as with the given argument', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -278,27 +270,27 @@ describe('Manifest', () => {
         'packages/gcf-utils',
         '12.34.56'
       );
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(manifest.repositoryConfig['packages/gcf-utils'].releaseAs).to.eql(
         '12.34.56'
       );
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(8);
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(8).toMatchSnapshot();
     });
     it('should read the default release-type from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/root-release-type.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -317,20 +309,20 @@ describe('Manifest', () => {
       );
     });
     it('should read custom pull request title patterns from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/group-pr-title-pattern.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -352,20 +344,20 @@ describe('Manifest', () => {
     });
 
     it('should read custom tag separator from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/tag-separator.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -385,20 +377,20 @@ describe('Manifest', () => {
     });
 
     it('should read extra files from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/extra-files.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -432,20 +424,20 @@ describe('Manifest', () => {
     });
 
     it('should read custom include component in tag from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/include-component-in-tag.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -466,20 +458,20 @@ describe('Manifest', () => {
     });
 
     it('should read custom include v in tag from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/include-v-in-tag.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -499,17 +491,17 @@ describe('Manifest', () => {
     });
 
     it('should read custom labels from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/labels.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -530,17 +522,17 @@ describe('Manifest', () => {
     });
 
     it('should read reviewers from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/reviewers.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -557,20 +549,20 @@ describe('Manifest', () => {
     });
 
     it('should read extra labels from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/extra-labels.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -591,20 +583,20 @@ describe('Manifest', () => {
       ]);
     });
     it('should read exclude paths from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/exclude-paths.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -625,17 +617,17 @@ describe('Manifest', () => {
       ]);
     });
     it('should build simple plugins from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/plugins.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -648,25 +640,25 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest.plugins).lengthOf(2);
-      expect(manifest.plugins[0]).instanceOf(NodeWorkspace);
-      expect(manifest.plugins[1]).instanceOf(CargoWorkspace);
+      expect(manifest.plugins).lengthOf(2).toMatchSnapshot();
+      expect(manifest.plugins[0]).instanceOf(NodeWorkspace).toMatchSnapshot();
+      expect(manifest.plugins[1]).instanceOf(CargoWorkspace).toMatchSnapshot();
     });
     it('should build complex plugins from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/complex-plugins.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -679,27 +671,27 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest.plugins).lengthOf(1);
-      expect(manifest.plugins[0]).instanceOf(LinkedVersions);
+      expect(manifest.plugins).lengthOf(1).toMatchSnapshot();
+      expect(manifest.plugins[0]).instanceOf(LinkedVersions).toMatchSnapshot();
       const plugin = manifest.plugins[0] as LinkedVersions;
       expect(plugin.groupName).to.eql('grouped components');
       expect(plugin.components).to.eql(new Set(['pkg2', 'pkg3']));
     });
     it('should build maven-workspace from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/maven-workspace-plugins.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -712,26 +704,26 @@ describe('Manifest', () => {
         undefined,
         {changesBranch: 'next'}
       );
-      expect(manifest.plugins).lengthOf(1);
-      expect(manifest.plugins[0]).instanceOf(MavenWorkspace);
+      expect(manifest.plugins).lengthOf(1).toMatchSnapshot();
+      expect(manifest.plugins[0]).instanceOf(MavenWorkspace).toMatchSnapshot();
       const plugin = manifest.plugins[0] as MavenWorkspace;
       expect(plugin.considerAllArtifacts).to.be.true;
     });
     it('should configure search depth from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/search-depth.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -749,20 +741,20 @@ describe('Manifest', () => {
     });
 
     it('should read changelog host from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/changelog-host.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -784,20 +776,20 @@ describe('Manifest', () => {
     });
 
     it('should read changelog type from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/changelog-type.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -817,20 +809,20 @@ describe('Manifest', () => {
     });
 
     it('should read changelog path from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/changelog-path.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -852,20 +844,20 @@ describe('Manifest', () => {
     });
 
     it('should read versioning type from manifest', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/config/versioning.json'
           )
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -887,15 +879,15 @@ describe('Manifest', () => {
     });
 
     it('should throw a configuration error for a missing manifest config', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .rejects(new FileNotFoundError('.release-please-config.json'))
+        .mockRejectedValue(new FileNotFoundError('.release-please-config.json'))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -913,17 +905,17 @@ describe('Manifest', () => {
     });
 
     it('should throw a configuration error for a missing manifest versions file', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .rejects(new FileNotFoundError('.release-please-manifest.json'));
+        .mockRejectedValue(new FileNotFoundError('.release-please-manifest.json'));
       await assert.rejects(async () => {
         await Manifest.fromManifest(
           github,
@@ -936,15 +928,15 @@ describe('Manifest', () => {
     });
 
     it('should throw a configuration error for a malformed manifest config', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw('{"malformed json"'))
+        .mockResolvedValue(buildGitHubFileRaw('{"malformed json"'))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/versions/versions.json'
@@ -968,17 +960,17 @@ describe('Manifest', () => {
     });
 
     it('should throw a configuration error for a malformed manifest config', async () => {
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('release-please-config.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'manifest/config/config.json')
         )
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw('{"malformed json"'));
+        .mockResolvedValue(buildGitHubFileRaw('{"malformed json"'));
       await assert.rejects(
         async () => {
           await Manifest.fromManifest(
@@ -999,7 +991,7 @@ describe('Manifest', () => {
 
   describe('fromConfig', () => {
     it('should pass strategy options to the strategy', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1015,7 +1007,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v1.2.3',
@@ -1029,11 +1021,11 @@ describe('Manifest', () => {
         bumpMinorPreMajor: true,
         bumpPatchForMinorPreMajor: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
     });
     it('should find custom release pull request title', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1050,7 +1042,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v1.2.3',
@@ -1067,11 +1059,11 @@ describe('Manifest', () => {
         component: 'foobar',
         includeComponentInTag: false,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
     });
     it('finds previous release without tag', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1088,7 +1080,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v1.2.3',
@@ -1104,11 +1096,11 @@ describe('Manifest', () => {
         component: 'foobar',
         includeComponentInTag: false,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
     });
     it('finds previous release with tag', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1124,7 +1116,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'foobar-v1.2.3',
@@ -1140,11 +1132,11 @@ describe('Manifest', () => {
         component: 'foobar',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
     });
     it('finds manually tagged release', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1160,7 +1152,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'other-v3.3.3',
@@ -1176,7 +1168,7 @@ describe('Manifest', () => {
         component: 'other',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1186,7 +1178,7 @@ describe('Manifest', () => {
       );
     });
     it('finds legacy tags', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1202,8 +1194,8 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, []);
-      mockTags(sandbox, github, [
+      mockReleases(github, []);
+      mockTags(github, [
         {
           name: 'other-v3.3.3',
           sha: 'abc123',
@@ -1217,7 +1209,7 @@ describe('Manifest', () => {
         component: 'other',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1227,7 +1219,7 @@ describe('Manifest', () => {
       );
     });
     it('ignores manually tagged release if commit not found', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1243,7 +1235,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'other-v3.3.3',
@@ -1251,7 +1243,7 @@ describe('Manifest', () => {
           url: 'http://path/to/release',
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
 
       const manifest = await Manifest.fromConfig(github, 'target-branch', {
         releaseType: 'simple',
@@ -1260,12 +1252,12 @@ describe('Manifest', () => {
         component: 'other',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(Object.keys(manifest.releasedVersions), 'found release versions')
         .to.be.empty;
     });
     it('finds largest manually tagged release', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1295,7 +1287,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'other-v3.3.3',
@@ -1317,7 +1309,7 @@ describe('Manifest', () => {
         component: 'other',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1327,7 +1319,7 @@ describe('Manifest', () => {
       );
     });
     it('finds largest found tagged', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1357,8 +1349,8 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, []);
-      mockTags(sandbox, github, [
+      mockReleases(github, []);
+      mockTags(github, [
         {
           name: 'other-v3.3.3',
           sha: 'abc123',
@@ -1376,7 +1368,7 @@ describe('Manifest', () => {
         component: 'other',
         includeComponentInTag: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1386,7 +1378,7 @@ describe('Manifest', () => {
       );
     });
     it('finds manually tagged release commit over earlier automated commit', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1412,7 +1404,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v3.3.2',
@@ -1426,14 +1418,14 @@ describe('Manifest', () => {
           url: 'http://path/to/release',
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
 
       const manifest = await Manifest.fromConfig(github, 'target-branch', {
         releaseType: 'simple',
         bumpMinorPreMajor: true,
         bumpPatchForMinorPreMajor: true,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1443,7 +1435,7 @@ describe('Manifest', () => {
       );
     });
     it('allows configuring includeVInTag', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1459,7 +1451,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v1.2.3',
@@ -1472,14 +1464,14 @@ describe('Manifest', () => {
         releaseType: 'simple',
         includeVInTag: false,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
       expect(manifest.repositoryConfig['.'].includeVInTag).to.be.false;
     });
 
     it('finds latest published release', async () => {
-      mockReleases(sandbox, github, []);
-      mockCommits(sandbox, github, [
+      mockReleases(github, []);
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1514,11 +1506,11 @@ describe('Manifest', () => {
         releaseType: 'java',
         includeComponentInTag: false,
       });
-      expect(Object.keys(manifest.releasedVersions)).lengthOf(1);
+      expect(Object.keys(manifest.releasedVersions)).lengthOf(1).toMatchSnapshot();
       expect(manifest.releasedVersions['.'].toString()).to.be.equal('1.2.3');
     });
     it('falls back to release without component in tag', async () => {
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -1545,7 +1537,7 @@ describe('Manifest', () => {
           },
         },
       ]);
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v3.3.1',
@@ -1553,7 +1545,7 @@ describe('Manifest', () => {
           url: 'http://path/to/release',
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
 
       const manifest = await Manifest.fromConfig(github, 'target-branch', {
         releaseType: 'simple',
@@ -1562,7 +1554,7 @@ describe('Manifest', () => {
         component: 'foobar',
         includeComponentInTag: false,
       });
-      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1);
+      expect(Object.keys(manifest.repositoryConfig)).lengthOf(1).toMatchSnapshot();
       expect(
         Object.keys(manifest.releasedVersions),
         'found release versions'
@@ -1581,7 +1573,7 @@ describe('Manifest', () => {
         .times(6) // original + 5 retries
         .reply(502);
 
-      const sleepStub = sandbox.stub(github, <any>'sleepInMs').resolves(); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const sleepStub = vi.spyOn(github, <any>'sleepInMs').mockResolvedValue(); // eslint-disable-line @typescript-eslint/no-explicit-any
       await assert.rejects(
         async () => {
           await Manifest.fromConfig(github, 'target-branch', {
@@ -1600,14 +1592,14 @@ describe('Manifest', () => {
         }
       );
       scope.done();
-      sinon.assert.callCount(sleepStub, 5);
+      expect(sleepStub).to.have.callCount(5);
     });
   });
 
   describe('buildPullRequests', () => {
     describe('with basic config', () => {
       beforeEach(() => {
-        mockReleases(sandbox, github, [
+        mockReleases(github, [
           {
             id: 123456,
             sha: 'abc123',
@@ -1615,13 +1607,13 @@ describe('Manifest', () => {
             url: 'https://github.com/fake-owner/fake-repo/releases/tag/v1.0.0',
           },
         ]);
-        mockTags(sandbox, github, [
+        mockTags(github, [
           {
             sha: 'abc123',
             name: 'v1.0.0',
           },
         ]);
-        mockCommits(sandbox, github, [
+        mockCommits(github, [
           {
             sha: 'def456',
             message: 'fix: some bugfix',
@@ -1659,7 +1651,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.version?.toString()).to.eql('1.0.1');
         expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -1690,7 +1682,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.version?.toString()).to.eql('0.1.0-alpha.29');
         expect(pullRequest.previousVersion?.toString()).to.eql(
@@ -1709,14 +1701,14 @@ describe('Manifest', () => {
       });
 
       it('should honour the manifestFile argument in Manifest.fromManifest', async () => {
-        const getFileContentsStub = sandbox
-          .stub(github, 'getFileContentsOnBranch')
+        const getFileContentsStub = vi
+          .spyOn(github, 'getFileContentsOnBranch')
           .withArgs('release-please-config.json', 'next')
-          .resolves(
+          .mockResolvedValue(
             buildGitHubFileContent(fixturesPath, 'manifest/config/simple.json')
           )
           .withArgs('non/default/path/manifest.json', 'next')
-          .resolves(
+          .mockResolvedValue(
             buildGitHubFileContent(
               fixturesPath,
               'manifest/versions/simple.json'
@@ -1730,12 +1722,11 @@ describe('Manifest', () => {
           {changesBranch: 'next'}
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         assertHasUpdate(pullRequest.updates, 'non/default/path/manifest.json');
 
-        sinon.assert.calledOnceWithExactly(
-          getFileContentsStub,
+        expect(getFileContentsStub).to.have.been.calledWith(
           'non/default/path/manifest.json',
           'next'
         );
@@ -1756,7 +1747,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.draft).to.be.true;
       });
@@ -1778,7 +1769,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.draft).to.be.true;
       });
@@ -1800,7 +1791,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.labels).to.eql(['some-special-label']);
       });
@@ -1820,7 +1811,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.title.toString()).to.eql('release: 1.0.1');
       });
@@ -1840,7 +1831,7 @@ describe('Manifest', () => {
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.body.header.toString()).to.eql(
           'No beep boop for you'
@@ -1849,7 +1840,7 @@ describe('Manifest', () => {
     });
 
     it('should find the component from config', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -1857,7 +1848,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg1-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'def456',
           message: 'fix: some bugfix',
@@ -1879,13 +1870,13 @@ describe('Manifest', () => {
           },
         },
       ]);
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/repo/node/pkg1/package.json'
@@ -1904,7 +1895,7 @@ describe('Manifest', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.version?.toString()).to.eql('1.0.1');
       expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -1917,7 +1908,7 @@ describe('Manifest', () => {
     });
 
     it('should handle multiple package repository', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -1931,7 +1922,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v0.2.3',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -1997,13 +1988,13 @@ describe('Manifest', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].labels).to.eql(['autorelease: pending']);
-      snapshot(dateSafe(pullRequests[0].body.toString()));
+      expect(dateSafe(pullRequests[0].body.toString())).toMatchSnapshot();
     });
 
     it('should ignore multiple package release commits', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2017,7 +2008,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v0.2.3',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'def234',
           message: 'chore: release main',
@@ -2053,11 +2044,11 @@ describe('Manifest', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(0);
+      expect(pullRequests).lengthOf(0).toMatchSnapshot();
     });
 
     it('should allow creating multiple pull requests', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2071,7 +2062,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2140,13 +2131,13 @@ describe('Manifest', () => {
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(2);
-      snapshot(dateSafe(pullRequests[0].body.toString()));
-      snapshot(dateSafe(pullRequests[1].body.toString()));
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
+      expect(dateSafe(pullRequests[0].body.toString())).toMatchSnapshot();
+      expect(dateSafe(pullRequests[1].body.toString())).toMatchSnapshot();
     });
 
     it('should allow forcing release-as on a single component', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2160,7 +2151,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2225,12 +2216,12 @@ describe('Manifest', () => {
         'path/a': '1.0.0',
         'path/b': '0.2.3',
       };
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)));
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)));
       const manifest = await Manifest.fromManifest(
         github,
         'main',
@@ -2239,13 +2230,13 @@ describe('Manifest', () => {
         {changesBranch: 'next'}
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(2);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('1.0.1');
       expect(pullRequests[1].version?.toString()).to.eql('3.3.3');
     });
 
     it('should allow forcing release-as on entire manifest', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2259,7 +2250,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2324,12 +2315,12 @@ describe('Manifest', () => {
         'path/a': '1.0.0',
         'path/b': '0.2.3',
       };
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)));
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)));
       const manifest = await Manifest.fromManifest(
         github,
         'main',
@@ -2338,13 +2329,13 @@ describe('Manifest', () => {
         {changesBranch: 'next'}
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(2);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('3.3.3');
       expect(pullRequests[1].version?.toString()).to.eql('3.3.3');
     });
 
     it('should use version from existing PR title if differs from release branch manifest', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 11111,
           sha: 'commit1',
@@ -2370,7 +2361,7 @@ describe('Manifest', () => {
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg4-v4.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'commit11',
           message: 'fix: some bugfix',
@@ -2479,12 +2470,12 @@ describe('Manifest', () => {
         },
       };
 
-      const getFileContentsOnBranchStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsOnBranchStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/a': '1.0.0',
@@ -2498,7 +2489,7 @@ describe('Manifest', () => {
           '.release-please-manifest.json',
           'release-please--branches--main--changes--next--components--pkg1'
         )
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/a': '1.0.1',
@@ -2509,7 +2500,7 @@ describe('Manifest', () => {
           '.release-please-manifest.json',
           'release-please--branches--main--changes--next--components--pkg2'
         )
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/b': '2.0.1',
@@ -2517,7 +2508,7 @@ describe('Manifest', () => {
           )
         )
         .withArgs('path/b/package.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               name: 'pkg2',
@@ -2528,7 +2519,7 @@ describe('Manifest', () => {
           '.release-please-manifest.json',
           'release-please--branches--main--changes--next--components--pkg3'
         )
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/c': '3.0.1',
@@ -2536,7 +2527,7 @@ describe('Manifest', () => {
           )
         )
         .withArgs('path/c/setup.py', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             `
 name = "pkg3"
@@ -2549,7 +2540,7 @@ version = "3.0.0"
           '.release-please-manifest.json',
           'release-please--branches--main--changes--next--components--pkg4'
         )
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/d': '4.0.1',
@@ -2557,22 +2548,22 @@ version = "3.0.0"
           )
         );
 
-      const findFilesByFilenameAndRefStub = sandbox
-        .stub(github, 'findFilesByFilenameAndRef')
+      const findFilesByFilenameAndRefStub = vi
+        .spyOn(github, 'findFilesByFilenameAndRef')
         .withArgs('version.py', 'next', 'path/c')
-        .resolves([]);
+        .mockResolvedValue([]);
 
       // need to avoid making a request for go versioning
-      sandbox.stub(github, 'findFilesByGlobAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByGlobAndRef').mockResolvedValue([]);
 
-      const addIssueLabelsStub = sandbox
-        .stub(github, 'addIssueLabels')
+      const addIssueLabelsStub = vi
+        .spyOn(github, 'addIssueLabels')
         .withArgs([DEFAULT_CUSTOM_VERSION_LABEL], 111)
-        .resolves();
+        .mockResolvedValue();
 
       let commentCount = 0;
-      sandbox.replace(github, 'commentOnIssue', (comment, number) => {
-        snapshot(comment);
+      vi.spyOn(github, 'commentOnIssue').mockImplementation((comment, number) => {
+        expect(comment).toMatchSnapshot();
         expect(number).to.be.oneOf([111, 222, 333, 444]);
         commentCount += 1;
         return Promise.resolve('https://foo/bar');
@@ -2631,19 +2622,19 @@ version = "3.0.0"
         ],
         []
       );
-      expect(pullRequests).lengthOf(4);
+      expect(pullRequests).lengthOf(4).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('6.7.9-alpha.1');
       expect(pullRequests[1].version?.toString()).to.eql('7.8.9');
       expect(pullRequests[2].version?.toString()).to.eql('8.9.0');
       expect(pullRequests[3].version?.toString()).to.eql('9.0.1');
-      sinon.assert.called(getFileContentsOnBranchStub);
-      sinon.assert.called(addIssueLabelsStub);
-      sinon.assert.called(findFilesByFilenameAndRefStub);
+      expect(getFileContentsOnBranchStub).to.have.been.called;
+      expect(addIssueLabelsStub).to.have.been.called;
+      expect(findFilesByFilenameAndRefStub).to.have.been.called;
       expect(commentCount).to.eql(4);
     });
 
     it('should always use PR title version when labelled as custom version', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2657,7 +2648,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2720,12 +2711,12 @@ version = "3.0.0"
         },
       };
 
-      const getFileContentsOnBranchStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsOnBranchStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/a': '1.0.0',
@@ -2757,14 +2748,14 @@ version = "3.0.0"
         ],
         []
       );
-      expect(pullRequests).lengthOf(2);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('1.0.1');
       expect(pullRequests[1].version?.toString()).to.eql('4.5.6-beta.1');
-      sinon.assert.called(getFileContentsOnBranchStub);
+      expect(getFileContentsOnBranchStub).to.have.been.called;
     });
 
     it('should report issue via PR comment if labeled as custom version but version not found in title', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2778,7 +2769,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2841,12 +2832,12 @@ version = "3.0.0"
         },
       };
 
-      const getFileContentsOnBranchStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsOnBranchStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/a': '1.0.0',
@@ -2856,8 +2847,8 @@ version = "3.0.0"
         );
 
       let commented = false;
-      sandbox.replace(github, 'commentOnIssue', (comment, number) => {
-        snapshot(comment);
+      vi.spyOn(github, 'commentOnIssue').mockImplementation((comment, number) => {
+        expect(comment).toMatchSnapshot();
         expect(number).to.eql(123);
         commented = true;
         return Promise.resolve('https://foo/bar');
@@ -2887,15 +2878,15 @@ version = "3.0.0"
         ],
         []
       );
-      expect(pullRequests).lengthOf(2);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('1.0.1');
       expect(pullRequests[1].version?.toString()).to.eql('0.2.4'); // should not use version from title
       expect(commented).to.be.true;
-      sinon.assert.called(getFileContentsOnBranchStub);
+      expect(getFileContentsOnBranchStub).to.have.been.called;
     });
 
     it('should warn end user via PR comment if version not found in title and not labeled as custom version', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -2909,7 +2900,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -2972,12 +2963,12 @@ version = "3.0.0"
         },
       };
 
-      const getFileContentsOnBranchStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsOnBranchStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({
               'path/a': '1.0.0',
@@ -2987,8 +2978,8 @@ version = "3.0.0"
         );
 
       let commented = false;
-      sandbox.replace(github, 'commentOnIssue', (comment, number) => {
-        snapshot(comment);
+      vi.spyOn(github, 'commentOnIssue').mockImplementation((comment, number) => {
+        expect(comment).toMatchSnapshot();
         expect(number).to.eql(123);
         commented = true;
         return Promise.resolve('https://foo/bar');
@@ -3018,16 +3009,16 @@ version = "3.0.0"
         ],
         []
       );
-      expect(pullRequests).lengthOf(2);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('1.0.1');
       expect(pullRequests[1].version?.toString()).to.eql('0.2.4'); // should not use version from title
       expect(commented).to.be.true;
-      sinon.assert.called(getFileContentsOnBranchStub);
+      expect(getFileContentsOnBranchStub).to.have.been.called;
     });
 
     it('should allow specifying a bootstrap sha', async () => {
-      mockReleases(sandbox, github, []);
-      mockCommits(sandbox, github, [
+      mockReleases(github, []);
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix 1',
@@ -3049,7 +3040,7 @@ version = "3.0.0"
           files: ['path/b/foo'],
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
       const config: ManifestConfig = {
         'bootstrap-sha': 'cccccc',
         'separate-pull-requests': true,
@@ -3068,12 +3059,12 @@ version = "3.0.0"
         'path/a': '0.0.0',
         'path/b': '0.0.0',
       };
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)));
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)));
       const manifest = await Manifest.fromManifest(
         github,
         'main',
@@ -3082,12 +3073,12 @@ version = "3.0.0"
         {changesBranch: 'next'}
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('0.0.1');
     });
 
     it('should allow specifying a last release sha', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -3101,7 +3092,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -3148,7 +3139,7 @@ version = "3.0.0"
           },
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
       const config: ManifestConfig = {
         'last-release-sha': 'bbbbbb',
         'separate-pull-requests': true,
@@ -3167,12 +3158,12 @@ version = "3.0.0"
         'path/a': '0.0.0',
         'path/b': '0.0.0',
       };
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)));
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)));
       const manifest = await Manifest.fromManifest(
         github,
         'main',
@@ -3181,12 +3172,12 @@ version = "3.0.0"
         {changesBranch: 'next'}
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].version?.toString()).to.eql('0.0.1');
     });
 
     it('should allow customizing pull request title with root package', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 1,
           sha: 'abc123',
@@ -3218,7 +3209,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/root-v1.2.1',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -3293,16 +3284,16 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.title.toString()).to.eql(
         'chore(main): release root v1.2.2'
       );
-      snapshot(dateSafe(pullRequest.body.toString()));
+      expect(dateSafe(pullRequest.body.toString())).toMatchSnapshot();
     });
 
     it('should allow customizing pull request title without root package', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 1,
           sha: 'abc123',
@@ -3322,7 +3313,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v0.2.3',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -3392,13 +3383,13 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].title.toString()).to.eql('chore(main): release v');
     });
 
     it('should read latest version from manifest if no release tag found', async () => {
-      mockReleases(sandbox, github, []);
-      mockCommits(sandbox, github, [
+      mockReleases(github, []);
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -3454,7 +3445,7 @@ version = "3.0.0"
           })),
         },
       ]);
-      mockTags(sandbox, github, []);
+      mockTags(github, []);
       const config: ManifestConfig = {
         packages: {
           'path/a': {
@@ -3471,14 +3462,14 @@ version = "3.0.0"
         'path/a': '1.2.3',
         'path/b': '2.3.4',
       };
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'next')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)))
         .withArgs('path/b/package.json', 'next')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(JSON.stringify({name: 'b', version: '2.3.4'}))
         );
       const manifest = await Manifest.fromManifest(
@@ -3489,15 +3480,15 @@ version = "3.0.0"
         {changesBranch: 'next', separatePullRequests: true}
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(2);
-      expect(pullRequests[0].body.releaseData).lengthOf(1);
-      expect(pullRequests[0].conventionalCommits).lengthOf(102);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
+      expect(pullRequests[0].body.releaseData).lengthOf(1).toMatchSnapshot();
+      expect(pullRequests[0].conventionalCommits).lengthOf(102).toMatchSnapshot();
       expect(pullRequests[0].body.releaseData[0].component).to.eql('pkg1');
       expect(pullRequests[0].body.releaseData[0].version?.toString()).to.eql(
         '1.2.4'
       );
-      expect(pullRequests[1].body.releaseData).lengthOf(1);
-      expect(pullRequests[1].conventionalCommits).lengthOf(2);
+      expect(pullRequests[1].body.releaseData).lengthOf(1).toMatchSnapshot();
+      expect(pullRequests[1].conventionalCommits).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[1].body.releaseData[0].component).to.eql('pkg2');
       expect(pullRequests[1].body.releaseData[0].version?.toString()).to.eql(
         '2.3.5'
@@ -3505,8 +3496,8 @@ version = "3.0.0"
     });
 
     it('should use latest version from tag if github releases not found but tag found', async () => {
-      mockReleases(sandbox, github, []);
-      mockCommits(sandbox, github, [
+      mockReleases(github, []);
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -3538,7 +3529,7 @@ version = "3.0.0"
           files: ['path/b/foo'],
         },
       ]);
-      mockTags(sandbox, github, [
+      mockTags(github, [
         {name: 'pkg1-v1.2.3', sha: 'commit1'},
         {name: 'pkg2-v2.3.4', sha: 'commit2'},
       ]);
@@ -3558,21 +3549,21 @@ version = "3.0.0"
         'path/a': '1.2.3',
         'path/b': '2.3.4',
       };
-      const getFileContentsOnBranchStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsOnBranchStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('release-please-config.json', 'main')
-        .resolves(buildGitHubFileRaw(JSON.stringify(config)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(config)))
         .withArgs('.release-please-manifest.json', 'main')
-        .resolves(buildGitHubFileRaw(JSON.stringify(versions)))
+        .mockResolvedValue(buildGitHubFileRaw(JSON.stringify(versions)))
         .withArgs('path/b/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(JSON.stringify({name: 'b', version: '2.3.4'}))
         );
 
       const manifest = await Manifest.fromManifest(github, 'main');
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
-      expect(pullRequests[0].body.releaseData).lengthOf(2);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
+      expect(pullRequests[0].body.releaseData).lengthOf(2).toMatchSnapshot();
       expect(pullRequests[0].body.releaseData[0].component).to.eql('pkg1');
       expect(pullRequests[0].body.releaseData[0].version?.toString()).to.eql(
         '1.2.4'
@@ -3581,11 +3572,11 @@ version = "3.0.0"
       expect(pullRequests[0].body.releaseData[1].version?.toString()).to.eql(
         '2.3.5'
       );
-      sinon.assert.calledOnce(getFileContentsOnBranchStub);
+      expect(getFileContentsOnBranchStub).to.have.been.called;
     });
 
     it('should not update manifest if unpublished version is created', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           tagName: 'v1.2.3',
@@ -3593,7 +3584,7 @@ version = "3.0.0"
           url: 'http://path/to/release',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'abc123',
           message: 'some commit message',
@@ -3623,7 +3614,7 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.version?.toString()).to.eql('1.2.4-SNAPSHOT');
       expect(pullRequest.previousVersion?.toString()).to.eql('1.2.3');
@@ -3638,7 +3629,7 @@ version = "3.0.0"
 
     describe('without commits', () => {
       beforeEach(() => {
-        mockReleases(sandbox, github, [
+        mockReleases(github, [
           {
             id: 123456,
             sha: 'abc123',
@@ -3646,7 +3637,7 @@ version = "3.0.0"
             url: 'https://github.com/fake-owner/fake-repo/releases/tag/v1.0.0',
           },
         ]);
-        mockCommits(sandbox, github, []);
+        mockCommits(github, []);
       });
       it('should ignore by default', async () => {
         const manifest = new Manifest(
@@ -3662,23 +3653,23 @@ version = "3.0.0"
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(0);
+        expect(pullRequests).lengthOf(0).toMatchSnapshot();
       });
 
       it('should delegate to strategies', async () => {
-        const getFileContentsStub = sandbox.stub(
+        const getFileContentsStub = vi.spyOn(
           github,
           'getFileContentsOnBranch'
         );
         getFileContentsStub
           .withArgs('versions.txt', 'main')
-          .resolves(
+          .mockResolvedValue(
             buildGitHubFileContent(
               fixturesPath,
               'strategies/java-yoshi/versions-released.txt'
             )
           );
-        sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+        vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
         const manifest = new Manifest(
           github,
           'main',
@@ -3692,7 +3683,7 @@ version = "3.0.0"
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(1);
+        expect(pullRequests).lengthOf(1).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.version?.toString()).to.eql('1.0.1-SNAPSHOT');
         expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -3706,7 +3697,7 @@ version = "3.0.0"
     });
 
     it('should handle extra files', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'commit1',
@@ -3726,7 +3717,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/c-v1.0.1',
         },
       ]);
-      mockTags(sandbox, github, [
+      mockTags(github, [
         {
           name: 'a-v1.1.0',
           sha: 'commit1',
@@ -3740,7 +3731,7 @@ version = "3.0.0"
           sha: 'commit3',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: a bugfix',
@@ -3786,7 +3777,7 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].updates).to.be.an('array');
       expect(pullRequests[0].updates.map(update => update.path))
         .to.include.members([
@@ -3804,7 +3795,7 @@ version = "3.0.0"
     });
 
     it('should allow overriding commit message', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -3812,7 +3803,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/v1.0.0',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'def456',
           message: 'fix: some bugfix',
@@ -3860,14 +3851,14 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       safeSnapshot(pullRequest.body.toString());
     });
 
     describe('with plugins', () => {
       beforeEach(() => {
-        mockReleases(sandbox, github, [
+        mockReleases(github, [
           {
             id: 123456,
             sha: 'abc123',
@@ -3881,7 +3872,7 @@ version = "3.0.0"
             url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v1.0.0',
           },
         ]);
-        mockCommits(sandbox, github, [
+        mockCommits(github, [
           {
             sha: 'aaaaaa',
             message: 'fix: some bugfix\nfix:another fix',
@@ -3931,16 +3922,16 @@ version = "3.0.0"
       });
 
       it('should load and run a single plugins', async () => {
-        const mockPlugin = sandbox.createStubInstance(NodeWorkspace);
-        mockPlugin.run.returnsArg(0);
-        mockPlugin.preconfigure.returnsArg(0);
-        mockPlugin.processCommits.returnsArg(0);
+        const mockPlugin = {
+          run: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          preconfigure: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          processCommits: vi.fn((arg: unknown) => Promise.resolve(arg)),
+        } as unknown as NodeWorkspace;
 
-        const pluginFactory = require('../src/factories/plugin-factory');
-        const buildPluginStub = sandbox
-          .stub(pluginFactory, 'buildPlugin')
-          .withArgs(sinon.match.has('type', 'node-workspace'))
-          .returns(mockPlugin);
+        const buildPluginStub = vi
+          .spyOn(pluginFactory, 'buildPlugin')
+          .withArgs(expect.objectContaining({type: 'node-workspace'}))
+          .mockReturnValue(mockPlugin);
         const manifest = new Manifest(
           github,
           'main',
@@ -3967,25 +3958,27 @@ version = "3.0.0"
         );
         const pullRequests = await manifest.buildPullRequests([], []);
         expect(pullRequests).not.empty;
-        sinon.assert.calledOnce(mockPlugin.run);
-        sinon.assert.calledOnce(buildPluginStub);
+        expect(mockPlugin.run).to.have.been.calledOnce;
+        expect(buildPluginStub).to.have.been.calledOnce;
       });
 
       it('should load and run multiple plugins', async () => {
-        const mockPlugin = sandbox.createStubInstance(NodeWorkspace);
-        mockPlugin.run.returnsArg(0);
-        mockPlugin.preconfigure.returnsArg(0);
-        mockPlugin.processCommits.returnsArg(0);
-        const mockPlugin2 = sandbox.createStubInstance(CargoWorkspace);
-        mockPlugin2.run.returnsArg(0);
-        mockPlugin2.preconfigure.returnsArg(0);
-        mockPlugin2.processCommits.returnsArg(0);
-        sandbox
-          .stub(pluginFactory, 'buildPlugin')
-          .withArgs(sinon.match.has('type', 'node-workspace'))
-          .returns(mockPlugin)
-          .withArgs(sinon.match.has('type', 'cargo-workspace'))
-          .returns(mockPlugin2);
+        const mockPlugin = {
+          run: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          preconfigure: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          processCommits: vi.fn((arg: unknown) => Promise.resolve(arg)),
+        } as unknown as NodeWorkspace;
+        const mockPlugin2 = {
+          run: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          preconfigure: vi.fn((arg: unknown) => Promise.resolve(arg)),
+          processCommits: vi.fn((arg: unknown) => Promise.resolve(arg)),
+        } as unknown as CargoWorkspace;
+        vi
+          .spyOn(pluginFactory, 'buildPlugin')
+          .withArgs(expect.objectContaining({type: 'node-workspace'}))
+          .mockReturnValue(mockPlugin)
+          .withArgs(expect.objectContaining({type: 'cargo-workspace'}))
+          .mockReturnValue(mockPlugin2);
         const manifest = new Manifest(
           github,
           'main',
@@ -4012,20 +4005,22 @@ version = "3.0.0"
         );
         const pullRequests = await manifest.buildPullRequests([], []);
         expect(pullRequests).not.empty;
-        sinon.assert.calledOnce(mockPlugin.run);
-        sinon.assert.calledOnce(mockPlugin2.run);
+        expect(mockPlugin.run).to.have.been.calledOnce;
+        expect(mockPlugin2.run).to.have.been.calledOnce;
       });
 
       it('should apply plugin hook "processCommits"', async () => {
-        const spyPlugin = sinon.spy(
-          new SentenceCase(github, 'main', DEFAULT_RELEASE_PLEASE_MANIFEST, {})
+        const sentenceCasePlugin = new SentenceCase(
+          github,
+          'main',
+          DEFAULT_RELEASE_PLEASE_MANIFEST,
+          {}
         );
-        sandbox
-          .stub(pluginFactory, 'buildPlugin')
-          .withArgs(sinon.match.has('type', 'sentence-case'))
-          // TS compiler is having issues with sinon.spy.
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .returns(spyPlugin as any as InstanceType<typeof SentenceCase>);
+        vi.spyOn(sentenceCasePlugin, 'processCommits');
+        vi
+          .spyOn(pluginFactory, 'buildPlugin')
+          .withArgs(expect.objectContaining({type: 'sentence-case'}))
+          .returns(sentenceCasePlugin);
         const manifest = new Manifest(
           github,
           'main',
@@ -4047,7 +4042,7 @@ version = "3.0.0"
         expect(pullRequests).not.empty;
         // This assertion verifies that conventional commit parsing
         // was applied before calling the processCommits plugin hook:
-        sinon.assert.calledWith(spyPlugin.processCommits, [
+        expect(sentenceCasePlugin.processCommits).to.have.been.calledWith([
           {
             sha: 'aaaaaa',
             message: 'fix: Another fix',
@@ -4077,14 +4072,14 @@ version = "3.0.0"
     });
 
     it('should fallback to tagged version', async () => {
-      mockReleases(sandbox, github, []);
-      mockTags(sandbox, github, [
+      mockReleases(github, []);
+      mockTags(github, [
         {
           name: 'pkg1-v1.0.0',
           sha: 'abc123',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'def456',
           message: 'fix: some bugfix',
@@ -4106,13 +4101,13 @@ version = "3.0.0"
           },
         },
       ]);
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/repo/node/pkg1/package.json'
@@ -4131,7 +4126,7 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.version?.toString()).to.eql('1.0.1');
       expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -4144,7 +4139,7 @@ version = "3.0.0"
     });
 
     it('should handle mixing componentless configs', async () => {
-      mockReleases(sandbox, github, [
+      mockReleases(github, [
         {
           id: 123456,
           sha: 'abc123',
@@ -4158,7 +4153,7 @@ version = "3.0.0"
           url: 'https://github.com/fake-owner/fake-repo/releases/tag/pkg2-v0.2.3',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'aaaaaa',
           message: 'fix: some bugfix',
@@ -4225,20 +4220,20 @@ version = "3.0.0"
         }
       );
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       expect(pullRequests[0].labels).to.eql(['autorelease: pending']);
-      snapshot(dateSafe(pullRequests[0].body.toString()));
+      expect(dateSafe(pullRequests[0].body.toString())).toMatchSnapshot();
     });
 
     it('should allow customizing release-search-depth', async () => {
-      const releaseStub = mockReleases(sandbox, github, []);
-      mockTags(sandbox, github, [
+      const releaseStub = mockReleases(github, []);
+      mockTags(github, [
         {
           name: 'pkg1-v1.0.0',
           sha: 'abc123',
         },
       ]);
-      mockCommits(sandbox, github, [
+      mockCommits(github, [
         {
           sha: 'def456',
           message: 'fix: some bugfix',
@@ -4260,13 +4255,13 @@ version = "3.0.0"
           },
         },
       ]);
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/repo/node/pkg1/package.json'
@@ -4289,7 +4284,7 @@ version = "3.0.0"
       );
       expect(manifest.releaseSearchDepth).to.eql(1);
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.version?.toString()).to.eql('1.0.1');
       expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -4299,21 +4294,18 @@ version = "3.0.0"
       expect(pullRequest.headRefName).to.eql(
         'release-please--branches--main--components--pkg1'
       );
-      sinon.assert.calledOnceWithMatch(
-        releaseStub,
-        sinon.match.has('maxResults', 1)
-      );
+      expect(releaseStub).to.have.been.calledOnceWith(expect.objectContaining({maxResults: 1}));
     });
 
     it('should allow customizing commit-search-depth', async () => {
-      mockReleases(sandbox, github, []);
-      mockTags(sandbox, github, [
+      mockReleases(github, []);
+      mockTags(github, [
         {
           name: 'pkg1-v1.0.0',
           sha: 'abc123',
         },
       ]);
-      const commitsStub = mockCommits(sandbox, github, [
+      const commitsStub = mockCommits(github, [
         {
           sha: 'def456',
           message: 'fix: some bugfix',
@@ -4335,13 +4327,13 @@ version = "3.0.0"
           },
         },
       ]);
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'manifest/repo/node/pkg1/package.json'
@@ -4364,7 +4356,7 @@ version = "3.0.0"
       );
       expect(manifest.commitSearchDepth).to.eql(1);
       const pullRequests = await manifest.buildPullRequests([], []);
-      expect(pullRequests).lengthOf(1);
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
       const pullRequest = pullRequests[0];
       expect(pullRequest.version?.toString()).to.eql('1.0.1');
       expect(pullRequest.previousVersion?.toString()).to.eql('1.0.0');
@@ -4374,17 +4366,13 @@ version = "3.0.0"
       expect(pullRequest.headRefName).to.eql(
         'release-please--branches--main--components--pkg1'
       );
-      sinon.assert.calledOnceWithMatch(
-        commitsStub,
-        'main',
-        sinon.match.has('maxResults', 1)
-      );
+      expect(commitsStub).to.have.been.calledOnceWith('main', expect.objectContaining({maxResults: 1}));
     });
 
     describe('with multiple components', () => {
       beforeEach(() => {
-        mockReleases(sandbox, github, []);
-        mockTags(sandbox, github, [
+        mockReleases(github, []);
+        mockTags(github, [
           {
             name: 'b-v1.0.0',
             sha: 'abc123',
@@ -4402,7 +4390,7 @@ version = "3.0.0"
             sha: 'abc123',
           },
         ]);
-        mockCommits(sandbox, github, [
+        mockCommits(github, [
           {
             sha: 'def456',
             message: 'fix: some bugfix',
@@ -4424,13 +4412,13 @@ version = "3.0.0"
             },
           },
         ]);
-        const getFileContentsStub = sandbox.stub(
+        const getFileContentsStub = vi.spyOn(
           github,
           'getFileContentsOnBranch'
         );
         getFileContentsStub
           .withArgs('package.json', 'main')
-          .resolves(
+          .mockResolvedValue(
             buildGitHubFileContent(
               fixturesPath,
               'manifest/repo/node/pkg1/package.json'
@@ -4466,7 +4454,7 @@ version = "3.0.0"
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(3);
+        expect(pullRequests).lengthOf(3).toMatchSnapshot();
         const pullRequestB = pullRequests[0];
         expect(pullRequestB.headRefName).to.eql(
           'release-please--branches--main--components--b'
@@ -4507,7 +4495,7 @@ version = "3.0.0"
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(2);
+        expect(pullRequests).lengthOf(2).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.headRefName).to.eql(
           'release-please--branches--main'
@@ -4545,7 +4533,7 @@ version = "3.0.0"
           }
         );
         const pullRequests = await manifest.buildPullRequests([], []);
-        expect(pullRequests).lengthOf(2);
+        expect(pullRequests).lengthOf(2).toMatchSnapshot();
         const pullRequest = pullRequests[0];
         expect(pullRequest.headRefName).to.eql(
           'release-please--branches--main'
@@ -4583,15 +4571,15 @@ version = "3.0.0"
         }
       );
       mockPullRequests(github, []);
-      sandbox.stub(manifest, 'buildPullRequests').resolves([]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([]);
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequests = await manifest.createPullRequests();
       expect(pullRequests).to.be.empty;
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -4599,17 +4587,17 @@ version = "3.0.0"
     });
 
     it('handles a single pull request', async () => {
-      sandbox
-        .stub(github, 'createPullRequest')
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -4618,12 +4606,12 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -4654,7 +4642,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -4675,14 +4663,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequests = await manifest.createPullRequests();
-      expect(pullRequests).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequests).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -4690,17 +4678,17 @@ version = "3.0.0"
     });
 
     it('handles a multiple pull requests', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'))
+        .mockResolvedValue(buildGitHubFileRaw('some-content'))
         .withArgs('pkg2/README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content-2'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content-2'));
       mockPullRequests(github, []);
-      sandbox
-        .stub(github, 'getPullRequest')
+      vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(123)
-        .resolves({
+        .mockResolvedValue({
           number: 123,
           title: 'pr title1',
           body: 'pr body1',
@@ -4710,7 +4698,7 @@ version = "3.0.0"
           files: [],
         })
         .withArgs(124)
-        .resolves({
+        .mockResolvedValue({
           number: 124,
           title: 'pr title2',
           body: 'pr body2',
@@ -4719,17 +4707,17 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      sandbox
-        .stub(github, 'createPullRequest')
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 123,
           title: 'pr title1',
           body: 'pr body1',
@@ -4739,14 +4727,14 @@ version = "3.0.0"
           files: [],
         })
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main2'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main2'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 124,
           title: 'pr title2',
           body: 'pr body2',
@@ -4777,7 +4765,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -4817,16 +4805,16 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequests = await manifest.createPullRequests();
       expect(pullRequests.map(pullRequest => pullRequest!.number)).to.eql([
         123, 124,
       ]);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -4834,17 +4822,17 @@ version = "3.0.0"
     });
 
     it('handles signoff users', async () => {
-      sandbox
-        .stub(github, 'createPullRequest')
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -4853,12 +4841,12 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -4890,7 +4878,7 @@ version = "3.0.0"
           signoff: 'Alice <alice@example.com>',
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -4911,14 +4899,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -4926,17 +4914,17 @@ version = "3.0.0"
     });
 
     it('handles fork = true', async () => {
-      sandbox
-        .stub(github, 'createPullRequest')
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: true, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: true, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -4945,12 +4933,12 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -4982,7 +4970,7 @@ version = "3.0.0"
           fork: true,
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -5003,14 +4991,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -5018,9 +5006,9 @@ version = "3.0.0"
     });
 
     it('enables auto-merge when filters are provided (filters: version bump, commit type, commit scope, match-all)', async () => {
-      const createPullRequestStub = sandbox
-        .stub(github, 'createPullRequest')
-        .resolves({
+      const createPullRequestStub = vi
+        .spyOn(github, 'createPullRequest')
+        .mockResolvedValue({
           number: 22,
           title: 'pr title',
           body: 'pr body',
@@ -5029,18 +5017,18 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      const enablePullRequestAutoMergeStub = sandbox
-        .stub(github, 'enablePullRequestAutoMerge')
-        .resolves('direct-merged');
-      const addPullRequestReviewersStub = sandbox
-        .stub(github, 'addPullRequestReviewers')
-        .resolves();
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const enablePullRequestAutoMergeStub = vi
+        .spyOn(github, 'enablePullRequestAutoMerge')
+        .mockResolvedValue('direct-merged');
+      const addPullRequestReviewersStub = vi
+        .spyOn(github, 'addPullRequestReviewers')
+        .mockResolvedValue();
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -5093,10 +5081,10 @@ version = "3.0.0"
           },
         }
       );
-      sandbox
-        .stub(manifest, 'buildPullRequests')
-        .withArgs(sinon.match.any, sinon.match.any)
-        .resolves([
+      vi
+        .spyOn(manifest, 'buildPullRequests')
+        .withArgs(expect.anything(), expect.anything())
+        .mockResolvedValue([
           {
             title: PullRequestTitle.ofTargetBranch('main', 'main'),
             body: new PullRequestBody([]),
@@ -5240,38 +5228,30 @@ version = "3.0.0"
             ],
           },
         ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
 
       const pullRequestNumbers = await manifest.createPullRequests();
 
-      expect(pullRequestNumbers).lengthOf(6);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnce(createLabelsStub);
+      expect(pullRequestNumbers).lengthOf(6).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnce;
 
-      expect(createPullRequestStub.callCount).to.equal(6);
-      sinon.assert.calledWith(
-        createPullRequestStub,
-        sinon.match.has('headBranchName', sinon.match.string),
-        'main',
-        'main',
-        sinon.match.string,
-        sinon.match.array,
-        sinon.match.object
-      );
+      expect(createPullRequestStub).to.have.callCount(6);
+      expect(createPullRequestStub).to.have.been.calledWith(expect.objectContaining({headBranchName: expect.any(String)}), 'main', 'main', expect.any(String), expect.any(Array), expect.any(Object));
 
-      expect(enablePullRequestAutoMergeStub.callCount).to.equal(1);
+      expect(enablePullRequestAutoMergeStub).to.have.callCount(1);
 
       // only called when not auto-merged
-      expect(addPullRequestReviewersStub.callCount).to.equal(5);
+      expect(addPullRequestReviewersStub).to.have.callCount(5);
     });
 
     it('enables auto-merge when filters are provided (filters: only commit type, match-all)', async () => {
-      const createPullRequestStub = sandbox
-        .stub(github, 'createPullRequest')
-        .resolves({
+      const createPullRequestStub = vi
+        .spyOn(github, 'createPullRequest')
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -5280,18 +5260,18 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      const enablePullRequestAutoMergeStub = sandbox
-        .stub(github, 'enablePullRequestAutoMerge')
-        .resolves('direct-merged');
-      const addPullRequestReviewersStub = sandbox
-        .stub(github, 'addPullRequestReviewers')
-        .resolves();
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const enablePullRequestAutoMergeStub = vi
+        .spyOn(github, 'enablePullRequestAutoMerge')
+        .mockResolvedValue('direct-merged');
+      const addPullRequestReviewersStub = vi
+        .spyOn(github, 'addPullRequestReviewers')
+        .mockResolvedValue();
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -5338,10 +5318,10 @@ version = "3.0.0"
           },
         }
       );
-      sandbox
-        .stub(manifest, 'buildPullRequests')
-        .withArgs(sinon.match.any, sinon.match.any)
-        .resolves([
+      vi
+        .spyOn(manifest, 'buildPullRequests')
+        .withArgs(expect.anything(), expect.anything())
+        .mockResolvedValue([
           {
             title: PullRequestTitle.ofTargetBranch('main', 'main'),
             body: new PullRequestBody([]),
@@ -5431,37 +5411,29 @@ version = "3.0.0"
             ],
           },
         ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
 
       const pullRequestNumbers = await manifest.createPullRequests();
 
-      expect(pullRequestNumbers).lengthOf(4);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnce(createLabelsStub);
+      expect(pullRequestNumbers).lengthOf(4).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnce;
 
-      expect(createPullRequestStub.callCount).to.equal(4);
-      sinon.assert.calledWith(
-        createPullRequestStub,
-        sinon.match.has('headBranchName', sinon.match.string),
-        'main',
-        'main',
-        sinon.match.string,
-        sinon.match.array,
-        sinon.match.object
-      );
+      expect(createPullRequestStub).to.have.callCount(4);
+      expect(createPullRequestStub).to.have.been.calledWith(expect.objectContaining({headBranchName: expect.any(String)}), 'main', 'main', expect.any(String), expect.any(Array), expect.any(Object));
 
-      expect(enablePullRequestAutoMergeStub.callCount).to.equal(3);
+      expect(enablePullRequestAutoMergeStub).to.have.callCount(3);
       // only called when not auto-merged
-      expect(addPullRequestReviewersStub.callCount).to.equal(1);
+      expect(addPullRequestReviewersStub).to.have.callCount(1);
     });
 
     it('enables auto-merge when filters are provided (filters: build-patch-minor version bump, commit filters, match-at-least-one)', async () => {
-      const createPullRequestStub = sandbox
-        .stub(github, 'createPullRequest')
-        .resolves({
+      const createPullRequestStub = vi
+        .spyOn(github, 'createPullRequest')
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -5470,18 +5442,18 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      const enablePullRequestAutoMergeStub = sandbox
-        .stub(github, 'enablePullRequestAutoMerge')
-        .resolves('direct-merged');
-      const addPullRequestReviewersStub = sandbox
-        .stub(github, 'addPullRequestReviewers')
-        .resolves();
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const enablePullRequestAutoMergeStub = vi
+        .spyOn(github, 'enablePullRequestAutoMerge')
+        .mockResolvedValue('direct-merged');
+      const addPullRequestReviewersStub = vi
+        .spyOn(github, 'addPullRequestReviewers')
+        .mockResolvedValue();
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
       mockPullRequests(github, []);
-      sandbox.stub(github, 'getPullRequest').withArgs(22).resolves({
+      vi.spyOn(github, 'getPullRequest').withArgs(22).mockResolvedValue({
         number: 22,
         title: 'pr title1',
         body: 'pr body1',
@@ -5539,10 +5511,10 @@ version = "3.0.0"
           },
         }
       );
-      sandbox
-        .stub(manifest, 'buildPullRequests')
-        .withArgs(sinon.match.any, sinon.match.any)
-        .resolves([
+      vi
+        .spyOn(manifest, 'buildPullRequests')
+        .withArgs(expect.anything(), expect.anything())
+        .mockResolvedValue([
           {
             title: PullRequestTitle.ofTargetBranch('main', 'main'),
             body: new PullRequestBody([]),
@@ -5768,49 +5740,41 @@ version = "3.0.0"
             ],
           },
         ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
 
       const pullRequestNumbers = await manifest.createPullRequests();
 
-      expect(pullRequestNumbers).lengthOf(7);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnce(createLabelsStub);
+      expect(pullRequestNumbers).lengthOf(7).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnce;
 
-      expect(createPullRequestStub.callCount).to.equal(7);
-      sinon.assert.calledWith(
-        createPullRequestStub,
-        sinon.match.has('headBranchName', sinon.match.string),
-        'main',
-        'main',
-        sinon.match.string,
-        sinon.match.array,
-        sinon.match.object
-      );
+      expect(createPullRequestStub).to.have.callCount(7);
+      expect(createPullRequestStub).to.have.been.calledWith(expect.objectContaining({headBranchName: expect.any(String)}), 'main', 'main', expect.any(String), expect.any(Array), expect.any(Object));
 
-      expect(enablePullRequestAutoMergeStub.callCount).to.equal(4);
+      expect(enablePullRequestAutoMergeStub).to.have.callCount(4);
       // only called when not auto-merged
-      expect(addPullRequestReviewersStub.callCount).to.equal(3);
+      expect(addPullRequestReviewersStub).to.have.callCount(3);
     });
 
     it('updates an existing pull request', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
-      sandbox
-        .stub(github, 'createPullRequest')
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -5819,8 +5783,7 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [
           {
             number: 22,
@@ -5834,10 +5797,10 @@ version = "3.0.0"
         ],
         []
       );
-      sandbox
-        .stub(github, 'updatePullRequest')
-        .withArgs(22, sinon.match.any, sinon.match.any, sinon.match.any)
-        .resolves({
+      vi
+        .spyOn(github, 'updatePullRequest')
+        .withArgs(22, expect.anything(), expect.anything(), expect.anything())
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -5868,7 +5831,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -5889,14 +5852,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -5909,8 +5872,7 @@ version = "3.0.0"
       });
 
       it('updates an existing pull request', async () => {
-        mockPullRequests(
-          github,
+        mockPullRequests(github,
           [
             {
               number: 22,
@@ -5924,16 +5886,16 @@ version = "3.0.0"
           ],
           []
         );
-        const updatePullRequestStub = sandbox
-          .stub(github, 'updatePullRequest')
+        const updatePullRequestStub = vi
+          .spyOn(github, 'updatePullRequest')
           .withArgs(
             22,
-            sinon.match.any,
+            expect.anything(),
             'main',
             'main',
-            sinon.match.has('pullRequestOverflowHandler', sinon.match.truthy)
+            expect.objectContaining({pullRequestOverflowHandler: expect.anything()})
           )
-          .resolves({
+          .mockResolvedValue({
             number: 22,
             title: 'pr title1',
             body: 'pr body1',
@@ -5964,9 +5926,9 @@ version = "3.0.0"
             plugins: ['node-workspace'],
           }
         );
-        const buildPullRequestsStub = sandbox
-          .stub(manifest, 'buildPullRequests')
-          .resolves([
+        const buildPullRequestsStub = vi
+          .spyOn(manifest, 'buildPullRequests')
+          .mockResolvedValue([
             {
               title: PullRequestTitle.ofTargetBranch('main', 'main'),
               body,
@@ -5983,42 +5945,42 @@ version = "3.0.0"
               conventionalCommits: [],
             },
           ]);
-        const getLabelsStub = sandbox
-          .stub(github, 'getLabels')
-          .resolves(['label-a', 'label-b']);
-        const createLabelsStub = sandbox
-          .stub(github, 'createLabels')
-          .resolves();
+        const getLabelsStub = vi
+          .spyOn(github, 'getLabels')
+          .mockResolvedValue(['label-a', 'label-b']);
+        const createLabelsStub = vi
+          .spyOn(github, 'createLabels')
+          .mockResolvedValue();
         const pullRequestNumbers = await manifest.createPullRequests();
-        sinon.assert.calledOnce(updatePullRequestStub);
-        sinon.assert.calledOnce(buildPullRequestsStub);
-        sinon.assert.calledOnce(getLabelsStub);
-        sinon.assert.calledOnceWithExactly(createLabelsStub, [
+        expect(updatePullRequestStub).to.have.been.calledOnce;
+        expect(buildPullRequestsStub).to.have.been.calledOnce;
+        expect(getLabelsStub).to.have.been.calledOnce;
+        expect(createLabelsStub).to.have.been.calledOnceWith([
           'autorelease: pending',
           'autorelease: tagged',
           'autorelease: pre-release',
         ]);
-        expect(pullRequestNumbers).lengthOf(1);
+        expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
       });
 
       it('ignores an existing pull request if there are no changes', async () => {
-        const getFileContentsOnBranchStub = sandbox
-          .stub(github, 'getFileContentsOnBranch')
+        const getFileContentsOnBranchStub = vi
+          .spyOn(github, 'getFileContentsOnBranch')
           .withArgs('README.md', 'main')
-          .resolves(buildGitHubFileRaw('some-content'))
+          .mockResolvedValue(buildGitHubFileRaw('some-content'))
           .withArgs('release-notes.md', 'my-head-branch--release-notes')
-          .resolves(buildGitHubFileRaw(body.toString()));
-        const createPullRequestStub = sandbox
-          .stub(github, 'createPullRequest')
+          .mockResolvedValue(buildGitHubFileRaw(body.toString()));
+        const createPullRequestStub = vi
+          .spyOn(github, 'createPullRequest')
           // .withArgs(
-          //   sinon.match.has('headBranchName', 'release-please/branches/main'),
-          //   sinon.match.string,
-          //   sinon.match.string,
-          //   sinon.match.string,
-          //   sinon.match.array,
-          //   sinon.match({fork: false, draft: false})
+          //   expect.objectContaining({headBranchName: 'release-please/branches/main'}),
+          //   expect.any(String),
+          //   expect.any(String),
+          //   expect.any(String),
+          //   expect.any(Array),
+          //   expect.objectContaining({fork: false, draft: false})
           // )
-          .resolves({
+          .mockResolvedValue({
             number: 22,
             title: 'pr title1',
             body: 'pr body1',
@@ -6027,8 +5989,7 @@ version = "3.0.0"
             labels: [],
             files: [],
           });
-        mockPullRequests(
-          github,
+        mockPullRequests(github,
           [
             {
               number: 22,
@@ -6042,16 +6003,16 @@ version = "3.0.0"
           ],
           []
         );
-        const updatePullRequestStub = sandbox
-          .stub(github, 'updatePullRequest')
+        const updatePullRequestStub = vi
+          .spyOn(github, 'updatePullRequest')
           // .withArgs(
           //   22,
-          //   sinon.match.any,
-          //   sinon.match.string,
-          //   sinon.match.string,
-          //   sinon.match.has('pullRequestOverflowHandler', sinon.match.truthy)
+          //   expect.anything(),
+          //   expect.any(String),
+          //   expect.any(String),
+          //   expect.objectContaining({pullRequestOverflowHandler: expect.anything()})
           // )
-          .resolves({
+          .mockResolvedValue({
             number: 22,
             title: 'pr title1',
             body: 'pr body1',
@@ -6082,13 +6043,13 @@ version = "3.0.0"
             plugins: ['node-workspace'],
           }
         );
-        const getLabelsStub = sandbox
-          .stub(github, 'getLabels')
-          .resolves(['label-a', 'label-b', 'autorelease: pending']);
-        const createLabelsStub = sandbox
-          .stub(github, 'createLabels')
-          .resolves();
-        sandbox.stub(manifest, 'buildPullRequests').resolves([
+        const getLabelsStub = vi
+          .spyOn(github, 'getLabels')
+          .mockResolvedValue(['label-a', 'label-b', 'autorelease: pending']);
+        const createLabelsStub = vi
+          .spyOn(github, 'createLabels')
+          .mockResolvedValue();
+        vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
           {
             title: PullRequestTitle.ofTargetBranch('main', 'main'),
             body,
@@ -6106,34 +6067,34 @@ version = "3.0.0"
           },
         ]);
         const pullRequestNumbers = await manifest.createPullRequests();
-        expect(pullRequestNumbers).lengthOf(1);
-        sinon.assert.calledOnce(getLabelsStub);
-        sinon.assert.calledOnceWithExactly(createLabelsStub, [
+        expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+        expect(getLabelsStub).to.have.been.calledOnce;
+        expect(createLabelsStub).to.have.been.calledOnceWith([
           'autorelease: tagged',
           'autorelease: pre-release',
         ]);
-        sinon.assert.calledOnce(getFileContentsOnBranchStub);
-        sinon.assert.notCalled(createPullRequestStub);
-        sinon.assert.calledOnce(updatePullRequestStub);
+        expect(getFileContentsOnBranchStub).to.have.been.calledOnce;
+        expect(createPullRequestStub).not.to.have.been.called;
+        expect(updatePullRequestStub).to.have.been.calledOnce;
       });
     });
 
     it('updates an existing snapshot pull request', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
-      sandbox
-        .stub(github, 'createPullRequest')
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -6142,8 +6103,7 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [
           {
             number: 22,
@@ -6157,10 +6117,10 @@ version = "3.0.0"
         ],
         []
       );
-      sandbox
-        .stub(github, 'updatePullRequest')
-        .withArgs(22, sinon.match.any, sinon.match.any, sinon.match.any)
-        .resolves({
+      vi
+        .spyOn(github, 'updatePullRequest')
+        .withArgs(22, expect.anything(), expect.anything(), expect.anything())
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -6190,11 +6150,11 @@ version = "3.0.0"
           separatePullRequests: true,
         }
       );
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b', 'autorelease: pending']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b', 'autorelease: pending']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -6216,21 +6176,20 @@ version = "3.0.0"
         },
       ]);
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: tagged',
         'autorelease: pre-release',
       ]);
     });
 
     it('skips pull requests if there are pending, merged pull requests', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
-      mockPullRequests(
-        github,
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
+      mockPullRequests(github,
         [],
         [
           {
@@ -6266,7 +6225,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -6287,14 +6246,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(0);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(0).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -6302,21 +6261,21 @@ version = "3.0.0"
     });
 
     it('reopens snoozed, closed pull request if there are changes', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
-      sandbox
-        .stub(github, 'createPullRequest')
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
+      vi
+        .spyOn(github, 'createPullRequest')
         .withArgs(
-          sinon.match.has('headBranchName', 'release-please/branches/main'),
+          expect.objectContaining({headBranchName: 'release-please/branches/main'}),
           'main',
           'main',
-          sinon.match.string,
-          sinon.match.array,
-          sinon.match({fork: false, draft: false})
+          expect.any(String),
+          expect.any(Array),
+          expect.objectContaining({fork: false, draft: false})
         )
-        .resolves({
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -6325,8 +6284,7 @@ version = "3.0.0"
           labels: [],
           files: [],
         });
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [],
         [
@@ -6341,10 +6299,10 @@ version = "3.0.0"
           },
         ]
       );
-      sandbox
-        .stub(github, 'updatePullRequest')
-        .withArgs(22, sinon.match.any, sinon.match.any, sinon.match.any)
-        .resolves({
+      vi
+        .spyOn(github, 'updatePullRequest')
+        .withArgs(22, expect.anything(), expect.anything(), expect.anything())
+        .mockResolvedValue({
           number: 22,
           title: 'pr title1',
           body: 'pr body1',
@@ -6375,7 +6333,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body: new PullRequestBody([
@@ -6396,22 +6354,22 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(1);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(1).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
       ]);
-      sinon.assert.calledOnce(removeLabelsStub);
+      expect(removeLabelsStub).to.have.been.calledOnce;
     });
 
     it('ignores snoozed, closed pull request if there are no changes', async () => {
@@ -6420,12 +6378,11 @@ version = "3.0.0"
           notes: '## 1.1.0\n\nSome release notes',
         },
       ]);
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('README.md', 'main')
-        .resolves(buildGitHubFileRaw('some-content'));
-      mockPullRequests(
-        github,
+        .mockResolvedValue(buildGitHubFileRaw('some-content'));
+      mockPullRequests(github,
         [],
         [],
         [
@@ -6462,7 +6419,7 @@ version = "3.0.0"
           plugins: ['node-workspace'],
         }
       );
-      sandbox.stub(manifest, 'buildPullRequests').resolves([
+      vi.spyOn(manifest, 'buildPullRequests').mockResolvedValue([
         {
           title: PullRequestTitle.ofTargetBranch('main', 'main'),
           body,
@@ -6479,14 +6436,14 @@ version = "3.0.0"
           conventionalCommits: [],
         },
       ]);
-      const getLabelsStub = sandbox
-        .stub(github, 'getLabels')
-        .resolves(['label-a', 'label-b']);
-      const createLabelsStub = sandbox.stub(github, 'createLabels').resolves();
+      const getLabelsStub = vi
+        .spyOn(github, 'getLabels')
+        .mockResolvedValue(['label-a', 'label-b']);
+      const createLabelsStub = vi.spyOn(github, 'createLabels').mockResolvedValue();
       const pullRequestNumbers = await manifest.createPullRequests();
-      expect(pullRequestNumbers).lengthOf(0);
-      sinon.assert.calledOnce(getLabelsStub);
-      sinon.assert.calledOnceWithExactly(createLabelsStub, [
+      expect(pullRequestNumbers).lengthOf(0).toMatchSnapshot();
+      expect(getLabelsStub).to.have.been.calledOnce;
+      expect(createLabelsStub).to.have.been.calledOnceWith([
         'autorelease: pending',
         'autorelease: tagged',
         'autorelease: pre-release',
@@ -6496,8 +6453,7 @@ version = "3.0.0"
 
   describe('buildReleases', () => {
     it('should handle a single manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6512,10 +6468,10 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -6535,7 +6491,7 @@ version = "3.0.0"
       );
 
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('release-brancher-v1.3.1');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6546,12 +6502,11 @@ version = "3.0.0"
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.undefined;
 
-      sinon.assert.calledOnce(getFileContentsStub);
+      expect(getFileContentsStub).to.have.been.calledOnce;
     });
 
     it('should handle a multiple manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6571,31 +6526,31 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
@@ -6625,7 +6580,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(4);
+      expect(releases).lengthOf(4).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('bot-config-utils-v3.2.0');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6657,8 +6612,7 @@ version = "3.0.0"
     });
 
     it('should handle a mixed manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6678,19 +6632,19 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
@@ -6713,7 +6667,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(2);
+      expect(releases).lengthOf(2).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v3.2.0');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6731,8 +6685,7 @@ version = "3.0.0"
     });
 
     it('should handle a single standalone release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6760,7 +6713,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v3.2.7');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6773,8 +6726,7 @@ version = "3.0.0"
     });
 
     it('should handle a single component release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6804,7 +6756,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v3.2.7');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6817,8 +6769,7 @@ version = "3.0.0"
     });
 
     it('should allow skipping releases', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6838,31 +6789,31 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
@@ -6893,7 +6844,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(3);
+      expect(releases).lengthOf(3).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('bot-config-utils-v3.2.0');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -6912,8 +6863,7 @@ version = "3.0.0"
     });
 
     it('should build draft releases', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6928,13 +6878,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -6953,15 +6903,14 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v1.3.1');
       expect(releases[0].draft).to.be.true;
       expect(releases[0].prerelease).to.be.undefined;
     });
 
     it('should build draft releases manifest wide', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -6976,13 +6925,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7003,15 +6952,14 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v1.3.1');
       expect(releases[0].draft).to.be.true;
       expect(releases[0].prerelease).to.be.undefined;
     });
 
     it('should build prerelease releases from beta', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7028,13 +6976,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7053,7 +7001,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v1.3.1-beta1');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.true;
@@ -7063,8 +7011,7 @@ version = "3.0.0"
     });
 
     it('should not build prerelease releases from pre-major', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7081,13 +7028,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7106,7 +7053,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v0.2.0');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.false;
@@ -7114,8 +7061,7 @@ version = "3.0.0"
     });
 
     it('should build prerelease releases from pre-major if the pre-release label is applied', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7132,13 +7078,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7157,7 +7103,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v0.2.0');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.true;
@@ -7165,8 +7111,7 @@ version = "3.0.0"
     });
 
     it('should not build prerelease releases from non-prerelease', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7181,13 +7126,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7206,7 +7151,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v1.3.1');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.false;
@@ -7214,8 +7159,7 @@ version = "3.0.0"
     });
 
     it('should build prerelease releases when forcePrerelease is true', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7232,13 +7176,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7258,7 +7202,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v0.2.0');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.true;
@@ -7266,8 +7210,7 @@ version = "3.0.0"
     });
 
     it('should build prerelease releases from non-prerelease when forcePrerelease is true', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7282,13 +7225,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7308,7 +7251,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].name).to.eql('release-brancher: v1.3.1');
       expect(releases[0].draft).to.be.undefined;
       expect(releases[0].prerelease).to.be.true;
@@ -7316,8 +7259,7 @@ version = "3.0.0"
     });
 
     it('should skip component in tag', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7333,13 +7275,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7358,13 +7300,12 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v1.3.1');
     });
 
     it('should handle customized pull request title', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7393,7 +7334,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v3.2.7');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -7403,8 +7344,7 @@ version = "3.0.0"
     });
 
     it('should skip component releases for non-component configs', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7434,12 +7374,11 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(0);
+      expect(releases).lengthOf(0).toMatchSnapshot();
     });
 
     it('should handle complex title and base branch', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7472,7 +7411,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('v3.1.0-hotfix1');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes).to.be.a('string');
@@ -7480,8 +7419,7 @@ version = "3.0.0"
     });
 
     it('should find the correct number of releases with a componentless tag', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7535,12 +7473,11 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(2);
+      expect(releases).lengthOf(2).toMatchSnapshot();
     });
 
     it('should handle overflowing release notes', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7560,38 +7497,38 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
         )
         // This branch is parsed from the overflow PR body
         .withArgs('release-notes.md', 'my-head-branch--release-notes')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(pullRequestBody('release-notes/multiple.txt'))
         );
       const manifest = new Manifest(
@@ -7619,7 +7556,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.buildReleases();
-      expect(releases).lengthOf(4);
+      expect(releases).lengthOf(4).toMatchSnapshot();
       expect(releases[0].tag.toString()).to.eql('bot-config-utils-v3.2.0');
       expect(releases[0].sha).to.eql('abc123');
       expect(releases[0].notes)
@@ -7653,8 +7590,7 @@ version = "3.0.0"
 
   describe('createReleases', () => {
     it('should handle a single manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7669,13 +7605,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7683,16 +7619,16 @@ version = "3.0.0"
       mockCreateRelease(github, [
         {id: 123456, sha: 'abc123', tagName: 'release-brancher-v1.3.1'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
 
       const manifest = new Manifest(
         github,
@@ -7707,33 +7643,21 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.path).to.eql('.');
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledOnceWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should handle a multiple manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7753,28 +7677,28 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox
-        .stub(github, 'getFileContentsOnBranch')
+      const getFileContentsStub = vi
+        .spyOn(github, 'getFileContentsOnBranch')
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
@@ -7786,16 +7710,16 @@ version = "3.0.0"
         {id: 3, sha: 'abc123', tagName: 'object-selector-v1.1.0'},
         {id: 4, sha: 'abc123', tagName: 'datastore-lock-v2.1.0'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -7821,7 +7745,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(4);
+      expect(releases).lengthOf(4).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('bot-config-utils-v3.2.0');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.be.string;
@@ -7838,41 +7762,20 @@ version = "3.0.0"
       expect(releases[3]!.sha).to.eql('abc123');
       expect(releases[3]!.notes).to.be.string;
       expect(releases[3]!.path).to.eql('packages/datastore-lock');
-      sinon.assert.callCount(commentStub, 4);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'bot-config-utils-v3.2.0')
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'label-utils-v1.1.0')
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'object-selector-v1.1.0')
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'datastore-lock-v2.1.0')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
-      sinon.assert.calledOnce(getFileContentsStub);
+      expect(commentStub).to.have.callCount(4);
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'bot-config-utils-v3.2.0'}));
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'label-utils-v1.1.0'}));
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'object-selector-v1.1.0'}));
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'datastore-lock-v2.1.0'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
+      expect(getFileContentsStub).to.have.been.called;
     });
 
     it('should handle a single standalone release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7887,12 +7790,12 @@ version = "3.0.0"
           },
         ]
       );
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -7908,38 +7811,26 @@ version = "3.0.0"
       mockCreateRelease(github, [
         {id: 123456, sha: 'abc123', tagName: 'v3.2.7'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('v3.2.7');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.be.string;
       expect(releases[0]!.path).to.eql('.');
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'v3.2.7')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'v3.2.7'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should allow customizing pull request labels', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -7954,13 +7845,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -7968,16 +7859,16 @@ version = "3.0.0"
       mockCreateRelease(github, [
         {id: 123456, sha: 'abc123', tagName: 'release-brancher-v1.3.1'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -7996,32 +7887,20 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['some-tagged-label'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['some-pull-request-label'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['some-tagged-label'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['some-pull-request-label'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should create a draft release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8036,13 +7915,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8055,16 +7934,16 @@ version = "3.0.0"
           draft: true,
         },
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8079,37 +7958,25 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.draft).to.be.true;
-      sinon.assert.calledOnceWithExactly(githubReleaseStub, sinon.match.any, {
+      expect(githubReleaseStub).to.have.been.calledOnceWith(expect.anything(), {
         draft: true,
         prerelease: undefined,
       } as ReleaseOptions);
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should create a prerelease release from beta', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8126,13 +7993,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8145,16 +8012,16 @@ version = "3.0.0"
           prerelease: true,
         },
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8169,37 +8036,25 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1-beta1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.draft).to.be.undefined;
-      sinon.assert.calledOnceWithExactly(githubReleaseStub, sinon.match.any, {
+      expect(githubReleaseStub).to.have.been.calledOnceWith(expect.anything(), {
         draft: undefined,
         prerelease: true,
       } as ReleaseOptions);
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged', 'autorelease: pre-release'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1-beta1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged', 'autorelease: pre-release'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1-beta1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should not create a prerelease release from non-prerelease', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8214,13 +8069,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8233,16 +8088,16 @@ version = "3.0.0"
           prerelease: false,
         },
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8257,37 +8112,25 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.draft).to.be.undefined;
-      sinon.assert.calledOnceWithExactly(githubReleaseStub, sinon.match.any, {
+      expect(githubReleaseStub).to.have.been.calledOnceWith(expect.anything(), {
         draft: undefined,
         prerelease: false,
       } as ReleaseOptions);
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should create a prerelease when pull request labelled as pre-release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8302,13 +8145,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8321,16 +8164,16 @@ version = "3.0.0"
           prerelease: true,
         },
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8344,37 +8187,25 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.draft).to.be.undefined;
-      sinon.assert.calledOnceWithExactly(githubReleaseStub, sinon.match.any, {
+      expect(githubReleaseStub).to.have.been.calledOnceWith(expect.anything(), {
         draft: undefined,
         prerelease: true,
       } as ReleaseOptions);
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged', 'autorelease: pre-release'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged', 'autorelease: pre-release'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should handle partially failed manifest release', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8394,31 +8225,31 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
@@ -8435,16 +8266,16 @@ version = "3.0.0"
         {id: 3, sha: 'abc123', tagName: 'object-selector-v1.1.0'},
         {id: 4, sha: 'abc123', tagName: 'datastore-lock-v2.1.0'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8470,7 +8301,7 @@ version = "3.0.0"
         }
       );
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(3);
+      expect(releases).lengthOf(3).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('label-utils-v1.1.0');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.be.string;
@@ -8483,36 +8314,18 @@ version = "3.0.0"
       expect(releases[2]!.sha).to.eql('abc123');
       expect(releases[2]!.notes).to.be.string;
       expect(releases[2]!.path).to.eql('packages/datastore-lock');
-      sinon.assert.callCount(commentStub, 3);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'label-utils-v1.1.0')
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'object-selector-v1.1.0')
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'datastore-lock-v2.1.0')
-      );
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).to.have.callCount(3);
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'label-utils-v1.1.0'}));
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'object-selector-v1.1.0'}));
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'datastore-lock-v2.1.0'}));
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should throw DuplicateReleaseError if all releases already tagged', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8532,31 +8345,31 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('packages/bot-config-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/bot-config-utils'})
           )
         )
         .withArgs('packages/label-utils/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/label-utils'})
           )
         )
         .withArgs('packages/object-selector/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/object-selector'})
           )
         )
         .withArgs('packages/datastore-lock/package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-automations/datastore-lock'})
           )
@@ -8583,13 +8396,13 @@ version = "3.0.0"
           duplicate: true,
         },
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const lockBranchStub = sandbox.stub(github, 'lockBranch').resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const lockBranchStub = vi.spyOn(github, 'lockBranch').mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
       const manifest = new Manifest(
         github,
         'main',
@@ -8618,18 +8431,17 @@ version = "3.0.0"
         await manifest.createReleases();
         expect(false).to.be.true;
       } catch (err) {
-        expect(err).instanceof(DuplicateReleaseError);
+        expect(err).instanceof(DuplicateReleaseError).toMatchSnapshot();
       }
-      sinon.assert.notCalled(commentStub);
-      sinon.assert.calledOnce(addLabelsStub);
-      sinon.assert.calledOnce(removeLabelsStub);
-      sinon.assert.calledOnce(lockBranchStub);
-      sinon.assert.calledOnce(unlockBranchStub);
+      expect(commentStub).not.to.have.been.called;
+      expect(addLabelsStub).to.have.been.calledOnce;
+      expect(removeLabelsStub).to.have.been.calledOnce;
+      expect(lockBranchStub).to.have.been.calledOnce;
+      expect(unlockBranchStub).to.have.been.calledOnce;
     });
 
     it('should use fallback when branch lock fails due to missing token permissions (REST error)', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8644,13 +8456,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8658,18 +8470,18 @@ version = "3.0.0"
       mockCreateRelease(github, [
         {id: 123456, sha: 'abc123', tagName: 'release-brancher-v1.3.1'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
 
       // make the lock branch fail with the relevant permission error
-      sandbox.replace(github, 'lockBranch', async () => {
+      vi.spyOn(github, 'lockBranch').mockImplementation(async () => {
         throw new RequestError('Resource not accessible by integration', 403, {
           request: {
             method: 'POST',
@@ -8708,35 +8520,23 @@ version = "3.0.0"
       );
 
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.path).to.eql('.');
 
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
 
       // ensure we don't try to update permissions rules again given the lock failed
-      sinon.assert.notCalled(unlockBranchStub);
+      expect(unlockBranchStub).not.to.have.been.called;
     });
 
     it('should use fallback when branch lock fails due to missing token permissions (GraphQL error)', async () => {
-      mockPullRequests(
-        github,
+      mockPullRequests(github,
         [],
         [
           {
@@ -8751,13 +8551,13 @@ version = "3.0.0"
           },
         ]
       );
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileRaw(
             JSON.stringify({name: '@google-cloud/release-brancher'})
           )
@@ -8765,18 +8565,18 @@ version = "3.0.0"
       mockCreateRelease(github, [
         {id: 123456, sha: 'abc123', tagName: 'release-brancher-v1.3.1'},
       ]);
-      const commentStub = sandbox.stub(github, 'commentOnIssue').resolves();
-      const addLabelsStub = sandbox.stub(github, 'addIssueLabels').resolves();
-      const removeLabelsStub = sandbox
-        .stub(github, 'removeIssueLabels')
-        .resolves();
-      const waitForReleaseToBeListedStub = sandbox
-        .stub(github, 'waitForReleaseToBeListed')
-        .resolves();
-      const unlockBranchStub = sandbox.stub(github, 'unlockBranch').resolves();
+      const commentStub = vi.spyOn(github, 'commentOnIssue').mockResolvedValue();
+      const addLabelsStub = vi.spyOn(github, 'addIssueLabels').mockResolvedValue();
+      const removeLabelsStub = vi
+        .spyOn(github, 'removeIssueLabels')
+        .mockResolvedValue();
+      const waitForReleaseToBeListedStub = vi
+        .spyOn(github, 'waitForReleaseToBeListed')
+        .mockResolvedValue();
+      const unlockBranchStub = vi.spyOn(github, 'unlockBranch').mockResolvedValue();
 
       // make the lock branch fail with the relevant permission error
-      sandbox.replace(github, 'lockBranch', async () => {
+      vi.spyOn(github, 'lockBranch').mockImplementation(async () => {
         throw new GraphqlResponseError(
           {
             method: 'GET',
@@ -8817,30 +8617,19 @@ version = "3.0.0"
       );
 
       const releases = await manifest.createReleases();
-      expect(releases).lengthOf(1);
+      expect(releases).lengthOf(1).toMatchSnapshot();
       expect(releases[0]!.tagName).to.eql('release-brancher-v1.3.1');
       expect(releases[0]!.sha).to.eql('abc123');
       expect(releases[0]!.notes).to.eql('some release notes');
       expect(releases[0]!.path).to.eql('.');
 
-      sinon.assert.calledOnce(commentStub);
-      sinon.assert.calledOnceWithExactly(
-        addLabelsStub,
-        ['autorelease: tagged'],
-        1234
-      );
-      sinon.assert.calledOnceWithExactly(
-        removeLabelsStub,
-        ['autorelease: pending'],
-        1234
-      );
-      sinon.assert.calledWith(
-        waitForReleaseToBeListedStub,
-        sinon.match.has('tagName', 'release-brancher-v1.3.1')
-      );
+      expect(commentStub).to.have.been.calledOnce;
+      expect(addLabelsStub).to.have.been.calledOnceWith(['autorelease: tagged'], 1234);
+      expect(removeLabelsStub).to.have.been.calledOnceWith(['autorelease: pending'], 1234);
+      expect(waitForReleaseToBeListedStub).to.have.been.calledWith(expect.objectContaining({tagName: 'release-brancher-v1.3.1'}));
 
       // ensure we don't try to update permissions rules again given the lock failed
-      sinon.assert.notCalled(unlockBranchStub);
+      expect(unlockBranchStub).not.to.have.been.called;
     });
   });
 });

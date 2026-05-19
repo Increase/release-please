@@ -1,0 +1,1745 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PullRequestBody > parse > can parse initial release pull rqeuest body 1`] = `
+[
+  {
+    "notes": "## 0.1.0 (2022-01-20)
+
+
+### Features
+
+* initial generation ([f09aade](https://github.com/googleapis/java-eventarc-publishing/commit/f09aade83d98d32a7a886dac2bf495c4cc15a8db))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.6.0 ([#20](https://github.com/googleapis/java-eventarc-publishing/issues/20)) ([7bea63a](https://github.com/googleapis/java-eventarc-publishing/commit/7bea63a9ddd3c9d0def80d8571b5f1ab8a8eca70))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > can parse initial release pull rqeuest body 2`] = `
+"## 0.1.0 (2022-01-20)
+
+
+### Features
+
+* initial generation ([f09aade](https://github.com/googleapis/java-eventarc-publishing/commit/f09aade83d98d32a7a886dac2bf495c4cc15a8db))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.6.0 ([#20](https://github.com/googleapis/java-eventarc-publishing/issues/20)) ([7bea63a](https://github.com/googleapis/java-eventarc-publishing/commit/7bea63a9ddd3c9d0def80d8571b5f1ab8a8eca70))"
+`;
+
+exports[`PullRequestBody > parse > should parse legacy PHP body 1`] = `
+[
+  {
+    "component": "google/cloud-access-approval",
+    "notes": "### Features
+
+* update client libraries to support Database operations ([#4977](https://github.com/googleapis/google-cloud-php/issues/4977)) ([731b051](https://github.com/googleapis/google-cloud-php/commit/731b051d9cd8c2ddea077fdd2719885bdf6a8925))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/access-context-manager",
+    "notes": "### Features
+
+* update client libraries to support Database operations ([#4976](https://github.com/googleapis/google-cloud-php/issues/4976)) ([3ce2080](https://github.com/googleapis/google-cloud-php/commit/3ce2080e1293f6c6b07bb03c9f816cbcd032ae3b))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/analytics-admin",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/analytics-data",
+    "notes": "### Features
+
+* [AnalyticsData] Updates from OwlBot ([#4974](https://github.com/googleapis/google-cloud-php/issues/4974)) ([841628c](https://github.com/googleapis/google-cloud-php/commit/841628c1e83a36f5671e1d1ef8c99d6f1f9e2d67))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 8,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-api-gateway",
+    "notes": "### Features
+
+* [ApiGateway] service update ([#5013](https://github.com/googleapis/google-cloud-php/issues/5013)) ([2cdda28](https://github.com/googleapis/google-cloud-php/commit/2cdda2871320b5c56eff7523fbe15aece1f6dbf3))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-apigee-connect",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-appengine-admin",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-artifact-registry",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-asset",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 6,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-assured-workloads",
+    "notes": "### Features
+
+* [AssuredWorkloads] service updates ([#5004](https://github.com/googleapis/google-cloud-php/issues/5004)) ([881b79e](https://github.com/googleapis/google-cloud-php/commit/881b79e72fd6d11075775d5ce16231a363baafe2))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 5,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-automl",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-bigquery-connection",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 5,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-bigquerydatatransfer",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 2,
+      "patch": 6,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-bigquery-reservation",
+    "notes": "### Features
+
+* increase the logical timeout (retry deadline) to 5 minutes ([#4864](https://github.com/googleapis/google-cloud-php/issues/4864)) ([52130ee](https://github.com/googleapis/google-cloud-php/commit/52130ee60f03c61ef0ada04c31b1268af87bacb6))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 5,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-bigquery-storage",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 2,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-bigtable",
+    "notes": "### Bug Fixes
+
+* make partial veneer client excludes explicit ([#4995](https://github.com/googleapis/google-cloud-php/issues/4995)) ([8819eaa](https://github.com/googleapis/google-cloud-php/commit/8819eaa01e146ba40576750b47a22cbb8cb1407b))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 11,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-billing",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 3,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-billing-budgets",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-binary-authorization",
+    "notes": "### Features
+
+* [BinaryAuthorization] update client libraries to support Database operations ([#4959](https://github.com/googleapis/google-cloud-php/issues/4959)) ([a76716a](https://github.com/googleapis/google-cloud-php/commit/a76716ad8d333204bad2c8ac9cc6672b068242c7))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-build",
+    "notes": "### Features
+
+* [Build] update client libraries to support Database operations ([#4958](https://github.com/googleapis/google-cloud-php/issues/4958)) ([bd76f9e](https://github.com/googleapis/google-cloud-php/commit/bd76f9e8ca0a5035f66d419d7ad61c5ec57b49ae))
+
+
+### Bug Fixes
+
+* [Build] autoload for metadata classes ([#4991](https://github.com/googleapis/google-cloud-php/issues/4991)) ([7dad428](https://github.com/googleapis/google-cloud-php/commit/7dad428f26771c98adc45a72d4ff66c40f2d8208))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-channel",
+    "notes": "### Features
+
+* [Channel] update client libraries to support Database operations ([#4957](https://github.com/googleapis/google-cloud-php/issues/4957)) ([5a43585](https://github.com/googleapis/google-cloud-php/commit/5a43585ce3a0281b50dc78b7a403673443f95838))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 6,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-common-protos",
+    "notes": "### Features
+
+* update common-protos and add common/operation_metadata.proto ([#4837](https://github.com/googleapis/google-cloud-php/issues/4837)) ([8eea01c](https://github.com/googleapis/google-cloud-php/commit/8eea01c549613ea391a0fa043d717f4e14891894))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-compute",
+    "notes": "### Features
+
+* Update gapic-generator-php to v1.3.0 ([#4978](https://github.com/googleapis/google-cloud-php/issues/4978)) ([96d6c1e](https://github.com/googleapis/google-cloud-php/commit/96d6c1e4a32357a6e7afc8a9329349e9ba4f69f1))
+
+
+### Bug Fixes
+
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 6,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-contact-center-insights",
+    "notes": "### Features
+
+* [ContactCenterInsights] new API for the View resource ([#4984](https://github.com/googleapis/google-cloud-php/issues/4984)) ([54a9de3](https://github.com/googleapis/google-cloud-php/commit/54a9de35279b872fc09c995576f8e90296e571b4))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-container",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 5,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-container-analysis",
+    "notes": "### Bug Fixes
+
+* [ContainerAnalysis] Modify the bazel.BUILD file by hand to include the compliance protos which are not autogenerated ([#4989](https://github.com/googleapis/google-cloud-php/issues/4989)) ([76cf4bb](https://github.com/googleapis/google-cloud-php/commit/76cf4bb19d5a431ff05e61fefba74a34a155d1ba))
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-core",
+    "notes": "### Bug Fixes
+
+* step ordering for component release ([#4813](https://github.com/googleapis/google-cloud-php/issues/4813)) ([b5109cf](https://github.com/googleapis/google-cloud-php/commit/b5109cfdc8e2b6032b96f1a99a50dd13dfcae356))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 43,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-data-catalog",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 0,
+      "patch": 6,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-data-fusion",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-datalabeling",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dataflow",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dataproc",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 2,
+      "minor": 4,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dataproc-metastore",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-datastore",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 13,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-datastore-admin",
+    "notes": "### Features
+
+* [DatastoreAdmin] define Datastore -> Firestore in Datastore mode migration long running operation metadata ([#4979](https://github.com/googleapis/google-cloud-php/issues/4979)) ([7774f2b](https://github.com/googleapis/google-cloud-php/commit/7774f2bc8294c33b2c9961fdb813871a94155871))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-debugger",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-deploy",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dialogflow",
+    "notes": "### Features
+
+* added export documentation method feat: added filter in list documentations request feat: added option to import custom metadata from Google Cloud Storage in reload document request feat: added option to apply partial update to the smart messagin... ([#4853](https://github.com/googleapis/google-cloud-php/issues/4853)) ([6c3343d](https://github.com/googleapis/google-cloud-php/commit/6c3343d500a84cee5a2f13ce5c4ef4fa7920d1c1))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 24,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dlp",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 3,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-dms",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 4,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-document-ai",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-domains",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-error-reporting",
+    "notes": "### Features
+
+* [ErrorReporting] Updates from OwlBot ([#4937](https://github.com/googleapis/google-cloud-php/issues/4937)) ([f6f47fa](https://github.com/googleapis/google-cloud-php/commit/f6f47fa516fc40ea0014263266534da0540d9e72))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 19,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-essential-contacts",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-eventarc",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-filestore",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-firestore",
+    "notes": "### Bug Fixes
+
+* make partial veneer client excludes explicit ([#4995](https://github.com/googleapis/google-cloud-php/issues/4995)) ([8819eaa](https://github.com/googleapis/google-cloud-php/commit/8819eaa01e146ba40576750b47a22cbb8cb1407b))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 20,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-functions",
+    "notes": "### Features
+
+* [Functions] Updates from OwlBot ([#4932](https://github.com/googleapis/google-cloud-php/issues/4932)) ([6abbb28](https://github.com/googleapis/google-cloud-php/commit/6abbb2858aacc44b45ffe3f1060f488566721509))
+
+
+### Bug Fixes
+
+* [Functions] service update ([#5010](https://github.com/googleapis/google-cloud-php/issues/5010)) ([e2efd54](https://github.com/googleapis/google-cloud-php/commit/e2efd54ae6aa92ed73a5107a59039249f30baca5))
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-game-servers",
+    "notes": "### Features
+
+* [Gaming] service update ([#5009](https://github.com/googleapis/google-cloud-php/issues/5009)) ([1b5756b](https://github.com/googleapis/google-cloud-php/commit/1b5756bfc66001e1e058bd915f1f147b60df180d))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-gke-connect-gateway",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-gke-hub",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/grafeas",
+    "notes": "### Bug Fixes
+
+* [Grafeas] Modify the bazel.BUILD file by hand to include the compliance protos which are not autogenerated ([#4988](https://github.com/googleapis/google-cloud-php/issues/4988)) ([2da5f2b](https://github.com/googleapis/google-cloud-php/commit/2da5f2b35912bfbc6f6c6157882d11ac105140f3))
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-iam-credentials",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-iap",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-iot",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-kms",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 12,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-language",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 26,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-life-sciences",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-logging",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 22,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-managed-identities",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-media-translation",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-memcache",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 5,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-monitoring",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 0,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-network-connectivity",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-network-management",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-network-security",
+    "notes": "### ⚠ BREAKING CHANGES
+
+* updating metadata messages for all long running operations (#4981)
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))
+* updating metadata messages for all long running operations ([#4981](https://github.com/googleapis/google-cloud-php/issues/4981)) ([5a25584](https://github.com/googleapis/google-cloud-php/commit/5a25584349798e3604fea469c35a696594d8502e))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-notebooks",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-orchestration-airflow",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-org-policy",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-osconfig",
+    "notes": "### Features
+
+* [OsConfig] service update ([#5001](https://github.com/googleapis/google-cloud-php/issues/5001)) ([d726f30](https://github.com/googleapis/google-cloud-php/commit/d726f306729a5286931dae4ee7cd058bf2d07e4c))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-oslogin",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 3,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-policy-troubleshooter",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-private-catalog",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-profiler",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-pubsub",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 34,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-recaptcha-enterprise",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-recommendations-ai",
+    "notes": "### Features
+
+* [RecommendationEngine] Updates from OwlBot ([#4903](https://github.com/googleapis/google-cloud-php/issues/4903)) ([f7fa368](https://github.com/googleapis/google-cloud-php/commit/f7fa368483ff8c8de60856a99aa174b6f591e5d2))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 4,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-recommender",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 5,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-redis",
+    "notes": "### Bug Fixes
+
+* make partial veneer client excludes explicit ([#4995](https://github.com/googleapis/google-cloud-php/issues/4995)) ([8819eaa](https://github.com/googleapis/google-cloud-php/commit/8819eaa01e146ba40576750b47a22cbb8cb1407b))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-resource-manager",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-resource-settings",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-retail",
+    "notes": "### Features
+
+* [Retail] service update ([#5000](https://github.com/googleapis/google-cloud-php/issues/5000)) ([19dfe3b](https://github.com/googleapis/google-cloud-php/commit/19dfe3b81dd0a8c12044b02914b6ebbab0ec4e03))
+
+
+### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-scheduler",
+    "notes": "### Features
+
+* [Scheduler] Updates from OwlBot ([#4897](https://github.com/googleapis/google-cloud-php/issues/4897)) ([95de7e0](https://github.com/googleapis/google-cloud-php/commit/95de7e0f1bfb3e08a13af37d4c58550f4d7db874))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 6,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-secret-manager",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 7,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-security-center",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 5,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-security-private-ca",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-service-control",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-service-directory",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 6,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-service-management",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-service-usage",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-shell",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-spanner",
+    "notes": "### Bug Fixes
+
+* [Spanner] exclude partial veneer SpannerClient from owlbot ([#4994](https://github.com/googleapis/google-cloud-php/issues/4994)) ([0f59589](https://github.com/googleapis/google-cloud-php/commit/0f5958976d944d868508e2b84b734010de03bfa6))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 46,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-speech",
+    "notes": "### Bug Fixes
+
+* make partial veneer client excludes explicit ([#4995](https://github.com/googleapis/google-cloud-php/issues/4995)) ([8819eaa](https://github.com/googleapis/google-cloud-php/commit/8819eaa01e146ba40576750b47a22cbb8cb1407b))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-sql-admin",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-storage",
+    "notes": "### Features
+
+* added methods/tests for enabling Turbo Replication. ([#4543](https://github.com/googleapis/google-cloud-php/issues/4543)) ([d621cff](https://github.com/googleapis/google-cloud-php/commit/d621cffaf6a58ad0f8106cc4dadc068163db5d15))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 26,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-storage-transfer",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-talent",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 16,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-tasks",
+    "notes": "### Features
+
+* [Tasks] Updates from OwlBot ([#4883](https://github.com/googleapis/google-cloud-php/issues/4883)) ([3296dd1](https://github.com/googleapis/google-cloud-php/commit/3296dd13e3b49276c1a45edc1d8d88703f0d9a9a))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 10,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-text-to-speech",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 3,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-tpu",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-trace",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 4,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-translate",
+    "notes": "### Bug Fixes
+
+* make partial veneer client excludes explicit ([#4995](https://github.com/googleapis/google-cloud-php/issues/4995)) ([8819eaa](https://github.com/googleapis/google-cloud-php/commit/8819eaa01e146ba40576750b47a22cbb8cb1407b))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 12,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-videointelligence",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 12,
+      "patch": 5,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-video-transcoder",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 3,
+      "patch": 2,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-vision",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 5,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-vpc-access",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-web-risk",
+    "notes": "",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-web-security-scanner",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 7,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "google/cloud-workflows",
+    "notes": "### Bug Fixes
+
+* owlbot copy excludes ([#4987](https://github.com/googleapis/google-cloud-php/issues/4987)) ([49e2a11](https://github.com/googleapis/google-cloud-php/commit/49e2a11239a30d9c11743a0ca7693f3cc51fce03))
+* remove deprecated aliases in double-nested protos ([#4997](https://github.com/googleapis/google-cloud-php/issues/4997)) ([c4c790c](https://github.com/googleapis/google-cloud-php/commit/c4c790cc33266848c8851c5ae557d326ad27fcf5))",
+    "version": Version {
+      "build": undefined,
+      "major": 0,
+      "minor": 2,
+      "patch": 3,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > should parse legacy PHP body 2`] = `
+"### Features
+
+* update client libraries to support Database operations ([#4977](https://github.com/googleapis/google-cloud-php/issues/4977)) ([731b051](https://github.com/googleapis/google-cloud-php/commit/731b051d9cd8c2ddea077fdd2719885bdf6a8925))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components 1`] = `
+[
+  {
+    "component": "@google-automations/bot-config-utils",
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "@google-automations/label-utils",
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "@google-automations/object-selector",
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "@google-automations/datastore-lock",
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 2,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components 2`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components 3`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components 4`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components 5`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components mixed with componentless 1`] = `
+[
+  {
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 2,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "component": "@google-automations/label-utils",
+    "notes": "### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 1,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components mixed with componentless 2`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse multiple components mixed with componentless 3`] = `
+"### Features
+
+* upgrade to gcf-utils@12 ([#2262](https://www.github.com/googleapis/repo-automation-bots/issues/2262)) ([bd04376](https://www.github.com/googleapis/repo-automation-bots/commit/bd043767ae59a4eed450f1d18741111dc4c3f8e8))"
+`;
+
+exports[`PullRequestBody > parse > should parse single component from legacy manifest release 1`] = `
+[
+  {
+    "component": "@google-cloud/release-brancher",
+    "notes": "### Bug Fixes
+
+* **release-brancher:** use "ci:" (non-releasable) in init ([#2622](https://www.github.com/googleapis/repo-automation-bots/issues/2622)) ([c4b3ac5](https://www.github.com/googleapis/repo-automation-bots/commit/c4b3ac5e50f9579202a614c655e79eaf4bca362e))",
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 3,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > should parse single component from legacy manifest release 2`] = `
+"### Bug Fixes
+
+* **release-brancher:** use "ci:" (non-releasable) in init ([#2622](https://www.github.com/googleapis/repo-automation-bots/issues/2622)) ([c4b3ac5](https://www.github.com/googleapis/repo-automation-bots/commit/c4b3ac5e50f9579202a614c655e79eaf4bca362e))"
+`;
+
+exports[`PullRequestBody > parse > should parse standalone release 1`] = `
+[
+  {
+    "notes": "### [3.2.7](https://www.github.com/googleapis/java-asset/compare/v3.2.6...v3.2.7) (2021-10-20)
+
+
+### Dependencies
+
+* update dependency com.google.api.grpc:proto-google-cloud-orgpolicy-v1 to v2.0.6 ([#980](https://www.github.com/googleapis/java-asset/issues/980)) ([710bb59](https://www.github.com/googleapis/java-asset/commit/710bb59c17da57f1104a84f8e44ada7c7fc9a59f))
+* update dependency com.google.api.grpc:proto-google-cloud-os-config-v1 to v2.2.2 ([#981](https://www.github.com/googleapis/java-asset/issues/981)) ([5495310](https://www.github.com/googleapis/java-asset/commit/5495310b7abf3a3dfa6878fc20e12ac3f268c93f))
+* update dependency com.google.api.grpc:proto-google-cloud-pubsub-v1 to v1.96.7 ([#982](https://www.github.com/googleapis/java-asset/issues/982)) ([c93a011](https://www.github.com/googleapis/java-asset/commit/c93a01135432ad2094550be6d03c05e7efde56ac))
+* update dependency com.google.api.grpc:proto-google-identity-accesscontextmanager-v1 to v1.2.3 ([#983](https://www.github.com/googleapis/java-asset/issues/983)) ([4eb1b14](https://www.github.com/googleapis/java-asset/commit/4eb1b14f1915ec22d2edb002341fa0eb361b70d8))
+* update dependency com.google.cloud:google-cloud-bigquery to v2.3.1 ([#984](https://www.github.com/googleapis/java-asset/issues/984)) ([5ba60b8](https://www.github.com/googleapis/java-asset/commit/5ba60b8916dfa066b76766bb650bf552ce05838b))
+* update dependency com.google.cloud:google-cloud-bigquery to v2.3.2 ([#991](https://www.github.com/googleapis/java-asset/issues/991)) ([cc6183e](https://www.github.com/googleapis/java-asset/commit/cc6183e49786e312a8af78026c7981f76f46fdd8))
+* update dependency com.google.cloud:google-cloud-core to v2.2.0 ([#988](https://www.github.com/googleapis/java-asset/issues/988)) ([2e07803](https://www.github.com/googleapis/java-asset/commit/2e0780320ed89e78f4c99b374469f2be9b828588))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.4.0 ([#989](https://www.github.com/googleapis/java-asset/issues/989)) ([0be3e21](https://www.github.com/googleapis/java-asset/commit/0be3e2170158450927075faf601f43a271a4443a))
+* update dependency com.google.cloud:google-cloud-storage to v2.1.9 ([#987](https://www.github.com/googleapis/java-asset/issues/987)) ([ea85100](https://www.github.com/googleapis/java-asset/commit/ea8510036db7990c47c7471f6d6ce899a83ec456))",
+    "version": Version {
+      "build": undefined,
+      "major": 3,
+      "minor": 2,
+      "patch": 7,
+      "preRelease": undefined,
+    },
+  },
+]
+`;
+
+exports[`PullRequestBody > parse > should parse standalone release 2`] = `
+"### [3.2.7](https://www.github.com/googleapis/java-asset/compare/v3.2.6...v3.2.7) (2021-10-20)
+
+
+### Dependencies
+
+* update dependency com.google.api.grpc:proto-google-cloud-orgpolicy-v1 to v2.0.6 ([#980](https://www.github.com/googleapis/java-asset/issues/980)) ([710bb59](https://www.github.com/googleapis/java-asset/commit/710bb59c17da57f1104a84f8e44ada7c7fc9a59f))
+* update dependency com.google.api.grpc:proto-google-cloud-os-config-v1 to v2.2.2 ([#981](https://www.github.com/googleapis/java-asset/issues/981)) ([5495310](https://www.github.com/googleapis/java-asset/commit/5495310b7abf3a3dfa6878fc20e12ac3f268c93f))
+* update dependency com.google.api.grpc:proto-google-cloud-pubsub-v1 to v1.96.7 ([#982](https://www.github.com/googleapis/java-asset/issues/982)) ([c93a011](https://www.github.com/googleapis/java-asset/commit/c93a01135432ad2094550be6d03c05e7efde56ac))
+* update dependency com.google.api.grpc:proto-google-identity-accesscontextmanager-v1 to v1.2.3 ([#983](https://www.github.com/googleapis/java-asset/issues/983)) ([4eb1b14](https://www.github.com/googleapis/java-asset/commit/4eb1b14f1915ec22d2edb002341fa0eb361b70d8))
+* update dependency com.google.cloud:google-cloud-bigquery to v2.3.1 ([#984](https://www.github.com/googleapis/java-asset/issues/984)) ([5ba60b8](https://www.github.com/googleapis/java-asset/commit/5ba60b8916dfa066b76766bb650bf552ce05838b))
+* update dependency com.google.cloud:google-cloud-bigquery to v2.3.2 ([#991](https://www.github.com/googleapis/java-asset/issues/991)) ([cc6183e](https://www.github.com/googleapis/java-asset/commit/cc6183e49786e312a8af78026c7981f76f46fdd8))
+* update dependency com.google.cloud:google-cloud-core to v2.2.0 ([#988](https://www.github.com/googleapis/java-asset/issues/988)) ([2e07803](https://www.github.com/googleapis/java-asset/commit/2e0780320ed89e78f4c99b374469f2be9b828588))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.4.0 ([#989](https://www.github.com/googleapis/java-asset/issues/989)) ([0be3e21](https://www.github.com/googleapis/java-asset/commit/0be3e2170158450927075faf601f43a271a4443a))
+* update dependency com.google.cloud:google-cloud-storage to v2.1.9 ([#987](https://www.github.com/googleapis/java-asset/issues/987)) ([ea85100](https://www.github.com/googleapis/java-asset/commit/ea8510036db7990c47c7471f6d6ce899a83ec456))"
+`;
+
+exports[`PullRequestBody > toString > can handle a custom header and footer 1`] = `
+"My special header!!!
+---
+
+
+<details><summary>pkg1: 1.2.3</summary>
+
+some special notes go here
+</details>
+
+<details><summary>pkg2: 2.0.0</summary>
+
+more special notes go here
+</details>
+
+---
+A custom footer"
+`;
+
+exports[`PullRequestBody > toString > can handle a single entries 1`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+some special notes go here
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`PullRequestBody > toString > can handle a single entries forced components 1`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg1: 1.2.3</summary>
+
+some special notes go here
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`PullRequestBody > toString > can handle componently entries 1`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>1.2.3</summary>
+
+some special notes go here
+</details>
+
+<details><summary>pkg2: 2.0.0</summary>
+
+more special notes go here
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`PullRequestBody > toString > can handle multiple entries 1`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg1: 1.2.3</summary>
+
+some special notes go here
+</details>
+
+<details><summary>pkg2: 2.0.0</summary>
+
+more special notes go here
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;

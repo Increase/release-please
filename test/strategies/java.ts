@@ -11,26 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach} from 'vitest';
 
-import {afterEach, beforeEach, describe, it} from 'mocha';
 import {GitHub} from '../../src';
 import {Java} from '../../src/strategies/java';
-import * as sinon from 'sinon';
 import {
   assertHasUpdate,
   assertHasUpdates,
   assertNoHasUpdate,
   buildMockConventionalCommit,
 } from '../helpers';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
 import {Changelog} from '../../src/updaters/changelog';
 import {DEFAULT_LABELS, DEFAULT_SNAPSHOT_LABELS} from '../../src/manifest';
 import {Generic} from '../../src/updaters/generic';
 import {JavaReleased} from '../../src/updaters/java/java-released';
-
-const sandbox = sinon.createSandbox();
 
 describe('Java', () => {
   let github: GitHub;
@@ -41,10 +37,7 @@ describe('Java', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     describe('for default component', () => {
       const COMMITS_NO_SNAPSHOT = [
         ...buildMockConventionalCommit('fix(deps): update dependency'),

@@ -1,0 +1,459 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Merge plugin > run > ignores no pull requests 1`] = `[]`;
+
+exports[`Merge plugin > run > merges a single pull request 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "python",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": undefined,
+            "notes": "Release notes for path: python, releaseType: python",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges all labels for pull requests 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "simple",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "python-pkg",
+            "notes": "Release notes for path: python, releaseType: python",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [
+        "label-a",
+        "label-b",
+        "label-c",
+      ],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "path1/foo",
+          "updater": CompositeUpdater {
+            "updaters": [
+              RawContent {
+                "rawContent": "foo",
+              },
+              RawContent {
+                "rawContent": "bar",
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "path2/foo",
+          "updater": RawContent {
+            "rawContent": "asdf",
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges all labels for pull requests 2`] = `
+[
+  "label-a",
+  "label-b",
+  "label-c",
+]
+`;
+
+exports[`Merge plugin > run > merges all labels for pull requests 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>python-pkg: 1.0.0</summary>
+
+Release notes for path: python, releaseType: python
+</details>
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node, releaseType: node
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests as a draft 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "simple",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "python-pkg",
+            "notes": "python notes",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgA",
+            "notes": "some notes",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": true,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "path1/foo",
+          "updater": CompositeUpdater {
+            "updaters": [
+              RawContent {
+                "rawContent": "foo",
+              },
+              RawContent {
+                "rawContent": "bar",
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "path2/foo",
+          "updater": RawContent {
+            "rawContent": "asdf",
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests as a draft 2`] = `
+[
+  {
+    "createIfMissing": false,
+    "path": "path1/foo",
+    "updater": CompositeUpdater {
+      "updaters": [
+        RawContent {
+          "rawContent": "foo",
+        },
+        RawContent {
+          "rawContent": "bar",
+        },
+      ],
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "path2/foo",
+    "updater": RawContent {
+      "rawContent": "asdf",
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests as a draft 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>python-pkg: 1.0.0</summary>
+
+python notes
+</details>
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+some notes
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests into an aggregate 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "simple",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "python-pkg",
+            "notes": "Release notes for path: python, releaseType: python",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "path1/foo",
+          "updater": CompositeUpdater {
+            "updaters": [
+              RawContent {
+                "rawContent": "foo",
+              },
+              RawContent {
+                "rawContent": "bar",
+              },
+            ],
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "path2/foo",
+          "updater": RawContent {
+            "rawContent": "asdf",
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests into an aggregate 2`] = `
+[
+  {
+    "createIfMissing": false,
+    "path": "path1/foo",
+    "updater": CompositeUpdater {
+      "updaters": [
+        RawContent {
+          "rawContent": "foo",
+        },
+        RawContent {
+          "rawContent": "bar",
+        },
+      ],
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "path2/foo",
+    "updater": RawContent {
+      "rawContent": "asdf",
+    },
+  },
+]
+`;
+
+exports[`Merge plugin > run > merges multiple pull requests into an aggregate 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>python-pkg: 1.0.0</summary>
+
+Release notes for path: python, releaseType: python
+</details>
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node, releaseType: node
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;

@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {JavaUpdate} from '../../src/updaters/java/java-update';
 import {Version} from '../../src/version';
 
@@ -35,7 +34,7 @@ describe('JavaUpdate', () => {
         version: Version.parse('v0.16.2-sp.1'),
       });
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('only updates current versions for snapshots', async () => {
       const oldContent = readFileSync(
@@ -50,7 +49,7 @@ describe('JavaUpdate', () => {
         isSnapshot: true,
       });
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('updates all versions for non snapshots', async () => {
       const oldContent = readFileSync(
@@ -64,7 +63,7 @@ describe('JavaUpdate', () => {
         version: Version.parse('3.3.3'),
       });
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

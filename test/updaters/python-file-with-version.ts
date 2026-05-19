@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {PythonFileWithVersion} from '../../src/updaters/python/python-file-with-version';
 import {Version} from '../../src/version';
 
@@ -32,7 +31,7 @@ describe('version.py', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('updates long patch versions in version.py', async () => {
       const oldContent = readFileSync(
@@ -43,7 +42,7 @@ describe('version.py', () => {
         version: Version.parse('0.5.11'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });
@@ -59,7 +58,7 @@ describe('project/__init__.py', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });
@@ -75,7 +74,7 @@ describe('src/project/__init__.py', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

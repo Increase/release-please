@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {PubspecYaml} from '../../src/updaters/dart/pubspec-yaml';
 import {Version} from '../../src/version';
 
@@ -32,7 +31,7 @@ describe('PubspecYaml', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates version with build number in pubspec.yaml file', async () => {
@@ -44,7 +43,7 @@ describe('PubspecYaml', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('leaves malformatted build numbers alone in pubspec.yaml file', async () => {
@@ -56,7 +55,7 @@ describe('PubspecYaml', () => {
         version: Version.parse('0.6.0'),
       });
       const newContent = version.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

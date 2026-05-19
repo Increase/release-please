@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {JavaYoshi} from '../../src/strategies/java-yoshi';
-import * as sinon from 'sinon';
 import {
   buildGitHubFileContent,
   assertHasUpdate,
@@ -31,7 +29,6 @@ import {VersionsManifest} from '../../src/updaters/java/versions-manifest';
 import {CompositeUpdater} from '../../src/updaters/composite';
 import {FileNotFoundError, MissingRequiredFileError} from '../../src/errors';
 
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/java-yoshi';
 
 const COMMITS = [
@@ -53,10 +50,7 @@ describe('JavaYoshi', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new JavaYoshi({
@@ -64,14 +58,14 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'versions.txt'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -86,14 +80,14 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'versions.txt'));
       const latestRelease = {
         tag: new TagName(Version.parse('0.123.4'), 'google-cloud-automl'),
         sha: 'abc123',
@@ -112,14 +106,14 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'versions-released.txt')
         );
       const latestRelease = {
@@ -145,14 +139,14 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(
             fixturesPath,
             'versions-with-beta-artifacts.txt'
@@ -187,8 +181,8 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
@@ -207,7 +201,7 @@ describe('JavaYoshi', () => {
           latestRelease,
         });
       } catch (e) {
-        expect(e).instanceof(MissingRequiredFileError);
+        expect(e).instanceof(MissingRequiredFileError).toMatchSnapshot();
         failed = true;
       }
       expect(failed).to.be.true;
@@ -220,14 +214,14 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'versions.txt'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -244,23 +238,23 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByFilenameAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByFilenameAndRef');
       findFilesStub
         .withArgs('pom.xml', 'main', '.')
-        .resolves(['path1/pom.xml', 'path2/pom.xml']);
+        .mockResolvedValue(['path1/pom.xml', 'path2/pom.xml']);
       findFilesStub
         .withArgs('build.gradle', 'main', '.')
-        .resolves(['path1/build.gradle', 'path2/build.gradle']);
+        .mockResolvedValue(['path1/build.gradle', 'path2/build.gradle']);
       findFilesStub
         .withArgs('dependencies.properties', 'main', '.')
-        .resolves(['dependencies.properties']);
-      const getFileContentsStub = sandbox.stub(
+        .mockResolvedValue(['dependencies.properties']);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'versions.txt'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -288,14 +282,14 @@ describe('JavaYoshi', () => {
         component: 'google-cloud-automl',
         extraFiles: ['foo/bar.java', 'src/version.java'],
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'versions.txt'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'versions.txt'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -314,23 +308,23 @@ describe('JavaYoshi', () => {
         github,
         component: 'google-cloud-automl',
       });
-      const findFilesStub = sandbox.stub(github, 'findFilesByFilenameAndRef');
+      const findFilesStub = vi.spyOn(github, 'findFilesByFilenameAndRef');
       findFilesStub
         .withArgs('pom.xml', 'main', '.')
-        .resolves(['path1/pom.xml', 'path2/pom.xml']);
+        .mockResolvedValue(['path1/pom.xml', 'path2/pom.xml']);
       findFilesStub
         .withArgs('build.gradle', 'main', '.')
-        .resolves(['path1/build.gradle', 'path2/build.gradle']);
+        .mockResolvedValue(['path1/build.gradle', 'path2/build.gradle']);
       findFilesStub
         .withArgs('dependencies.properties', 'main', '.')
-        .resolves(['dependencies.properties']);
-      const getFileContentsStub = sandbox.stub(
+        .mockResolvedValue(['dependencies.properties']);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('versions.txt', 'main')
-        .resolves(
+        .mockResolvedValue(
           buildGitHubFileContent(fixturesPath, 'versions-released.txt')
         );
       const latestRelease = undefined;

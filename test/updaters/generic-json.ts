@@ -11,14 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import assert from 'node:assert';
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Version} from '../../src/version';
 import {GenericJson} from '../../src/updaters/generic-json';
-import {expect, assert} from 'chai';
 
 const fixturesPath = './test/updaters/fixtures';
 
@@ -31,7 +30,7 @@ describe('GenericJson', () => {
       ).replace(/\r\n/g, '\n');
       const updater = new GenericJson('$.version', Version.parse('v2.3.4'));
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('updates deep entry', async () => {
       const oldContent = readFileSync(
@@ -43,7 +42,7 @@ describe('GenericJson', () => {
         Version.parse('v2.3.4')
       );
       const newContent = updater.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('ignores non-matching entry', async () => {
       const oldContent = readFileSync(

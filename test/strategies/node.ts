@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {Node} from '../../src/strategies/node';
 import {
   buildMockConventionalCommit,
   buildGitHubFileContent,
   assertHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {PackageLockJson} from '../../src/updaters/node/package-lock-json';
 import {SamplesPackageJson} from '../../src/updaters/node/samples-package-json';
 import {Changelog} from '../../src/updaters/changelog';
@@ -32,11 +30,9 @@ import {PackageJson} from '../../src/updaters/node/package-json';
 import {ChangelogJson} from '../../src/updaters/changelog-json';
 import * as assert from 'assert';
 import {MissingRequiredFileError, FileNotFoundError} from '../../src/errors';
-import snapshot = require('snap-shot-it');
 import {McpServer} from '../../src/updaters/node/mcp-server';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/node';
 
 const UUID_REGEX =
@@ -58,10 +54,7 @@ describe('Node', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Node({
@@ -112,13 +105,13 @@ describe('Node', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'package.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'package.json'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -142,13 +135,13 @@ describe('Node', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'package.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'package.json'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -156,9 +149,9 @@ describe('Node', () => {
       expect(pullRequest!.version?.toString()).to.eql(expectedVersion);
     });
     it('handles missing package.json', async () => {
-      sandbox
-        .stub(github, 'getFileContentsOnBranch')
-        .rejects(new FileNotFoundError('stub/path'));
+      vi
+        .spyOn(github, 'getFileContentsOnBranch')
+        .mockRejectedValue(new FileNotFoundError('stub/path'));
       const strategy = new Node({
         targetBranch: 'main',
         github,
@@ -189,17 +182,17 @@ describe('Node', () => {
         github,
         component: 'google-cloud-node',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
-      const getFileContentsStub = sandbox.stub(
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('changelog.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'changelog.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'changelog.json'));
       getFileContentsStub
         .withArgs('package.json', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'package.json'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'package.json'));
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits: COMMITS,
@@ -211,7 +204,7 @@ describe('Node', () => {
       const newContent = update.updater.updateContent(
         JSON.stringify({entries: []})
       );
-      snapshot(
+      expect(
         newContent
           .replace(/\r\n/g, '\n') // make newline consistent regardless of OS.
           .replace(UUID_REGEX, 'abc-123-efd-qwerty')
@@ -227,7 +220,7 @@ describe('Node', () => {
         component: 'google-cloud-automl',
         packageName: 'google-cloud-automl-pkg',
       });
-      sandbox.stub(github, 'findFilesByFilenameAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByFilenameAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,

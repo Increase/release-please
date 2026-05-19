@@ -14,7 +14,7 @@
 
 import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
 import {GitHub} from '../github';
-import {RepositoryConfig, CandidateReleasePullRequest} from '../manifest';
+import type {RepositoryConfig, CandidateReleasePullRequest} from '../manifest';
 
 /**
  * This plugin allows configuring a priority of release groups. For example, you could

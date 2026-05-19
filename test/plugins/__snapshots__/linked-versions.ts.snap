@@ -1,0 +1,1399 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinkedVersions plugin > can skip grouping pull requests 1`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > can skip grouping pull requests 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > can skip grouping pull requests 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > should allow multiple groups of linked versions 1`] = `
+[
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkg2",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkg3",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/b/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "bbbbbb",
+        "type": "fix",
+      },
+      {
+        "bareMessage": "0.2.4",
+        "breaking": false,
+        "files": undefined,
+        "message": "Release-As: 0.2.4",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "",
+        "type": "Release-As",
+      },
+      {
+        "bareMessage": "Synchronize group name versions",
+        "breaking": false,
+        "files": undefined,
+        "message": "chore(pkg3): Synchronize group name versions",
+        "notes": [
+          {
+            "text": "0.2.4",
+            "title": "RELEASE AS",
+          },
+        ],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": "pkg3",
+        "sha": "",
+        "type": "chore",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--target-branch--groups--group-name",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "target-branch",
+      "component": undefined,
+      "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release group name libraries\\$/,
+      "pullRequestTitlePattern": "chore\${scope}: release group name libraries",
+      "targetBranch": "target-branch",
+      "version": undefined,
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "path/b/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/b/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 0,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/b" => Version {
+                  "build": undefined,
+                  "major": 0,
+                  "minor": 2,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 0,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/c" => Version {
+                  "build": undefined,
+                  "major": 0,
+                  "minor": 2,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "path/c/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/c/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+    ],
+  },
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkg1",
+          "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkg4",
+          "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg4:** Synchronize second group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/a/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "fix",
+      },
+      {
+        "bareMessage": "1.0.1",
+        "breaking": false,
+        "files": undefined,
+        "message": "Release-As: 1.0.1",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "",
+        "type": "Release-As",
+      },
+      {
+        "bareMessage": "Synchronize second group name versions",
+        "breaking": false,
+        "files": undefined,
+        "message": "chore(pkg4): Synchronize second group name versions",
+        "notes": [
+          {
+            "text": "1.0.1",
+            "title": "RELEASE AS",
+          },
+        ],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": "pkg4",
+        "sha": "",
+        "type": "chore",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--target-branch--groups--second-group-name",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "target-branch",
+      "component": undefined,
+      "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release second group name libraries\\$/,
+      "pullRequestTitlePattern": "chore\${scope}: release second group name libraries",
+      "targetBranch": "target-branch",
+      "version": undefined,
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "path/a/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/a/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 0,
+                "patch": 1,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/a" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 0,
+                  "patch": 1,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 0,
+                "patch": 1,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/d" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 0,
+                  "patch": 1,
+                  "preRelease": undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "path/d/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg4:** Synchronize second group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/d/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`LinkedVersions plugin > should allow multiple groups of linked versions 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg1: 1.0.1</summary>
+
+## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkg4: 1.0.1</summary>
+
+## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkg4:** Synchronize second group name versions
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > should allow multiple groups of linked versions 3`] = `"release-please--branches--target-branch--groups--second-group-name"`;
+
+exports[`LinkedVersions plugin > should allow multiple groups of linked versions 4`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg2: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
+</details>
+
+<details><summary>pkg3: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > should allow multiple groups of linked versions 5`] = `"release-please--branches--target-branch--groups--group-name"`;
+
+exports[`LinkedVersions plugin > should group pull requests 1`] = `
+[
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkg1",
+          "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": false,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/a/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "fix",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--target-branch--components--pkg1",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "previousVersion": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 0,
+      "patch": 0,
+      "preRelease": undefined,
+    },
+    "title": PullRequestTitle {
+      "changesBranch": "target-branch",
+      "component": "pkg1",
+      "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+      "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+      "targetBranch": "target-branch",
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "path/a/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/a/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": ReleasePleaseManifest {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionsMap": Map {
+            "path/a" => Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 1,
+              "preRelease": undefined,
+            },
+          },
+        },
+      },
+    ],
+    "version": Version {
+      "build": undefined,
+      "major": 1,
+      "minor": 0,
+      "patch": 1,
+      "preRelease": undefined,
+    },
+  },
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkg2",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkg3",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/b/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "bbbbbb",
+        "type": "fix",
+      },
+      {
+        "bareMessage": "0.2.4",
+        "breaking": false,
+        "files": undefined,
+        "message": "Release-As: 0.2.4",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "",
+        "type": "Release-As",
+      },
+      {
+        "bareMessage": "Synchronize group name versions",
+        "breaking": false,
+        "files": undefined,
+        "message": "chore(pkg3): Synchronize group name versions",
+        "notes": [
+          {
+            "text": "0.2.4",
+            "title": "RELEASE AS",
+          },
+        ],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": "pkg3",
+        "sha": "",
+        "type": "chore",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--target-branch--groups--group-name",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "target-branch",
+      "component": undefined,
+      "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release group name libraries\\$/,
+      "pullRequestTitlePattern": "chore\${scope}: release group name libraries",
+      "targetBranch": "target-branch",
+      "version": undefined,
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "path/b/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/b/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 0,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/b" => Version {
+                  "build": undefined,
+                  "major": 0,
+                  "minor": 2,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 0,
+                "minor": 2,
+                "patch": 4,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/c" => Version {
+                  "build": undefined,
+                  "major": 0,
+                  "minor": 2,
+                  "patch": 4,
+                  "preRelease": undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "path/c/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/c/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`LinkedVersions plugin > should group pull requests 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > should group pull requests 3`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg2: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
+</details>
+
+<details><summary>pkg3: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`LinkedVersions plugin > should sync versions pull requests 1`] = `
+[
+  {
+    "body": PullRequestBody {
+      "extra": undefined,
+      "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+      "header": ":sparkles: Stainless prepared a new release",
+      "releaseData": [
+        {
+          "component": "pkg1",
+          "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkg2",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+        {
+          "component": "pkg3",
+          "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+        },
+      ],
+      "useComponents": true,
+    },
+    "conventionalCommits": [
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/a/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "aaaaaa",
+        "type": "fix",
+      },
+      {
+        "bareMessage": "some bugfix",
+        "breaking": false,
+        "files": [
+          "path/b/foo",
+        ],
+        "message": "fix: some bugfix",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "bbbbbb",
+        "type": "fix",
+      },
+      {
+        "bareMessage": "0.2.4",
+        "breaking": false,
+        "files": undefined,
+        "message": "Release-As: 0.2.4",
+        "notes": [],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": null,
+        "sha": "",
+        "type": "Release-As",
+      },
+      {
+        "bareMessage": "Synchronize group name versions",
+        "breaking": false,
+        "files": undefined,
+        "message": "chore(pkg3): Synchronize group name versions",
+        "notes": [
+          {
+            "text": "0.2.4",
+            "title": "RELEASE AS",
+          },
+        ],
+        "pullRequest": undefined,
+        "references": [],
+        "scope": "pkg3",
+        "sha": "",
+        "type": "chore",
+      },
+    ],
+    "draft": false,
+    "headRefName": "release-please--branches--target-branch",
+    "labels": [
+      "autorelease: pending",
+    ],
+    "title": PullRequestTitle {
+      "changesBranch": "target-branch",
+      "component": undefined,
+      "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+      "pullRequestTitlePattern": "chore: release \${branch}",
+      "targetBranch": "target-branch",
+      "version": undefined,
+    },
+    "updates": [
+      {
+        "createIfMissing": true,
+        "path": "path/a/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/a/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 1,
+            "minor": 0,
+            "patch": 1,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": ".release-please-manifest.json",
+        "updater": CompositeUpdater {
+          "updaters": [
+            ReleasePleaseManifest {
+              "version": Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 0,
+                "patch": 1,
+                "preRelease": undefined,
+              },
+              "versionsMap": Map {
+                "path/a" => Version {
+                  "build": undefined,
+                  "major": 1,
+                  "minor": 0,
+                  "patch": 1,
+                  "preRelease": undefined,
+                },
+              },
+            },
+            CompositeUpdater {
+              "updaters": [
+                ReleasePleaseManifest {
+                  "version": Version {
+                    "build": undefined,
+                    "major": 0,
+                    "minor": 2,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "versionsMap": Map {
+                    "path/b" => Version {
+                      "build": undefined,
+                      "major": 0,
+                      "minor": 2,
+                      "patch": 4,
+                      "preRelease": undefined,
+                    },
+                  },
+                },
+                ReleasePleaseManifest {
+                  "version": Version {
+                    "build": undefined,
+                    "major": 0,
+                    "minor": 2,
+                    "patch": 4,
+                    "preRelease": undefined,
+                  },
+                  "versionsMap": Map {
+                    "path/c" => Version {
+                      "build": undefined,
+                      "major": 0,
+                      "minor": 2,
+                      "patch": 4,
+                      "preRelease": undefined,
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "path/b/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/b/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": true,
+        "path": "path/c/CHANGELOG.md",
+        "updater": Changelog {
+          "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions",
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+          "versionsMap": undefined,
+        },
+      },
+      {
+        "createIfMissing": false,
+        "path": "path/c/version.txt",
+        "updater": DefaultUpdater {
+          "version": Version {
+            "build": undefined,
+            "major": 0,
+            "minor": 2,
+            "patch": 4,
+            "preRelease": undefined,
+          },
+          "versionsMap": undefined,
+        },
+      },
+    ],
+  },
+]
+`;
+
+exports[`LinkedVersions plugin > should sync versions pull requests 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>pkg1: 1.0.1</summary>
+
+## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
+</details>
+
+<details><summary>pkg2: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
+
+
+### Bug Fixes
+
+* some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
+</details>
+
+<details><summary>pkg3: 0.2.4</summary>
+
+## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
+
+
+### Miscellaneous Chores
+
+* **pkg3:** Synchronize group name versions
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;

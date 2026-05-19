@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {PHPClientVersion} from '../../src/updaters/php/php-client-version';
 import {Version} from '../../src/version';
 
@@ -32,7 +31,7 @@ describe('PHPManifest', () => {
         version: Version.parse('0.8.0'),
       });
       const newContent = composer.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
     it('update version in ServiceBuilder.php files', async () => {
       const oldContent = readFileSync(
@@ -43,7 +42,7 @@ describe('PHPManifest', () => {
         version: Version.parse('0.8.0'),
       });
       const newContent = composer.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

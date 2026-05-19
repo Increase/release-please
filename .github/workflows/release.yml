@@ -20,7 +20,7 @@
 # (contents, pull-requests, issues: write)
 # and — unlike GITHUB_TOKEN — events fired from PRs/commits it opens
 # do trigger downstream workflows.
-name: release
+name: Release
 on:
   push:
     branches: [main]
@@ -35,6 +35,7 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
     outputs:
@@ -77,6 +78,7 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.releases_created == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
     steps:

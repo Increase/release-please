@@ -11,17 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi, type MockInstance} from 'vitest';
 
-import nock = require('nock');
-import {expect} from 'chai';
-import {afterEach, beforeEach, describe, it} from 'mocha';
+import nock, {type Scope} from './http-mock';
 nock.disableNetConnect();
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import * as sinon from 'sinon';
-
 import {GH_API_URL, GitHub, GitHubRelease} from '../src/github';
 import {PullRequest} from '../src/pull-request';
 import {TagName} from '../src/util/tag-name';
@@ -43,11 +39,9 @@ import {GraphqlResponseError} from '@octokit/graphql';
 import {ReleasePullRequest} from '../src/release-pull-request';
 
 const fixturesPath = './test/fixtures';
-const sandbox = sinon.createSandbox();
-
 describe('GitHub', () => {
   let github: GitHub;
-  let req: nock.Scope;
+  let req: Scope;
 
   function getNock() {
     return nock('https://api.github.com/')
@@ -73,11 +67,7 @@ describe('GitHub', () => {
     // This shared nock will take care of some common requests.
     req = getNock();
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-
-  describe('create', () => {
+    describe('create', () => {
     it('allows configuring the default branch explicitly', async () => {
       const github = await GitHub.create({
         owner: 'some-owner',
@@ -101,7 +91,7 @@ describe('GitHub', () => {
     });
 
     it('default agent is undefined when no proxy option passed ', () => {
-      expect(GitHub.createDefaultAgent('test_url')).eq(undefined);
+      expect(GitHub.createDefaultAgent('test_url')).eq(undefined).toMatchSnapshot();
     });
 
     it('should return a https agent', () => {
@@ -225,7 +215,7 @@ describe('GitHub', () => {
         'pom.xml',
         'main'
       );
-      snapshot(pomFiles);
+      expect(pomFiles).toMatchSnapshot();
       req.done();
     });
 
@@ -269,7 +259,7 @@ describe('GitHub', () => {
         .get('/repos/fake/fake/git/trees/main?recursive=true')
         .reply(200, fileSearchResponse);
       const pomFiles = await github.findFilesByExtensionAndRef('xml', 'main');
-      snapshot(pomFiles);
+      expect(pomFiles).toMatchSnapshot();
       req.done();
     });
 
@@ -365,7 +355,7 @@ describe('GitHub', () => {
       expect(fileContents)
         .to.have.property('sha')
         .equal('2f3d2c47bf49f81aca0df9ffc49524a213a2dc33');
-      snapshot(fileContents);
+      expect(fileContents).toMatchSnapshot();
       req.done();
     });
 
@@ -389,8 +379,8 @@ describe('GitHub', () => {
       for await (const pullRequest of generator) {
         pullRequests.push(pullRequest);
       }
-      expect(pullRequests).lengthOf(25);
-      snapshot(pullRequests!);
+      expect(pullRequests).lengthOf(25).toMatchSnapshot();
+      expect(pullRequests!).toMatchSnapshot();
       req.done();
     });
     it('handles merged pull requests without files', async () => {
@@ -408,8 +398,8 @@ describe('GitHub', () => {
       for await (const pullRequest of generator) {
         pullRequests.push(pullRequest);
       }
-      expect(pullRequests).lengthOf(25);
-      snapshot(pullRequests!);
+      expect(pullRequests).lengthOf(25).toMatchSnapshot();
+      expect(pullRequests!).toMatchSnapshot();
       req.done();
     });
     it('uses REST API if files are not needed', async () => {
@@ -465,8 +455,8 @@ describe('GitHub', () => {
       for await (const pullRequest of generator) {
         pullRequests.push(pullRequest);
       }
-      expect(pullRequests).lengthOf(2);
-      snapshot(pullRequests!);
+      expect(pullRequests).lengthOf(2).toMatchSnapshot();
+      expect(pullRequests!).toMatchSnapshot();
       req.done();
     });
   });
@@ -488,7 +478,7 @@ describe('GitHub', () => {
         }
       );
       expect(commitsSinceSha.length).to.eql(1);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
 
@@ -517,7 +507,7 @@ describe('GitHub', () => {
         }
       );
       expect(commitsSinceSha.length).to.eql(11);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
 
@@ -537,7 +527,7 @@ describe('GitHub', () => {
         }
       );
       expect(commitsSinceSha.length).to.eql(3);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
 
@@ -560,7 +550,7 @@ describe('GitHub', () => {
         }
       );
       expect(commitsSinceSha.length).to.eql(10);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
 
@@ -616,7 +606,7 @@ describe('GitHub', () => {
         {backfillFiles: true}
       );
       expect(commitsSinceSha.length).to.eql(1);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
 
@@ -646,7 +636,7 @@ describe('GitHub', () => {
         {backfillFiles: true}
       );
       expect(commitsSinceSha.length).to.eql(1);
-      snapshot(commitsSinceSha);
+      expect(commitsSinceSha).toMatchSnapshot();
       req.done();
     });
   });
@@ -667,8 +657,8 @@ describe('GitHub', () => {
       for await (const commit of generator) {
         commits.push(commit);
       }
-      expect(commits).lengthOf(2);
-      snapshot(commits!);
+      expect(commits).lengthOf(2).toMatchSnapshot();
+      expect(commits!).toMatchSnapshot();
       req.done();
     });
   });
@@ -714,7 +704,7 @@ describe('GitHub', () => {
       for await (const release of generator) {
         releases.push(release);
       }
-      expect(releases).lengthOf(5);
+      expect(releases).lengthOf(5).toMatchSnapshot();
     });
 
     it('iterates through up to 3 releases', async () => {
@@ -729,7 +719,7 @@ describe('GitHub', () => {
       for await (const release of generator) {
         releases.push(release);
       }
-      expect(releases).lengthOf(3);
+      expect(releases).lengthOf(3).toMatchSnapshot();
     });
 
     it('correctly identifies draft releases', async () => {
@@ -746,7 +736,7 @@ describe('GitHub', () => {
           drafts++;
         }
       }
-      expect(drafts).eq(1);
+      expect(drafts).eq(1).toMatchSnapshot();
     });
 
     it('iterates through a result withouth releases', async () => {
@@ -768,14 +758,14 @@ describe('GitHub', () => {
       for await (const release of generator) {
         releases.push(release);
       }
-      expect(releases).lengthOf(0);
+      expect(releases).lengthOf(0).toMatchSnapshot();
     });
   });
 
   describe('createRelease', () => {
-    let githubCreateReleaseSpy: sinon.SinonSpy;
+    let githubCreateReleaseSpy: MockInstance;
     beforeEach(async () => {
-      githubCreateReleaseSpy = sandbox.spy(
+      githubCreateReleaseSpy = vi.spyOn(
         github['octokit'].repos,
         'createRelease'
       );
@@ -783,7 +773,7 @@ describe('GitHub', () => {
     it('should create a release with a package prefix', async () => {
       req
         .post('/repos/fake/fake/releases', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(200, {
@@ -802,7 +792,7 @@ describe('GitHub', () => {
         notes: 'Some release notes',
       });
       req.done();
-      sinon.assert.calledOnceWithExactly(githubCreateReleaseSpy, {
+      expect(githubCreateReleaseSpy).to.have.been.calledOnceWith({
         name: undefined,
         owner: 'fake',
         repo: 'fake',
@@ -826,7 +816,7 @@ describe('GitHub', () => {
     it('should raise a DuplicateReleaseError if already_exists', async () => {
       req
         .post('/repos/fake/fake/releases', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(422, {
@@ -856,7 +846,7 @@ describe('GitHub', () => {
     it('should raise a RequestError for other validation errors', async () => {
       req
         .post('/repos/fake/fake/releases', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(422, {
@@ -876,7 +866,7 @@ describe('GitHub', () => {
     it('should create a draft release', async () => {
       req
         .post('/repos/fake/fake/releases', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(200, {
@@ -896,7 +886,7 @@ describe('GitHub', () => {
         {draft: true}
       );
       req.done();
-      sinon.assert.calledOnceWithExactly(githubCreateReleaseSpy, {
+      expect(githubCreateReleaseSpy).to.have.been.calledOnceWith({
         name: undefined,
         owner: 'fake',
         repo: 'fake',
@@ -915,7 +905,7 @@ describe('GitHub', () => {
     it('should create a prerelease release', async () => {
       req
         .post('/repos/fake/fake/releases', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(200, {
@@ -936,7 +926,7 @@ describe('GitHub', () => {
         {prerelease: true}
       );
       req.done();
-      sinon.assert.calledOnceWithExactly(githubCreateReleaseSpy, {
+      expect(githubCreateReleaseSpy).to.have.been.calledOnceWith({
         name: undefined,
         owner: 'fake',
         repo: 'fake',
@@ -963,7 +953,7 @@ describe('GitHub', () => {
       );
       req
         .post('/repos/fake/fake/issues/1347/comments', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return true;
         })
         .reply(201, createCommentResponse);
@@ -991,7 +981,7 @@ describe('GitHub', () => {
     it('can generate notes with previous tag', async () => {
       req
         .post('/repos/fake/fake/releases/generate-notes', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return body;
         })
         .reply(200, {
@@ -1010,7 +1000,7 @@ describe('GitHub', () => {
     it('can generate notes without previous tag', async () => {
       req
         .post('/repos/fake/fake/releases/generate-notes', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           return body;
         })
         .reply(200, {
@@ -1111,14 +1101,14 @@ describe('GitHub', () => {
 
   describe('updatePullRequest', () => {
     it('handles a ref branch different from the base branch', async () => {
-      const upsertReleaseBranch = sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      const upsertReleaseBranch = vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves('the-pull-request-branch-sha');
 
-      const getPullRequestStub = sandbox
-        .stub(github, 'getPullRequest')
+      const getPullRequestStub = vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(123)
-        .resolves({
+        .mockResolvedValue({
           title: 'updated-title',
           headBranchName: 'release-please--branches--main--changes--next',
           baseBranchName: 'main',
@@ -1161,14 +1151,14 @@ describe('GitHub', () => {
       };
 
       await github.updatePullRequest(123, pullRequest, 'main', 'next');
-      sinon.assert.calledOnce(upsertReleaseBranch);
-      sinon.assert.calledOnce(getPullRequestStub);
+      expect(upsertReleaseBranch).to.have.been.calledOnce;
+      expect(getPullRequestStub).to.have.been.calledOnce;
       req.done();
     });
 
     it('handles a PR body that is too big', async () => {
-      const upsertReleaseBranch = sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      const upsertReleaseBranch = vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves('the-pull-request-branch-sha');
 
       req = req
@@ -1190,10 +1180,10 @@ describe('GitHub', () => {
             ref: 'main',
           },
         });
-      const getPullRequestStub = sandbox
-        .stub(github, 'getPullRequest')
+      const getPullRequestStub = vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(123)
-        .resolves({
+        .mockResolvedValue({
           title: 'updated-title',
           headBranchName: 'release-please--branches--main',
           baseBranchName: 'main',
@@ -1212,27 +1202,27 @@ describe('GitHub', () => {
         conventionalCommits: [],
       };
       const pullRequestOverflowHandler = new MockPullRequestOverflowHandler();
-      const handleOverflowStub = sandbox
-        .stub(pullRequestOverflowHandler, 'handleOverflow')
-        .resolves('overflow message');
+      const handleOverflowStub = vi
+        .spyOn(pullRequestOverflowHandler, 'handleOverflow')
+        .mockResolvedValue('overflow message');
       await github.updatePullRequest(123, pullRequest, 'main', 'main', {
         pullRequestOverflowHandler,
       });
-      sinon.assert.calledOnce(handleOverflowStub);
-      sinon.assert.calledOnce(upsertReleaseBranch);
-      sinon.assert.calledOnce(getPullRequestStub);
+      expect(handleOverflowStub).to.have.been.calledOnce;
+      expect(upsertReleaseBranch).to.have.been.calledOnce;
+      expect(getPullRequestStub).to.have.been.calledOnce;
       req.done();
     });
 
     it('skips update if the PR was merged between query and update', async () => {
-      const upsertReleaseBranch = sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      const upsertReleaseBranch = vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves('the-pull-request-branch-sha');
 
-      const getPullRequestStub = sandbox
-        .stub(github, 'getPullRequest')
+      const getPullRequestStub = vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(123)
-        .resolves({
+        .mockResolvedValue({
           title: 'release: 1.9.1',
           headBranchName: 'release-please--branches--main--changes--next',
           baseBranchName: 'main',
@@ -1269,8 +1259,8 @@ describe('GitHub', () => {
       );
 
       // Should return the current PR state without modifying it
-      sinon.assert.notCalled(upsertReleaseBranch);
-      sinon.assert.calledOnce(getPullRequestStub);
+      expect(upsertReleaseBranch).not.to.have.been.called;
+      expect(getPullRequestStub).to.have.been.calledOnce;
       expect(result.number).to.equal(123);
       expect(result.labels).to.include('autorelease: tagged');
       req.done();
@@ -1289,8 +1279,8 @@ describe('GitHub', () => {
     };
 
     it('creates a new pull request', async () => {
-      sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves();
 
       req = req
@@ -1303,10 +1293,10 @@ describe('GitHub', () => {
         })
         .reply(200, {number: 99});
 
-      sandbox
-        .stub(github, 'getPullRequest')
+      vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(99)
-        .resolves({
+        .mockResolvedValue({
           title: 'test-title',
           headBranchName: 'release-please--branches--main',
           baseBranchName: 'main',
@@ -1331,8 +1321,8 @@ describe('GitHub', () => {
     });
 
     it('recovers when a pull request already exists', async () => {
-      sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves();
 
       req = req.post('/repos/fake/fake/pulls').reply(422, {
@@ -1362,10 +1352,10 @@ describe('GitHub', () => {
       // addLabels
       req = req.post('/repos/fake/fake/issues/42/labels').reply(200, []);
 
-      sandbox
-        .stub(github, 'getPullRequest')
+      vi
+        .spyOn(github, 'getPullRequest')
         .withArgs(42)
-        .resolves({
+        .mockResolvedValue({
           title: 'existing-title',
           headBranchName: 'release-please--branches--main',
           baseBranchName: 'main',
@@ -1388,8 +1378,8 @@ describe('GitHub', () => {
     });
 
     it('throws when 422 but no existing PR is found', async () => {
-      sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves();
 
       req = req.post('/repos/fake/fake/pulls').reply(422, {
@@ -1423,8 +1413,8 @@ describe('GitHub', () => {
     });
 
     it('throws on non-422 errors', async () => {
-      sandbox
-        .stub(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
+      vi
+        .spyOn(github, <any>'upsertReleaseBranch') // eslint-disable-line @typescript-eslint/no-explicit-any
         .resolves();
 
       req = req.post('/repos/fake/fake/pulls').reply(500, {
@@ -1451,7 +1441,7 @@ describe('GitHub', () => {
     it('toggle on github auto-merge feature for PR', async () => {
       req
         .post('/graphql', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           expect(body.query).to.contain('query pullRequestId');
           expect(body.variables).to.eql({
             owner: 'fake',
@@ -1470,7 +1460,7 @@ describe('GitHub', () => {
           },
         })
         .post('/graphql', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           expect(body.query).to.contain('mutation mutateEnableAutoMerge');
           expect(body.variables).to.eql({
             pullRequestId: 'someIdForPR123',
@@ -1487,10 +1477,7 @@ describe('GitHub', () => {
     });
 
     it('merges release PR directly when an auto-merge given but PR in "clean status"', async () => {
-      const mutatePullRequestEnableAutoMergeStub = sandbox
-        .stub(github, <any>'mutatePullRequestEnableAutoMerge') // eslint-disable-line @typescript-eslint/no-explicit-any
-        .throws(
-          new GraphqlResponseError(
+      const graphqlError = new GraphqlResponseError(
             {method: 'GET', url: '/foo/bar'},
             {},
             {
@@ -1505,12 +1492,16 @@ describe('GitHub', () => {
                 },
               ],
             }
-          )
-        );
+          );
+      const mutatePullRequestEnableAutoMergeStub = vi
+        .spyOn(github, <any>'mutatePullRequestEnableAutoMerge') // eslint-disable-line @typescript-eslint/no-explicit-any
+        .mockImplementation(() => {
+          throw graphqlError;
+        });
 
       req
         .post('/graphql', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           expect(body.query).to.contain('query pullRequestId');
           expect(body.variables).to.eql({
             owner: 'fake',
@@ -1535,36 +1526,37 @@ describe('GitHub', () => {
 
       const result = await github.enablePullRequestAutoMerge(123, 'rebase');
       expect(result).to.equal('direct-merged');
-      sinon.assert.calledOnce(mutatePullRequestEnableAutoMergeStub);
+      expect(mutatePullRequestEnableAutoMergeStub).to.have.been.calledOnce;
       req.done();
     });
 
     it('merges release PR directly when an auto-merge given but "protected branch rules not configured for this branch"', async () => {
-      const mutatePullRequestEnableAutoMergeStub = sandbox
-        .stub(github, <any>'mutatePullRequestEnableAutoMerge') // eslint-disable-line @typescript-eslint/no-explicit-any
-        .throws(
-          new GraphqlResponseError(
-            {method: 'GET', url: '/foo/bar'},
-            {},
+      const graphqlError = new GraphqlResponseError(
+        {method: 'GET', url: '/foo/bar'},
+        {},
+        {
+          data: {},
+          errors: [
             {
-              data: {},
-              errors: [
-                {
-                  type: 'UNPROCESSABLE',
-                  message:
-                    '["Pull request Protected branch rules not configured for this branch"]',
-                  path: ['foo'],
-                  extensions: {},
-                  locations: [{line: 123, column: 456}],
-                },
-              ],
-            }
-          )
-        );
+              type: 'UNPROCESSABLE',
+              message:
+                '["Pull request Protected branch rules not configured for this branch"]',
+              path: ['foo'],
+              extensions: {},
+              locations: [{line: 123, column: 456}],
+            },
+          ],
+        }
+      );
+      const mutatePullRequestEnableAutoMergeStub = vi
+        .spyOn(github, <any>'mutatePullRequestEnableAutoMerge') // eslint-disable-line @typescript-eslint/no-explicit-any
+        .mockImplementation(() => {
+          throw graphqlError;
+        });
 
       req
         .post('/graphql', body => {
-          snapshot(body);
+          expect(body).toMatchSnapshot();
           expect(body.query).to.contain('query pullRequestId');
           expect(body.variables).to.eql({
             owner: 'fake',
@@ -1589,7 +1581,7 @@ describe('GitHub', () => {
 
       const result = await github.enablePullRequestAutoMerge(123, 'rebase');
       expect(result).to.equal('direct-merged');
-      sinon.assert.calledOnce(mutatePullRequestEnableAutoMergeStub);
+      expect(mutatePullRequestEnableAutoMergeStub).to.have.been.calledOnce;
       req.done();
     });
   });

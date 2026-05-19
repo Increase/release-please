@@ -11,25 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {Helm} from '../../src/strategies/helm';
 import {
   buildMockConventionalCommit,
   buildGitHubFileContent,
   assertHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {Changelog} from '../../src/updaters/changelog';
 import {ChartYaml} from '../../src/updaters/helm/chart-yaml';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/helm';
 
 describe('Helm', () => {
@@ -46,10 +43,7 @@ describe('Helm', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Helm({
@@ -95,13 +89,13 @@ describe('Helm', () => {
         sha: 'abc123',
         notes: 'some notes',
       };
-      const getFileContentsStub = sandbox.stub(
+      const getFileContentsStub = vi.spyOn(
         github,
         'getFileContentsOnBranch'
       );
       getFileContentsStub
         .withArgs('Chart.yaml', 'main')
-        .resolves(buildGitHubFileContent(fixturesPath, 'Chart.yaml'));
+        .mockResolvedValue(buildGitHubFileContent(fixturesPath, 'Chart.yaml'));
       const pullRequest = await strategy.buildReleasePullRequest({
         commits,
         latestRelease,
@@ -123,7 +117,7 @@ describe('Helm', () => {
         latestRelease,
       });
       const updates = release!.updates;
-      expect(updates).lengthOf(2);
+      expect(updates).lengthOf(2).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
       assertHasUpdate(updates, 'Chart.yaml', ChartYaml);
     });

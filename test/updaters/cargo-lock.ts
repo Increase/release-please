@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {CargoLock} from '../../src/updaters/rust/cargo-lock';
 import {parseCargoLockfile} from '../../src/updaters/rust/common';
 
@@ -46,7 +44,7 @@ describe('CargoLock', () => {
         name: 'delf',
         version: '0.2.0',
       });
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('silently ignores invalid [[package]] entries', async () => {
@@ -63,7 +61,7 @@ describe('CargoLock', () => {
         name: 'delf',
         version: '0.2.0',
       });
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

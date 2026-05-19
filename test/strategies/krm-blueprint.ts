@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
 import {KRMBlueprint} from '../../src/strategies/krm-blueprint';
 import {
   buildMockConventionalCommit,
@@ -20,17 +20,14 @@ import {
   assertHasUpdate,
   assertNoHasUpdate,
 } from '../helpers';
-import nock = require('nock');
-import * as sinon from 'sinon';
+import nock from '../http-mock';
 import {GitHub} from '../../src/github';
 import {Version} from '../../src/version';
 import {TagName} from '../../src/util/tag-name';
-import {expect} from 'chai';
 import {KRMBlueprintVersion} from '../../src/updaters/krm/krm-blueprint-version';
 import {Changelog} from '../../src/updaters/changelog';
 
 nock.disableNetConnect();
-const sandbox = sinon.createSandbox();
 const fixturesPath = './test/fixtures/strategies/krm-blueprint';
 
 describe('KRMBlueprint', () => {
@@ -47,10 +44,7 @@ describe('KRMBlueprint', () => {
       defaultBranch: 'main',
     });
   });
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new KRMBlueprint({
@@ -58,7 +52,7 @@ describe('KRMBlueprint', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
@@ -73,7 +67,7 @@ describe('KRMBlueprint', () => {
         github,
         component: 'some-krm-blueprint-package',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = {
         tag: new TagName(
           Version.parse('0.123.4'),
@@ -96,7 +90,7 @@ describe('KRMBlueprint', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox.stub(github, 'findFilesByExtensionAndRef').resolves([]);
+      vi.spyOn(github, 'findFilesByExtensionAndRef').mockResolvedValue([]);
       const latestRelease = undefined;
       const release = await strategy.buildReleasePullRequest({
         commits,
@@ -112,14 +106,12 @@ describe('KRMBlueprint', () => {
         github,
         component: 'google-cloud-automl',
       });
-      sandbox
-        .stub(github, 'findFilesByExtensionAndRef')
+      vi
+        .spyOn(github, 'findFilesByExtensionAndRef')
         .withArgs('yaml', 'main', '.')
-        .resolves(['project.yaml', 'no-attrib-bucket.yaml']);
+        .mockResolvedValue(['project.yaml', 'no-attrib-bucket.yaml']);
       stubFilesFromFixtures({
-        github,
-        sandbox,
-        fixturePath: `${fixturesPath}/nested-pkg`,
+        github,fixturePath: `${fixturesPath}/nested-pkg`,
         files: ['project.yaml', 'no-attrib-bucket.yaml'],
         targetBranch: 'main',
       });

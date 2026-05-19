@@ -11,12 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
-import {describe, it, afterEach, beforeEach} from 'mocha';
-import {expect} from 'chai';
 import {GitHub} from '../../src/github';
 import {Ruby} from '../../src/strategies/ruby';
-import * as sinon from 'sinon';
 import {assertHasUpdate, buildGitHubFileRaw} from '../helpers';
 import {buildMockConventionalCommit} from '../helpers';
 import {TagName} from '../../src/util/tag-name';
@@ -33,8 +31,6 @@ Gem::Specification.new do |gem|
   gem.name = "${GEM_NAME}"
 end
 `;
-
-const sandbox = sinon.createSandbox();
 
 const COMMITS = [
   ...buildMockConventionalCommit(
@@ -55,21 +51,18 @@ describe('Ruby', () => {
       defaultBranch: 'main',
     });
 
-    const fileFilesStub = sandbox.stub(github, 'findFilesByGlobAndRef');
+    const fileFilesStub = vi.spyOn(github, 'findFilesByGlobAndRef');
     fileFilesStub
       .withArgs('*.gemspec', 'main')
-      .resolves(['google-cloud-automl.gemspec']);
+      .mockResolvedValue(['google-cloud-automl.gemspec']);
 
-    const getFileContentsStub = sandbox.stub(github, 'getFileContentsOnBranch');
+    const getFileContentsStub = vi.spyOn(github, 'getFileContentsOnBranch');
     getFileContentsStub
       .withArgs('google-cloud-automl.gemspec', 'main')
-      .resolves(buildGitHubFileRaw(GEMFILE_CONTENTS));
+      .mockResolvedValue(buildGitHubFileRaw(GEMFILE_CONTENTS));
   });
 
-  afterEach(() => {
-    sandbox.restore();
-  });
-  describe('buildReleasePullRequest', () => {
+    describe('buildReleasePullRequest', () => {
     it('returns release PR changes with defaultInitialVersion', async () => {
       const expectedVersion = '0.0.1';
       const strategy = new Ruby({
@@ -120,7 +113,7 @@ describe('Ruby', () => {
         latestRelease,
       });
       const updates = release!.updates;
-      expect(updates).lengthOf(5);
+      expect(updates).lengthOf(5).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
       assertHasUpdate(updates, 'lib/google/cloud/automl/version.rb', VersionRB);
       assertHasUpdate(
@@ -161,7 +154,7 @@ describe('Ruby', () => {
         latestRelease,
       });
       const updates = release!.updates;
-      expect(updates).lengthOf(5);
+      expect(updates).lengthOf(5).toMatchSnapshot();
       assertHasUpdate(updates, 'CHANGELOG.md', Changelog);
       assertHasUpdate(updates, 'lib/foo/version.rb', VersionRB);
       assertHasUpdate(updates, 'sig/lib/foo/version.rbs', VersionRB);

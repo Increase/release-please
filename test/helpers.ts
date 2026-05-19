@@ -11,12 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {expect, vi, type MockInstance} from 'vitest';
 
 import {readFileSync, readdirSync, statSync} from 'fs';
 import {resolve, posix} from 'path';
 import * as crypto from 'crypto';
-import * as sinon from 'sinon';
-import snapshot = require('snap-shot-it');
 import {
   Commit,
   ConventionalCommit,
@@ -24,8 +23,7 @@ import {
 } from '../src/commit';
 import {GitHub, GitHubTag, GitHubRelease} from '../src/github';
 import {Update} from '../src/update';
-import {expect} from 'chai';
-import {CandidateReleasePullRequest} from '../src/manifest';
+import type {CandidateReleasePullRequest} from '../src/manifest';
 import {Version} from '../src/version';
 import {PullRequestTitle} from '../src/util/pull-request-title';
 import {PullRequestBody, ReleaseData} from '../src/util/pull-request-body';
@@ -41,7 +39,7 @@ import {ReleasePullRequest} from '../src/release-pull-request';
 import {PullRequest} from '../src/pull-request';
 
 export function safeSnapshot(content: string) {
-  snapshot(dateSafe(newLine(content)));
+  expect(dateSafe(newLine(content))).toMatchSnapshot();
 }
 
 export function dateSafe(content: string): string {
@@ -130,8 +128,7 @@ export function buildGitHubFileRaw(content: string): GitHubFileContents {
 }
 
 export interface StubFiles {
-  sandbox: sinon.SinonSandbox;
-  github: GitHub;
+    github: GitHub;
 
   // "main"
   targetBranch?: string;
@@ -167,7 +164,7 @@ export interface StubFiles {
 }
 
 export function stubFilesFromFixtures(options: StubFiles) {
-  const {fixturePath, sandbox, github, files} = options;
+  const {fixturePath,github, files} = options;
   const inlineFiles = options.inlineFiles ?? [];
   const overlap = inlineFiles.filter(f => files.includes(f[0]));
   if (overlap.length > 0) {
@@ -177,7 +174,7 @@ export function stubFilesFromFixtures(options: StubFiles) {
   }
   const targetBranch = options.targetBranch ?? 'main';
   const flatten = options.flatten ?? true;
-  const stub = sandbox.stub(github, 'getFileContentsOnBranch');
+  const stub = vi.spyOn(github, 'getFileContentsOnBranch');
   for (const file of files) {
     let fixtureFile = file;
     if (flatten) {
@@ -186,12 +183,12 @@ export function stubFilesFromFixtures(options: StubFiles) {
     }
     stub
       .withArgs(file, targetBranch)
-      .resolves(buildGitHubFileContent(fixturePath, fixtureFile));
+      .mockResolvedValue(buildGitHubFileContent(fixturePath, fixtureFile));
   }
   for (const [file, content] of inlineFiles) {
-    stub.withArgs(file, targetBranch).resolves(buildGitHubFileRaw(content));
+    stub.withArgs(file, targetBranch).mockResolvedValue(buildGitHubFileRaw(content));
   }
-  stub.rejects(Object.assign(Error('not found'), {status: 404}));
+  stub.rejects(Object.assign(new Error('not found'), {status: 404}));
 }
 
 // get list of files in a directory
@@ -328,55 +325,51 @@ export function buildMockCandidatePullRequest(
 }
 
 export function mockCommits(
-  sandbox: sinon.SinonSandbox,
   github: GitHub,
   commits: Commit[]
-): sinon.SinonStub {
+): MockInstance {
   async function* fakeGenerator() {
     for (const commit of commits) {
       yield commit;
     }
   }
-  return sandbox.stub(github, 'mergeCommitIterator').returns(fakeGenerator());
+  return vi.spyOn(github, 'mergeCommitIterator').mockReturnValue(fakeGenerator());
 }
 
 export function mockReleases(
-  sandbox: sinon.SinonSandbox,
   github: GitHub,
   releases: GitHubRelease[]
-): sinon.SinonStub {
+): MockInstance {
   async function* fakeGenerator() {
     for (const release of releases) {
       yield release;
     }
   }
-  return sandbox.stub(github, 'releaseIterator').returns(fakeGenerator());
+  return vi.spyOn(github, 'releaseIterator').mockReturnValue(fakeGenerator());
 }
 
 export function mockTags(
-  sandbox: sinon.SinonSandbox,
   github: GitHub,
   tags: GitHubTag[]
-): sinon.SinonStub {
+): MockInstance {
   async function* fakeGenerator() {
     for (const tag of tags) {
       yield tag;
     }
   }
-  return sandbox.stub(github, 'tagIterator').returns(fakeGenerator());
+  return vi.spyOn(github, 'tagIterator').mockReturnValue(fakeGenerator());
 }
 
 export function mockPullRequests(
-  sandbox: sinon.SinonSandbox,
   github: GitHub,
   pullRequests: PullRequest[]
-): sinon.SinonStub {
+): MockInstance {
   async function* fakeGenerator() {
     for (const pullRequest of pullRequests) {
       yield pullRequest;
     }
   }
-  return sandbox.stub(github, 'pullRequestIterator').returns(fakeGenerator());
+  return vi.spyOn(github, 'pullRequestIterator').mockReturnValue(fakeGenerator());
 }
 
 export function mockReleaseData(count: number): ReleaseData[] {

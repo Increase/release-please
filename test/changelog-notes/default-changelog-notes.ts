@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {
   buildCommitFromFixture,
   buildMockCommit,
@@ -346,7 +345,7 @@ describe('DefaultChangelogNotes', () => {
         pullRequestBodyContent
       );
       expect(parsedPullRequestBody).to.not.be.undefined;
-      expect(parsedPullRequestBody!.releaseData).lengthOf(1);
+      expect(parsedPullRequestBody!.releaseData).lengthOf(1).toMatchSnapshot();
       expect(parsedPullRequestBody!.releaseData[0].version?.toString()).to.eql(
         '1.2.3'
       );

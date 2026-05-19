@@ -11,10 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {BranchName} from '../../src/util/branch-name';
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 
 describe('BranchName', () => {

@@ -1,0 +1,125 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OCaml > buildUpdates > builds common files 1`] = `
+[
+  {
+    "createIfMissing": true,
+    "path": "CHANGELOG.md",
+    "updater": Changelog {
+      "changelogEntry": "## 0.0.1 (2026-05-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/ocaml-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
+* **deps:** update dependency com.google.cloud:google-cloud-storage to v1.120.0 ([845db13](https://github.com/googleapis/ocaml-test-repo/commit/845db1381b3d5d20151cad2588f85feb))",
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+      "versionsMap": undefined,
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "dune-project",
+    "updater": DuneProject {
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionsMap": undefined,
+    },
+  },
+]
+`;
+
+exports[`OCaml > buildUpdates > finds and updates a project files 1`] = `
+[
+  {
+    "createIfMissing": true,
+    "path": "CHANGELOG.md",
+    "updater": Changelog {
+      "changelogEntry": "## 0.0.1 (2026-05-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/ocaml-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
+* **deps:** update dependency com.google.cloud:google-cloud-storage to v1.120.0 ([845db13](https://github.com/googleapis/ocaml-test-repo/commit/845db1381b3d5d20151cad2588f85feb))",
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+      "versionsMap": undefined,
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "esy.json",
+    "updater": EsyJson {
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionsMap": undefined,
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "sample.opam",
+    "updater": Opam {
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionsMap": undefined,
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "sample.opam.locked",
+    "updater": Opam {
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionsMap": undefined,
+    },
+  },
+  {
+    "createIfMissing": false,
+    "path": "dune-project",
+    "updater": DuneProject {
+      "version": Version {
+        "build": undefined,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "preRelease": undefined,
+      },
+      "versionsMap": undefined,
+    },
+  },
+]
+`;

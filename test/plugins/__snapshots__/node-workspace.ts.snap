@@ -1,0 +1,1279 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgB",
+            "notes": "### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgE",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 1,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node1/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "other notes",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node2/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgB",
+  "version": "2.2.3",
+  "dependencies": {
+    "@here/pkgA": "3.3.4",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node2/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node3/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgC",
+  "version": "1.1.2",
+  "dependencies": {
+    "@here/pkgB": "2.2.3",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node3/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node5/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgE",
+  "version": "1.0.1",
+  "dependencies": {
+    "@here/pkgA": "workspace:^",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node5/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 1,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "node3" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "node5" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 0,
+                "patch": 1,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 2`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 3`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgB",
+  "version": "2.2.3",
+  "dependencies": {
+    "@here/pkgA": "3.3.4",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 4`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgC",
+  "version": "1.1.2",
+  "dependencies": {
+    "@here/pkgB": "2.2.3",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 5`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node1, releaseType: node
+</details>
+
+<details><summary>@here/pkgB: 2.2.3</summary>
+
+### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4
+</details>
+
+<details><summary>@here/pkgC: 1.1.2</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3
+</details>
+
+<details><summary>@here/pkgE: 1.0.1</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 6`] = `"other notes"`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 7`] = `
+"### Dependencies
+
+* update dependency foo/bar to 1.2.3
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4"
+`;
+
+exports[`NodeWorkspace plugin > run > appends dependency notes to an updated module 8`] = `
+"### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3"
+`;
+
+exports[`NodeWorkspace plugin > run > combines node packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: node4, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/root",
+            "notes": "Release notes for path: ., releaseType: node
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from ^3.3.3 to ^3.3.4
+    * @here/pkgD bumped from ^4.4.4 to ^4.4.5",
+            "version": Version {
+              "build": undefined,
+              "major": 5,
+              "minor": 5,
+              "patch": 6,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node4/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgD",
+  "version": "4.4.5",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/root",
+  "version": "5.5.6",
+  "dependencies": {
+    "@here/pkgA": "^3.3.4",
+    "@here/pkgD": "^4.4.5"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > combines node packages 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node1, releaseType: node
+</details>
+
+<details><summary>@here/pkgD: 4.4.5</summary>
+
+Release notes for path: node4, releaseType: node
+</details>
+
+<details><summary>@here/root: 5.5.6</summary>
+
+Release notes for path: ., releaseType: node
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from ^3.3.3 to ^3.3.4
+    * @here/pkgD bumped from ^4.4.4 to ^4.4.5
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`NodeWorkspace plugin > run > handles a single node package 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "python",
+    },
+    "path": "python",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": undefined,
+            "notes": "Release notes for path: python, releaseType: python",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 0,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": false,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "group": undefined,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore\\(\\\\\\(\\(\\?<changesBranch>\\[\\\\w-\\./\\]\\+ => \\)\\?\\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\\\\\)\\)\\?: release \\?\\(\\?<component>@\\?\\[\\\\w-\\./\\]\\*\\)\\? v\\?\\(\\?<version>\\[0-9\\]\\.\\*\\)\\$/,
+        "pullRequestTitlePattern": "chore\${scope}: release\${component} \${version}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [],
+      "version": Version {
+        "build": undefined,
+        "major": 1,
+        "minor": 0,
+        "patch": 0,
+        "preRelease": undefined,
+      },
+    },
+  },
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > handles a single node package 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node1, releaseType: node
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`NodeWorkspace plugin > run > respects version prefix 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/plugin1",
+            "notes": "Release notes for path: plugin1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "2.2.2",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "plugin1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/plugin1",
+  "version": "4.4.4",
+  "peerDependencies": {
+    "@here/pkgA": "^3.3.3"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > respects version prefix 2`] = `
+"{
+  "name": "@here/plugin1",
+  "version": "4.4.4",
+  "peerDependencies": {
+    "@here/pkgA": "^3.3.3"
+  }
+}"
+`;
+
+exports[`NodeWorkspace plugin > run > should ignore peer dependencies 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {},
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > should ignore peer dependencies 2`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node1, releaseType: node
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 1`] = `
+[
+  {
+    "config": {
+      "releaseType": "node",
+    },
+    "path": ".",
+    "pullRequest": {
+      "body": PullRequestBody {
+        "extra": undefined,
+        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
+        "header": ":sparkles: Stainless prepared a new release",
+        "releaseData": [
+          {
+            "component": "@here/pkgA",
+            "notes": "Release notes for path: node1, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 3,
+              "minor": 3,
+              "patch": 4,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgB",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgC",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgD",
+            "notes": "Release notes for path: node4, releaseType: node",
+            "version": Version {
+              "build": undefined,
+              "major": 4,
+              "minor": 4,
+              "patch": 5,
+              "preRelease": undefined,
+            },
+          },
+          {
+            "component": "@here/pkgE",
+            "notes": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 1,
+              "preRelease": undefined,
+            },
+          },
+        ],
+        "useComponents": true,
+      },
+      "conventionalCommits": [],
+      "draft": false,
+      "headRefName": "release-please--branches--main",
+      "labels": [],
+      "title": PullRequestTitle {
+        "changesBranch": "main",
+        "component": undefined,
+        "matchPattern": /\\^chore: release \\(\\?<branch>\\[\\\\w-\\./\\]\\+\\)\\?\\$/,
+        "pullRequestTitlePattern": "chore: release \${branch}",
+        "targetBranch": "main",
+        "version": undefined,
+      },
+      "updates": [
+        {
+          "createIfMissing": false,
+          "path": "node1/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node2/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgB",
+  "version": "2.2.3",
+  "dependencies": {
+    "@here/pkgA": "3.3.4",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node2/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 2,
+              "minor": 2,
+              "patch": 3,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node3/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgC",
+  "version": "1.1.2",
+  "dependencies": {
+    "@here/pkgB": "2.2.3",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node3/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 1,
+              "patch": 2,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node4/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgD",
+  "version": "4.4.5",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node5/package.json",
+          "updater": RawContent {
+            "rawContent": "{
+  "name": "@here/pkgE",
+  "version": "1.0.1",
+  "dependencies": {
+    "@here/pkgA": "workspace:^",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": "node5/CHANGELOG.md",
+          "updater": Changelog {
+            "changelogEntry": "### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4",
+            "version": Version {
+              "build": undefined,
+              "major": 1,
+              "minor": 0,
+              "patch": 1,
+              "preRelease": undefined,
+            },
+            "versionHeaderRegex": /\\\\n###\\? v\\?\\[0-9\\[\\]/s,
+            "versionsMap": undefined,
+          },
+        },
+        {
+          "createIfMissing": false,
+          "path": ".release-please-manifest.json",
+          "updater": ReleasePleaseManifest {
+            "version": undefined,
+            "versionsMap": Map {
+              "node2" => Version {
+                "build": undefined,
+                "major": 2,
+                "minor": 2,
+                "patch": 3,
+                "preRelease": undefined,
+              },
+              "node3" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 1,
+                "patch": 2,
+                "preRelease": undefined,
+              },
+              "node5" => Version {
+                "build": undefined,
+                "major": 1,
+                "minor": 0,
+                "patch": 1,
+                "preRelease": undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 2`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgA",
+  "version": "3.3.4",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 3`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgB",
+  "version": "2.2.3",
+  "dependencies": {
+    "@here/pkgA": "3.3.4",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 4`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgC",
+  "version": "1.1.2",
+  "dependencies": {
+    "@here/pkgB": "2.2.3",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 5`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgD",
+  "version": "4.4.5",
+  "dependencies": {
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 6`] = `
+RawContent {
+  "rawContent": "{
+  "name": "@here/pkgE",
+  "version": "1.0.1",
+  "dependencies": {
+    "@here/pkgA": "workspace:^",
+    "anotherExternal": "^4.3.1"
+  }
+}",
+}
+`;
+
+exports[`NodeWorkspace plugin > run > walks dependency tree and updates previously untouched packages 7`] = `
+":sparkles: Stainless prepared a new release
+---
+
+
+<details><summary>@here/pkgA: 3.3.4</summary>
+
+Release notes for path: node1, releaseType: node
+</details>
+
+<details><summary>@here/pkgB: 2.2.3</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped from 3.3.3 to 3.3.4
+</details>
+
+<details><summary>@here/pkgC: 1.1.2</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgB bumped from 2.2.2 to 2.2.3
+</details>
+
+<details><summary>@here/pkgD: 4.4.5</summary>
+
+Release notes for path: node4, releaseType: node
+</details>
+
+<details><summary>@here/pkgE: 1.0.1</summary>
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @here/pkgA bumped to 3.3.4
+</details>
+
+---
+This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+
+The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
+
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
+
+🔗 Stainless [website](https://www.stainlessapi.com)
+📚 Read the [docs](https://app.stainlessapi.com/docs)
+🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+`;

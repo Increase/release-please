@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
-import {describe, it} from 'mocha';
-import {expect} from 'chai';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import {readdirSync} from 'fs';
@@ -26,6 +25,11 @@ addFormats(ajv);
 
 describe('schemas', () => {
   describe('manifest file', () => {
+    it('is a valid JSON Schema', () => {
+      expect(ajv.validateSchema(manifestSchema)).to.be.true;
+      expect(ajv.errors).to.be.null;
+    });
+
     const manifestValidator = ajv.compile(manifestSchema);
     for (const manifestFile of readdirSync(resolve(fixturesPath, 'versions'))) {
       it(`validates ${manifestFile}`, () => {
@@ -42,6 +46,11 @@ describe('schemas', () => {
   });
 
   describe('config file', () => {
+    it('is a valid JSON Schema', () => {
+      expect(ajv.validateSchema(configSchema)).to.be.true;
+      expect(ajv.errors).to.be.null;
+    });
+
     const configValidator = ajv.compile(configSchema);
     for (const manifestFile of readdirSync(resolve(fixturesPath, 'config'))) {
       it(`validates ${manifestFile}`, () => {
@@ -61,7 +70,7 @@ describe('schemas', () => {
       };
       const result = configValidator(config);
       expect(result).to.be.false;
-      expect(configValidator.errors).lengthOf(1);
+      expect(configValidator.errors).lengthOf(1).toMatchSnapshot();
       const error = configValidator.errors![0];
       expect(error.message).to.eql('must NOT have additional properties');
       expect(error.instancePath).to.eql('');

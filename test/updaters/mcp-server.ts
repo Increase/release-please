@@ -1,7 +1,6 @@
+import {describe, it, expect} from 'vitest';
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {Version} from '../../src/version';
 import {McpServer} from '../../src/updaters/node/mcp-server';
 
@@ -19,7 +18,7 @@ describe('McpServer', () => {
         version: Version.parse('2.36.1'),
       });
       const newContent = packageJson.updateContent(oldContent);
-      snapshot(newContent.replace(/\r\n/g, '\n'));
+      expect(newContent.replace(/\r\n/g, '\n')).toMatchSnapshot();
     });
   });
 });

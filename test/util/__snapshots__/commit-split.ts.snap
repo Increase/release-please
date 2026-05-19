@@ -1,0 +1,219 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CommitSplit > excluding empty commits > should separate commits 1`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+]
+`;
+
+exports[`CommitSplit > excluding empty commits > should separate commits 2`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+]
+`;
+
+exports[`CommitSplit > excluding empty commits > should separate commits 3`] = `
+[
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+]
+`;
+
+exports[`CommitSplit > excluding empty commits > should separate commits with limited list of paths 1`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+]
+`;
+
+exports[`CommitSplit > handles nested folders 1`] = `
+[
+  {
+    "files": [
+      "core/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+]
+`;
+
+exports[`CommitSplit > handles nested folders 2`] = `
+[
+  {
+    "files": [
+      "core/subpackage/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+]
+`;
+
+exports[`CommitSplit > including empty commits > should separate commits 1`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+  {
+    "files": [],
+    "message": "empty files",
+    "sha": "efg",
+  },
+]
+`;
+
+exports[`CommitSplit > including empty commits > should separate commits 2`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+  {
+    "files": [],
+    "message": "empty files",
+    "sha": "efg",
+  },
+]
+`;
+
+exports[`CommitSplit > including empty commits > should separate commits 3`] = `
+[
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+  {
+    "files": [],
+    "message": "empty files",
+    "sha": "efg",
+  },
+]
+`;
+
+exports[`CommitSplit > including empty commits > should separate commits with limited list of paths 1`] = `
+[
+  {
+    "files": [
+      "pkg1/foo.txt",
+      "pkg2/bar.txt",
+    ],
+    "message": "commit abc123",
+    "sha": "abc123",
+  },
+  {
+    "files": [
+      "pkg1/foo2.txt",
+      "pkg3/asdf.txt",
+    ],
+    "message": "commit def234",
+    "sha": "def234",
+  },
+  {
+    "files": [],
+    "message": "empty files",
+    "sha": "efg",
+  },
+]
+`;
+
+exports[`CommitSplit > including empty commits > should separate commits with limited list of paths 2`] = `
+[
+  {
+    "files": [],
+    "message": "empty files",
+    "sha": "efg",
+  },
+]
+`;
+
+exports[`CommitSplit > uses path prefixes 1`] = `
+[
+  {
+    "files": [
+      "pkg5/foo.txt",
+      "pkg6/pkg5/foo.txt",
+    ],
+    "message": "path prefixes",
+    "sha": "hij",
+  },
+]
+`;
+
+exports[`CommitSplit > uses path prefixes 2`] = `
+[
+  {
+    "files": [
+      "pkg5/foo.txt",
+      "pkg6/pkg5/foo.txt",
+    ],
+    "message": "path prefixes",
+    "sha": "hij",
+  },
+]
+`;

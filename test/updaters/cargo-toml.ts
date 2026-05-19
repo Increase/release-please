@@ -11,13 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import {describe, it, expect} from 'vitest';
 
 import {readFileSync} from 'fs';
 import {resolve} from 'path';
-import snapshot = require('snap-shot-it');
-import {describe, it} from 'mocha';
 import {CargoToml} from '../../src/updaters/rust/cargo-toml';
-import {expect} from 'chai';
 import {Version} from '../../src/version';
 
 const fixturesPath = './test/updaters/fixtures';
@@ -66,7 +64,7 @@ describe('CargoToml', () => {
         versionsMap: versions,
       });
       const newContent = cargoToml.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
 
     it('updates (only) path dependencies', async () => {
@@ -90,7 +88,7 @@ describe('CargoToml', () => {
         versionsMap: versions,
       });
       const newContent = cargoToml.updateContent(oldContent);
-      snapshot(newContent);
+      expect(newContent).toMatchSnapshot();
     });
   });
 });

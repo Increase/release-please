@@ -50,50 +50,33 @@ import {
 import {signoffCommitMessage} from './util/signoff-commit-message';
 import {CommitExclude} from './util/commit-exclude';
 import {setupLogger} from 'code-suggester/build/src/logger';
+import {
+  type ExtraFile,
+  DEFAULT_RELEASE_PLEASE_CONFIG,
+  DEFAULT_RELEASE_PLEASE_MANIFEST,
+  ROOT_PROJECT_PATH,
+  DEFAULT_COMPONENT_NAME,
+  DEFAULT_LABELS,
+  DEFAULT_RELEASE_LABELS,
+  DEFAULT_SNAPSHOT_LABELS,
+  SNOOZE_LABEL,
+  DEFAULT_PRERELEASE_LABELS,
+} from './manifest-constants';
 
-type ExtraJsonFile = {
-  type: 'json';
-  path: string;
-  jsonpath: string;
-  glob?: boolean;
-};
-type ExtraYamlFile = {
-  type: 'yaml';
-  path: string;
-  jsonpath: string;
-  glob?: boolean;
-};
-type ExtraXmlFile = {
-  type: 'xml';
-  path: string;
-  xpath: string;
-  glob?: boolean;
-};
-type ExtraPomFile = {
-  type: 'pom';
-  path: string;
-  glob?: boolean;
-};
-type ExtraTomlFile = {
-  type: 'toml';
-  path: string;
-  jsonpath: string;
-  glob?: boolean;
-};
-type ExtraRubyReadMeFile = {
-  type: 'ruby-readme';
-  path: string;
-  jsonpath: string;
-  glob?: boolean;
-};
-export type ExtraFile =
-  | string
-  | ExtraJsonFile
-  | ExtraYamlFile
-  | ExtraXmlFile
-  | ExtraPomFile
-  | ExtraTomlFile
-  | ExtraRubyReadMeFile;
+export type {ExtraFile} from './manifest-constants';
+export {
+  DEFAULT_RELEASE_PLEASE_CONFIG,
+  DEFAULT_RELEASE_PLEASE_MANIFEST,
+  ROOT_PROJECT_PATH,
+  DEFAULT_COMPONENT_NAME,
+  DEFAULT_LABELS,
+  DEFAULT_RELEASE_LABELS,
+  DEFAULT_SNAPSHOT_LABELS,
+  SNOOZE_LABEL,
+  DEFAULT_PRERELEASE_LABELS,
+  DEFAULT_CUSTOM_VERSION_LABEL,
+  MANIFEST_PULL_REQUEST_TITLE_PATTERN,
+} from './manifest-constants';
 /**
  * These are configurations provided to each strategy per-path.
  */
@@ -270,21 +253,8 @@ export type ReleasedVersions = Record<string, Version>;
 // path => config
 export type RepositoryConfig = Record<string, ReleaserConfig>;
 
-export const DEFAULT_RELEASE_PLEASE_CONFIG = 'release-please-config.json';
-export const DEFAULT_RELEASE_PLEASE_MANIFEST = '.release-please-manifest.json';
-export const ROOT_PROJECT_PATH = '.';
-export const DEFAULT_COMPONENT_NAME = '';
-export const DEFAULT_LABELS = ['autorelease: pending'];
-export const DEFAULT_RELEASE_LABELS = ['autorelease: tagged'];
-export const DEFAULT_SNAPSHOT_LABELS = ['autorelease: snapshot'];
-export const SNOOZE_LABEL = 'autorelease: snooze';
-export const DEFAULT_PRERELEASE_LABELS = ['autorelease: pre-release'];
-export const DEFAULT_CUSTOM_VERSION_LABEL = 'autorelease: custom version';
-
 const DEFAULT_RELEASE_SEARCH_DEPTH = 10;
 const DEFAULT_COMMIT_SEARCH_DEPTH = 300;
-
-export const MANIFEST_PULL_REQUEST_TITLE_PATTERN = 'chore: release ${branch}';
 
 export interface CreatedRelease extends GitHubRelease {
   id: number;
