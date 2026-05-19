@@ -1,24 +1,26 @@
-name: release
-
-# Two-stage flow that keeps `main` source-only and ships built dist/ on a
-# long-lived `release` branch:
+# Two-stage flow that keeps `main` source-only
+# and ships built dist/ on a long-lived `release` branch:
 #
-#   1. `release-please` job: build the action in-tree (so `uses: ./` works
-#      without dist/ committed to main), run the action against this repo,
-#      which either opens/updates a release PR or — once a release PR is
-#      merged — cuts a GitHub Release and tags vX.Y.Z on main.
+#   1. `release-please` job:
+#      build the action in-tree (so `uses: ./` works without dist/ committed to main),
+#      run the action against this repo,
+#      which either opens/updates a release PR
+#      or — once a release PR is merged — cuts a GitHub Release and tags vX.Y.Z on main.
 #
-#   2. `publish-bundle` job (only when step 1 actually cut a release): sync
-#      `main` into the `release` branch, force-add the freshly built dist/,
-#      push, and re-point the new vX.Y.Z tag at the release-branch commit
-#      so `uses: Increase/release-please@vX.Y.Z` resolves to a ref that
-#      contains `dist/index.js`.
+#   2. `publish-bundle` job (only when step 1 actually cut a release):
+#      sync `main` into the `release` branch,
+#      force-add the freshly built dist/,
+#      push,
+#      and re-point the new vX.Y.Z tag at the release-branch commit
+#      so `uses: Increase/release-please@vX.Y.Z` resolves to a ref
+#      that contains `dist/index.js`.
 #
 # The `Increase Releases` GitHub App is the identity for every write here:
-# its installation token has the scopes release-please needs (contents,
-# pull-requests, issues: write) and — unlike GITHUB_TOKEN — events fired
-# from PRs/commits it opens do trigger downstream workflows.
-
+# its installation token has the scopes release-please needs
+# (contents, pull-requests, issues: write)
+# and — unlike GITHUB_TOKEN — events fired from PRs/commits it opens
+# do trigger downstream workflows.
+name: release
 on:
   push:
     branches: [main]
@@ -59,9 +61,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Build dist/ in this runner's checkout so `uses: ./` finds it. We
-      # never commit this build to main; the publish-bundle job below
-      # rebuilds on the release branch and commits there.
+      # Build dist/ in this runner's checkout so `uses: ./` finds it.
+      # We never commit this build to main;
+      # the publish-bundle job below rebuilds on the release branch and commits there.
       - name: Build action bundle
         run: pnpm build:action
 
