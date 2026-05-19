@@ -62,10 +62,62 @@ include `Release-As: x.y.z` in a commit body on the default branch.
 
 ## Using the action
 
-The fork exposes a JavaScript action at the repository root,
-so consumers reference it with `uses: increase/release-please@<sha>`.
+The fork exposes a JavaScript action at the repository root.
+Consumers pin to the floating major-version tag,
+which moves with each patch/minor release:
+
+```yaml
+# .github/workflows/release.yml
+name: Release
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: increase/release-please@v0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+`GITHUB_TOKEN` is sufficient for most repositories.
+Note that PRs opened by `GITHUB_TOKEN`
+do **not** trigger downstream workflows
+(this is a GitHub safety feature, not a bug),
+so if your release PR needs CI to run on it,
+authenticate with a GitHub App installation token instead.
 See [`.github/workflows/self-test.yml`](.github/workflows/self-test.yml)
-for an example invocation against this repository itself.
+for the App-token pattern used by this repository.
+
+The complete list of action inputs and outputs
+is in [`action.yml`](action.yml).
+
+## Configuration
+
+Each consuming repository keeps two files at the root:
+
+- `release-please-config.json` — release configuration
+  (release type, changelog sections, PR header, etc.).
+  See this repo's [`release-please-config.json`](release-please-config.json) for an example.
+- `.release-please-manifest.json` — last-released version per package,
+  maintained automatically by release-please.
+  Seed it with the current version (e.g. `{".": "0.1.0"}`)
+  before the first run.
+
+The complete set of supported options
+is documented in [`schemas/config.json`](schemas/config.json).
+
+## Local CLI
 
 The CLI is also available locally
 once you've compiled `src/` to `build/`:
@@ -77,19 +129,6 @@ pnpm start -- --help
 ```
 
 `pnpm test` and `pnpm lint` do not need the build step.
-
-## Configuration
-
-Each consuming repository keeps two files at the root:
-
-- `release-please-config.json` — release configuration
-  (release type, changelog sections, PR header, etc.).
-  See this repo's [`release-please-config.json`](release-please-config.json) for an example.
-- `.release-please-manifest.json` — last-released version per package,
-  maintained automatically by release-please.
-
-The complete set of supported options
-is documented in [`schemas/config.json`](schemas/config.json).
 
 ## Development
 
