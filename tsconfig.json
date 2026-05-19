@@ -27,12 +27,13 @@
     "outDir": "build",
     "typeRoots": ["./typings", "./node_modules/@types"]
   },
-  "exclude": ["__snapshots__"],
-  "include": [
-    "typings/**/*.d.ts",
-    "src/**/*.ts",
-    "test/vitest-env.d.ts",
-    "test/**/*.ts",
-    "system-test/*.ts"
+  "include": ["typings/iarna__toml.d.ts", "src/**/*.ts"],
+  "exclude": [
+    "__snapshots__",
+    "test",
+    "system-test",
+    "node_modules",
+    "build",
+    "dist"
   ]
 }
