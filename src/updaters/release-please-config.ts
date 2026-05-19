@@ -21,7 +21,7 @@ import {
 } from '../manifest';
 
 const SCHEMA_URL =
-  'https://raw.githubusercontent.com/stainless-api/release-please/main/schemas/config.json';
+  'https://raw.githubusercontent.com/Increase/release-please/main/schemas/config.json';
 
 interface ManifestConfigFile extends ManifestConfig {
   $schema?: string;

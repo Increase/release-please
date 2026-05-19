@@ -10,16 +10,12 @@ exports[`MavenWorkspace plugin > run > appends to existing candidate 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven3",
@@ -179,7 +175,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`MavenWorkspace plugin > run > appends to existing candidate 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -198,15 +194,11 @@ Release notes for path: maven3, releaseType: maven
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > appends to existing candidate 3`] = `
@@ -250,16 +242,12 @@ exports[`MavenWorkspace plugin > run > appends to existing candidate with specia
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven3",
@@ -412,7 +400,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`MavenWorkspace plugin > run > appends to existing candidate with special updater 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -431,15 +419,11 @@ Release notes for path: maven3, releaseType: maven
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > appends to existing candidate with special updater 3`] = `
@@ -483,16 +467,12 @@ exports[`MavenWorkspace plugin > run > can consider all artifacts 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "multi1",
@@ -802,7 +782,7 @@ exports[`MavenWorkspace plugin > run > can consider all artifacts 2`] = `
 `;
 
 exports[`MavenWorkspace plugin > run > can consider all artifacts 3`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -822,15 +802,11 @@ Release notes for path: multi1, releaseType: java-yoshi
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > can consider all artifacts 4`] = `
@@ -883,16 +859,12 @@ exports[`MavenWorkspace plugin > run > handles a single maven package 1`] = `
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven4",
@@ -980,7 +952,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`MavenWorkspace plugin > run > handles a single maven package 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -990,15 +962,11 @@ Release notes for path: maven4, releaseType: maven
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > handles a single maven package 3`] = `
@@ -1027,16 +995,12 @@ exports[`MavenWorkspace plugin > run > skips pom files not configured for releas
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven1",
@@ -1388,7 +1352,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`MavenWorkspace plugin > run > skips pom files not configured for release 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -1422,15 +1386,11 @@ Release notes for path: maven1, releaseType: maven
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > skips pom files not configured for release 3`] = `
@@ -1501,16 +1461,12 @@ exports[`MavenWorkspace plugin > run > skips updating manifest with snapshot ver
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven1",
@@ -1842,16 +1798,12 @@ exports[`MavenWorkspace plugin > run > walks dependency tree and updates previou
     "pullRequest": {
       "body": PullRequestBody {
         "extra": undefined,
-        "footer": "This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+        "footer": "This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions",
-        "header": ":sparkles: Stainless prepared a new release",
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.",
+        "header": ":sparkles: Increase prepared a new release",
         "releaseData": [
           {
             "component": "maven1",
@@ -2203,7 +2155,7 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 `;
 
 exports[`MavenWorkspace plugin > run > walks dependency tree and updates previously untouched packages 2`] = `
-":sparkles: Stainless prepared a new release
+":sparkles: Increase prepared a new release
 ---
 
 
@@ -2237,15 +2189,11 @@ Release notes for path: maven1, releaseType: maven
 </details>
 
 ---
-This pull request is managed by Stainless's [GitHub App](https://github.com/apps/stainless-app).
+This pull request is managed by Increase's [release-please](https://github.com/Increase/release-please) fork.
 
 The [semver version number](https://semver.org/#semantic-versioning-specification-semver) is based on included [commit messages](https://www.conventionalcommits.org/en/v1.0.0/). Alternatively, you can manually set the version number in the title of this pull request.
 
-For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request.
-
-🔗 Stainless [website](https://www.stainlessapi.com)
-📚 Read the [docs](https://app.stainlessapi.com/docs)
-🙋 [Reach out](mailto:support@stainlessapi.com) for help or questions"
+For a better experience, it is recommended to use either rebase-merge or squash-merge when merging this pull request."
 `;
 
 exports[`MavenWorkspace plugin > run > walks dependency tree and updates previously untouched packages 3`] = `
