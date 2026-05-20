@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.2.7](https://github.com/Increase/release-please/compare/v0.2.6...v0.2.7) (2026-05-20)
+
+
+### Chores
+
+* **deps:** bump minimatch from 3.1.2 to 9.0.9 ([#31](https://github.com/Increase/release-please/issues/31)) ([69db278](https://github.com/Increase/release-please/commit/69db278d28a72bcde9692980a18dcc0afd9d5568))
+* **deps:** bump minimatch from 3.1.2 to 9.0.9 ([#38](https://github.com/Increase/release-please/issues/38)) ([e9fdb10](https://github.com/Increase/release-please/commit/e9fdb10cfa42af0a96ed4bda51f51c90173df76c))
+* **deps:** bump octokit, http-proxy-agent, and xmldom to majors ([#36](https://github.com/Increase/release-please/issues/36)) ([7dd9eae](https://github.com/Increase/release-please/commit/7dd9eaec8f1a655493e1e0a7c9aeb05b0e75d760))
+* **deps:** rollup non-breaking Dependabot bumps ([#35](https://github.com/Increase/release-please/issues/35)) ([a6dfefd](https://github.com/Increase/release-please/commit/a6dfefd4423d7c238bf0474b1ff096d7c8533433))
+* slim deps and drop unused TS compiler flags ahead of v1 ([#49](https://github.com/Increase/release-please/issues/49)) ([77b6b4d](https://github.com/Increase/release-please/commit/77b6b4d9df4d6262da7f4ee6c4c4c9726f72f0a7))
+
+
+### Refactors
+
+* add explicit override keywords and enable noImplicitOverride ([#50](https://github.com/Increase/release-please/issues/50)) ([0174951](https://github.com/Increase/release-please/commit/01749519cacf0c6fe5c05aa65363c3fa135b1484))
+
+
+### Tests
+
+* freeze system clock so date-sensitive snapshots are deterministic ([#48](https://github.com/Increase/release-please/issues/48)) ([39de137](https://github.com/Increase/release-please/commit/39de137553cf331ad895f70996dc04850a27d9bb))
+
 ## [0.2.6](https://github.com/Increase/release-please/compare/v0.2.5...v0.2.6) (2026-05-19)
 
 
