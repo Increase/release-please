@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/Increase/release-please/compare/v0.2.8...v1.0.0) (2026-05-20)
+
+
+### Chores
+
+* cut v1.0.0 ([#60](https://github.com/Increase/release-please/issues/60)) ([f72f150](https://github.com/Increase/release-please/commit/f72f15009b2cff653386add0aaff1b67da9dfb6e))
+
 ## [0.2.8](https://github.com/Increase/release-please/compare/v0.2.7...v0.2.8) (2026-05-20)
 
 
