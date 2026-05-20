@@ -68,7 +68,9 @@ export abstract class WorkspacePlugin<T> extends ManifestPlugin {
   ): Promise<CandidateReleasePullRequest[]> {
     this.logger.info('Running workspace plugin');
 
-    const [inScopeCandidates, outOfScopeCandidates] = candidates.reduce(
+    const [inScopeCandidates, outOfScopeCandidates] = candidates.reduce<
+      [CandidateReleasePullRequest[], CandidateReleasePullRequest[]]
+    >(
       (collection, candidate) => {
         if (!candidate.pullRequest.version) {
           this.logger.warn('pull request missing version', candidate);
@@ -81,7 +83,7 @@ export abstract class WorkspacePlugin<T> extends ManifestPlugin {
         }
         return collection;
       },
-      [[], []] as CandidateReleasePullRequest[][]
+      [[], []]
     );
 
     this.logger.info(`Found ${inScopeCandidates.length} in-scope releases`);
@@ -171,12 +173,12 @@ export abstract class WorkspacePlugin<T> extends ManifestPlugin {
       newCandidates = await mergePlugin.run(newCandidates);
     }
 
-    const newUpdates = newCandidates[0].pullRequest.updates;
+    const newUpdates = newCandidates[0]!.pullRequest.updates;
     newUpdates.push({
       path: this.manifestPath,
       createIfMissing: false,
       updater: new ReleasePleaseManifest({
-        version: newCandidates[0].pullRequest.version!,
+        version: newCandidates[0]!.pullRequest.version!,
         versionsMap: updatedPathVersions,
       }),
     });

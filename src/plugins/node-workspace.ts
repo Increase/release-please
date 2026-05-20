@@ -89,7 +89,7 @@ export class NodeWorkspace extends WorkspacePlugin<Package> {
 
     const packagesByPath = new Map<string, Package>();
     for (const path in this.repositoryConfig) {
-      const config = this.repositoryConfig[path];
+      const config = this.repositoryConfig[path]!;
       if (config.releaseType !== 'node') {
         continue;
       }
@@ -209,9 +209,9 @@ export class NodeWorkspace extends WorkspacePlugin<Package> {
     // append dependency notes
     if (dependencyNotes) {
       if (existingCandidate.pullRequest.body.releaseData.length > 0) {
-        existingCandidate.pullRequest.body.releaseData[0].notes =
+        existingCandidate.pullRequest.body.releaseData[0]!.notes =
           appendDependenciesSectionToChangelog(
-            existingCandidate.pullRequest.body.releaseData[0].notes,
+            existingCandidate.pullRequest.body.releaseData[0]!.notes,
             dependencyNotes,
             this.logger
           );

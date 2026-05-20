@@ -502,7 +502,7 @@ export class GitHub {
         if (results > maxResults) {
           break;
         }
-        yield response.data[i];
+        yield response.data[i]!;
       }
       if (!response.pageInfo.hasNextPage) {
         break;
@@ -668,7 +668,7 @@ export class GitHub {
           break;
         }
 
-        const commitData = response.data[i];
+        const commitData = response.data[i]!;
         yield await this.mergeCommitREST(
           {
             sha: commitData.sha,
@@ -856,7 +856,7 @@ export class GitHub {
         if (results > maxResults) {
           break;
         }
-        yield response.data[i];
+        yield response.data[i]!;
       }
       if (!response.pageInfo.hasNextPage) {
         break;
@@ -1039,7 +1039,7 @@ export class GitHub {
         if ((results += 1) > maxResults) {
           break;
         }
-        yield response.data[i];
+        yield response.data[i]!;
       }
       if (results > maxResults || !response.pageInfo.hasNextPage) {
         break;
@@ -1065,7 +1065,7 @@ export class GitHub {
           break;
         }
 
-        const release = response.data[i];
+        const release = response.data[i]!;
         const tag = await this.octokit.git.getRef({
           repo: this.repository.repo,
           owner: this.repository.owner,
@@ -2155,7 +2155,7 @@ export class GitHub {
     const latestPRCommit =
       lastPageOfPrCommits.data[lastPageOfPrCommits.data.length - 1];
 
-    return await this.isBranchASyncedWithB(branchName, latestPRCommit.sha);
+    return await this.isBranchASyncedWithB(branchName, latestPRCommit!.sha);
   }
 
   /**

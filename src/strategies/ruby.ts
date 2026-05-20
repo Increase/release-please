@@ -98,7 +98,7 @@ export class Ruby extends BaseStrategy {
     if (gemspec.length === 1) {
       const gemspecContent = (
         await this.github.getFileContentsOnBranch(
-          gemspec[0],
+          gemspec[0]!,
           this.changesBranch
         )
       ).parsedContent;

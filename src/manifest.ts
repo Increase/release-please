@@ -602,8 +602,8 @@ export class Manifest {
         strategiesByPath
       );
       for (const path in missingReleases) {
-        releaseShasByPath[path] = missingReleases[path].sha;
-        releasesByPath[path] = missingReleases[path];
+        releaseShasByPath[path] = missingReleases[path]!.sha;
+        releasesByPath[path] = missingReleases[path]!;
         releasesFound++;
       }
     }
@@ -619,7 +619,7 @@ export class Manifest {
       );
     }
     for (const path in releasesByPath) {
-      const release = releasesByPath[path];
+      const release = releasesByPath[path]!;
       this.logger.trace(
         `Release for path: ${path}, version: ${release.tag.version.toString()}, sha: ${
           release.sha
@@ -714,8 +714,8 @@ export class Manifest {
     let commitsPerPath: Record<string, Commit[]> = {};
     for (const path in this.repositoryConfig) {
       commitsPerPath[path] = commitsAfterSha(
-        path === ROOT_PROJECT_PATH ? commits : splitCommits[path],
-        releaseShasByPath[path]
+        path === ROOT_PROJECT_PATH ? commits : (splitCommits[path] ?? []),
+        releaseShasByPath[path] ?? ''
       );
     }
 
@@ -746,10 +746,10 @@ export class Manifest {
       if (
         !latestRelease &&
         this.releasedVersions[path] &&
-        this.releasedVersions[path].toString() !== '0.0.0'
+        this.releasedVersions[path]!.toString() !== '0.0.0'
       ) {
-        const version = this.releasedVersions[path];
-        const strategy = strategiesByPath[path];
+        const version = this.releasedVersions[path]!;
+        const strategy = strategiesByPath[path]!;
         const component = await strategy.getComponent();
         this.logger.info(
           `No latest release found for path: ${path}, component: ${component}, but a previous version (${version.toString()}) was specified in the manifest.`
@@ -773,7 +773,7 @@ export class Manifest {
 
     let newReleasePullRequests: CandidateReleasePullRequest[] = [];
     for (const path in this.repositoryConfig) {
-      const config = this.repositoryConfig[path];
+      const config = this.repositoryConfig[path]!;
       this.logger.info(
         `Building candidate release pull request for path: ${path}`
       );
@@ -781,7 +781,7 @@ export class Manifest {
       this.logger.debug(`targetBranch: ${this.targetBranch}`);
       this.logger.debug(`changesBranch: ${this.changesBranch}`);
       let pathCommits = parseConventionalCommits(
-        commitsPerPath[path],
+        commitsPerPath[path] ?? [],
         this.logger
       );
       // The processCommits hook can be implemented by plugins to
@@ -791,13 +791,15 @@ export class Manifest {
         pathCommits = plugin.processCommits(pathCommits);
       }
       this.logger.debug(`commits: ${pathCommits.length}`);
-      const latestReleasePullRequest =
-        releasePullRequestsBySha[releaseShasByPath[path]];
+      const sha = releaseShasByPath[path];
+      const latestReleasePullRequest = sha
+        ? releasePullRequestsBySha[sha]
+        : undefined;
       if (!latestReleasePullRequest) {
         this.logger.warn('No latest release pull request found.');
       }
 
-      const strategy = strategies[path];
+      const strategy = strategies[path]!;
       const latestRelease = releasesByPath[path];
 
       const branchName = (await strategy.getBranchName()).toString();
@@ -806,7 +808,7 @@ export class Manifest {
         snoozedPullRequests.find(pr => pr.headBranchName === branchName);
 
       const releasePullRequest = await strategy.buildReleasePullRequest({
-        commits: commitsPerPath[path],
+        commits: commitsPerPath[path] ?? [],
         latestRelease,
         draft: config.draftPullRequest ?? this.draftPullRequest,
         labels: this.labels,
@@ -881,12 +883,12 @@ export class Manifest {
         this.logger.warn(`No version for path ${path}`);
         continue;
       }
-      const component = await strategiesByPath[path].getComponent();
+      const component = await strategiesByPath[path]!.getComponent();
       const expectedTag = new TagName(
         expectedVersion,
         component,
-        this.repositoryConfig[path].tagSeparator,
-        this.repositoryConfig[path].includeVInTag
+        this.repositoryConfig[path]!.tagSeparator,
+        this.repositoryConfig[path]!.includeVInTag
       );
       this.logger.debug(`looking for tagName: ${expectedTag.toString()}`);
       const foundTag = allTags[expectedTag.toString()];
@@ -1260,11 +1262,11 @@ export class Manifest {
     const candidateReleases: CandidateRelease[] = [];
     for await (const pullRequest of generator) {
       for (const path in this.repositoryConfig) {
-        const config = this.repositoryConfig[path];
+        const config = this.repositoryConfig[path]!;
         this.logger.info(`Building release for path: ${path}`);
         this.logger.debug(`type: ${config.releaseType}`);
         this.logger.debug(`targetBranch: ${this.targetBranch}`);
-        const strategy = strategiesByPath[path];
+        const strategy = strategiesByPath[path]!;
         const releases = await strategy.buildReleases(pullRequest, {
           groupPullRequestTitlePattern: this.groupPullRequestTitlePattern,
         });
@@ -1308,7 +1310,7 @@ export class Manifest {
     for (const release of await this.buildReleases()) {
       pullRequestsByNumber[release.pullRequest.number] = release.pullRequest;
       if (releasesByPullRequest[release.pullRequest.number]) {
-        releasesByPullRequest[release.pullRequest.number].push(release);
+        releasesByPullRequest[release.pullRequest.number]!.push(release);
       } else {
         releasesByPullRequest[release.pullRequest.number] = [release];
       }
@@ -1319,8 +1321,8 @@ export class Manifest {
         const resultReleases: CreatedRelease[] = [];
         for (const pullNumber in releasesByPullRequest) {
           const releases = await this.createReleasesForPullRequest(
-            releasesByPullRequest[pullNumber],
-            pullRequestsByNumber[pullNumber]
+            releasesByPullRequest[pullNumber]!,
+            pullRequestsByNumber[pullNumber]!
           );
           resultReleases.push(...releases);
         }
@@ -1330,8 +1332,8 @@ export class Manifest {
         for (const pullNumber in releasesByPullRequest) {
           promises.push(
             this.createReleasesForPullRequest(
-              releasesByPullRequest[pullNumber],
-              pullRequestsByNumber[pullNumber]
+              releasesByPullRequest[pullNumber]!,
+              pullRequestsByNumber[pullNumber]!
             )
           );
         }
@@ -1430,7 +1432,7 @@ export class Manifest {
     const adjustPullRequestTags = async () => {
       // Note: if the pull request represents more than one release it becomes difficult to determine if it should be
       // labelled as pre-release.
-      const isPrerelease = releases.length === 1 && releases[0].prerelease;
+      const isPrerelease = releases.length === 1 && releases[0]!.prerelease;
       await Promise.all([
         this.github.removeIssueLabels(this.labels, pullRequest.number),
         this.github.addIssueLabels(
@@ -1491,7 +1493,7 @@ export class Manifest {
       this.logger.info('Building strategies by path');
       this._strategiesByPath = {};
       for (const path in this.repositoryConfig) {
-        const config = this.repositoryConfig[path];
+        const config = this.repositoryConfig[path]!;
         this.logger.debug(`${path}: ${config.releaseType}`);
         const strategy = await buildStrategy({
           ...config,
@@ -1511,7 +1513,7 @@ export class Manifest {
       this._pathsByComponent = {};
       const strategiesByPath = await this.getStrategiesByPath();
       for (const path in this.repositoryConfig) {
-        const strategy = strategiesByPath[path];
+        const strategy = strategiesByPath[path]!;
         const component = (await strategy.getComponent()) || '';
         if (this._pathsByComponent[component]) {
           this.logger.warn(
@@ -1686,10 +1688,10 @@ async function parseConfig(
     if (onlyPath && onlyPath !== path) continue;
     repositoryConfig[path] = mergeReleaserConfig(
       defaultConfig,
-      extractReleaserConfig(config.packages[path])
+      extractReleaserConfig(config.packages[path]!)
     );
     if (releaseAs) {
-      repositoryConfig[path].releaseAs = releaseAs;
+      repositoryConfig[path]!.releaseAs = releaseAs;
     }
   }
   const configLabel = config.label;
@@ -1769,7 +1771,7 @@ async function parseReleasedVersions(
   );
   const releasedVersions: ReleasedVersions = {};
   for (const path in manifestJson) {
-    releasedVersions[path] = Version.parse(manifestJson[path]);
+    releasedVersions[path] = Version.parse(manifestJson[path]!);
   }
   return releasedVersions;
 }

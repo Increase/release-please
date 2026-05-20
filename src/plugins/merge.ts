@@ -69,7 +69,7 @@ export class Merge extends ManifestPlugin {
     this.logger.info(`Merging ${candidates.length} pull requests`);
 
     const [inScopeCandidates, outOfScopeCandidates] = candidates.reduce<
-      Array<Array<CandidateReleasePullRequest>>
+      [CandidateReleasePullRequest[], CandidateReleasePullRequest[]]
     >(
       (collection, candidate) => {
         if (candidate.config.separatePullRequests && !this.forceMerge) {

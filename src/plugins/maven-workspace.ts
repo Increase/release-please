@@ -375,9 +375,9 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
     // append dependency notes
     if (dependencyNotes) {
       if (existingCandidate.pullRequest.body.releaseData.length > 0) {
-        existingCandidate.pullRequest.body.releaseData[0].notes =
+        existingCandidate.pullRequest.body.releaseData[0]!.notes =
           appendDependenciesSectionToChangelog(
-            existingCandidate.pullRequest.body.releaseData[0].notes,
+            existingCandidate.pullRequest.body.releaseData[0]!.notes,
             dependencyNotes,
             this.logger
           );
@@ -588,14 +588,14 @@ function parseMavenArtifact(
       version: parsedNode.version,
     });
   }
-  const groupId = groupNodes[0].firstChild!.textContent!;
-  const artifactId = artifactNodes[0].firstChild!.textContent!;
+  const groupId = groupNodes[0]!.firstChild!.textContent!;
+  const artifactId = artifactNodes[0]!.firstChild!.textContent!;
   return {
     path: dirname(path),
     groupId,
     artifactId,
     name: `${groupId}:${artifactId}`,
-    version: versionNodes[0].firstChild!.textContent!,
+    version: versionNodes[0]!.firstChild!.textContent!,
     dependencies,
     testDependencies,
     managedDependencies,

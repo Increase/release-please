@@ -213,9 +213,9 @@ export class CargoWorkspace extends WorkspacePlugin<CrateInfo> {
     // append dependency notes
     if (dependencyNotes) {
       if (existingCandidate.pullRequest.body.releaseData.length > 0) {
-        existingCandidate.pullRequest.body.releaseData[0].notes =
+        existingCandidate.pullRequest.body.releaseData[0]!.notes =
           appendDependenciesSectionToChangelog(
-            existingCandidate.pullRequest.body.releaseData[0].notes,
+            existingCandidate.pullRequest.body.releaseData[0]!.notes,
             dependencyNotes,
             this.logger
           );
@@ -343,7 +343,7 @@ export class CargoWorkspace extends WorkspacePlugin<CrateInfo> {
       const targets = crateInfo.manifest.target;
       if (targets) {
         for (const targetName in targets) {
-          const target = targets[targetName];
+          const target = targets[targetName]!;
 
           allDeps.push(
             ...Object.keys({
@@ -451,8 +451,8 @@ function getChangelogDepsNotes(
   if (updatedManifest.target && originalManifest.target) {
     for (const targetName in updatedManifest.target) {
       populateUpdates(
-        originalManifest.target[targetName],
-        updatedManifest.target[targetName],
+        originalManifest.target[targetName]!,
+        updatedManifest.target[targetName]!,
         updates
       );
     }

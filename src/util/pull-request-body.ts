@@ -129,14 +129,14 @@ function extractMultipleReleases(notes: string, logger: Logger): ReleaseData[] {
   const root = parse(notes);
   for (const detail of root.getElementsByTagName('details')) {
     const summaryNode = detail.getElementsByTagName('summary')[0];
-    const summary = summaryNode?.textContent;
+    const summary = summaryNode?.textContent ?? '';
     const match = summary.match(SUMMARY_PATTERN);
     if (match?.groups) {
-      detail.removeChild(summaryNode);
+      detail.removeChild(summaryNode!);
       const notes = detail.textContent.trim();
       data.push({
         component: match.groups.component,
-        version: Version.parse(match.groups.version),
+        version: Version.parse(match.groups.version!),
         notes,
       });
     } else {
@@ -145,10 +145,10 @@ function extractMultipleReleases(notes: string, logger: Logger): ReleaseData[] {
         logger.warn(`Summary: ${summary} did not match the expected pattern`);
         continue;
       }
-      detail.removeChild(summaryNode);
+      detail.removeChild(summaryNode!);
       const notes = detail.textContent.trim();
       data.push({
-        version: Version.parse(componentlessMatch.groups.version),
+        version: Version.parse(componentlessMatch.groups.version!),
         notes,
       });
     }
