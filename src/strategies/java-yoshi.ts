@@ -30,7 +30,7 @@ export class JavaYoshi extends Java {
    * @param {ConventionalCommit[]} commits parsed commits
    * @returns {ConventionalCommit[]} modified commits
    */
-  protected async postProcessCommits(
+  protected override async postProcessCommits(
     commits: ConventionalCommit[]
   ): Promise<ConventionalCommit[]> {
     if (commits.length === 0) {
@@ -51,13 +51,13 @@ export class JavaYoshi extends Java {
     return commits;
   }
 
-  protected async needsSnapshot(): Promise<boolean> {
+  protected override async needsSnapshot(): Promise<boolean> {
     return VersionsManifest.needsSnapshot(
       (await this.getVersionsContent()).parsedContent
     );
   }
 
-  protected async buildVersionsMap(): Promise<VersionsMap> {
+  protected override async buildVersionsMap(): Promise<VersionsMap> {
     this.versionsContent = await this.getVersionsContent();
     return VersionsManifest.parseVersions(this.versionsContent.parsedContent);
   }
@@ -83,7 +83,7 @@ export class JavaYoshi extends Java {
     return this.versionsContent;
   }
 
-  protected async buildUpdates(
+  protected override async buildUpdates(
     options: JavaBuildUpdatesOption
   ): Promise<Update[]> {
     const updates: Update[] = [];
@@ -184,7 +184,7 @@ export class JavaYoshi extends Java {
     return updates;
   }
 
-  protected async updateVersionsMap(
+  protected override async updateVersionsMap(
     versionsMap: VersionsMap,
     conventionalCommits: ConventionalCommit[]
   ): Promise<VersionsMap> {

@@ -128,7 +128,7 @@ export class Rust extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const packageManifest = await this.getPackageManifest();
     if (packageManifest) {
       return packageManifest.package?.name;

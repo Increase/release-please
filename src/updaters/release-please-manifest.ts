@@ -16,7 +16,7 @@ import {jsonStringify} from '../util/json-stringify';
 import {DefaultUpdater} from './default';
 
 export class ReleasePleaseManifest extends DefaultUpdater {
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     const parsed: Record<string, string> = content ? JSON.parse(content) : {};
     for (const [path, version] of this.versionsMap!) {
       parsed[path] = version.toString();

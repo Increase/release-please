@@ -16,7 +16,7 @@ import {GitHubFileContents} from '@google-automations/git-file-utils';
 
 // Generic
 import {Changelog} from '../updaters/changelog';
-import * as yaml from 'js-yaml';
+import {parse as parseYaml} from 'yaml';
 // helm
 import {ChartYaml} from '../updaters/helm/chart-yaml';
 import {BaseStrategy, BuildUpdatesOptions} from './base';
@@ -52,9 +52,9 @@ export class Helm extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const chartYmlContents = await this.getChartYmlContents();
-    const chart = yaml.load(chartYmlContents.parsedContent, {json: true});
+    const chart = parseYaml(chartYmlContents.parsedContent, {uniqueKeys: false});
     if (typeof chart === 'object') {
       return (chart as {name: string}).name;
     } else {

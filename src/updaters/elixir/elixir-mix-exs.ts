@@ -24,7 +24,7 @@ export class ElixirMixExs extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const oldModuleAttributeVersion = content.match(
       /@version "([A-Za-z0-9_\-+.~]+)"/
     );

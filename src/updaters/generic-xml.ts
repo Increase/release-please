@@ -14,6 +14,7 @@
 
 import {Version} from '../version';
 import {BaseXml} from './base-xml';
+import * as dom from '@xmldom/xmldom';
 import * as xpath from 'xpath';
 
 export class GenericXml extends BaseXml {
@@ -26,10 +27,10 @@ export class GenericXml extends BaseXml {
     this.version = version;
   }
 
-  protected updateDocument(document: Document): boolean {
+  protected updateDocument(document: dom.Document): boolean {
     const version = this.version.toString();
     let updated = false;
-    for (const node of xpath.select(this.xpath, document) as Node[]) {
+    for (const node of xpath.select(this.xpath, document as unknown as Node) as Node[]) {
       if (node.textContent !== version) {
         node.textContent = version;
         updated = true;

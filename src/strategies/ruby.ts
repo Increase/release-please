@@ -122,7 +122,7 @@ export class Ruby extends BaseStrategy {
     );
   }
 
-  protected async postProcessCommits(
+  protected override async postProcessCommits(
     commits: ConventionalCommit[]
   ): Promise<ConventionalCommit[]> {
     commits.forEach(commit => {

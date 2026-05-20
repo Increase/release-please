@@ -25,7 +25,7 @@ export abstract class BaseXml implements Updater {
    * @returns {string} The updated content
    */
   updateContent(content: string): string {
-    const document = new dom.DOMParser().parseFromString(content);
+    const document = new dom.DOMParser().parseFromString(content, 'text/xml');
     const updated = this.updateDocument(document);
 
     if (updated) {
@@ -45,5 +45,5 @@ export abstract class BaseXml implements Updater {
    * @return true if document has been changed and therefore file needs to be changed, false otherwise.
    * @protected
    */
-  protected abstract updateDocument(document: Document): boolean;
+  protected abstract updateDocument(document: dom.Document): boolean;
 }

@@ -21,7 +21,7 @@ import {VersionUpdater, MinorVersionUpdate} from '../versioning-strategy';
  * This VersioningStrategy always bumps the minor version.
  */
 export class AlwaysBumpMinor extends DefaultVersioningStrategy {
-  determineReleaseType(
+  override determineReleaseType(
     _version: Version,
     _commits: ConventionalCommit[]
   ): VersionUpdater {

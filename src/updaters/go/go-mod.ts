@@ -1,7 +1,7 @@
 import {DefaultUpdater} from '../default';
 
 export class GoModUpdater extends DefaultUpdater {
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     if (this.version.major < 2) {
       return content;
     }

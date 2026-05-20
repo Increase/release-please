@@ -14,7 +14,7 @@
 
 // Generic
 import {Changelog} from '../updaters/changelog';
-import * as yaml from 'js-yaml';
+import {parse as parseYaml} from 'yaml';
 
 // pubspec
 import {PubspecYaml} from '../updaters/dart/pubspec-yaml';
@@ -53,9 +53,9 @@ export class Dart extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const pubspecYmlContents = await this.getPubspecYmlContents();
-    const pubspec = yaml.load(pubspecYmlContents.parsedContent, {json: true});
+    const pubspec = parseYaml(pubspecYmlContents.parsedContent, {uniqueKeys: false});
     if (typeof pubspec === 'object') {
       return (pubspec as {name: string}).name;
     } else {

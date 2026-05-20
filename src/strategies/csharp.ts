@@ -36,13 +36,13 @@ export class CSharp extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const csprojContents = await this.getCsprojContents();
     const pkg = this.parseCsprojPackageName(csprojContents.parsedContent);
     return pkg;
   }
 
-  protected normalizeComponent(component: string | undefined): string {
+  protected override normalizeComponent(component: string | undefined): string {
     if (!component) {
       return '';
     }

@@ -60,7 +60,7 @@ export class Merge extends ManifestPlugin {
     this.forceMerge = options.forceMerge ?? false;
   }
 
-  async run(
+  override async run(
     candidates: CandidateReleasePullRequest[]
   ): Promise<CandidateReleasePullRequest[]> {
     if (candidates.length < 1) {

@@ -14,6 +14,7 @@
 
 import {Version, VersionsMap} from '../../version';
 import {BaseXml} from '../base-xml';
+import * as dom from '@xmldom/xmldom';
 import * as xpath from 'xpath';
 
 const XPATH_PROJECT_VERSION =
@@ -41,15 +42,16 @@ export class PomXml extends BaseXml {
     this.dependencyVersions = dependencyVersions;
   }
 
-  protected updateDocument(document: Document): boolean {
+  protected updateDocument(document: dom.Document): boolean {
     // NOTE this intentionally ignores namespaces - let the maven decide, what's valid and what's not
 
     const updates: {nodes: Node[]; version: Version}[] = [];
+    const docAsNode = document as unknown as Node;
 
     // Update project.version
     const projectVersionNodes: Node[] = xpath.select(
       XPATH_PROJECT_VERSION,
-      document
+      docAsNode
     ) as Node[];
     if (projectVersionNodes.length) {
       // If found update, detect actual change
@@ -61,7 +63,7 @@ export class PomXml extends BaseXml {
       // Try updating project.parent.version
       const parentVersionNodes: Node[] = xpath.select(
         XPATH_PROJECT_PARENT_VERSION,
-        document
+        docAsNode
       ) as Node[];
       updates.push({
         nodes: parentVersionNodes,
@@ -84,17 +86,18 @@ export class PomXml extends BaseXml {
   }
 
   dependencyUpdates(
-    document: Document,
+    document: dom.Document,
     updatedVersions: VersionsMap
   ): {name: string; nodes: Node[]; version: Version}[] {
     const updates: {name: string; nodes: Node[]; version: Version}[] = [];
+    const docAsNode = document as unknown as Node;
     const dependencyNodes = xpath.select(
       XPATH_PROJECT_DEPENDENCIES,
-      document
+      docAsNode
     ) as Node[];
     const dependencyManagementNodes = xpath.select(
       XPATH_PROJECT_DEPENDENCY_MANAGEMENT_DEPENDENCIES,
-      document
+      docAsNode
     ) as Node[];
     // try to update dependency versions
     for (const [name, version] of updatedVersions.entries()) {

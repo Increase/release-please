@@ -46,7 +46,7 @@ export class MissingRequiredFileError extends ConfigurationError {
 export class GitHubAPIError extends Error {
   body: RequestErrorBody | undefined;
   status: number;
-  cause?: Error;
+  override cause?: Error;
   constructor(requestError: RequestError, message?: string) {
     super(message ?? requestError.message);
     this.status = requestError.status;

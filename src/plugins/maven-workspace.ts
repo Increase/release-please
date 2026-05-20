@@ -151,7 +151,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * @returns {CandidateReleasePullRequest | undefined} The associated
    *   candidate release or undefined if there is no existing release yet
    */
-  protected findCandidateForPackage(
+  protected override findCandidateForPackage(
     pkg: MavenArtifact,
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
   ): CandidateReleasePullRequest | undefined {
@@ -180,7 +180,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    *   The candidate pull requests indexed by the package name.
    * @returns {string[]} Package names to
    */
-  protected packageNamesToUpdate(
+  protected override packageNamesToUpdate(
     graph: DependencyGraph<MavenArtifact>,
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
   ): string[] {
@@ -211,7 +211,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * @returns A map of all updated versions (package name => Version) and a
    *   map of all updated versions (component path => Version).
    */
-  protected async buildUpdatedVersions(
+  protected override async buildUpdatedVersions(
     _graph: DependencyGraph<MavenArtifact>,
     orderedPackages: MavenArtifact[],
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
@@ -328,7 +328,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * considered releases.
    * @param {Version} version The release version
    */
-  protected isReleaseVersion(version: Version): boolean {
+  protected override isReleaseVersion(version: Version): boolean {
     return !version.preRelease?.includes('SNAPSHOT');
   }
 
@@ -486,7 +486,10 @@ function getChangelogDepsNotes(
   updatedVersions: VersionsMap,
   logger: Logger = defaultLogger
 ): string {
-  const document = new dom.DOMParser().parseFromString(artifact.pomContent);
+  const document = new dom.DOMParser().parseFromString(
+    artifact.pomContent,
+    'text/xml'
+  );
   const dependencyUpdates = updater.dependencyUpdates(
     document,
     updatedVersions
@@ -519,22 +522,29 @@ function parseMavenArtifact(
   path: string,
   logger: Logger
 ): MavenArtifact | undefined {
-  const document = new dom.DOMParser().parseFromString(pomContent);
+  let document: dom.Document;
+  try {
+    document = new dom.DOMParser().parseFromString(pomContent, 'text/xml');
+  } catch (e) {
+    logger.warn(`Failed to parse ${path}: ${(e as Error).message}`);
+    return;
+  }
+  const docAsNode = document as unknown as Node;
 
-  const groupNodes = xpath.select(XPATH_PROJECT_GROUP, document) as Node[];
+  const groupNodes = xpath.select(XPATH_PROJECT_GROUP, docAsNode) as Node[];
   if (groupNodes.length === 0) {
     logger.warn(`Missing project.groupId in ${path}`);
     return;
   }
   const artifactNodes = xpath.select(
     XPATH_PROJECT_ARTIFACT,
-    document
+    docAsNode
   ) as Node[];
   if (artifactNodes.length === 0) {
     logger.warn(`Missing project.artifactId in ${path}`);
     return;
   }
-  const versionNodes = xpath.select(XPATH_PROJECT_VERSION, document) as Node[];
+  const versionNodes = xpath.select(XPATH_PROJECT_VERSION, docAsNode) as Node[];
   if (versionNodes.length === 0) {
     logger.warn(`Missing project.version in ${path}`);
     return;
@@ -543,7 +553,7 @@ function parseMavenArtifact(
   const testDependencies: Gav[] = [];
   for (const dependencyNode of xpath.select(
     XPATH_PROJECT_DEPENDENCIES,
-    document
+    docAsNode
   ) as Node[]) {
     const parsedNode = parseDependencyNode(dependencyNode);
     if (!parsedNode.version) {
@@ -566,7 +576,7 @@ function parseMavenArtifact(
   const managedDependencies: Gav[] = [];
   for (const dependencyNode of xpath.select(
     XPATH_PROJECT_DEPENDENCY_MANAGEMENT_DEPENDENCIES,
-    document
+    docAsNode
   ) as Node[]) {
     const parsedNode = parseDependencyNode(dependencyNode);
     if (!parsedNode.version) {

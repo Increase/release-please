@@ -63,7 +63,7 @@ export abstract class WorkspacePlugin<T> extends ManifestPlugin {
     this.updateAllPackages = options.updateAllPackages ?? false;
     this.merge = options.merge ?? true;
   }
-  async run(
+  override async run(
     candidates: CandidateReleasePullRequest[]
   ): Promise<CandidateReleasePullRequest[]> {
     this.logger.info('Running workspace plugin');

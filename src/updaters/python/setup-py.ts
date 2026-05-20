@@ -23,7 +23,7 @@ export class SetupPy extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     return content.replace(
       /(version ?= ?["'])[0-9]+\.[0-9]+\.[0-9]+(?:-\w+)?(["'])/,
       `$1${this.version}$2`

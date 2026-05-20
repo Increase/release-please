@@ -48,7 +48,7 @@ export class AppJson extends DefaultUpdater {
   /**
    * Given initial file contents, return updated contents.
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const parsed = JSON.parse(content) as AppJson;
 
     logger.info(
