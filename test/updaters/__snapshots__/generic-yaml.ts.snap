@@ -6,7 +6,7 @@ version: 11.1.0
 lockfileVersion: 2
 requires: true
 packages:
-  '':
+  "":
     name: release-please
     version: 2.3.4
 "

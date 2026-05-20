@@ -15,7 +15,7 @@
 import {Updater} from '../update';
 import {Version} from '../version';
 import * as jp from 'jsonpath';
-import * as yaml from 'js-yaml';
+import {parseAllDocuments, stringify as stringifyYaml} from 'yaml';
 import {logger as defaultLogger, Logger} from '../util/logger';
 
 const DOCUMENT_SEPARATOR = '---\n';
@@ -46,7 +46,12 @@ export class GenericYaml implements Updater {
     // Parse possibly multi-document file
     let docs: unknown[];
     try {
-      docs = yaml.loadAll(content, null, {json: true});
+      const parsed = parseAllDocuments(content, {uniqueKeys: false});
+      const errors = parsed.flatMap(d => d.errors);
+      if (errors.length > 0) {
+        throw errors[0];
+      }
+      docs = parsed.map(d => d.toJS());
     } catch (e) {
       logger.warn('Invalid yaml, cannot be parsed', e);
       return content;
@@ -72,10 +77,10 @@ export class GenericYaml implements Updater {
     // Stringify documents
     if (docs.length === 1) {
       // Single doc
-      return yaml.dump(docs[0]);
+      return stringifyYaml(docs[0]);
     } else {
       // Multi-document, each document starts with separator
-      return docs.map(data => DOCUMENT_SEPARATOR + yaml.dump(data)).join('');
+      return docs.map(data => DOCUMENT_SEPARATOR + stringifyYaml(data)).join('');
     }
   }
 }
