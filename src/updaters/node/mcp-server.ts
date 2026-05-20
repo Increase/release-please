@@ -10,7 +10,7 @@ export class McpServer extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     logger.info(`updating to ${this.version}`);
     return content.replace(/version: '.*'/, `version: '${this.version}'`);
   }

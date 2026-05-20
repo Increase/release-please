@@ -163,7 +163,7 @@ class PrereleaseMajorVersionUpdate implements VersionUpdater {
  * Example: 1.2.3-beta01 -> 1.2.3-beta02.
  */
 export class PrereleaseVersioningStrategy extends DefaultVersioningStrategy {
-  determineReleaseType(
+  override determineReleaseType(
     version: Version,
     commits: ConventionalCommit[]
   ): VersionUpdater {

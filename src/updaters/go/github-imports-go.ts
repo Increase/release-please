@@ -10,7 +10,7 @@ export class GithubImportsGo extends DefaultUpdater {
     this.repository = options.repository;
   }
 
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     if (this.version.major < 2) {
       return content;
     }

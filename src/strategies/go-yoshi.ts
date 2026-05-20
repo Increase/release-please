@@ -105,7 +105,7 @@ export class GoYoshi extends BaseStrategy {
     return updates;
   }
 
-  protected async postProcessCommits(
+  protected override async postProcessCommits(
     commits: ConventionalCommit[]
   ): Promise<ConventionalCommit[]> {
     let regenCommit: ConventionalCommit;
@@ -211,7 +211,7 @@ export class GoYoshi extends BaseStrategy {
 
   // "closes" is a little presumptuous, let's just indicate that the
   // PR references these other commits:
-  protected async buildReleaseNotes(
+  protected override async buildReleaseNotes(
     conventionalCommits: ConventionalCommit[],
     newVersion: Version,
     newVersionTag: TagName,

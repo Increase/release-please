@@ -9,6 +9,7 @@
     "noEmit": false,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "pretty": true,
     "skipLibCheck": true,

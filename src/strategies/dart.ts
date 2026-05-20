@@ -53,7 +53,7 @@ export class Dart extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const pubspecYmlContents = await this.getPubspecYmlContents();
     const pubspec = parseYaml(pubspecYmlContents.parsedContent, {uniqueKeys: false});
     if (typeof pubspec === 'object') {

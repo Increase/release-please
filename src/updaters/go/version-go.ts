@@ -15,7 +15,7 @@
 import {DefaultUpdater} from '../default';
 
 export class VersionGo extends DefaultUpdater {
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     return content.replace(
       /const Version = "[0-9]+\.[0-9]+\.[0-9](-\w+)?"/,
       `const Version = "${this.version.toString()}"`

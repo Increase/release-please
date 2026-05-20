@@ -97,13 +97,13 @@ export class Node extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const pkgJsonContents = await this.getPkgJsonContents();
     const pkg = JSON.parse(pkgJsonContents.parsedContent);
     return pkg.name;
   }
 
-  protected normalizeComponent(component: string | undefined): string {
+  protected override normalizeComponent(component: string | undefined): string {
     if (!component) {
       return '';
     }

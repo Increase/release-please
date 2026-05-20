@@ -27,7 +27,7 @@ export class VersionsManifest extends JavaUpdate {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     if (!this.versionsMap) {
       logger.warn('missing versions map');
       return content;

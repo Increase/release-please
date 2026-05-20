@@ -65,7 +65,7 @@ export class PHPYoshi extends BaseStrategy {
       changelogSections: CHANGELOG_SECTIONS,
     });
   }
-  async buildReleasePullRequest({
+  override async buildReleasePullRequest({
     commits,
     labels = [],
     latestRelease,
@@ -217,7 +217,7 @@ export class PHPYoshi extends BaseStrategy {
     };
   }
 
-  protected async parsePullRequestBody(
+  protected override async parsePullRequestBody(
     pullRequestBody: string
   ): Promise<PullRequestBody | undefined> {
     const body = PullRequestBody.parse(pullRequestBody, this.logger);

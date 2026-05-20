@@ -9,7 +9,7 @@ export class PythonReadme extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     // differs for windows vs. linux/ios
     const newlineType = content.includes('\r\n') ? '\r\n' : '\n';
 

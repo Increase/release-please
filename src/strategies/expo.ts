@@ -23,7 +23,7 @@ import {Version} from '../version';
  * the Node strategy to additionally update the `app.json` file of a project.
  */
 export class Expo extends Node {
-  protected async buildUpdates(
+  protected override async buildUpdates(
     options: BuildUpdatesOptions
   ): Promise<Update[]> {
     const version = options.newVersion;

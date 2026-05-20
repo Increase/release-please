@@ -15,7 +15,7 @@ export class RubyReadMeUpdater extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string): string {
+  override updateContent(content: string): string {
     return content.replace(
       RUBY_VERSION_LINE_REGEX,
       `$1${stringifyRubyVersion(this.version)}"`
