@@ -141,7 +141,7 @@ export class GoYoshi extends BaseStrategy {
               issue: match.groups['pr'],
               prefix: '#',
             });
-            regenCommit.bareMessage = match.groups['prefix'].trim();
+            regenCommit.bareMessage = (match.groups['prefix'] ?? '').trim();
           }
         }
       }

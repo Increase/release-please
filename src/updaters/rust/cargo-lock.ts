@@ -43,7 +43,7 @@ export class CargoLock implements Updater {
     // n.b for `replaceTomlString`, we need to keep track of the index
     // (position) of the package we're considering.
     for (let i = 0; i < parsed.package.length; i++) {
-      const pkg = parsed.package[i];
+      const pkg = parsed.package[i]!;
       if (!pkg.name) {
         // all `[[package]]` entries should have a name,
         // but if they don't, ignore them silently.
