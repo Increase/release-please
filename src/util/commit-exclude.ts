@@ -37,7 +37,7 @@ export class CommitExclude {
     Object.entries(commitsPerPath).forEach(([path, commits]) => {
       if (this.excludePaths[path]) {
         commits = commits.filter(commit =>
-          this.shouldInclude(commit, this.excludePaths[path], path)
+          this.shouldInclude(commit, this.excludePaths[path]!, path)
         );
       }
       filteredCommitsPerPath[path] = commits;

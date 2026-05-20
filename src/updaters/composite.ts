@@ -45,7 +45,7 @@ export function mergeUpdates(updates: Update[]): Update[] {
   const updatesByPath: Record<string, Update[]> = {};
   for (const update of updates) {
     if (updatesByPath[update.path]) {
-      updatesByPath[update.path].push(update);
+      updatesByPath[update.path]!.push(update);
     } else {
       updatesByPath[update.path] = [update];
     }
@@ -53,13 +53,13 @@ export function mergeUpdates(updates: Update[]): Update[] {
 
   const newUpdates: Update[] = [];
   for (const path in updatesByPath) {
-    const update = updatesByPath[path];
+    const update = updatesByPath[path]!;
     const updaters = update.map(u => u.updater);
     newUpdates.push({
       path,
-      createIfMissing: update[0].createIfMissing,
+      createIfMissing: update[0]!.createIfMissing,
       updater:
-        updaters.length === 1 ? updaters[0] : new CompositeUpdater(...updaters),
+        updaters.length === 1 ? updaters[0]! : new CompositeUpdater(...updaters),
     });
   }
   return newUpdates;

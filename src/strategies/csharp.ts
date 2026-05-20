@@ -60,7 +60,7 @@ export class CSharp extends BaseStrategy {
 
     if (files.length > 0) {
       // Return just the filename, not the full path
-      const fullPath = files[0];
+      const fullPath = files[0]!;
       return fullPath.split('/').pop()!;
     }
 

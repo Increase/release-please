@@ -30,7 +30,7 @@ class PrereleasePatchVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
+        const numberLength = (match.groups.number ?? '').length;
         const nextPrereleaseNumber = Number(match.groups.number) + 1;
         const paddedNextPrereleaseNumber = `${nextPrereleaseNumber}`.padStart(
           numberLength,
@@ -68,7 +68,7 @@ class PrereleaseMinorVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
+        const numberLength = (match.groups.number ?? '').length;
         const prereleaseNumber = Number(match.groups.number);
 
         let nextPrereleaseNumber = 1;
@@ -117,7 +117,7 @@ class PrereleaseMajorVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
+        const numberLength = (match.groups.number ?? '').length;
         const prereleaseNumber = Number(match.groups.number);
 
         let nextPrereleaseNumber = 1;

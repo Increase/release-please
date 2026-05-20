@@ -688,7 +688,7 @@ If you instead want to use the version number \`${newVersion}\` generated from c
     let releaseData: ReleaseData | undefined;
     if (
       pullRequestBody.releaseData.length === 1 &&
-      !pullRequestBody.releaseData[0].component
+      !pullRequestBody.releaseData[0]!.component
     ) {
       const branchComponent = await this.getBranchComponent();
       // standalone release PR, ensure the components match

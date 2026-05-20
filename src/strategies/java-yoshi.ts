@@ -235,7 +235,7 @@ function isStableArtifact(artifact: string): boolean {
     return true;
   }
 
-  const versionMatch = match[1].match(VERSION_REGEX);
+  const versionMatch = match[1]!.match(VERSION_REGEX);
   if (versionMatch?.[1]) {
     // The version is not stable (probably alpha/beta/rc)
     return false;

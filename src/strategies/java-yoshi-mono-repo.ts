@@ -233,7 +233,7 @@ export class JavaYoshiMonoRepo extends Java {
                 // We filter out "chore:" commits, to reduce noise in the upstream
                 // release notes. We will only show a product release note entry
                 // if there has been a substantial change, such as a fix or feature.
-                commits: splitCommits[path],
+                commits: splitCommits[path] ?? [],
                 language: 'JAVA',
               })
             );
@@ -329,7 +329,7 @@ function isStableArtifact(artifact: string): boolean {
     return true;
   }
 
-  const versionMatch = match[1].match(VERSION_REGEX);
+  const versionMatch = match[1]!.match(VERSION_REGEX);
   if (versionMatch?.[1]) {
     // The version is not stable (probably alpha/beta/rc)
     return false;

@@ -367,10 +367,10 @@ function splitMessages(message: string): string[] {
   const messages = [parts.shift()!];
   for (const part of parts) {
     const [newMessage, ...rest] = part.split('END_NESTED_COMMIT');
-    messages.push(newMessage);
+    messages.push(newMessage ?? '');
     // anthing outside of the BEGIN/END annotations are added to the original
     // commit
-    messages[0] = messages[0] + rest.join();
+    messages[0] = (messages[0] ?? '') + rest.join();
   }
 
   return messages;
@@ -430,10 +430,9 @@ function preprocessCommitMessage(commit: Commit): string {
   // look for 'BEGIN_COMMIT_OVERRIDE' section of pull request body
   if (commit.pullRequest) {
     const overrideMessage = (
-      commit.pullRequest.body.split('BEGIN_COMMIT_OVERRIDE')[1] || ''
-    )
-      .split('END_COMMIT_OVERRIDE')[0]
-      .trim();
+      (commit.pullRequest.body.split('BEGIN_COMMIT_OVERRIDE')[1] ?? '')
+        .split('END_COMMIT_OVERRIDE')[0] ?? ''
+    ).trim();
     if (overrideMessage) {
       return overrideMessage;
     }
