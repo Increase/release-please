@@ -74,9 +74,9 @@ export class ChangelogJson extends DefaultUpdater {
       // this logic removes this suffix and prepends it to the
       // issues array.
       const match = message.match(PR_SUFFIX_REGEX);
-      if (match?.groups?.pr) {
+      if (match?.groups?.['pr']) {
         message = message.replace(match[0], '');
-        issues.add(match.groups.pr);
+        issues.add(match.groups['pr']);
       }
       // Array.from(someSet) will maintain elements in insertion
       // order, given this we add references after the pr suffix.

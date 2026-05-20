@@ -30,14 +30,14 @@ class PrereleasePatchVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
-        const nextPrereleaseNumber = Number(match.groups.number) + 1;
+        const numberLength = match.groups['number'].length;
+        const nextPrereleaseNumber = Number(match.groups['number']) + 1;
         const paddedNextPrereleaseNumber = `${nextPrereleaseNumber}`.padStart(
           numberLength,
           '0'
         );
-        const maybeDot = match.groups.dot ? '.' : '';
-        const nextPrerelease = `${match.groups.type}${maybeDot}${paddedNextPrereleaseNumber}`;
+        const maybeDot = match.groups['dot'] ? '.' : '';
+        const nextPrerelease = `${match.groups['type']}${maybeDot}${paddedNextPrereleaseNumber}`;
         return new Version(
           version.major,
           version.minor,
@@ -68,8 +68,8 @@ class PrereleaseMinorVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
-        const prereleaseNumber = Number(match.groups.number);
+        const numberLength = match.groups['number'].length;
+        const prereleaseNumber = Number(match.groups['number']);
 
         let nextPrereleaseNumber = 1;
         let nextMinorNumber = version.minor + 1;
@@ -85,8 +85,8 @@ class PrereleaseMinorVersionUpdate implements VersionUpdater {
           numberLength,
           '0'
         );
-        const maybeDot = match.groups.dot ? '.' : '';
-        const nextPrerelease = `${match.groups.type}${maybeDot}${paddedNextPrereleaseNumber}`;
+        const maybeDot = match.groups['dot'] ? '.' : '';
+        const nextPrerelease = `${match.groups['type']}${maybeDot}${paddedNextPrereleaseNumber}`;
         return new Version(
           version.major,
           nextMinorNumber,
@@ -117,8 +117,8 @@ class PrereleaseMajorVersionUpdate implements VersionUpdater {
     if (version.preRelease) {
       const match = version.preRelease.match(PRERELEASE_PATTERN);
       if (match?.groups) {
-        const numberLength = match.groups.number.length;
-        const prereleaseNumber = Number(match.groups.number);
+        const numberLength = match.groups['number'].length;
+        const prereleaseNumber = Number(match.groups['number']);
 
         let nextPrereleaseNumber = 1;
         let nextMajorNumber = version.major + 1;
@@ -136,8 +136,8 @@ class PrereleaseMajorVersionUpdate implements VersionUpdater {
           numberLength,
           '0'
         );
-        const maybeDot = match.groups.dot ? '.' : '';
-        const nextPrerelease = `${match.groups.type}${maybeDot}${paddedNextPrereleaseNumber}`;
+        const maybeDot = match.groups['dot'] ? '.' : '';
+        const nextPrerelease = `${match.groups['type']}${maybeDot}${paddedNextPrereleaseNumber}`;
         return new Version(
           nextMajorNumber,
           nextMinorNumber,

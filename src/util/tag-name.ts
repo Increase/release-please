@@ -40,10 +40,10 @@ export class TagName {
     const match = tagName.match(TAG_PATTERN);
     if (match?.groups) {
       return new TagName(
-        Version.parse(match.groups.version),
-        match.groups.component,
-        match.groups.separator,
-        !!match.groups.v
+        Version.parse(match.groups['version']),
+        match.groups['component'],
+        match.groups['separator'],
+        !!match.groups['v']
       );
     }
     return;

@@ -135,8 +135,8 @@ function extractMultipleReleases(notes: string, logger: Logger): ReleaseData[] {
       detail.removeChild(summaryNode);
       const notes = detail.textContent.trim();
       data.push({
-        component: match.groups.component,
-        version: Version.parse(match.groups.version),
+        component: match.groups['component'],
+        version: Version.parse(match.groups['version']),
         notes,
       });
     } else {
@@ -148,7 +148,7 @@ function extractMultipleReleases(notes: string, logger: Logger): ReleaseData[] {
       detail.removeChild(summaryNode);
       const notes = detail.textContent.trim();
       data.push({
-        version: Version.parse(componentlessMatch.groups.version),
+        version: Version.parse(componentlessMatch.groups['version']),
         notes,
       });
     }
@@ -159,7 +159,7 @@ const COMPARE_REGEX = /^#{2,} \[?(?<version>\d+\.\d+\.\d+.*)\]?/;
 function extractSingleRelease(body: string, logger: Logger): ReleaseData[] {
   body = body.trim();
   const match = body.match(COMPARE_REGEX);
-  const versionString = match?.groups?.version;
+  const versionString = match?.groups?.['version'];
   if (!versionString) {
     logger.warn('Failed to find version in release notes');
     return [];
