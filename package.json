@@ -90,7 +90,7 @@
     "conventional-commits-filter": "^3.0.0",
     "detect-indent": "^6.1.0",
     "diff": "^5.2.2",
-    "figures": "^3.0.0",
+    "figures": "^6.1.0",
     "http-proxy-agent": "^9.0.0",
     "https-proxy-agent": "^7.0.6",
     "js-yaml": "^4.1.1",
