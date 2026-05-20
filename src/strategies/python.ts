@@ -180,8 +180,8 @@ export class Python extends BaseStrategy {
     const setupPyContents = await this.getSetupPyContents();
     if (setupPyContents) {
       const match = setupPyContents.match(ARTIFACT_NAME_REGEX);
-      if (match?.groups?.name) {
-        return match.groups.name;
+      if (match?.groups?.['name']) {
+        return match.groups['name'];
       }
     }
     return null;

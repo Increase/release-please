@@ -222,7 +222,7 @@ export class JavaYoshiMonoRepo extends Java {
         for (const path of Object.keys(splitCommits)) {
           const repoMetadata = await this.getRepoMetadata(path);
           const artifactName = repoMetadata
-            ? repoMetadata.distribution_name
+            ? repoMetadata['distribution_name']
             : null;
           if (repoMetadata && artifactName) {
             this.logger.info(`Found artifact ${artifactName} for ${path}`);

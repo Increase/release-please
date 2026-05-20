@@ -111,17 +111,17 @@ export class FilePullRequestOverflowHandler
     pullRequest: PullRequest
   ): Promise<PullRequestBody | undefined> {
     const match = pullRequest.body.match(OVERFLOW_MESSAGE_REGEX);
-    if (match?.groups?.url) {
+    if (match?.groups?.['url']) {
       this.logger.info(
-        `Pull request body overflows, parsing full body from: ${match.groups.url}`
+        `Pull request body overflows, parsing full body from: ${match.groups['url']}`
       );
-      const url = new URL(match.groups.url);
+      const url = new URL(match.groups['url']);
       const pathMatch = url.pathname.match(FILE_PATH_REGEX);
-      if (pathMatch?.groups?.branchName) {
+      if (pathMatch?.groups?.['branchName']) {
         try {
           const fileContents = await this.github.getFileContentsOnBranch(
             RELEASE_NOTES_FILENAME,
-            pathMatch.groups.branchName
+            pathMatch.groups['branchName']
           );
           return PullRequestBody.parse(fileContents.parsedContent);
         } catch (err) {
@@ -132,7 +132,7 @@ export class FilePullRequestOverflowHandler
           }
         }
       }
-      this.logger.warn(`Could not parse branch from ${match.groups.url}`);
+      this.logger.warn(`Could not parse branch from ${match.groups['url']}`);
       return PullRequestBody.parse(pullRequest.body, this.logger);
     }
     return PullRequestBody.parse(pullRequest.body, this.logger);
