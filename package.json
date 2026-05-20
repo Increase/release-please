@@ -80,7 +80,7 @@
     "conventional-changelog-conventionalcommits": "^6.0.0",
     "conventional-changelog-writer": "^6.0.0",
     "conventional-commits-filter": "^3.0.0",
-    "detect-indent": "^6.1.0",
+    "detect-indent": "^7.0.2",
     "diff": "^5.2.2",
     "http-proxy-agent": "^9.0.0",
     "https-proxy-agent": "^7.0.6",
