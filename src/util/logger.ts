@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import chalk from 'chalk';
-import figures from 'figures';
+import {styleText} from 'node:util';
 
-const errorPrefix = chalk.red(figures.cross);
-const warnPrefix = chalk.yellow(figures.warning);
-const infoPrefix = chalk.green(figures.tick);
-const debugPrefix = chalk.gray(figures.pointer);
-const tracePrefix = chalk.dim.gray(figures.pointerSmall);
+const errorPrefix = styleText('red', '✖');
+const warnPrefix = styleText('yellow', '⚠');
+const infoPrefix = styleText('green', '✔');
+const debugPrefix = styleText('gray', '❯');
+const tracePrefix = styleText(['dim', 'gray'], '›');
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface LogFn {

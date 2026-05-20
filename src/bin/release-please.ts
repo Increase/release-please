@@ -30,9 +30,7 @@ import {
 } from '../factory';
 import {Bootstrapper} from '../bootstrapper';
 import {createPatch} from 'diff';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const parseGithubRepoUrl = require('parse-github-repo-url');
+import {parseRepoUrl} from '../util/parse-repo-url';
 
 interface ErrorObject {
   body?: object;
@@ -822,7 +820,11 @@ const debugConfigCommand: yargs.CommandModule<{}, DebugConfigArgs> = {
 };
 
 async function buildGitHub(argv: GitHubArgs): Promise<GitHub> {
-  const [owner, repo] = parseGithubRepoUrl(argv.repoUrl);
+  const parsed = parseRepoUrl(argv.repoUrl);
+  if (!parsed) {
+    throw new Error(`Could not parse repo-url: ${argv.repoUrl}`);
+  }
+  const [owner, repo] = parsed;
   const github = await GitHub.create({
     owner,
     repo,

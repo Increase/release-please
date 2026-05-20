@@ -20,8 +20,7 @@
 // surface them via `core.setOutput`.
 
 import * as core from '@actions/core';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const parseGithubRepoUrl = require('parse-github-repo-url');
+import {parseRepoUrl} from './util/parse-repo-url';
 
 import {GitHub} from './github';
 import {
@@ -81,7 +80,7 @@ function readInputs(): ActionInputs {
 }
 
 async function buildGitHub(inputs: ActionInputs): Promise<GitHub> {
-  const parsed = parseGithubRepoUrl(inputs.repoUrl);
+  const parsed = parseRepoUrl(inputs.repoUrl);
   if (!parsed) {
     throw new Error(`Could not parse repo-url: ${inputs.repoUrl}`);
   }
