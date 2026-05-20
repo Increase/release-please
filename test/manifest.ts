@@ -7010,6 +7010,105 @@ version = "3.0.0"
       );
     });
 
+    it('should build prerelease releases manifest wide', async () => {
+      mockPullRequests(github,
+        [],
+        [
+          {
+            headBranchName: 'release-please/branches/main',
+            baseBranchName: 'main',
+            number: 1234,
+            title: 'chore: release main',
+            body: pullRequestBody(
+              'release-notes/single-manifest-prerelease.txt'
+            ),
+            labels: ['autorelease: pending'],
+            files: [''],
+            sha: 'abc123',
+          },
+        ]
+      );
+      const getFileContentsStub = vi.spyOn(
+        github,
+        'getFileContentsOnBranch'
+      );
+      getFileContentsStub
+        .withArgs('package.json', 'main')
+        .mockResolvedValue(
+          buildGitHubFileRaw(
+            JSON.stringify({name: '@google-cloud/release-brancher'})
+          )
+        );
+      const manifest = new Manifest(
+        github,
+        'main',
+        {
+          '.': {
+            releaseType: 'node',
+          },
+        },
+        {
+          '.': Version.parse('1.3.0'),
+        },
+        {
+          prerelease: true,
+        }
+      );
+      const releases = await manifest.buildReleases();
+      expect(releases).lengthOf(1);
+      expect(releases[0].prerelease).to.be.true;
+    });
+
+    it('should let path config override manifest-wide prerelease', async () => {
+      mockPullRequests(github,
+        [],
+        [
+          {
+            headBranchName: 'release-please/branches/main',
+            baseBranchName: 'main',
+            number: 1234,
+            title: 'chore: release main',
+            body: pullRequestBody(
+              'release-notes/single-manifest-prerelease.txt'
+            ),
+            labels: ['autorelease: pending'],
+            files: [''],
+            sha: 'abc123',
+          },
+        ]
+      );
+      const getFileContentsStub = vi.spyOn(
+        github,
+        'getFileContentsOnBranch'
+      );
+      getFileContentsStub
+        .withArgs('package.json', 'main')
+        .mockResolvedValue(
+          buildGitHubFileRaw(
+            JSON.stringify({name: '@google-cloud/release-brancher'})
+          )
+        );
+      const manifest = new Manifest(
+        github,
+        'main',
+        {
+          '.': {
+            releaseType: 'node',
+            prerelease: false,
+          },
+        },
+        {
+          '.': Version.parse('1.3.0'),
+        },
+        {
+          prerelease: true,
+        }
+      );
+      const releases = await manifest.buildReleases();
+      expect(releases).lengthOf(1);
+      expect(releases[0].prerelease).to.be.false;
+    });
+
     it('should not build prerelease releases from pre-major', async () => {
       mockPullRequests(github,
         [],

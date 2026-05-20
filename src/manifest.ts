@@ -382,6 +382,7 @@ export class Manifest {
     this.bootstrapSha = manifestOptions?.bootstrapSha;
     this.lastReleaseSha = manifestOptions?.lastReleaseSha;
     this.draft = manifestOptions?.draft;
+    this.prerelease = manifestOptions?.prerelease;
     this.draftPullRequest = manifestOptions?.draftPullRequest;
     this.groupPullRequestTitlePattern =
       manifestOptions?.groupPullRequestTitlePattern;
@@ -1281,7 +1282,8 @@ export class Manifest {
             prerelease:
               hasPrereleaseLabel ||
               config.forcePrerelease ||
-              (config.prerelease && !!release.tag.version.preRelease),
+              ((config.prerelease ?? this.prerelease) &&
+                !!release.tag.version.preRelease),
           });
         }
       }
