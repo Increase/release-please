@@ -52,7 +52,7 @@ export class Helm extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const chartYmlContents = await this.getChartYmlContents();
     const chart = yaml.load(chartYmlContents.parsedContent, {json: true});
     if (typeof chart === 'object') {

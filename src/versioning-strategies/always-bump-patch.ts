@@ -22,7 +22,7 @@ import {VersionUpdater, PatchVersionUpdate} from '../versioning-strategy';
  * strategy is useful for backport branches.
  */
 export class AlwaysBumpPatch extends DefaultVersioningStrategy {
-  determineReleaseType(
+  override determineReleaseType(
     _version: Version,
     _commits: ConventionalCommit[]
   ): VersionUpdater {

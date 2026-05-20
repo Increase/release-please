@@ -52,7 +52,7 @@ export class GroupPriority extends ManifestPlugin {
    * @returns {CandidateReleasePullRequest[]} Possibly a subset of the candidate
    *   pull requests if a preferred group is found.
    */
-  async run(
+  override async run(
     pullRequests: CandidateReleasePullRequest[]
   ): Promise<CandidateReleasePullRequest[]> {
     this.logger.debug(

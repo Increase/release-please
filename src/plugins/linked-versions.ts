@@ -58,7 +58,7 @@ export class LinkedVersions extends ManifestPlugin {
    * @param {Record<string, Strategy>} strategiesByPath Strategies indexed by path
    * @returns {Record<string, Strategy>} Updated strategies indexed by path
    */
-  async preconfigure(
+  override async preconfigure(
     strategiesByPath: Record<string, Strategy>,
     commitsByPath: Record<string, Commit[]>,
     releasesByPath: Record<string, Release>
@@ -145,7 +145,7 @@ export class LinkedVersions extends ManifestPlugin {
    * @param {CandidateReleasePullRequest[]} pullRequests Candidate pull requests
    * @returns {CandidateReleasePullRequest[]} Updated pull requests
    */
-  async run(
+  override async run(
     candidates: CandidateReleasePullRequest[]
   ): Promise<CandidateReleasePullRequest[]> {
     if (!this.merge) {

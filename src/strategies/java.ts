@@ -74,7 +74,7 @@ export class Java extends BaseStrategy {
     this.skipSnapshot = options.skipSnapshot ?? false;
   }
 
-  async buildReleasePullRequest({
+  override async buildReleasePullRequest({
     commits,
     labels = [],
     latestRelease,
@@ -169,7 +169,7 @@ export class Java extends BaseStrategy {
     };
   }
 
-  isPublishedVersion(version: Version): boolean {
+  override isPublishedVersion(version: Version): boolean {
     return !version.preRelease || version.preRelease.indexOf('SNAPSHOT') < 0;
   }
 

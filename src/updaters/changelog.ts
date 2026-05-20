@@ -34,7 +34,7 @@ export class Changelog extends DefaultUpdater {
     );
   }
 
-  updateContent(content: string | undefined): string {
+  override updateContent(content: string | undefined): string {
     content = content || '';
     // Handle both H2 (features/BREAKING CHANGES) and H3 (fixes).
     const lastEntryIndex = content.search(this.versionHeaderRegex);

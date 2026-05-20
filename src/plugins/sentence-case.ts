@@ -45,7 +45,7 @@ export class SentenceCase extends ManifestPlugin {
    * @param {Commit[]} commits The set of commits that will feed into release pull request.
    * @returns {Commit[]} The modified commit objects.
    */
-  processCommits(commits: ConventionalCommit[]): ConventionalCommit[] {
+  override processCommits(commits: ConventionalCommit[]): ConventionalCommit[] {
     this.logger.info(`SentenceCase processing ${commits.length} commits`);
     for (const commit of commits) {
       // The parsed conventional commit message, without the type:

@@ -23,7 +23,7 @@ import {PomXml} from '../updaters/java/pom-xml';
  * pom.xml files automatically.
  */
 export class Maven extends Java {
-  protected async buildUpdates(
+  protected override async buildUpdates(
     options: JavaBuildUpdatesOption
   ): Promise<Update[]> {
     const version = options.newVersion;

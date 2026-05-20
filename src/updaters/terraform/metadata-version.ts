@@ -24,7 +24,7 @@ export class MetadataVersion extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const oldVersion = content.match(/version: [0-9]+\.[0-9]+\.[0-9]+(-\w+)?/);
     if (oldVersion) {
       logger.info(`updating from ${oldVersion} to v${this.version}`);

@@ -35,7 +35,7 @@ const DEPENDENCY_UPDATE_REGEX =
  * greatest version bump.
  */
 export class DependencyManifest extends DefaultVersioningStrategy {
-  determineReleaseType(
+  override determineReleaseType(
     version: Version,
     commits: ConventionalCommit[]
   ): VersionUpdater {

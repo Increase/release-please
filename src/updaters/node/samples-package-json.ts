@@ -41,7 +41,7 @@ export class SamplesPackageJson extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const parsed = JSON.parse(content);
     if (!parsed.dependencies?.[this.packageName]) {
       return content;

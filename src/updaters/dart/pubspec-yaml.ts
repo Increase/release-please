@@ -25,7 +25,7 @@ export class PubspecYaml extends DefaultUpdater {
    * @returns {string} The updated content
    */
 
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const oldVersion = content.match(/^version: ([0-9.]+)\+?(.*$)/m);
     let buildNumber = '';
 

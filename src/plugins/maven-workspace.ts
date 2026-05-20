@@ -151,7 +151,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * @returns {CandidateReleasePullRequest | undefined} The associated
    *   candidate release or undefined if there is no existing release yet
    */
-  protected findCandidateForPackage(
+  protected override findCandidateForPackage(
     pkg: MavenArtifact,
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
   ): CandidateReleasePullRequest | undefined {
@@ -180,7 +180,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    *   The candidate pull requests indexed by the package name.
    * @returns {string[]} Package names to
    */
-  protected packageNamesToUpdate(
+  protected override packageNamesToUpdate(
     graph: DependencyGraph<MavenArtifact>,
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
   ): string[] {
@@ -211,7 +211,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * @returns A map of all updated versions (package name => Version) and a
    *   map of all updated versions (component path => Version).
    */
-  protected async buildUpdatedVersions(
+  protected override async buildUpdatedVersions(
     _graph: DependencyGraph<MavenArtifact>,
     orderedPackages: MavenArtifact[],
     candidatesByPackage: Record<string, CandidateReleasePullRequest>
@@ -328,7 +328,7 @@ export class MavenWorkspace extends WorkspacePlugin<MavenArtifact> {
    * considered releases.
    * @param {Version} version The release version
    */
-  protected isReleaseVersion(version: Version): boolean {
+  protected override isReleaseVersion(version: Version): boolean {
     return !version.preRelease?.includes('SNAPSHOT');
   }
 

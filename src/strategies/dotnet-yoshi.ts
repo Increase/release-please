@@ -65,7 +65,7 @@ export class DotnetYoshi extends BaseStrategy {
     super(options);
   }
 
-  protected async buildReleaseNotes(
+  protected override async buildReleaseNotes(
     conventionalCommits: ConventionalCommit[],
     newVersion: Version,
     newVersionTag: TagName,
@@ -104,7 +104,7 @@ export class DotnetYoshi extends BaseStrategy {
     }
   }
 
-  async getDefaultComponent(): Promise<string | undefined> {
+  override async getDefaultComponent(): Promise<string | undefined> {
     // default component is based on the path
     const pathParts = this.path.split('/');
     return pathParts[pathParts.length - 1];

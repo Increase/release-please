@@ -41,7 +41,7 @@ interface TaggedValue {
  * replaced.
  */
 class TaggedTOMLParser extends TOMLParser {
-  parseValue() {
+  override parseValue() {
     // Remember the start position of the value.
     //
     // Off-by-one correctness: by this point, `this.pos` points one character
@@ -51,7 +51,7 @@ class TaggedTOMLParser extends TOMLParser {
     return super.parseValue();
   }
 
-  next(fn: Function) {
+  override next(fn: Function) {
     const prevState = this.state;
     super.next(fn); // `next` returns void
 
@@ -60,7 +60,7 @@ class TaggedTOMLParser extends TOMLParser {
     this.state.__TAGGED_START = prevState.__TAGGED_START;
   }
 
-  return(value: unknown) {
+  override return(value: unknown) {
     const prevState = this.state;
     super.return(value); // `return` returns void
 

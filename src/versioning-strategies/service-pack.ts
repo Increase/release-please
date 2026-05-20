@@ -53,7 +53,7 @@ class ServicePackVersionUpdate implements VersionUpdater {
  * the number is an auto-incrementing integer starting with 1.
  */
 export class ServicePackVersioningStrategy extends DefaultVersioningStrategy {
-  determineReleaseType(
+  override determineReleaseType(
     _version: Version,
     _commits: ConventionalCommit[]
   ): VersionUpdater {

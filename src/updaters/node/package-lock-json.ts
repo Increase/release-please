@@ -27,7 +27,7 @@ type LockFileV2 = {
  * version (for a v2 lock file).
  */
 export class PackageLockJson extends DefaultUpdater {
-  updateContent(content: string, logger: Logger = defaultLogger): string {
+  override updateContent(content: string, logger: Logger = defaultLogger): string {
     const parsed = JSON.parse(content) as LockFileV2;
     logger.info(`updating from ${parsed.version} to ${this.version}`);
     parsed.version = this.version.toString();

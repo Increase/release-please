@@ -77,7 +77,7 @@ export class Generic extends DefaultUpdater {
    * @param {string} content The initial content
    * @returns {string} The updated content
    */
-  updateContent(
+  override updateContent(
     content: string | undefined,
     logger: Logger = defaultLogger
   ): string {

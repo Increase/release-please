@@ -135,7 +135,7 @@ const AUTORELEASE_PATTERN =
   /^release-?(?<component>[\w-.]*)?-v(?<version>[0-9].*)$/;
 const RELEASE_PLEASE_BRANCH_PREFIX = 'release-please--branches';
 class AutoreleaseBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     if (branchName.startsWith(RELEASE_PLEASE_BRANCH_PREFIX)) {
       return false;
     }
@@ -149,7 +149,7 @@ class AutoreleaseBranchName extends BranchName {
       this.version = Version.parse(match.groups.version);
     }
   }
-  toString(): string {
+  override toString(): string {
     if (this.component) {
       return `release-${this.component}-v${this.version?.toString()}`;
     }
@@ -166,7 +166,7 @@ class AutoreleaseBranchName extends BranchName {
  */
 const V12_DEFAULT_PATTERN = `^${RELEASE_PLEASE}/branches/(?<branch>[^/]+)$`;
 class V12DefaultBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     return !!branchName.match(V12_DEFAULT_PATTERN);
   }
   constructor(branchName: string) {
@@ -176,7 +176,7 @@ class V12DefaultBranchName extends BranchName {
       this.targetBranch = match.groups.branch;
     }
   }
-  toString(): string {
+  override toString(): string {
     return `${RELEASE_PLEASE}/branches/${this.targetBranch}`;
   }
 }
@@ -190,7 +190,7 @@ class V12DefaultBranchName extends BranchName {
  */
 const V12_COMPONENT_PATTERN = `^${RELEASE_PLEASE}/branches/(?<branch>[^/]+)/components/(?<component>.+)$`;
 class V12ComponentBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     return !!branchName.match(V12_COMPONENT_PATTERN);
   }
   constructor(branchName: string) {
@@ -201,7 +201,7 @@ class V12ComponentBranchName extends BranchName {
       this.component = match.groups.component;
     }
   }
-  toString(): string {
+  override toString(): string {
     return `${RELEASE_PLEASE}/branches/${this.targetBranch}/components/${this.component}`;
   }
 }
@@ -209,7 +209,7 @@ class V12ComponentBranchName extends BranchName {
 const DEFAULT_PATTERN = `^${RELEASE_PLEASE}--branches--(?<branch>.+?)(?:--changes--(?<changes>.+))?$`;
 
 class DefaultBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     return !!branchName.match(DEFAULT_PATTERN);
   }
   constructor(branchName: string) {
@@ -220,7 +220,7 @@ class DefaultBranchName extends BranchName {
       this.changesBranch = match.groups.changes;
     }
   }
-  toString(): string {
+  override toString(): string {
     const changes =
       !this.changesBranch || this.targetBranch === this.changesBranch
         ? ''
@@ -231,7 +231,7 @@ class DefaultBranchName extends BranchName {
 
 const COMPONENT_PATTERN = `^${RELEASE_PLEASE}--branches--(?<branch>.+?)(?:--changes--(?<changes>.+))?--components--(?<component>.+)$`;
 class ComponentBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     return !!branchName.match(COMPONENT_PATTERN);
   }
   constructor(branchName: string) {
@@ -243,7 +243,7 @@ class ComponentBranchName extends BranchName {
       this.component = match.groups.component;
     }
   }
-  toString(): string {
+  override toString(): string {
     const changes =
       !this.changesBranch || this.targetBranch === this.changesBranch
         ? ''
@@ -254,7 +254,7 @@ class ComponentBranchName extends BranchName {
 
 const GROUP_PATTERN = `^${RELEASE_PLEASE}--branches--(?<branch>.+?)(?:--changes--(?<changes>.+))?--groups--(?<group>.+)$`;
 class GroupBranchName extends BranchName {
-  static matches(branchName: string): boolean {
+  static override matches(branchName: string): boolean {
     return !!branchName.match(GROUP_PATTERN);
   }
   constructor(branchName: string) {
@@ -266,7 +266,7 @@ class GroupBranchName extends BranchName {
       this.component = match.groups.group;
     }
   }
-  toString(): string {
+  override toString(): string {
     const changes =
       !this.changesBranch || this.targetBranch === this.changesBranch
         ? ''

@@ -51,7 +51,7 @@ export class Sfdx extends BaseStrategy {
     return updates;
   }
 
-  async getDefaultPackageName(): Promise<string | undefined> {
+  override async getDefaultPackageName(): Promise<string | undefined> {
     const pkgJsonContents = await this.getSfdxProjectJsonContents();
     const pkg = JSON.parse(pkgJsonContents.parsedContent);
     return pkg.name;
