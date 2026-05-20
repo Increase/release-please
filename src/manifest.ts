@@ -313,6 +313,7 @@ export class Manifest {
   private bootstrapSha?: string;
   private lastReleaseSha?: string;
   private draft?: boolean;
+  private prerelease?: boolean;
   private draftPullRequest?: boolean;
   private groupPullRequestTitlePattern?: string;
   readonly releaseSearchDepth: number;
