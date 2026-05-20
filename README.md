@@ -102,7 +102,7 @@ jobs:
           client-id: ${{ vars.INCREASE_RELEASES_CLIENT_ID }}
           private-key: ${{ secrets.INCREASE_RELEASES_PRIVATE_KEY }}
 
-      - uses: increase/release-please@v0
+      - uses: increase/release-please@v1
         with:
           token: ${{ steps.app-token.outputs.token }}
 ```
