@@ -2,12 +2,21 @@ import {afterAll, afterEach, beforeAll, vi} from 'vitest';
 import nock from './http-mock';
 import {server} from './msw';
 
-beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
+beforeAll(() => {
+  server.listen({onUnhandledRequest: 'error'});
+  vi.useFakeTimers({
+    toFake: ['Date'],
+    now: new Date('2026-05-19T12:00:00Z'),
+  });
+});
 afterEach(() => {
   nock.cleanAll();
   vi.restoreAllMocks();
 });
-afterAll(() => server.close());
+afterAll(() => {
+  vi.useRealTimers();
+  server.close();
+});
 type Matcher = {test: (value: unknown) => boolean};
 
 function isMatcher(value: unknown): value is Matcher {
