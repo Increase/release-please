@@ -117,11 +117,11 @@ export class PHPYoshi extends BaseStrategy {
         };
         const newVersion = await this.versioningStrategy.bump(
           version,
-          splitCommits[directory]
+          splitCommits[directory] ?? []
         );
         versionsMap.set(composer.name, newVersion);
         const partialReleaseNotes = await this.changelogNotes.buildNotes(
-          splitCommits[directory],
+          splitCommits[directory] ?? [],
           {
             host: this.changelogHost,
             owner: this.repository.owner,
@@ -169,7 +169,7 @@ export class PHPYoshi extends BaseStrategy {
       commits: conventionalCommits, // TODO(@bcoe): these commits will need to be divided into multiple changelog.json updates.
     });
     for (const directory in directoryVersionContents) {
-      const componentInfo = directoryVersionContents[directory];
+      const componentInfo = directoryVersionContents[directory]!;
       const version = versionsMap.get(componentInfo.composer.name);
       if (!version) {
         this.logger.warn(`No version found for ${componentInfo.composer.name}`);

@@ -114,7 +114,7 @@ export class Generic extends DefaultUpdater {
         // replace inline versions
         replaceVersion(
           line,
-          (match.groups?.scope || 'version') as BlockScope,
+          (match.groups?.['scope'] || 'version') as BlockScope,
           this.version
         );
       } else if (blockScope) {
@@ -127,8 +127,8 @@ export class Generic extends DefaultUpdater {
         // look for block start line
         match = line.match(this.blockStartRegex);
         if (match) {
-          if (match.groups?.scope) {
-            blockScope = match.groups.scope as BlockScope;
+          if (match.groups?.['scope']) {
+            blockScope = match.groups['scope'] as BlockScope;
           } else {
             blockScope = 'version';
           }

@@ -53,11 +53,11 @@ export class Version {
     if (!match?.groups) {
       throw Error(`unable to parse version string: ${versionString}`);
     }
-    const major = Number(match.groups.major);
-    const minor = Number(match.groups.minor);
-    const patch = Number(match.groups.patch);
-    const preRelease = match.groups.preRelease;
-    const build = match.groups.build;
+    const major = Number(match.groups['major']);
+    const minor = Number(match.groups['minor']);
+    const patch = Number(match.groups['patch']);
+    const preRelease = match.groups['preRelease'];
+    const build = match.groups['build'];
     return new Version(major, minor, patch, preRelease, build);
   }
 

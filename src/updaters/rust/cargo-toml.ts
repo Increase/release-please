@@ -83,7 +83,7 @@ export class CargoToml extends DefaultUpdater {
       if (parsed.target) {
         for (const targetName of Object.keys(parsed.target)) {
           for (const depKind of DEP_KINDS) {
-            const deps = parsed.target[targetName][depKind];
+            const deps = parsed.target[targetName]![depKind];
 
             if (!deps) {
               continue; // to next depKind

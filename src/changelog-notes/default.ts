@@ -65,7 +65,7 @@ export class DefaultChangelogNotes implements ChangelogNotes {
 
     const config: {[key: string]: ChangelogSection[]} = {};
     if (options.changelogSections) {
-      config.types = options.changelogSections;
+      config['types'] = options.changelogSections;
     }
     const preset = await presetFactory(config);
     preset.writerOpts.commitPartial =

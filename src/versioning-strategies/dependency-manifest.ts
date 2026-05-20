@@ -45,7 +45,7 @@ export class DependencyManifest extends DefaultVersioningStrategy {
     let breaking = 0;
     let features = 0;
     for (const dep in dependencyUpdates) {
-      const version = dependencyUpdates[dep];
+      const version = dependencyUpdates[dep]!;
       if (version.patch === 0) {
         if (version.minor === 0) {
           breaking++;
@@ -93,7 +93,7 @@ function buildDependencyUpdates(
     const match = commit.message.match(DEPENDENCY_UPDATE_REGEX);
     if (!match) continue;
 
-    const versionString = match[2];
+    const versionString = match[2]!;
     let version: Version;
     try {
       version = Version.parse(versionString);
@@ -103,9 +103,9 @@ function buildDependencyUpdates(
 
     // commits are sorted by latest first, so if there is a collision,
     // then we've already recorded the latest version
-    if (versionsMap[match[1]]) continue;
+    if (versionsMap[match[1]!]) continue;
 
-    versionsMap[match[1]] = version;
+    versionsMap[match[1]!] = version;
   }
   return versionsMap;
 }

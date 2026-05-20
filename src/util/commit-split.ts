@@ -85,7 +85,7 @@ export class CommitSplit {
       }
       const dedupe: Set<string> = new Set();
       for (let i = 0; i < commit.files.length; i++) {
-        const file: string = commit.files[i];
+        const file: string = commit.files[i]!;
         // NOTE: GitHub API always returns paths using the `/` separator,
         // regardless of what platform the client code is running on
         const splitPath = file.split('/');
@@ -104,17 +104,17 @@ export class CommitSplit {
         if (!pkgName || dedupe.has(pkgName)) continue;
         else dedupe.add(pkgName);
         if (!splitCommits[pkgName]) splitCommits[pkgName] = [];
-        splitCommits[pkgName].push(commit);
+        splitCommits[pkgName]!.push(commit);
       }
       if (commit.files.length === 0 && this.includeEmpty) {
         if (this.packagePaths) {
           for (const pkgName of this.packagePaths) {
             splitCommits[pkgName] = splitCommits[pkgName] || [];
-            splitCommits[pkgName].push(commit);
+            splitCommits[pkgName]!.push(commit);
           }
         } else {
           for (const pkgName in splitCommits) {
-            splitCommits[pkgName].push(commit);
+            splitCommits[pkgName]!.push(commit);
           }
         }
       }

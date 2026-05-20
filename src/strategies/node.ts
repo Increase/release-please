@@ -107,7 +107,7 @@ export class Node extends BaseStrategy {
     if (!component) {
       return '';
     }
-    return component.match(/^@[\w-]+\//) ? component.split('/')[1] : component;
+    return component.match(/^@[\w-]+\//) ? component.split('/')[1]! : component;
   }
 
   protected async getPkgJsonContents(): Promise<GitHubFileContents> {

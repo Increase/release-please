@@ -122,10 +122,10 @@ export class GoYoshi extends BaseStrategy {
       ) {
         if (regenCommit) {
           const match = commit.message.match(REGEN_ISSUE_REGEX);
-          if (match?.groups?.pr) {
+          if (match?.groups?.['pr']) {
             regenCommit.references.push({
               action: 'refs',
-              issue: match.groups.pr,
+              issue: match.groups['pr'],
               prefix: '#',
             });
           }
@@ -135,13 +135,13 @@ export class GoYoshi extends BaseStrategy {
           regenCommit = commit;
 
           const match = commit.bareMessage.match(REGEN_ISSUE_REGEX);
-          if (match?.groups?.pr) {
+          if (match?.groups?.['pr']) {
             regenCommit.references.push({
               action: 'refs',
-              issue: match.groups.pr,
+              issue: match.groups['pr'],
               prefix: '#',
             });
-            regenCommit.bareMessage = match.groups.prefix.trim();
+            regenCommit.bareMessage = (match.groups['prefix'] ?? '').trim();
           }
         }
       }

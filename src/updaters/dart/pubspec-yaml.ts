@@ -30,7 +30,7 @@ export class PubspecYaml extends DefaultUpdater {
     let buildNumber = '';
 
     if (oldVersion) {
-      buildNumber = oldVersion[2];
+      buildNumber = oldVersion[2] ?? '';
       const parsedBuild = parseInt(buildNumber, 10);
       if (!Number.isNaN(parsedBuild)) {
         buildNumber = `+${parsedBuild + 1}`;

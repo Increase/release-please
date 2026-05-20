@@ -66,7 +66,7 @@ export class LinkedVersions extends ManifestPlugin {
     // Find all strategies in the group
     const groupStrategies: Record<string, Strategy> = {};
     for (const path in strategiesByPath) {
-      const strategy = strategiesByPath[path];
+      const strategy = strategiesByPath[path]!;
       const component = await strategy.getComponent();
       if (!component) {
         continue;
@@ -84,10 +84,10 @@ export class LinkedVersions extends ManifestPlugin {
     const groupVersions: Record<string, Version> = {};
     const missingReleasePaths = new Set<string>();
     for (const path in groupStrategies) {
-      const strategy = groupStrategies[path];
+      const strategy = groupStrategies[path]!;
       const latestRelease = releasesByPath[path];
       const releasePullRequest = await strategy.buildReleasePullRequest({
-        commits: parseConventionalCommits(commitsByPath[path], this.logger),
+        commits: parseConventionalCommits(commitsByPath[path] ?? [], this.logger),
         latestRelease,
         manifestPath: this.manifestPath,
       });
@@ -104,19 +104,19 @@ export class LinkedVersions extends ManifestPlugin {
 
     const primaryVersion = versions.reduce(
       (collector, version) =>
-        collector.compare(version) > 0 ? collector : version,
+        collector!.compare(version) > 0 ? collector : version,
       versions[0]
-    );
+    )!;
 
     const newStrategies: Record<string, Strategy> = {};
     for (const path in strategiesByPath) {
       if (path in groupStrategies) {
-        const component = await strategiesByPath[path].getComponent();
+        const component = await strategiesByPath[path]!.getComponent();
         this.logger.info(
           `Replacing strategy for path ${path} with forced version: ${primaryVersion}`
         );
         newStrategies[path] = await buildStrategy({
-          ...this.repositoryConfig[path],
+          ...this.repositoryConfig[path]!,
           github: this.github,
           path,
           targetBranch: this.targetBranch,
@@ -125,7 +125,7 @@ export class LinkedVersions extends ManifestPlugin {
         });
         if (missingReleasePaths.has(path)) {
           this.logger.debug(`Appending fake commit for path: ${path}`);
-          commitsByPath[path].push({
+          commitsByPath[path]!.push({
             sha: '',
             message: `chore(${component}): Synchronize ${
               this.groupName
@@ -133,7 +133,7 @@ export class LinkedVersions extends ManifestPlugin {
           });
         }
       } else {
-        newStrategies[path] = strategiesByPath[path];
+        newStrategies[path] = strategiesByPath[path]!;
       }
     }
 
@@ -152,7 +152,9 @@ export class LinkedVersions extends ManifestPlugin {
       return candidates;
     }
 
-    const [inScopeCandidates, outOfScopeCandidates] = candidates.reduce(
+    const [inScopeCandidates, outOfScopeCandidates] = candidates.reduce<
+      [CandidateReleasePullRequest[], CandidateReleasePullRequest[]]
+    >(
       (collection, candidate) => {
         if (!candidate.pullRequest.version) {
           this.logger.warn('pull request missing version', candidate);
@@ -166,7 +168,7 @@ export class LinkedVersions extends ManifestPlugin {
         }
         return collection;
       },
-      [[], []] as CandidateReleasePullRequest[][]
+      [[], []]
     );
     this.logger.info(
       `Found ${inScopeCandidates.length} linked-versions candidates`

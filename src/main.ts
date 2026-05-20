@@ -63,8 +63,8 @@ function readInputs(): ActionInputs {
 
   // Default repo-url to the calling repository, exactly as the composite did
   // via $GITHUB_SERVER_URL / $GITHUB_REPOSITORY.
-  const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
-  const repository = process.env.GITHUB_REPOSITORY || '';
+  const serverUrl = process.env['GITHUB_SERVER_URL'] || 'https://github.com';
+  const repository = process.env['GITHUB_REPOSITORY'] || '';
   const defaultRepoUrl = repository ? `${serverUrl}/${repository}` : '';
 
   return {

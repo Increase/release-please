@@ -51,7 +51,7 @@ export class JavaUpdate extends DefaultUpdater {
     content.split(/\r?\n/).forEach(line => {
       let match = line.match(INLINE_UPDATE_REGEX);
       if (match && (!this.isSnapshot || match[2] === 'current')) {
-        const newVersion = this.versionsMap!.get(match[1]);
+        const newVersion = this.versionsMap!.get(match[1]!);
         if (newVersion) {
           newLines.push(line.replace(VERSION_REGEX, newVersion.toString()));
         } else {
@@ -70,7 +70,7 @@ export class JavaUpdate extends DefaultUpdater {
       } else {
         match = line.match(BLOCK_START_REGEX);
         if (match && (!this.isSnapshot || match[2] === 'current')) {
-          blockPackageName = match[1];
+          blockPackageName = match[1] ?? null;
         }
         newLines.push(line);
       }
