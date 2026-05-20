@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.8](https://github.com/Increase/release-please/compare/v0.2.7...v0.2.8) (2026-05-20)
+
+
+### Bug Fixes
+
+* **manifest:** declare prerelease field on Manifest class ([#55](https://github.com/Increase/release-please/issues/55)) ([8d11321](https://github.com/Increase/release-please/commit/8d113217206a5a93b62b2508dfcfe761f57ba6ac))
+* **manifest:** honor manifestOptions.prerelease as default ([#52](https://github.com/Increase/release-please/issues/52)) ([aa002f1](https://github.com/Increase/release-please/commit/aa002f1904cbe485faf756ceab80f976e717ce65))
+
+
+### Chores
+
+* **deps-dev:** bump ajv-formats from 2.1.1 to 3.0.1 ([#46](https://github.com/Increase/release-please/issues/46)) ([59ff9e9](https://github.com/Increase/release-please/commit/59ff9e9cfa30fdd366bfb0a2b5cb63bc9dc7b8de))
+* **deps:** bump @google-automations/git-file-utils from 1.2.5 to 3.0.1 ([#45](https://github.com/Increase/release-please/issues/45)) ([e8e7a03](https://github.com/Increase/release-please/commit/e8e7a03b0ac24b09c23a41d05955179e75632928))
+* **deps:** bump @octokit/plugin-paginate-rest from 5.0.1 to 14.0.0 ([#57](https://github.com/Increase/release-please/issues/57)) ([dee0b88](https://github.com/Increase/release-please/commit/dee0b886e2c1e8499a55755e6eb3dade19d0afc4))
+* **deps:** bump minimatch from 3.1.2 to 9.0.9 ([#58](https://github.com/Increase/release-please/issues/58)) ([e6d04e3](https://github.com/Increase/release-please/commit/e6d04e3a0d582108ced1eff7997dc34c7626141c))
+* **deps:** bump tslib from 2.6.2 to 2.8.1 ([#47](https://github.com/Increase/release-please/issues/47)) ([63cfb32](https://github.com/Increase/release-please/commit/63cfb32c4aec19df9b26612189e7f328bcaabfed))
+* enable noPropertyAccessFromIndexSignature ([#53](https://github.com/Increase/release-please/issues/53)) ([5c5c42d](https://github.com/Increase/release-please/commit/5c5c42d76168b6d671df1385c200cc5ddb57fc8c))
+* enable noUnusedLocals and noUnusedParameters ([#51](https://github.com/Increase/release-please/issues/51)) ([9b85b01](https://github.com/Increase/release-please/commit/9b85b01d202361144d2295f9952392be87fcf70f))
+
 ## [0.2.7](https://github.com/Increase/release-please/compare/v0.2.6...v0.2.7) (2026-05-20)
 
 
