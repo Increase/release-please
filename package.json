@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/increase/release-please#readme",
   "devDependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^3.0.1",
     "@biomejs/biome": "^2.4.15",
     "@octokit/types": "^16.0.0",
     "@types/diff": "^5.0.2",
