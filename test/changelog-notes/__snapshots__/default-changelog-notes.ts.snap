@@ -3,7 +3,6 @@
 exports[`DefaultChangelogNotes > buildNotes > should build default release notes 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * some bugfix
@@ -11,7 +10,6 @@ exports[`DefaultChangelogNotes > buildNotes > should build default release notes
 ### Features
 
 * some feature ([sha1](https://github.com/googleapis/java-asset/commit/sha1))
-
 
 ### Bug Fixes
 
@@ -21,7 +19,6 @@ exports[`DefaultChangelogNotes > buildNotes > should build default release notes
 exports[`DefaultChangelogNotes > buildNotes > should build with custom changelog sections 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * some bugfix
@@ -30,11 +27,9 @@ exports[`DefaultChangelogNotes > buildNotes > should build with custom changelog
 
 * some feature ([sha1](https://github.com/googleapis/java-asset/commit/sha1))
 
-
 ### Bug Fixes
 
 * some bugfix ([sha2](https://github.com/googleapis/java-asset/commit/sha2))
-
 
 ### Documentation
 
@@ -44,11 +39,10 @@ exports[`DefaultChangelogNotes > buildNotes > should build with custom changelog
 exports[`DefaultChangelogNotes > buildNotes > should handle BREAKING CHANGE notes 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
-* some bugfix
 * **Migration:** migration note
+* some bugfix
 
 ### Bug Fixes
 
@@ -58,7 +52,6 @@ exports[`DefaultChangelogNotes > buildNotes > should handle BREAKING CHANGE note
 exports[`DefaultChangelogNotes > buildNotes > should ignore "chore: release" commits 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### Chores
 
 * some chore ([sha1](https://github.com/googleapis/java-asset/commit/sha1))"
@@ -66,7 +59,6 @@ exports[`DefaultChangelogNotes > buildNotes > should ignore "chore: release" com
 
 exports[`DefaultChangelogNotes > buildNotes > should ignore RELEASE AS notes 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -80,7 +72,6 @@ exports[`DefaultChangelogNotes > buildNotes > should ignore RELEASE AS notes 1`]
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > handles Release-As footers 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### meta
 
 * correct release ([1f64add](https://github.com/googleapis/java-asset/commit/1f64add37f426e87ce1b777616a137ec))"
@@ -89,7 +80,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > handles Rele
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should allow customizing sections 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### Miscellaneous Chores
 
 * some chore ([be1aa27](https://github.com/googleapis/java-asset/commit/be1aa271694db576f28f23da1df93519))"
@@ -97,7 +87,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should allow
 
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle BREAKING CHANGE body 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -111,7 +100,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle a breaking change 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * some bugfix
@@ -123,7 +111,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle a breaking change with reference 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -137,7 +124,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle bug links 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some fix ([71489e6](https://github.com/googleapis/java-asset/commit/71489e63ad212c54598f5bdcbedec5f6)), closes [#123](https://github.com/googleapis/java-asset/issues/123)"
@@ -145,7 +131,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle git trailers 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -159,7 +144,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle html tags 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### Features
 
 * render all imagesets as &lt;picture&gt; ([383fb14](https://github.com/googleapis/java-asset/commit/383fb14708ae91f7bb7e64bf0bacab38))"
@@ -167,7 +151,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle inline bug links 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### Bug Fixes
 
@@ -177,7 +160,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle meta commits 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * **recaptchaenterprise:** for some reason this migration is breaking.
@@ -185,7 +167,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 ### Features
 
 * **recaptchaenterprise:** migrate microgenerator ([3cf10aa](https://github.com/googleapis/java-asset/commit/3cf10aa5f94cd40a1d0d08e573eb737f))
-
 
 ### Bug Fixes
 
@@ -196,12 +177,11 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle multi-line breaking change, if prefixed with list 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * we were on Node 6
-    - deleted API foo
-    - deleted API bar
+      - deleted API foo
+      - deleted API bar
 
 ### Miscellaneous Chores
 
@@ -210,7 +190,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handle multi-line breaking changes 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -224,7 +203,6 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should handl
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should not include content two newlines after BREAKING CHANGE 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### ⚠ BREAKING CHANGES
 
 * we were on Node 6
@@ -237,11 +215,9 @@ exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should not i
 exports[`DefaultChangelogNotes > buildNotes > with commit parsing > should parse multiple commit messages from a single commit 1`] = `
 "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (1983-10-10)
 
-
 ### Features
 
 * some feature ([2ec0e9b](https://github.com/googleapis/java-asset/commit/2ec0e9bc0ba7deaf762dae213667bf42))
-
 
 ### Bug Fixes
 
@@ -253,7 +229,6 @@ exports[`DefaultChangelogNotes > pull request compatibility > should build parse
   {
     "notes": "## [1.2.3](https://github.com/googleapis/java-asset/compare/v1.2.2...v1.2.3) (2026-05-19)
 
-
 ### ⚠ BREAKING CHANGES
 
 * some bugfix
@@ -261,7 +236,6 @@ exports[`DefaultChangelogNotes > pull request compatibility > should build parse
 ### Features
 
 * some feature ([sha1](https://github.com/googleapis/java-asset/commit/sha1))
-
 
 ### Bug Fixes
 

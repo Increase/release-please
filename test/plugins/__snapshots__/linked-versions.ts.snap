@@ -7,7 +7,6 @@ exports[`LinkedVersions plugin > can skip grouping pull requests 1`] = `
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -27,7 +26,6 @@ exports[`LinkedVersions plugin > can skip grouping pull requests 2`] = `
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
@@ -46,7 +44,6 @@ exports[`LinkedVersions plugin > can skip grouping pull requests 3`] = `
 
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
-
 
 ### Miscellaneous Chores
 
@@ -76,7 +73,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -91,7 +87,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg3",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -172,7 +167,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -251,7 +245,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
 
-
 ### Miscellaneous Chores
 
 * **pkg3:** Synchronize group name versions",
@@ -296,7 +289,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -311,7 +303,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg4",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -392,7 +383,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -471,7 +461,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (2026-05-19)
 
-
 ### Miscellaneous Chores
 
 * **pkg4:** Synchronize second group name versions",
@@ -514,7 +503,6 @@ exports[`LinkedVersions plugin > should allow multiple groups of linked versions
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -523,7 +511,6 @@ exports[`LinkedVersions plugin > should allow multiple groups of linked versions
 <details><summary>pkg4: 1.0.1</summary>
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v1.0.0...pkg4-v1.0.1) (1983-10-10)
-
 
 ### Miscellaneous Chores
 
@@ -549,7 +536,6 @@ exports[`LinkedVersions plugin > should allow multiple groups of linked versions
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
@@ -558,7 +544,6 @@ exports[`LinkedVersions plugin > should allow multiple groups of linked versions
 <details><summary>pkg3: 0.2.4</summary>
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
-
 
 ### Miscellaneous Chores
 
@@ -590,7 +575,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -654,7 +638,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -729,7 +712,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -744,7 +726,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg3",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -825,7 +806,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -904,7 +884,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
 
-
 ### Miscellaneous Chores
 
 * **pkg3:** Synchronize group name versions",
@@ -945,7 +924,6 @@ exports[`LinkedVersions plugin > should group pull requests 2`] = `
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -967,7 +945,6 @@ exports[`LinkedVersions plugin > should group pull requests 3`] = `
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
@@ -976,7 +953,6 @@ exports[`LinkedVersions plugin > should group pull requests 3`] = `
 <details><summary>pkg3: 0.2.4</summary>
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
-
 
 ### Miscellaneous Chores
 
@@ -1007,7 +983,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -1023,7 +998,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -1038,7 +1012,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg3",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -1132,7 +1105,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1234,7 +1206,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -1268,7 +1239,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/c/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -1312,7 +1282,6 @@ exports[`LinkedVersions plugin > should sync versions pull requests 2`] = `
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -1322,7 +1291,6 @@ exports[`LinkedVersions plugin > should sync versions pull requests 2`] = `
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))
@@ -1331,7 +1299,6 @@ exports[`LinkedVersions plugin > should sync versions pull requests 2`] = `
 <details><summary>pkg3: 0.2.4</summary>
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg3-v0.2.3...pkg3-v0.2.4) (1983-10-10)
-
 
 ### Miscellaneous Chores
 

@@ -746,7 +746,6 @@ exports[`PHPYoshi > buildReleasePullRequest > includes misc commits 1`] = `
 <details><summary>google/client3 0.1.3</summary>
 
 
-
 ### Miscellaneous
 
 * some miscellaneous task ([def234](https://github.com/googleapis/php-yoshi-test-repo/commit/def234))
@@ -771,7 +770,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with de
 <details><summary>google/client1 1.2.4</summary>
 
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-storage to v1.120.0 ([845db13](https://github.com/googleapis/php-yoshi-test-repo/commit/845db1381b3d5d20151cad2588f85feb))
@@ -781,7 +779,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with de
 <details><summary>google/client2 2.0.1</summary>
 
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/php-yoshi-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
@@ -789,7 +786,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with de
 </details>
 
 <details><summary>google/client3 0.1.3</summary>
-
 
 
 ### Bug Fixes
@@ -816,7 +812,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with se
 <details><summary>google/client1 1.2.4</summary>
 
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-storage to v1.120.0 ([845db13](https://github.com/googleapis/php-yoshi-test-repo/commit/845db1381b3d5d20151cad2588f85feb))
@@ -826,7 +821,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with se
 <details><summary>google/client2 2.0.1</summary>
 
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/php-yoshi-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
@@ -834,7 +828,6 @@ exports[`PHPYoshi > buildReleasePullRequest > returns release PR changes with se
 </details>
 
 <details><summary>google/client3 0.1.3</summary>
-
 
 
 ### Bug Fixes

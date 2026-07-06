@@ -16,7 +16,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -79,7 +78,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -153,7 +151,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -239,7 +236,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -309,7 +305,6 @@ exports[`Manifest > buildPullRequests > should allow creating multiple pull requ
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -328,7 +323,6 @@ exports[`Manifest > buildPullRequests > should allow creating multiple pull requ
 
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
-
 
 ### Bug Fixes
 
@@ -357,7 +351,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -462,7 +455,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -586,7 +578,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "root",
           "notes": "## [1.2.2](https://github.com/fake-owner/fake-repo/compare/root-v1.2.1...root-v1.2.2) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -601,7 +592,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.1...pkg1-v1.0.2) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -672,7 +662,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.2.2](https://github.com/fake-owner/fake-repo/compare/root-v1.2.1...root-v1.2.2) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -752,7 +741,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.1...pkg1-v1.0.2) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -795,7 +783,6 @@ exports[`Manifest > buildPullRequests > should allow customizing pull request ti
 
 ## [1.2.2](https://github.com/fake-owner/fake-repo/compare/root-v1.2.1...root-v1.2.2) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -804,7 +791,6 @@ exports[`Manifest > buildPullRequests > should allow customizing pull request ti
 <details><summary>pkg1: 1.0.2</summary>
 
 ## [1.0.2](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.1...pkg1-v1.0.2) (1983-10-10)
-
 
 ### Bug Fixes
 
@@ -834,7 +820,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.1...pkg1-v1.0.2) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -885,7 +870,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.1...pkg1-v1.0.2) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -957,7 +941,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1062,7 +1045,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1186,7 +1168,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -1249,7 +1230,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1323,7 +1303,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v3.3.3) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1408,7 +1387,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/b/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v3.3.3) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1488,7 +1466,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v3.3.3) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -1551,7 +1528,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v3.3.3) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1625,7 +1601,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v3.3.3) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -1711,7 +1686,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [3.3.3](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v3.3.3) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -1790,7 +1764,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * real fix message ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -1863,7 +1836,6 @@ END_COMMIT_OVERRIDE",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * real fix message ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -1933,7 +1905,6 @@ exports[`Manifest > buildPullRequests > should allow overriding commit message 2
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * real fix message ([def456](https://github.com/fake-owner/fake-repo/commit/def456))
@@ -1961,7 +1932,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## 0.0.1 (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2034,7 +2004,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## 0.0.1 (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2115,7 +2084,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## 0.0.1 (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -2193,7 +2161,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## 0.0.1 (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2273,7 +2240,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -2336,7 +2302,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2410,7 +2375,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [4.5.6-beta.1](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v4.5.6-beta.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2496,7 +2460,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [4.5.6-beta.1](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v4.5.6-beta.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -2574,7 +2537,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2679,7 +2641,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -2803,7 +2764,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -2907,7 +2867,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -3031,7 +2990,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "a",
           "notes": "## [1.1.1](https://github.com/fake-owner/fake-repo/compare/a-v1.1.0...a-v1.1.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * a bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -3049,7 +3007,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "b",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * b bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -3064,7 +3021,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "c",
           "notes": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/c-v1.0.1...c-v1.0.2) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -3178,7 +3134,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.1.1](https://github.com/fake-owner/fake-repo/compare/a-v1.1.0...a-v1.1.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -3295,7 +3250,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * b bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -3381,7 +3335,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.2](https://github.com/fake-owner/fake-repo/compare/c-v1.0.1...c-v1.0.2) (2026-05-19)
 
-
 ### Bug Fixes
 
 * c bugfix ([cccccc](https://github.com/fake-owner/fake-repo/commit/cccccc))",
@@ -3465,7 +3418,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -3480,7 +3432,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -3546,7 +3497,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -3625,7 +3575,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -3668,7 +3617,6 @@ exports[`Manifest > buildPullRequests > should handle mixing componentless confi
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -3677,7 +3625,6 @@ exports[`Manifest > buildPullRequests > should handle mixing componentless confi
 <details><summary>pkg2: 0.2.4</summary>
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
-
 
 ### Bug Fixes
 
@@ -3708,7 +3655,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -3723,7 +3669,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -3789,7 +3734,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -3868,7 +3812,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -3911,7 +3854,6 @@ exports[`Manifest > buildPullRequests > should handle multiple package repositor
 
 ## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (1983-10-10)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -3920,7 +3862,6 @@ exports[`Manifest > buildPullRequests > should handle multiple package repositor
 <details><summary>pkg2: 0.2.4</summary>
 
 ## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (1983-10-10)
-
 
 ### Bug Fixes
 
@@ -4018,7 +3959,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg1",
           "notes": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -5610,7 +5550,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -5784,7 +5723,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg2",
           "notes": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbb](https://github.com/fake-owner/fake-repo/commit/bbb))",
@@ -5918,7 +5856,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbb](https://github.com/fake-owner/fake-repo/commit/bbb))",
@@ -6032,7 +5969,6 @@ exports[`Manifest > buildPullRequests > should read latest version from manifest
   {
     "component": "pkg1",
     "notes": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -7600,7 +7536,6 @@ exports[`Manifest > buildPullRequests > should read latest version from manifest
     "component": "pkg2",
     "notes": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbb](https://github.com/fake-owner/fake-repo/commit/bbb))",
@@ -7689,7 +7624,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -7752,7 +7686,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -7826,7 +7759,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -7912,7 +7844,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -7991,7 +7922,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -8006,7 +7936,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -8071,7 +8000,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -8194,7 +8122,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbb](https://github.com/fake-owner/fake-repo/commit/bbb))",
@@ -8280,7 +8207,6 @@ exports[`Manifest > buildPullRequests > should use latest version from tag if gi
     "component": "pkg1",
     "notes": "## [1.2.4](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.2.3...pkg1-v1.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -8295,7 +8221,6 @@ exports[`Manifest > buildPullRequests > should use latest version from tag if gi
   {
     "component": "pkg2",
     "notes": "## [2.3.5](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.3.4...pkg2-v2.3.5) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -8367,7 +8292,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [6.7.9-alpha.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v6.7.9-alpha.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([commit1](https://github.com/fake-owner/fake-repo/commit/commit11))",
@@ -8430,7 +8354,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [6.7.9-alpha.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v6.7.9-alpha.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -8504,7 +8427,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [7.8.9](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.0.0...pkg2-v7.8.9) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -8633,7 +8555,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [7.8.9](https://github.com/fake-owner/fake-repo/compare/pkg2-v2.0.0...pkg2-v7.8.9) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([commit2](https://github.com/fake-owner/fake-repo/commit/commit22))",
@@ -8753,7 +8674,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg3",
           "notes": "## [8.9.0](https://github.com/fake-owner/fake-repo/compare/pkg3-v3.0.0...pkg3-v8.9.0) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([commit3](https://github.com/fake-owner/fake-repo/commit/commit33))",
@@ -8858,7 +8778,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/c/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [8.9.0](https://github.com/fake-owner/fake-repo/compare/pkg3-v3.0.0...pkg3-v8.9.0) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9049,7 +8968,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg4",
           "notes": "## [9.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v4.0.0...pkg4-v9.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([commit4](https://github.com/fake-owner/fake-repo/commit/commit44))",
@@ -9176,7 +9094,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [9.0.1](https://github.com/fake-owner/fake-repo/compare/pkg4-v4.0.0...pkg4-v9.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([commit4](https://github.com/fake-owner/fake-repo/commit/commit44))",
@@ -9265,7 +9182,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkg1",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -9328,7 +9244,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "path/a/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/pkg1-v1.0.0...pkg1-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9402,7 +9317,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkg2",
           "notes": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9488,7 +9402,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.2.4](https://github.com/fake-owner/fake-repo/compare/pkg2-v0.2.3...pkg2-v0.2.4) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([bbbbbb](https://github.com/fake-owner/fake-repo/commit/bbbbbb))",
@@ -9567,7 +9480,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -9628,7 +9540,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9708,7 +9619,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -9769,7 +9679,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9849,7 +9758,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -9910,7 +9818,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -9990,7 +9897,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10051,7 +9957,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10131,7 +10036,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10192,7 +10096,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10272,7 +10175,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10333,7 +10235,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10413,7 +10314,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10474,7 +10374,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/v1.0.0...v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10553,7 +10452,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "",
           "notes": "## [0.1.0-alpha.29](https://github.com/fake-owner/fake-repo/compare/v0.1.0-alpha.28...v0.1.0-alpha.29) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10637,7 +10535,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [0.1.0-alpha.29](https://github.com/fake-owner/fake-repo/compare/v0.1.0-alpha.28...v0.1.0-alpha.29) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10716,7 +10613,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "b",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10731,7 +10627,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "c",
           "notes": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -10817,7 +10712,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10896,7 +10790,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -10940,7 +10833,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "d",
           "notes": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/d-v3.0.0...d-v3.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11006,7 +10898,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "pkg/d/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/d-v3.0.0...d-v3.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11086,7 +10977,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "b",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11101,7 +10991,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "c",
           "notes": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11187,7 +11076,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11266,7 +11154,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11310,7 +11197,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "",
           "notes": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/v3.0.0...v3.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11376,7 +11262,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "pkg/d/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/v3.0.0...v3.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11456,7 +11341,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "b",
           "notes": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11521,7 +11405,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "pkg/b/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.0.1](https://github.com/fake-owner/fake-repo/compare/b-v1.0.0...b-v1.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11596,7 +11479,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "c",
           "notes": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11661,7 +11543,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "pkg/c/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [2.0.1](https://github.com/fake-owner/fake-repo/compare/c-v2.0.0...c-v2.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 
@@ -11736,7 +11617,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "d",
           "notes": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/d-v3.0.0...d-v3.0.1) (2026-05-19)
 
-
 ### Bug Fixes
 
 * some bugfix ([def456](https://github.com/fake-owner/fake-repo/commit/def456))",
@@ -11801,7 +11681,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "pkg/d/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [3.0.1](https://github.com/fake-owner/fake-repo/compare/d-v3.0.0...d-v3.0.1) (2026-05-19)
-
 
 ### Bug Fixes
 

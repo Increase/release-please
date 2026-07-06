@@ -8,7 +8,6 @@ exports[`Ruby > buildUpdates > allows overriding version file 1`] = `
     "updater": Changelog {
       "changelogEntry": "## 0.0.1 (2026-05-19)
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/ruby-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
@@ -91,7 +90,6 @@ exports[`Ruby > buildUpdates > builds common files 1`] = `
     "path": "CHANGELOG.md",
     "updater": Changelog {
       "changelogEntry": "## [0.123.5](https://github.com/googleapis/ruby-test-repo/compare/google-cloud-automl-v0.123.4...google-cloud-automl/v0.123.5) (2026-05-19)
-
 
 ### Bug Fixes
 

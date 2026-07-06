@@ -8,7 +8,6 @@ exports[`OCaml > buildUpdates > builds common files 1`] = `
     "updater": Changelog {
       "changelogEntry": "## 0.0.1 (2026-05-19)
 
-
 ### Bug Fixes
 
 * **deps:** update dependency com.google.cloud:google-cloud-spanner to v1.50.0 ([08ca011](https://github.com/googleapis/ocaml-test-repo/commit/08ca01180a91c0a1ba8992b491db9212))
@@ -48,7 +47,6 @@ exports[`OCaml > buildUpdates > finds and updates a project files 1`] = `
     "path": "CHANGELOG.md",
     "updater": Changelog {
       "changelogEntry": "## 0.0.1 (2026-05-19)
-
 
 ### Bug Fixes
 
