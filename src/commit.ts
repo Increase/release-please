@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const visit = require('unist-util-visit');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const visitWithAncestors = require('unist-util-visit-parents');
+import {visit, visitWithAncestors} from './util/unist-visit';
+
 const NUMBER_REGEX = /^[0-9]+$/;
 import {PullRequest} from './pull-request';
 import {logger as defaultLogger, Logger} from './util/logger';
