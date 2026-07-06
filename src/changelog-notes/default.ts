@@ -98,12 +98,21 @@ export class DefaultChangelogNotes implements ChangelogNotes {
       commit: 'commit',
     };
 
-    const presetConfig: PresetConfig = {};
+    const presetConfig: PresetConfig = {
+      // The writer's default compare-URL builder percent-encodes the tag names,
+      // turning the '/' in monorepo component tags (e.g. "pkg/v1.2.3") into
+      // '%2F', which GitHub does not resolve in compare links. Keep emitting the
+      // unescaped URL release-please has always produced.
+      formatCompareUrl: () =>
+        `${context.host}/${context.owner}/${context.repository}/compare/${context.previousTag}...${context.currentTag}`,
+    };
     if (options.changelogSections) {
       // The preset used to take a `hidden` boolean per commit type; it now uses
       // an `effect` enum to decide whether a type is rendered in the changelog.
       presetConfig.types = options.changelogSections.map(sectionToCommitType);
     }
+    // createPreset (v10) is synchronous and returns the writer options on
+    // `.writer`; the pre-v9 factory was async and exposed `.writerOpts`.
     const preset = createPreset(presetConfig) as {writer: PresetWriterOptions};
     const writerOpts = preset.writer;
 

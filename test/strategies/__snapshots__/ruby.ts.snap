@@ -89,7 +89,7 @@ exports[`Ruby > buildUpdates > builds common files 1`] = `
     "createIfMissing": true,
     "path": "CHANGELOG.md",
     "updater": Changelog {
-      "changelogEntry": "## [0.123.5](https://github.com/googleapis/ruby-test-repo/compare/google-cloud-automl-v0.123.4...google-cloud-automl%2Fv0.123.5) (2026-05-19)
+      "changelogEntry": "## [0.123.5](https://github.com/googleapis/ruby-test-repo/compare/google-cloud-automl-v0.123.4...google-cloud-automl/v0.123.5) (2026-05-19)
 
 ### Bug Fixes
 
