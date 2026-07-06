@@ -57,7 +57,7 @@
     "@vercel/ncc": "^0.38.4",
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.10",
     "msw": "^2.10.2",
     "vitest": "^4.1.9"
   },
