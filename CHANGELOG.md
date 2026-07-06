@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/Increase/release-please/compare/v1.0.0...v1.0.1) (2026-07-06)
+
+### Chores
+
+* **deps-dev:** bump vitest from 4.1.6 to 4.1.9 ([#74](https://github.com/Increase/release-please/issues/74)) ([530035f](https://github.com/Increase/release-please/commit/530035f6446a6ee0c971fa70c6e107483219613c))
+* **deps:** apply pending Dependabot bumps, fixing ESM-only breakages ([#77](https://github.com/Increase/release-please/issues/77)) ([f95e0a0](https://github.com/Increase/release-please/commit/f95e0a03529a0b4dbc64b43fac3d096ad67de036))
+* **deps:** migrate to conventional-changelog-writer v9 ([#78](https://github.com/Increase/release-please/issues/78)) ([586d663](https://github.com/Increase/release-please/commit/586d6639e80e5fcd233e9f045120346bb30b896a))
+
 ## [1.0.0](https://github.com/Increase/release-please/compare/v0.2.8...v1.0.0) (2026-05-20)
 
 
