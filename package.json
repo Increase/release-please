@@ -58,7 +58,7 @@
     "@vitest/coverage-v8": "^4.1.9",
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
-    "msw": "^2.10.2",
+    "msw": "^2.14.7",
     "vitest": "^4.1.9"
   },
   "dependencies": {
