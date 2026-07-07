@@ -7,7 +7,6 @@ exports[`GoYoshi > buildReleasePullRequest > combines google-api-go-client autog
 
 ## 0.0.1 (1983-10-10)
 
-
 ### Features
 
 * **all:** auto-regenerate discovery clients, refs [#1281](https://github.com/googleapis/google-api-go-client/issues/1281) [#1280](https://github.com/googleapis/google-api-go-client/issues/1280) [#1279](https://github.com/googleapis/google-api-go-client/issues/1279) [#1278](https://github.com/googleapis/google-api-go-client/issues/1278)
@@ -27,7 +26,6 @@ exports[`GoYoshi > buildReleasePullRequest > filters out submodule commits 1`] =
 
 ## 0.0.1 (1983-10-10)
 
-
 ### Bug Fixes
 
 * **translate:** some translate fix ([a74c6a3](https://github.com/googleapis/google-cloud-go/commit/a74c6a3c43273a62de7e47bef2e11fb0))
@@ -46,7 +44,6 @@ exports[`GoYoshi > buildReleasePullRequest > filters out touched files not match
 
 
 ## 0.0.1 (1983-10-10)
-
 
 ### Bug Fixes
 

@@ -321,6 +321,57 @@ describe('DefaultChangelogNotes', () => {
       // });
     });
   });
+  describe('custom templates', () => {
+    const notesOptions = {
+      owner: 'googleapis',
+      repository: 'java-asset',
+      version: '1.2.3',
+      previousTag: 'v1.2.2',
+      currentTag: 'v1.2.3',
+      targetBranch: 'main',
+      changesBranch: 'main',
+    };
+    it('honors a custom headerPartial', async () => {
+      const changelogNotes = new DefaultChangelogNotes({
+        headerPartial: '# Release {{version}} for {{owner}}/{{repository}}',
+      });
+      const notes = await changelogNotes.buildNotes(commits, notesOptions);
+      expect(notes).toContain('# Release 1.2.3 for googleapis/java-asset');
+      // the default header should have been replaced
+      expect(notes).not.toContain('## [1.2.3]');
+      // the rest of the changelog (commit partials) still renders
+      expect(notes).toContain(
+        '* some feature ([sha1](https://github.com/googleapis/java-asset/commit/sha1))'
+      );
+    });
+    it('honors a custom commitPartial', async () => {
+      const changelogNotes = new DefaultChangelogNotes({
+        commitPartial: '* {{subject}} @ {{shortHash}}\n',
+      });
+      const notes = await changelogNotes.buildNotes(commits, notesOptions);
+      expect(notes).toContain('* some feature @ sha1');
+      expect(notes).toContain('* some bugfix @ sha2');
+      // the default commit rendering (with a commit link) is gone
+      expect(notes).not.toContain('/commit/sha1');
+      // the default header still renders
+      expect(notes).toContain('## [1.2.3]');
+    });
+    it('honors a custom mainTemplate that composes partials', async () => {
+      const changelogNotes = new DefaultChangelogNotes({
+        mainTemplate:
+          '{{> header}}\n\n{{#each commitGroups}}{{#each commits}}{{> commit root=@root}}\n{{/each}}{{/each}}',
+        commitPartial: '* {{subject}} <{{shortHash}}>\n',
+      });
+      const notes = await changelogNotes.buildNotes(commits, notesOptions);
+      // header partial (preset default) is pulled in by the main template
+      expect(notes).toContain('## [1.2.3]');
+      // the custom commit partial is pulled in per commit via {{> commit}}
+      expect(notes).toContain('* some feature <sha1>');
+      expect(notes).toContain('* some bugfix <sha2>');
+      // the breaking-change note section is NOT emitted by this main template
+      expect(notes).not.toContain('BREAKING CHANGES');
+    });
+  });
   describe('pull request compatibility', () => {
     it('should build parseable notes', async () => {
       const notesOptions = {

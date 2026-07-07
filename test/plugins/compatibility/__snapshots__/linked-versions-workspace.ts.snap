@@ -16,7 +16,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "pkgA",
           "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -31,7 +30,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkgB",
           "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (2026-05-19)
-
 
 ### Miscellaneous Chores
 
@@ -118,7 +116,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "packages/rustA/CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
-
 
 ### Features
 
@@ -247,7 +244,6 @@ version = "1.1.0"",
         "updater": Changelog {
           "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (2026-05-19)
 
-
 ### Miscellaneous Chores
 
 * **pkgB:** Synchronize my group versions
@@ -317,7 +313,6 @@ exports[`Plugin compatibility > linked-versions and workspace > should version b
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (1983-10-10)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -326,7 +321,6 @@ exports[`Plugin compatibility > linked-versions and workspace > should version b
 <details><summary>pkgB: 1.1.0</summary>
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgB-v1.0.0...pkgB-v1.1.0) (1983-10-10)
-
 
 ### Miscellaneous Chores
 

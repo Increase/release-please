@@ -16,7 +16,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
           "component": "primary",
           "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -31,7 +30,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         {
           "component": "pkgA",
           "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
-
 
 ### Features
 
@@ -145,7 +143,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "path": "CHANGELOG.md",
         "updater": Changelog {
           "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
-
 
 ### Features
 
@@ -346,7 +343,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
         "updater": Changelog {
           "changelogEntry": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -403,7 +399,6 @@ exports[`Plugin compatibility > linked-versions and group-pull-request-title-pat
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (1983-10-10)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -412,7 +407,6 @@ exports[`Plugin compatibility > linked-versions and group-pull-request-title-pat
 <details><summary>pkgA: 1.1.0</summary>
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (1983-10-10)
-
 
 ### Features
 
@@ -434,7 +428,6 @@ exports[`Plugin compatibility > linked-versions and group-pull-request-title-pat
     "name": "primary: v1.1.0",
     "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -450,7 +443,6 @@ exports[`Plugin compatibility > linked-versions and group-pull-request-title-pat
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -459,7 +451,6 @@ exports[`Plugin compatibility > linked-versions and group-pull-request-title-pat
 <details><summary>pkgA: 1.1.0</summary>
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
-
 
 ### Features
 
@@ -515,7 +506,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
     "name": "pkgA: v1.1.0",
     "notes": "## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))",
@@ -531,7 +521,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/primary-v1.0.0...primary-v1.1.0) (2026-05-19)
 
-
 ### Features
 
 * some feature ([aaaaaa](https://github.com/fake-owner/fake-repo/commit/aaaaaa))
@@ -540,7 +529,6 @@ For a better experience, it is recommended to use either rebase-merge or squash-
 <details><summary>pkgA: 1.1.0</summary>
 
 ## [1.1.0](https://github.com/fake-owner/fake-repo/compare/pkgA-v1.0.0...pkgA-v1.1.0) (2026-05-19)
-
 
 ### Features
 

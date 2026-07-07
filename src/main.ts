@@ -19,7 +19,6 @@
 // access library return values; here we capture the structured results and
 // surface them via `core.setOutput`.
 
-import * as core from '@actions/core';
 import {parseRepoUrl} from './util/parse-repo-url';
 
 import {GitHub} from './github';
@@ -31,6 +30,11 @@ import {
   CreatedRelease,
 } from './manifest';
 import {PullRequest} from './pull-request';
+
+// @actions/core is published as ESM-only as of v3, but this action is
+// bundled by ncc as CommonJS, so it must be loaded via dynamic import.
+type Core = typeof import('@actions/core');
+let core: Core;
 
 type Command = 'release-pr' | 'github-release' | 'both';
 
@@ -211,13 +215,20 @@ async function main(): Promise<void> {
   core.setOutput('pr', firstPr ? JSON.stringify(firstPr) : '');
 }
 
-main().catch(err => {
-  // We deliberately avoid printing the request object (which can contain the
-  // token) the way the CLI's handleError does; @actions/core.setFailed already
-  // surfaces a clean error to the workflow summary.
-  const message = err instanceof Error ? err.message : String(err);
-  if (err instanceof Error && err.stack) {
-    core.debug(err.stack);
+async function run(): Promise<void> {
+  core = await import('@actions/core');
+  try {
+    await main();
+  } catch (err) {
+    // We deliberately avoid printing the request object (which can contain
+    // the token) the way the CLI's handleError does; @actions/core.setFailed
+    // already surfaces a clean error to the workflow summary.
+    const message = err instanceof Error ? err.message : String(err);
+    if (err instanceof Error && err.stack) {
+      core.debug(err.stack);
+    }
+    core.setFailed(`release-please action failed: ${message}`);
   }
-  core.setFailed(`release-please action failed: ${message}`);
-});
+}
+
+run();
