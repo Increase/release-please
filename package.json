@@ -82,7 +82,7 @@
     "conventional-commits-filter": "^3.0.0",
     "diff": "^5.2.2",
     "handlebars": "^4.7.9",
-    "http-proxy-agent": "^9.0.0",
+    "http-proxy-agent": "^9.1.0",
     "https-proxy-agent": "^7.0.6",
     "jsonpath": "^1.3.0",
     "node-html-parser": "^6.0.0",
