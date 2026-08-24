@@ -135,7 +135,12 @@ export class DefaultChangelogNotes implements ChangelogNotes {
           )
           .map(note =>
             replaceIssueLink(
-              note,
+              // A 'Migration' note is the `# Migration` section lifted out of a
+              // breaking change's body, so it belongs under the same heading.
+              // The preset used to force every note title to 'BREAKING CHANGES';
+              // since conventionalcommits v10.3 it groups notes by their own
+              // title, which would render a stray '### MIGRATION' section.
+              {...note, title: 'BREAKING CHANGE'},
               context.host,
               context.owner,
               context.repository

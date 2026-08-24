@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.2](https://github.com/Increase/release-please/compare/v1.0.1...v1.0.2) (2026-08-24)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** **Migration:** would render as a stray `### MIGRATION` section instead of appearing under `### ⚠ BREAKING CHANGES`.
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.4.15 to 2.5.2 ([#79](https://github.com/Increase/release-please/issues/79)) ([c952d08](https://github.com/Increase/release-please/commit/c952d08ece3b86e079a355322bcea565531aa58d))
+* **deps-dev:** bump @vitest/coverage-v8 from 4.1.9 to 4.1.10 ([#80](https://github.com/Increase/release-please/issues/80)) ([44bcf84](https://github.com/Increase/release-please/commit/44bcf8462989cb59ed99e7c40c56bbcd999352bf))
+* **deps:** bump @octokit/request from 10.0.11 to 10.0.14 ([#95](https://github.com/Increase/release-please/issues/95)) ([96a8929](https://github.com/Increase/release-please/commit/96a89294a367339effda60776873d2abc619f7dc))
+* **deps:** bump code-suggester from 4.3.3 to 5.0.1 ([#84](https://github.com/Increase/release-please/issues/84)) ([9458940](https://github.com/Increase/release-please/commit/94589407fecdc8362f59699b28ab91c3d8630390))
+* **deps:** bump http-proxy-agent from 9.0.0 to 9.1.0 ([#87](https://github.com/Increase/release-please/issues/87)) ([26de7b6](https://github.com/Increase/release-please/commit/26de7b670627150ada7cdbc651333f1b0f4d42e3))
+* **deps:** bump type-fest from 5.6.0 to 5.8.0 ([#83](https://github.com/Increase/release-please/issues/83)) ([33480fe](https://github.com/Increase/release-please/commit/33480fe1782e756b8315c609a2c3428b27bde291))
+* **deps:** refresh lockfile to clear all open security advisories ([#96](https://github.com/Increase/release-please/issues/96)) ([c5d8336](https://github.com/Increase/release-please/commit/c5d833624aaabd5781b938afda5432241d5e1fcf))
+
+### Continuous Integration
+
+* bump actions/setup-node from 6 to 7 ([#89](https://github.com/Increase/release-please/issues/89)) ([b3cd279](https://github.com/Increase/release-please/commit/b3cd279bac5607c37314f414e2e40a28e2feea7e))
+
 ## [1.0.1](https://github.com/Increase/release-please/compare/v1.0.0...v1.0.1) (2026-07-06)
 
 ### Chores
