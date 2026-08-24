@@ -1,180 +1,6 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 45377:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.codeFrameColumns = codeFrameColumns;
-exports["default"] = _default;
-
-var _highlight = _interopRequireWildcard(__nccwpck_require__(35564));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-let deprecationWarningShown = false;
-
-function getDefs(chalk) {
-  return {
-    gutter: chalk.grey,
-    marker: chalk.red.bold,
-    message: chalk.red.bold
-  };
-}
-
-const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
-
-function getMarkerLines(loc, source, opts) {
-  const startLoc = Object.assign({
-    column: 0,
-    line: -1
-  }, loc.start);
-  const endLoc = Object.assign({}, startLoc, loc.end);
-  const {
-    linesAbove = 2,
-    linesBelow = 3
-  } = opts || {};
-  const startLine = startLoc.line;
-  const startColumn = startLoc.column;
-  const endLine = endLoc.line;
-  const endColumn = endLoc.column;
-  let start = Math.max(startLine - (linesAbove + 1), 0);
-  let end = Math.min(source.length, endLine + linesBelow);
-
-  if (startLine === -1) {
-    start = 0;
-  }
-
-  if (endLine === -1) {
-    end = source.length;
-  }
-
-  const lineDiff = endLine - startLine;
-  const markerLines = {};
-
-  if (lineDiff) {
-    for (let i = 0; i <= lineDiff; i++) {
-      const lineNumber = i + startLine;
-
-      if (!startColumn) {
-        markerLines[lineNumber] = true;
-      } else if (i === 0) {
-        const sourceLength = source[lineNumber - 1].length;
-        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
-      } else if (i === lineDiff) {
-        markerLines[lineNumber] = [0, endColumn];
-      } else {
-        const sourceLength = source[lineNumber - i].length;
-        markerLines[lineNumber] = [0, sourceLength];
-      }
-    }
-  } else {
-    if (startColumn === endColumn) {
-      if (startColumn) {
-        markerLines[startLine] = [startColumn, 0];
-      } else {
-        markerLines[startLine] = true;
-      }
-    } else {
-      markerLines[startLine] = [startColumn, endColumn - startColumn];
-    }
-  }
-
-  return {
-    start,
-    end,
-    markerLines
-  };
-}
-
-function codeFrameColumns(rawLines, loc, opts = {}) {
-  const highlighted = (opts.highlightCode || opts.forceColor) && (0, _highlight.shouldHighlight)(opts);
-  const chalk = (0, _highlight.getChalk)(opts);
-  const defs = getDefs(chalk);
-
-  const maybeHighlight = (chalkFn, string) => {
-    return highlighted ? chalkFn(string) : string;
-  };
-
-  const lines = rawLines.split(NEWLINE);
-  const {
-    start,
-    end,
-    markerLines
-  } = getMarkerLines(loc, lines, opts);
-  const hasColumns = loc.start && typeof loc.start.column === "number";
-  const numberMaxWidth = String(end).length;
-  const highlightedLines = highlighted ? (0, _highlight.default)(rawLines, opts) : rawLines;
-  let frame = highlightedLines.split(NEWLINE).slice(start, end).map((line, index) => {
-    const number = start + 1 + index;
-    const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-    const gutter = ` ${paddedNumber} | `;
-    const hasMarker = markerLines[number];
-    const lastMarkerLine = !markerLines[number + 1];
-
-    if (hasMarker) {
-      let markerLine = "";
-
-      if (Array.isArray(hasMarker)) {
-        const markerSpacing = line.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
-        const numberOfMarkers = hasMarker[1] || 1;
-        markerLine = ["\n ", maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")), markerSpacing, maybeHighlight(defs.marker, "^").repeat(numberOfMarkers)].join("");
-
-        if (lastMarkerLine && opts.message) {
-          markerLine += " " + maybeHighlight(defs.message, opts.message);
-        }
-      }
-
-      return [maybeHighlight(defs.marker, ">"), maybeHighlight(defs.gutter, gutter), line, markerLine].join("");
-    } else {
-      return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;
-    }
-  }).join("\n");
-
-  if (opts.message && !hasColumns) {
-    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
-  }
-
-  if (highlighted) {
-    return chalk.reset(frame);
-  } else {
-    return frame;
-  }
-}
-
-function _default(rawLines, lineNumber, colNumber, opts = {}) {
-  if (!deprecationWarningShown) {
-    deprecationWarningShown = true;
-    const message = "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
-
-    if (process.emitWarning) {
-      process.emitWarning(message, "DeprecationWarning");
-    } else {
-      const deprecationError = new Error(message);
-      deprecationError.name = "DeprecationWarning";
-      console.warn(new Error(message));
-    }
-  }
-
-  colNumber = Math.max(colNumber, 0);
-  const location = {
-    start: {
-      column: colNumber,
-      line: lineNumber
-    }
-  };
-  return codeFrameColumns(rawLines, location, opts);
-}
-
-/***/ }),
-
 /***/ 17732:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -922,7 +748,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 46902:
+/***/ 93866:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -943,9 +769,9 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BranchFileCache = exports.RepositoryFileCache = exports.BranchNotFoundError = exports.FileNotFoundError = exports.DEFAULT_FILE_MODE = void 0;
 const path_1 = __nccwpck_require__(16928);
-const minimatch_1 = __nccwpck_require__(5434);
+const minimatch_1 = __nccwpck_require__(27089);
 /* eslint-disable-next-line node/no-extraneous-import */
-const request_error_1 = __nccwpck_require__(54128);
+const request_error_1 = __nccwpck_require__(98969);
 exports.DEFAULT_FILE_MODE = '100644';
 class FileNotFoundError extends Error {
     constructor(path) {
@@ -4024,7 +3850,7 @@ module.exports.CyclicPackageGraphNode = CyclicPackageGraphNode;
 "use strict";
 
 
-const semver = __nccwpck_require__(42082);
+const semver = __nccwpck_require__(24493);
 const { prereleaseIdFromVersion } = __nccwpck_require__(38402);
 
 const PKG = Symbol("pkg");
@@ -4478,7 +4304,7 @@ module.exports.ValidationError = ValidationError;
 
 /***/ }),
 
-/***/ 36899:
+/***/ 70433:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -4915,17 +4741,17 @@ exports.NAMESPACE = NAMESPACE;
 
 /***/ }),
 
-/***/ 99123:
+/***/ 17341:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var conventions = __nccwpck_require__(36899);
-var dom = __nccwpck_require__(17195);
-var errors = __nccwpck_require__(34004);
-var entities = __nccwpck_require__(69056);
-var sax = __nccwpck_require__(72159);
+var conventions = __nccwpck_require__(70433);
+var dom = __nccwpck_require__(19525);
+var errors = __nccwpck_require__(59730);
+var entities = __nccwpck_require__(6234);
+var sax = __nccwpck_require__(1145);
 
 var DOMImplementation = dom.DOMImplementation;
 
@@ -5121,6 +4947,9 @@ function DOMParser(options) {
  * - Any `fatalError` throws a `ParseError` which prevents further processing.
  * - Any error thrown by `onError` is converted to a `ParseError` which prevents further
  * processing - If no `Document` was created during parsing it is reported as a `fatalError`.
+ * - A `DOMException` raised while building the DOM (e.g. an unbound namespace prefix) is
+ * reported as a `fatalError` and rethrown as a `ParseError` with the `DOMException` as its
+ * `cause`.
  * *****Warning: By configuring a faulty DOMHandler implementation,
  * the specified behavior can completely be broken*****.
  *
@@ -5401,14 +5230,16 @@ DOMHandler.prototype = {
 	 *
 	 * @param {string} message
 	 * - The message to be used for reporting and throwing the error.
+	 * @param {Error} [cause]
+	 * The error that caused this fatal error, preserved as the thrown `ParseError`'s `cause`.
 	 * @returns {never}
 	 * This function always throws an error and never returns a value.
 	 * @throws {ParseError}
 	 * Always throws a ParseError with the provided message.
 	 */
-	fatalError: function (message) {
+	fatalError: function (message, cause) {
 		this.reportError('fatalError', message);
-		throw new ParseError(message, this.locator);
+		throw new ParseError(message, this.locator, cause);
 	},
 };
 
@@ -5509,13 +5340,13 @@ exports.onWarningStopParsing = onWarningStopParsing;
 
 /***/ }),
 
-/***/ 17195:
+/***/ 19525:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var conventions = __nccwpck_require__(36899);
+var conventions = __nccwpck_require__(70433);
 var find = conventions.find;
 var hasDefaultHTMLNamespace = conventions.hasDefaultHTMLNamespace;
 var hasOwn = conventions.hasOwn;
@@ -5535,11 +5366,11 @@ var NAMESPACE = conventions.NAMESPACE;
  */
 var PDC = Symbol();
 
-var errors = __nccwpck_require__(34004);
+var errors = __nccwpck_require__(59730);
 var DOMException = errors.DOMException;
 var DOMExceptionName = errors.DOMExceptionName;
 
-var g = __nccwpck_require__(51834);
+var g = __nccwpck_require__(7348);
 
 /**
  * Checks if the given symbol equals the Private DOM Constructor symbol (PDC)
@@ -6000,7 +5831,22 @@ _extends(LiveNodeList, NodeList);
  * @see https://webidl.spec.whatwg.org/#dfn-supported-property-names
  * @constructs NamedNodeMap
  */
-function NamedNodeMap() {}
+/**
+ * A live collection of an element's attributes, keyed by name.
+ *
+ * The numbered entries and `length` are the sole authority for attribute order.
+ * A separate two-level null-prototype membership index (`namespaceURI` ->
+ * `localName` -> `Attr`, with the null/empty namespace held in its own bucket)
+ * lets the parse-time de-duplication in `setNamedItem` resolve an existing
+ * attribute in O(1) instead of scanning the list, so building an element with M
+ * attributes costs O(M) rather than O(M^2). The index never reorders attributes.
+ */
+function NamedNodeMap() {
+	// namespaceURI (non-empty string) -> (localName -> Attr)
+	this._nsIndex = Object.create(null);
+	// localName -> Attr, for the null / empty-string namespace
+	this._noNsIndex = Object.create(null);
+}
 /**
  * Returns the index of a node within the list.
  *
@@ -6019,6 +5865,70 @@ function _findNodeIndex(list, node) {
 			return i;
 		}
 		i++;
+	}
+}
+/**
+ * Returns the second-level index bucket (`localName` -> `Attr`) for a namespace,
+ * replicating `getNamedItemNS`'s falsy-namespace normalization: `null`,
+ * `undefined` and `''` all resolve to the dedicated null-namespace bucket, kept separate from
+ * any real URI (so a namespace URI equal to the string `"null"`
+ * cannot collide with the null namespace). Both levels are null-prototype objects, so an
+ * attribute named `__proto__` or `constructor` is an ordinary key.
+ *
+ * @param {NamedNodeMap} map
+ * @param {string | null | undefined} namespaceURI
+ * @param {boolean} create
+ * Create the bucket if it does not exist yet.
+ * @returns {Object | undefined}
+ * @private
+ */
+function _nnmBucket(map, namespaceURI, create) {
+	if (!namespaceURI) {
+		return map._noNsIndex;
+	}
+	var bucket = map._nsIndex[namespaceURI];
+	if (!bucket && create) {
+		bucket = map._nsIndex[namespaceURI] = Object.create(null);
+	}
+	return bucket;
+}
+/**
+ * Looks up an attribute by namespace and local name through the membership index.
+ *
+ * @param {NamedNodeMap} map
+ * @param {string | null | undefined} namespaceURI
+ * @param {string} localName
+ * @returns {Attr | null}
+ * The matching attribute, or `null` when absent.
+ * @private
+ */
+function _nnmIndexFind(map, namespaceURI, localName) {
+	var bucket = _nnmBucket(map, namespaceURI, false);
+	var found = bucket && bucket[localName];
+	return found ? found : null;
+}
+/**
+ * Records `attr` in the membership index under its namespace and local name,
+ * replacing any previous attribute with the same key.
+ *
+ * @param {NamedNodeMap} map
+ * @param {Attr} attr
+ * @private
+ */
+function _nnmIndexAdd(map, attr) {
+	_nnmBucket(map, attr.namespaceURI, true)[attr.localName] = attr;
+}
+/**
+ * Removes `attr` from the membership index.
+ *
+ * @param {NamedNodeMap} map
+ * @param {Attr} attr
+ * @private
+ */
+function _nnmIndexRemove(map, attr) {
+	var bucket = _nnmBucket(map, attr.namespaceURI, false);
+	if (bucket) {
+		delete bucket[attr.localName];
 	}
 }
 /**
@@ -6042,6 +5952,10 @@ function _addNamedNode(el, list, newAttr, oldAttr) {
 		list[list.length] = newAttr;
 		list.length++;
 	}
+	// Keep the membership index in sync with the ordered list. On replacement
+	// `oldAttr` shares `newAttr`'s (namespace, localName) key, so this overwrites
+	// its entry; on append it adds a new one.
+	_nnmIndexAdd(list, newAttr);
 	if (el) {
 		newAttr.ownerElement = el;
 		var doc = el.ownerDocument;
@@ -6072,6 +5986,7 @@ function _removeNamedNode(el, list, attr) {
 			list[i] = list[++i];
 		}
 		list.length = lastIndex;
+		_nnmIndexRemove(list, attr);
 		if (el) {
 			var doc = el.ownerDocument;
 			if (doc) {
@@ -6129,7 +6044,10 @@ NamedNodeMap.prototype = {
 		if (el && el !== this._ownerElement) {
 			throw new DOMException(DOMException.INUSE_ATTRIBUTE_ERR);
 		}
-		var oldAttr = this.getNamedItemNS(attr.namespaceURI, attr.localName);
+		// Resolve any existing attribute with the same (namespace, localName)
+		// through the O(1) membership index rather than an O(M) scan — this is the
+		// parse-dedup hot path (`setAttributeNode` per attribute during parse).
+		var oldAttr = _nnmIndexFind(this, attr.namespaceURI, attr.localName);
 		if (oldAttr === attr) {
 			return attr;
 		}
@@ -6858,9 +6776,38 @@ Node.prototype = {
 				while (child) {
 					var next = child.nextSibling;
 					if (next !== null && next.nodeType === TEXT_NODE && child.nodeType === TEXT_NODE) {
-						node.removeChild(next);
-						child.appendData(next.data);
-						// Do not advance child: re-check new nextSibling for another text run
+						// Merge the whole run of adjacent text nodes at once: gather the
+						// following text siblings' data, unlink them in a single pass, and
+						// re-index the child list a single time. Per-sibling `removeChild`
+						// (each an O(K) re-index) plus per-sibling `appendData` (each an O(K)
+						// string rebuild) is O(K^2) over a long run of single-character text
+						// nodes; this keeps it O(K). The first text node of the run survives
+						// and carries the concatenated data, preserving node identity and
+						// locator semantics.
+						var tail = [];
+						var sibling = next;
+						while (sibling !== null && sibling.nodeType === TEXT_NODE) {
+							tail.push(sibling.data);
+							sibling = sibling.nextSibling;
+						}
+						// `sibling` is now the first non-text node after the run, or null.
+						var removed = child.nextSibling;
+						while (removed !== sibling) {
+							var following = removed.nextSibling;
+							removed.parentNode = null;
+							removed.previousSibling = null;
+							removed.nextSibling = null;
+							removed = following;
+						}
+						child.nextSibling = sibling;
+						if (sibling !== null) {
+							sibling.previousSibling = child;
+						} else {
+							node.lastChild = child;
+						}
+						child.appendData(tail.join('')); // single O(K) string rebuild
+						_onUpdateChild(node.ownerDocument, node); // single O(K) re-index
+						child = sibling;
 					} else {
 						child = next;
 					}
@@ -7913,10 +7860,10 @@ Document.prototype = {
 	 * "InvalidCharacterError".
 	 *
 	 * Note: When the resulting document is serialized with `requireWellFormed: true`, the
-	 * serializer throws `InvalidStateError` if `.target` contains `:` or is an ASCII
-	 * case-insensitive match for `"xml"`, or if `.data` contains `?>` or characters outside the
-	 * XML Char production (W3C DOM Parsing §3.2.1.7). Without that option the data is emitted
-	 * verbatim.
+	 * serializer throws `InvalidStateError` if `.target` is not a valid XML `NCName` (a `Name`
+	 * with no colon) or is an ASCII case-insensitive match for `"xml"`, or if `.data` contains
+	 * `?>` or characters outside the XML Char production (W3C DOM Parsing §3.2.1.7). Without that
+	 * option the target and data are emitted verbatim.
 	 *
 	 * @param {string} target
 	 * @param {string} data
@@ -7971,19 +7918,29 @@ Document.prototype = {
 	 * The current implementation does not fill the `childNodes` with those of the corresponding
 	 * `Entity`
 	 *
+	 * The `name` is validated against the XML `Name` production at creation time; an invalid name
+	 * throws `InvalidCharacterError`. When the resulting node is serialized with
+	 * `requireWellFormed: true`, the serializer re-validates `nodeName` against the XML `Name`
+	 * production and throws `InvalidStateError` if a later `nodeName` mutation made it invalid;
+	 * without that option the name is emitted verbatim.
+	 *
+	 * __This implementation differs from the specification:__ xmldom does not expand entities —
+	 * the parser resolves entity references inline and never constructs `EntityReference` nodes,
+	 * so this method is the only producer.
+	 *
 	 * @deprecated
 	 * In DOM Level 4.
 	 * @param {string} name
 	 * The name of the entity to reference. No namespace well-formedness checks are performed.
 	 * @returns {EntityReference}
 	 * @throws {DOMException}
-	 * With code `INVALID_CHARACTER_ERR` when `name` is not valid.
+	 * With code `INVALID_CHARACTER_ERR` when `name` is not a valid XML `Name`.
 	 * @throws {DOMException}
 	 * with code `NOT_SUPPORTED_ERR` when the document is of type `html`
 	 * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-392B75AE
 	 */
 	createEntityReference: function (name) {
-		if (!g.Name.test(name)) {
+		if (!g.Name_exact.test(name)) {
 			throw new DOMException(DOMException.INVALID_CHARACTER_ERR, 'not a valid xml name "' + name + '"');
 		}
 		if (this.type === 'html') {
@@ -8359,6 +8316,12 @@ _extends(CDATASection, Text);
 /**
  * @class DocumentType
  * @augments Node
+ * @property {string} name
+ * The doctype name, stored verbatim. Declared `readonly` by the WHATWG DOM spec; xmldom does
+ * not enforce this constraint — direct property writes succeed and the written value is
+ * serialized verbatim. When serialized with `requireWellFormed: true`, the serializer
+ * validates the value against the XML `Name` production and throws `InvalidStateError` if it
+ * does not match.
  * @property {string} publicId
  * The external subset public identifier, stored verbatim (including surrounding quotes).
  * Declared `readonly` by the WHATWG DOM spec; xmldom does not enforce this constraint —
@@ -8377,7 +8340,7 @@ _extends(CDATASection, Text);
  * direct property writes succeed and the written value is serialized verbatim.
  * When serialized with `requireWellFormed: true`, the serializer throws `InvalidStateError`
  * if the value contains `"]>"`.
- * @see https://developer.mozilla.org/en-US/docs/Web/API/DocumentType MDN
+ * @see https://developer.mozilla.org/docs/Web/API/DocumentType MDN
  * @see https://dom.spec.whatwg.org/#interface-documenttype WHATWG DOM
  * @prettierignore
  */
@@ -8399,6 +8362,21 @@ function Entity(symbol) {
 Entity.prototype.nodeType = ENTITY_NODE;
 _extends(Entity, Node);
 
+/**
+ * Represents an EntityReference node, serialized as `&nodeName;`.
+ *
+ * `nodeName` is the referenced entity's name, stored verbatim. When serialized with
+ * `requireWellFormed: true`, the serializer validates `nodeName` against the XML `Name`
+ * production and throws `InvalidStateError` if it does not match; without that option the name
+ * is emitted verbatim between `&` and `;`.
+ *
+ * __This implementation differs from the specification:__ xmldom does not expand entities —
+ * the parser resolves entity references inline and never constructs `EntityReference` nodes,
+ * so the only producer is {@link Document#createEntityReference}.
+ *
+ * @class
+ * @see https://www.w3.org/TR/xml/#NT-Name
+ */
 function EntityReference(symbol) {
 	checkSymbol(symbol);
 }
@@ -8442,8 +8420,11 @@ function XMLSerializer() {}
  * - W3C DOM Parsing §3.2.1.1 requires well-formedness checks on Element `localName`s,
  * prefixes,
  * and attribute serialization (duplicate attributes, namespace declarations, attribute value
- * characters) when `requireWellFormed` is `true`. These checks are **not implemented** in this
- * release — see the tracking issue filed against the next breaking milestone.
+ * characters) when `requireWellFormed` is `true`. Element and attribute qualified names (which
+ * cover the namespace prefix) are validated against the XML `QName` production; the remaining
+ * §3.2.1.1 checks (duplicate attributes, namespace-declaration consistency) and creation-time
+ * name validation are **not implemented** in this release — see the tracking issue filed
+ * against the next breaking milestone.
  *
  * @param {Node} node
  * @param {Object | function} [options]
@@ -8459,16 +8440,22 @@ function XMLSerializer() {}
  * @throws {DOMException}
  * With name `InvalidStateError` when `requireWellFormed` is `true` and any of the following
  * conditions hold:
+ * - an Element's qualified name (including any namespace prefix) is not a valid XML QName
+ * - an attribute's qualified name (including a synthesized `xmlns:` namespace declaration) is
+ * not a valid XML QName
  * - CDATASection data contains `"]]>"`
  * - Text data contains characters outside the XML Char production
  * - a Comment node's data contains `--` anywhere or ends with `-`
- * - a ProcessingInstruction's target contains `:` or is an ASCII case-insensitive match for
- * `"xml"`, or its data contains `?>` or characters outside the XML Char production
+ * - a ProcessingInstruction's target is not a valid XML `NCName` (a `Name` with no colon) or is
+ * an ASCII case-insensitive match for `"xml"`, or its data contains `?>` or characters outside
+ * the XML Char production
+ * - a DocumentType's `name` is not a valid XML `Name` (XML 1.0 production [5])
  * - a DocumentType's `publicId` is non-empty and does not match the XML `PubidLiteral`
  * production (W3C DOM Parsing §3.2.1.3; XML 1.0 production [12])
  * - a DocumentType's `systemId` is non-empty and does not match the XML `SystemLiteral`
  * production (W3C DOM Parsing §3.2.1.3; XML 1.0 production [11])
  * - a DocumentType's `internalSubset` contains `"]>"`
+ * - an EntityReference's `nodeName` is not a valid XML `Name` (XML 1.0 production [5])
  * - the Document has no `documentElement`
  * @see https://developer.mozilla.org/docs/Web/API/XMLSerializer/serializeToString
  * @see https://html.spec.whatwg.org/#dom-xmlserializer-serializetostring
@@ -8554,7 +8541,13 @@ function needNamespaceDefine(node, isHTML, visibleNamespaces) {
  * @see https://w3c.github.io/DOM-Parsing/#serializing-an-element-s-attributes
  * @prettierignore
  */
-function addSerializedAttribute(buf, qualifiedName, value) {
+function addSerializedAttribute(buf, qualifiedName, value, requireWellFormed) {
+	if (requireWellFormed && !g.QName_exact.test(qualifiedName)) {
+		throw new DOMException(
+			'The attribute name "' + qualifiedName + '" is not a valid XML QName',
+			DOMExceptionName.InvalidStateError
+		);
+	}
 	buf.push(' ', qualifiedName, '="', value.replace(/[<>&"\t\n\r]/g, _xmlEncoder), '"');
 }
 
@@ -8626,6 +8619,13 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 							}
 						}
 
+						if (requireWellFormed && !g.QName_exact.test(prefixedNodeName)) {
+							throw new DOMException(
+								'The element name "' + prefixedNodeName + '" is not a valid XML QName',
+								DOMExceptionName.InvalidStateError
+							);
+						}
+
 						buf.push('<', prefixedNodeName);
 
 						// Build a fresh namespace snapshot for this element's children.
@@ -8650,7 +8650,7 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 							if (needNamespaceDefine(attr, isHTML, childNamespaces)) {
 								var attrPrefix = attr.prefix || '';
 								var uri = attr.namespaceURI;
-								addSerializedAttribute(buf, attrPrefix ? 'xmlns:' + attrPrefix : 'xmlns', uri);
+								addSerializedAttribute(buf, attrPrefix ? 'xmlns:' + attrPrefix : 'xmlns', uri, requireWellFormed);
 								childNamespaces.push({ prefix: attrPrefix, namespace: uri });
 							}
 							// Apply nodeFilter and serialize the attribute.
@@ -8659,7 +8659,7 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 								if (typeof filteredAttr === 'string') {
 									buf.push(filteredAttr);
 								} else {
-									addSerializedAttribute(buf, filteredAttr.name, filteredAttr.value);
+									addSerializedAttribute(buf, filteredAttr.name, filteredAttr.value, requireWellFormed);
 								}
 							}
 						}
@@ -8668,7 +8668,7 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 						if (nodeName === prefixedNodeName && needNamespaceDefine(n, isHTML, childNamespaces)) {
 							var nodePrefix = n.prefix || '';
 							var uri = n.namespaceURI;
-							addSerializedAttribute(buf, nodePrefix ? 'xmlns:' + nodePrefix : 'xmlns', uri);
+							addSerializedAttribute(buf, nodePrefix ? 'xmlns:' + nodePrefix : 'xmlns', uri, requireWellFormed);
 							childNamespaces.push({ prefix: nodePrefix, namespace: uri });
 						}
 
@@ -8712,7 +8712,7 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 						// Pass namespaces through; each child element will slice independently.
 						return { ns: namespaces };
 					case ATTRIBUTE_NODE:
-						addSerializedAttribute(buf, n.name, n.value);
+						addSerializedAttribute(buf, n.name, n.value, requireWellFormed);
 						return null;
 					case TEXT_NODE:
 						/*
@@ -8772,6 +8772,12 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 						var pubid = n.publicId;
 						var sysid = n.systemId;
 						if (requireWellFormed) {
+							if (!g.Name_exact.test(n.name)) {
+								throw new DOMException(
+									'The doctype name "' + n.name + '" is not a valid XML Name',
+									DOMExceptionName.InvalidStateError
+								);
+							}
 							if (pubid && !g.PubidLiteral_match.test(pubid)) {
 								throw new DOMException('DocumentType publicId is not a valid PubidLiteral', DOMExceptionName.InvalidStateError);
 							}
@@ -8798,8 +8804,11 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 						return null;
 					case PROCESSING_INSTRUCTION_NODE:
 						if (requireWellFormed) {
-							if (n.target.indexOf(':') !== -1 || n.target.toLowerCase() === 'xml') {
-								throw new DOMException('The ProcessingInstruction target is not well-formed', DOMExceptionName.InvalidStateError);
+							if (!g.NCName_exact.test(n.target) || n.target.toLowerCase() === 'xml') {
+								throw new DOMException(
+									'The processing instruction target "' + n.target + '" is not a valid XML NCName or is reserved',
+									DOMExceptionName.InvalidStateError
+								);
 							}
 							if (g.InvalidChar.test(n.data)) {
 								throw new DOMException(
@@ -8814,6 +8823,12 @@ function serializeToString(node, buf, visibleNamespaces, opts) {
 						buf.push('<?', n.target, ' ', n.data, '?>');
 						return null;
 					case ENTITY_REFERENCE_NODE:
+						if (requireWellFormed && !g.Name_exact.test(n.nodeName)) {
+							throw new DOMException(
+								'The entity reference name "' + n.nodeName + '" is not a valid XML Name',
+								DOMExceptionName.InvalidStateError
+							);
+						}
 						buf.push('&', n.nodeName, ';');
 						return null;
 					//case ENTITY_NODE:
@@ -9021,6 +9036,27 @@ try {
 			},
 		});
 
+		Object.defineProperty(CharacterData.prototype, 'data', {
+			get: function () {
+				return this._data != null ? this._data : '';
+			},
+			set: function (v) {
+				this._data = v;
+				this.length = typeof v === 'string' ? v.length : 0;
+			},
+		});
+
+		Object.defineProperty(CharacterData.prototype, 'nodeValue', {
+			get: function () {
+				return this.data;
+			},
+			set: function (v) {
+				this.data = v;
+			},
+			enumerable: true,
+			configurable: true,
+		});
+
 		Object.defineProperty(Element.prototype, 'children', {
 			get: function () {
 				return new LiveNodeList(this, childrenRefresh);
@@ -9071,13 +9107,13 @@ exports.XMLSerializer = XMLSerializer;
 
 /***/ }),
 
-/***/ 69056:
+/***/ 6234:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var freeze = (__nccwpck_require__(36899).freeze);
+var freeze = (__nccwpck_require__(70433).freeze);
 
 /**
  * The entities that are predefined in every XML document.
@@ -11250,13 +11286,13 @@ exports.entityMap = exports.HTML_ENTITIES;
 
 /***/ }),
 
-/***/ 34004:
+/***/ 59730:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var conventions = __nccwpck_require__(36899);
+var conventions = __nccwpck_require__(70433);
 
 function extendError(constructor, writableName) {
 	constructor.prototype = Object.create(Error.prototype, {
@@ -11444,10 +11480,13 @@ for (var i = 0; i < entries.length; i++) {
  * @class
  * @param {string} message
  * @param {any} [locator]
+ * @param {Error} [cause]
+ * The error that caused this one, e.g. a `DOMException` thrown while building the DOM.
  */
-function ParseError(message, locator) {
+function ParseError(message, locator, cause) {
 	this.message = message;
 	this.locator = locator;
+	this.cause = cause;
 	if (Error.captureStackTrace) Error.captureStackTrace(this, ParseError);
 }
 extendError(ParseError);
@@ -11460,7 +11499,7 @@ exports.ParseError = ParseError;
 
 /***/ }),
 
-/***/ 51834:
+/***/ 7348:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -11545,7 +11584,7 @@ function reg(args) {
 				return isStr ? part : part.source;
 			})
 			.join(''),
-		UNICODE_SUPPORT ? 'mu' : 'm'
+		UNICODE_SUPPORT ? 'u' : ''
 	);
 }
 
@@ -11634,6 +11673,9 @@ var NameChar = reg('[', NameStartChar_s, chars(/[-.0-9\xB7]/), chars(/[\u0300-\u
 // https://www.w3.org/TR/xml11/#NT-Name
 // `[5] Name ::= NameStartChar (NameChar)*`
 var Name = reg(NameStartChar, NameChar, '*');
+// Full-string anchored matcher for requireWellFormed serializer checks
+// https://w3c.github.io/DOM-Parsing/#xml-serializing-a-document-node
+var Name_exact = reg('^', Name, '$');
 /*
 https://www.w3.org/TR/xml11/#NT-Names
 `[6] Names ::= Name (#x20 Name)*`
@@ -11692,6 +11734,9 @@ var NCNameChar = chars_without(NameChar, ':');
 // `[4] NCName ::= Name - (Char* ':' Char*)`
 // An XML Name, minus the ":"
 var NCName = reg(NCNameStartChar, NCNameChar, '*');
+// Full-string anchored matcher for requireWellFormed serializer checks
+// https://w3c.github.io/DOM-Parsing/#xml-serializing-a-document-node
+var NCName_exact = reg('^', NCName, '$');
 
 /**
 https://www.w3.org/TR/xml-names/#ns-qualnames
@@ -11724,7 +11769,11 @@ var SystemLiteral = regg(/"[^"]*"|'[^']*'/);
  ```
  target /xml/i is not excluded!
 */
-var PI = reg(/^<\?/, '(', Name, ')', regg(S, '(', Char, '*?)'), '?', /\?>/);
+// The `(?!S)` after the leading `S+` asserts the data starts with a non-whitespace
+// character (greedy `S+` already consumes all separating whitespace), pruning the
+// `S+`/`Char*?` whitespace overlap that otherwise makes an unterminated PI (no `?>`)
+// backtrack quadratically. The lookahead is non-capturing, so the data stays group 2.
+var PI = reg(/^<\?/, '(', Name, ')', regg(S, '(?!', _SChar, ')(', Char, '*?)'), '?', /\?>/);
 
 // https://www.w3.org/TR/xml11/#NT-PubidChar
 // `[13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]`
@@ -11991,6 +12040,8 @@ exports.EntityValue = EntityValue;
 exports.ExternalID = ExternalID;
 exports.ExternalID_match = ExternalID_match;
 exports.Name = Name;
+exports.Name_exact = Name_exact;
+exports.NCName_exact = NCName_exact;
 exports.NotationDecl = NotationDecl;
 exports.Reference = Reference;
 exports.PEReference = PEReference;
@@ -12015,12 +12066,12 @@ exports.XMLDecl = XMLDecl;
 
 /***/ }),
 
-/***/ 54779:
+/***/ 71293:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var conventions = __nccwpck_require__(36899);
+var conventions = __nccwpck_require__(70433);
 exports.assign = conventions.assign;
 exports.hasDefaultHTMLNamespace = conventions.hasDefaultHTMLNamespace;
 exports.isHTMLMimeType = conventions.isHTMLMimeType;
@@ -12028,13 +12079,13 @@ exports.isValidMimeType = conventions.isValidMimeType;
 exports.MIME_TYPE = conventions.MIME_TYPE;
 exports.NAMESPACE = conventions.NAMESPACE;
 
-var errors = __nccwpck_require__(34004);
+var errors = __nccwpck_require__(59730);
 exports.DOMException = errors.DOMException;
 exports.DOMExceptionName = errors.DOMExceptionName;
 exports.ExceptionCode = errors.ExceptionCode;
 exports.ParseError = errors.ParseError;
 
-var dom = __nccwpck_require__(17195);
+var dom = __nccwpck_require__(19525);
 exports.Attr = dom.Attr;
 exports.CDATASection = dom.CDATASection;
 exports.CharacterData = dom.CharacterData;
@@ -12055,7 +12106,7 @@ exports.ProcessingInstruction = dom.ProcessingInstruction;
 exports.Text = dom.Text;
 exports.XMLSerializer = dom.XMLSerializer;
 
-var domParser = __nccwpck_require__(99123);
+var domParser = __nccwpck_require__(17341);
 exports.DOMParser = domParser.DOMParser;
 exports.normalizeLineEndings = domParser.normalizeLineEndings;
 exports.onErrorStopParsing = domParser.onErrorStopParsing;
@@ -12064,15 +12115,15 @@ exports.onWarningStopParsing = domParser.onWarningStopParsing;
 
 /***/ }),
 
-/***/ 72159:
+/***/ 1145:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var conventions = __nccwpck_require__(36899);
-var g = __nccwpck_require__(51834);
-var errors = __nccwpck_require__(34004);
+var conventions = __nccwpck_require__(70433);
+var g = __nccwpck_require__(7348);
+var errors = __nccwpck_require__(59730);
 
 var isHTMLEscapableRawTextElement = conventions.isHTMLEscapableRawTextElement;
 var isHTMLMimeType = conventions.isHTMLMimeType;
@@ -12196,6 +12247,10 @@ function parse(source, defaultNSMapCopy, entityMap, domBuilder, errorHandler) {
 					var doc = domBuilder.doc;
 					var text = doc.createTextNode(source.substring(start));
 					if (doc.documentElement) {
+						// `return errorHandler.error` is not a common pattern,
+						// it is usually only used with `.fatalError`s.
+						// In this case it is intentional, because it allows to stop parsing
+						// and returning doc after reporting the extra content that will not be part of the document.
 						return errorHandler.error('Extra content at the end of the document');
 					}
 					doc.appendChild(text);
@@ -12218,9 +12273,27 @@ function parse(source, defaultNSMapCopy, entityMap, domBuilder, errorHandler) {
 					if (!tagNameRaw) {
 						return errorHandler.fatalError('end tag name missing');
 					}
-					var tagNameMatch = end > 0 && g.reg('^', g.QName_group, g.S_OPT, '$').exec(tagNameRaw);
+					var endTagNameStrict = g.reg('^', g.QName_group, g.S_OPT, '$');
+					var tagNameMatch = end > 0 && endTagNameStrict.exec(tagNameRaw);
 					if (!tagNameMatch) {
-						return errorHandler.fatalError('end tag name contains invalid characters: "' + tagNameRaw + '"');
+						var leadingTagNameMatch = end > 0 && g.reg('^', g.QName_group).exec(tagNameRaw);
+						if (isHTML && leadingTagNameMatch) {
+							errorHandler.warning('end tag name contains invalid trailing characters: "' + tagNameRaw + '"');
+							tagNameMatch = leadingTagNameMatch;
+						} else if (
+							// Backward compatibility, remove this whole `else if` arm in the next breaking release
+							// (XML then falls through to the `fatalError` below, for a clean mode split: XML fatal,
+							// HTML warning). A valid end-tag name followed by a line break and trailing content was
+							// silently accepted while `reg` still used the `m` flag; re-adding `m` here matches exactly
+							// those inputs, kept recoverable and reported.
+							leadingTagNameMatch &&
+							new RegExp(endTagNameStrict.source, endTagNameStrict.flags + 'm').test(tagNameRaw)
+						) {
+							errorHandler.error('end tag name is followed by a line break and trailing content: "' + tagNameRaw + '"');
+							tagNameMatch = leadingTagNameMatch;
+						} else {
+							return errorHandler.fatalError('end tag name contains invalid characters: "' + tagNameRaw + '"');
+						}
 					}
 					if (!domBuilder.currentElement && !domBuilder.doc.documentElement) {
 						// not enough information to provide a helpful error message,
@@ -12305,7 +12378,9 @@ function parse(source, defaultNSMapCopy, entityMap, domBuilder, errorHandler) {
 			if (e instanceof ParseError) {
 				throw e;
 			} else if (e instanceof DOMException) {
-				throw new ParseError(e.name + ': ' + e.message, domBuilder.locator, e);
+				// A DOMException raised while building the DOM is not-well-formed input,
+				// so it is wrapped into a ParseError and reported before being thrown.
+				return errorHandler.fatalError('Error constructing the DOM: ' + e.name + ': ' + e.message, e);
 			}
 			errorHandler.error('element parse error: ' + e);
 			end = -1;
@@ -12360,6 +12435,15 @@ function parseElementStartPart(source, start, el, currentNSMap, entityReplacer, 
 	var s = S_TAG; //status
 	while (true) {
 		var c = source.charAt(p);
+		if (s === S_TAG && c === '<') {
+			// A `<` can never occur inside a tag name. Without this guard the scan runs
+			// on to the next `>` (or EOF) before `setTagName` rejects the whole slice, so
+			// a document with many `<` inside a malformed tag makes each one-character
+			// recovery step re-scan to the distant `>` — O(n^2). Stopping at the `<` keeps
+			// each recovery step bounded. The candidate scanned so far is reported raw,
+			// consistent with the sibling invalid-tag-name throw below.
+			throw new Error('unexpected < in tag name: ' + source.slice(start, p));
+		}
 		switch (c) {
 			case '=':
 				if (s === S_ATTR) {
@@ -12370,7 +12454,7 @@ function parseElementStartPart(source, start, el, currentNSMap, entityReplacer, 
 					s = S_EQ;
 				} else {
 					//fatalError: equal must after attrName or space after attrName
-					throw new Error('attribute equal must after attrName'); // No known test case
+					throw new Error('attribute equal must after attrName');
 				}
 				break;
 			case "'":
@@ -12402,7 +12486,7 @@ function parseElementStartPart(source, start, el, currentNSMap, entityReplacer, 
 					s = S_ATTR_END;
 				} else {
 					//fatalError: no equal before
-					throw new Error('attribute value must after "="'); // No known test case
+					throw new Error('attribute value must after "="');
 				}
 				break;
 			case '/':
@@ -12422,7 +12506,7 @@ function parseElementStartPart(source, start, el, currentNSMap, entityReplacer, 
 						break;
 					//case S_EQ:
 					default:
-						throw new Error("attribute invalid close char('/')"); // No known test case
+						throw new Error("attribute invalid close char('/')");
 				}
 				break;
 			case '': //end document
@@ -12559,7 +12643,13 @@ function appendElement(el, domBuilder, currentNSMap) {
 			//hack!!
 			if (localNSMap == null) {
 				localNSMap = Object.create(null);
-				_copy(currentNSMap, (currentNSMap = Object.create(null)));
+				// Derive the child scope's namespace map by prototype-chain inheritance
+				// instead of a flat copy: lookups inherit ancestor prefixes transparently,
+				// so a document nesting N scopes retains O(N) map entries rather than
+				// sum(1..N) = O(N^2). `localNSMap` stays a flat own-only record of the
+				// prefixes declared at THIS element, so own-property enumeration
+				// (endPrefixMapping below) still reports only local declarations.
+				currentNSMap = Object.create(currentNSMap);
 			}
 			currentNSMap[nsPrefix] = localNSMap[nsPrefix] = value;
 			a.uri = NAMESPACE.XMLNS;
@@ -12616,7 +12706,22 @@ function parseHtmlSpecialContent(source, elStartEnd, tagName, entityReplacer, do
 	// TODO: https://html.spec.whatwg.org/#cdata-rcdata-restrictions
 	var isEscapableRaw = isHTMLEscapableRawTextElement(tagName);
 	if (isEscapableRaw || isHTMLRawTextElement(tagName)) {
-		var elEndStart = source.indexOf('</' + tagName + '>', elStartEnd);
+		// The closing tag of a raw-text element matches case-insensitively
+		// (WHATWG HTML §13.2.5.14 RAWTEXT end tag name state). A case-sensitive
+		// search that missed the closing tag would return -1 and the `substring`
+		// below would treat -1 as a backward slice from position 0, re-emitting all
+		// prior source and amplifying output quadratically across repeated elements.
+		// The regex is anchored to `elStartEnd` via `lastIndex` so it scans forward
+		// only (O(distance), not the whole source).
+		var closeTag = new RegExp('</' + tagName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '>', 'ig');
+		closeTag.lastIndex = elStartEnd;
+		var match = closeTag.exec(source);
+		var elEndStart = match ? match.index : -1;
+		if (elEndStart < 0) {
+			// No closing tag: never slice with a -1 end index. Leave the element to
+			// the parse loop's normal recovery instead of back-capturing the source.
+			return elStartEnd + 1;
+		}
 		var text = source.substring(elStartEnd + 1, elEndStart);
 
 		if (isEscapableRaw) {
@@ -13277,181 +13382,7 @@ module.exports = ({onlyFirst = false} = {}) => {
 
 /***/ }),
 
-/***/ 64527:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/* module decorator */ module = __nccwpck_require__.nmd(module);
-
-const colorConvert = __nccwpck_require__(87414);
-
-const wrapAnsi16 = (fn, offset) => function () {
-	const code = fn.apply(colorConvert, arguments);
-	return `\u001B[${code + offset}m`;
-};
-
-const wrapAnsi256 = (fn, offset) => function () {
-	const code = fn.apply(colorConvert, arguments);
-	return `\u001B[${38 + offset};5;${code}m`;
-};
-
-const wrapAnsi16m = (fn, offset) => function () {
-	const rgb = fn.apply(colorConvert, arguments);
-	return `\u001B[${38 + offset};2;${rgb[0]};${rgb[1]};${rgb[2]}m`;
-};
-
-function assembleStyles() {
-	const codes = new Map();
-	const styles = {
-		modifier: {
-			reset: [0, 0],
-			// 21 isn't widely supported and 22 does the same thing
-			bold: [1, 22],
-			dim: [2, 22],
-			italic: [3, 23],
-			underline: [4, 24],
-			inverse: [7, 27],
-			hidden: [8, 28],
-			strikethrough: [9, 29]
-		},
-		color: {
-			black: [30, 39],
-			red: [31, 39],
-			green: [32, 39],
-			yellow: [33, 39],
-			blue: [34, 39],
-			magenta: [35, 39],
-			cyan: [36, 39],
-			white: [37, 39],
-			gray: [90, 39],
-
-			// Bright color
-			redBright: [91, 39],
-			greenBright: [92, 39],
-			yellowBright: [93, 39],
-			blueBright: [94, 39],
-			magentaBright: [95, 39],
-			cyanBright: [96, 39],
-			whiteBright: [97, 39]
-		},
-		bgColor: {
-			bgBlack: [40, 49],
-			bgRed: [41, 49],
-			bgGreen: [42, 49],
-			bgYellow: [43, 49],
-			bgBlue: [44, 49],
-			bgMagenta: [45, 49],
-			bgCyan: [46, 49],
-			bgWhite: [47, 49],
-
-			// Bright color
-			bgBlackBright: [100, 49],
-			bgRedBright: [101, 49],
-			bgGreenBright: [102, 49],
-			bgYellowBright: [103, 49],
-			bgBlueBright: [104, 49],
-			bgMagentaBright: [105, 49],
-			bgCyanBright: [106, 49],
-			bgWhiteBright: [107, 49]
-		}
-	};
-
-	// Fix humans
-	styles.color.grey = styles.color.gray;
-
-	for (const groupName of Object.keys(styles)) {
-		const group = styles[groupName];
-
-		for (const styleName of Object.keys(group)) {
-			const style = group[styleName];
-
-			styles[styleName] = {
-				open: `\u001B[${style[0]}m`,
-				close: `\u001B[${style[1]}m`
-			};
-
-			group[styleName] = styles[styleName];
-
-			codes.set(style[0], style[1]);
-		}
-
-		Object.defineProperty(styles, groupName, {
-			value: group,
-			enumerable: false
-		});
-
-		Object.defineProperty(styles, 'codes', {
-			value: codes,
-			enumerable: false
-		});
-	}
-
-	const ansi2ansi = n => n;
-	const rgb2rgb = (r, g, b) => [r, g, b];
-
-	styles.color.close = '\u001B[39m';
-	styles.bgColor.close = '\u001B[49m';
-
-	styles.color.ansi = {
-		ansi: wrapAnsi16(ansi2ansi, 0)
-	};
-	styles.color.ansi256 = {
-		ansi256: wrapAnsi256(ansi2ansi, 0)
-	};
-	styles.color.ansi16m = {
-		rgb: wrapAnsi16m(rgb2rgb, 0)
-	};
-
-	styles.bgColor.ansi = {
-		ansi: wrapAnsi16(ansi2ansi, 10)
-	};
-	styles.bgColor.ansi256 = {
-		ansi256: wrapAnsi256(ansi2ansi, 10)
-	};
-	styles.bgColor.ansi16m = {
-		rgb: wrapAnsi16m(rgb2rgb, 10)
-	};
-
-	for (let key of Object.keys(colorConvert)) {
-		if (typeof colorConvert[key] !== 'object') {
-			continue;
-		}
-
-		const suite = colorConvert[key];
-
-		if (key === 'ansi16') {
-			key = 'ansi';
-		}
-
-		if ('ansi16' in suite) {
-			styles.color.ansi[key] = wrapAnsi16(suite.ansi16, 0);
-			styles.bgColor.ansi[key] = wrapAnsi16(suite.ansi16, 10);
-		}
-
-		if ('ansi256' in suite) {
-			styles.color.ansi256[key] = wrapAnsi256(suite.ansi256, 0);
-			styles.bgColor.ansi256[key] = wrapAnsi256(suite.ansi256, 10);
-		}
-
-		if ('rgb' in suite) {
-			styles.color.ansi16m[key] = wrapAnsi16m(suite.rgb, 0);
-			styles.bgColor.ansi16m[key] = wrapAnsi16m(suite.rgb, 10);
-		}
-	}
-
-	return styles;
-}
-
-// Make the export immutable
-Object.defineProperty(module, 'exports', {
-	enumerable: true,
-	get: assembleStyles
-});
-
-
-/***/ }),
-
-/***/ 617:
+/***/ 55346:
 /***/ ((module) => {
 
 "use strict";
@@ -13554,7 +13485,7 @@ function moreThanOneError (schema) {
 }
 
 function newException (code, msg) {
-  const err = new Error(msg)
+  const err = new TypeError(msg)
   err.code = code
   /* istanbul ignore else */
   if (Error.captureStackTrace) Error.captureStackTrace(err, validate)
@@ -13725,7 +13656,7 @@ TrackerGroup.prototype.debug = function (depth) {
 "use strict";
 
 var util = __nccwpck_require__(39023)
-var stream = __nccwpck_require__(27714)
+var stream = __nccwpck_require__(45336)
 var delegate = __nccwpck_require__(55086)
 var Tracker = __nccwpck_require__(31937)
 
@@ -15347,379 +15278,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 57665:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const escapeStringRegexp = __nccwpck_require__(28799);
-const ansiStyles = __nccwpck_require__(64527);
-const stdoutColor = (__nccwpck_require__(39823).stdout);
-
-const template = __nccwpck_require__(88142);
-
-const isSimpleWindowsTerm = process.platform === 'win32' && !(process.env.TERM || '').toLowerCase().startsWith('xterm');
-
-// `supportsColor.level` → `ansiStyles.color[name]` mapping
-const levelMapping = ['ansi', 'ansi', 'ansi256', 'ansi16m'];
-
-// `color-convert` models to exclude from the Chalk API due to conflicts and such
-const skipModels = new Set(['gray']);
-
-const styles = Object.create(null);
-
-function applyOptions(obj, options) {
-	options = options || {};
-
-	// Detect level if not set manually
-	const scLevel = stdoutColor ? stdoutColor.level : 0;
-	obj.level = options.level === undefined ? scLevel : options.level;
-	obj.enabled = 'enabled' in options ? options.enabled : obj.level > 0;
-}
-
-function Chalk(options) {
-	// We check for this.template here since calling `chalk.constructor()`
-	// by itself will have a `this` of a previously constructed chalk object
-	if (!this || !(this instanceof Chalk) || this.template) {
-		const chalk = {};
-		applyOptions(chalk, options);
-
-		chalk.template = function () {
-			const args = [].slice.call(arguments);
-			return chalkTag.apply(null, [chalk.template].concat(args));
-		};
-
-		Object.setPrototypeOf(chalk, Chalk.prototype);
-		Object.setPrototypeOf(chalk.template, chalk);
-
-		chalk.template.constructor = Chalk;
-
-		return chalk.template;
-	}
-
-	applyOptions(this, options);
-}
-
-// Use bright blue on Windows as the normal blue color is illegible
-if (isSimpleWindowsTerm) {
-	ansiStyles.blue.open = '\u001B[94m';
-}
-
-for (const key of Object.keys(ansiStyles)) {
-	ansiStyles[key].closeRe = new RegExp(escapeStringRegexp(ansiStyles[key].close), 'g');
-
-	styles[key] = {
-		get() {
-			const codes = ansiStyles[key];
-			return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, key);
-		}
-	};
-}
-
-styles.visible = {
-	get() {
-		return build.call(this, this._styles || [], true, 'visible');
-	}
-};
-
-ansiStyles.color.closeRe = new RegExp(escapeStringRegexp(ansiStyles.color.close), 'g');
-for (const model of Object.keys(ansiStyles.color.ansi)) {
-	if (skipModels.has(model)) {
-		continue;
-	}
-
-	styles[model] = {
-		get() {
-			const level = this.level;
-			return function () {
-				const open = ansiStyles.color[levelMapping[level]][model].apply(null, arguments);
-				const codes = {
-					open,
-					close: ansiStyles.color.close,
-					closeRe: ansiStyles.color.closeRe
-				};
-				return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, model);
-			};
-		}
-	};
-}
-
-ansiStyles.bgColor.closeRe = new RegExp(escapeStringRegexp(ansiStyles.bgColor.close), 'g');
-for (const model of Object.keys(ansiStyles.bgColor.ansi)) {
-	if (skipModels.has(model)) {
-		continue;
-	}
-
-	const bgModel = 'bg' + model[0].toUpperCase() + model.slice(1);
-	styles[bgModel] = {
-		get() {
-			const level = this.level;
-			return function () {
-				const open = ansiStyles.bgColor[levelMapping[level]][model].apply(null, arguments);
-				const codes = {
-					open,
-					close: ansiStyles.bgColor.close,
-					closeRe: ansiStyles.bgColor.closeRe
-				};
-				return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, model);
-			};
-		}
-	};
-}
-
-const proto = Object.defineProperties(() => {}, styles);
-
-function build(_styles, _empty, key) {
-	const builder = function () {
-		return applyStyle.apply(builder, arguments);
-	};
-
-	builder._styles = _styles;
-	builder._empty = _empty;
-
-	const self = this;
-
-	Object.defineProperty(builder, 'level', {
-		enumerable: true,
-		get() {
-			return self.level;
-		},
-		set(level) {
-			self.level = level;
-		}
-	});
-
-	Object.defineProperty(builder, 'enabled', {
-		enumerable: true,
-		get() {
-			return self.enabled;
-		},
-		set(enabled) {
-			self.enabled = enabled;
-		}
-	});
-
-	// See below for fix regarding invisible grey/dim combination on Windows
-	builder.hasGrey = this.hasGrey || key === 'gray' || key === 'grey';
-
-	// `__proto__` is used because we must return a function, but there is
-	// no way to create a function with a different prototype
-	builder.__proto__ = proto; // eslint-disable-line no-proto
-
-	return builder;
-}
-
-function applyStyle() {
-	// Support varags, but simply cast to string in case there's only one arg
-	const args = arguments;
-	const argsLen = args.length;
-	let str = String(arguments[0]);
-
-	if (argsLen === 0) {
-		return '';
-	}
-
-	if (argsLen > 1) {
-		// Don't slice `arguments`, it prevents V8 optimizations
-		for (let a = 1; a < argsLen; a++) {
-			str += ' ' + args[a];
-		}
-	}
-
-	if (!this.enabled || this.level <= 0 || !str) {
-		return this._empty ? '' : str;
-	}
-
-	// Turns out that on Windows dimmed gray text becomes invisible in cmd.exe,
-	// see https://github.com/chalk/chalk/issues/58
-	// If we're on Windows and we're dealing with a gray color, temporarily make 'dim' a noop.
-	const originalDim = ansiStyles.dim.open;
-	if (isSimpleWindowsTerm && this.hasGrey) {
-		ansiStyles.dim.open = '';
-	}
-
-	for (const code of this._styles.slice().reverse()) {
-		// Replace any instances already present with a re-opening code
-		// otherwise only the part of the string until said closing code
-		// will be colored, and the rest will simply be 'plain'.
-		str = code.open + str.replace(code.closeRe, code.open) + code.close;
-
-		// Close the styling before a linebreak and reopen
-		// after next line to fix a bleed issue on macOS
-		// https://github.com/chalk/chalk/pull/92
-		str = str.replace(/\r?\n/g, `${code.close}$&${code.open}`);
-	}
-
-	// Reset the original `dim` if we changed it to work around the Windows dimmed gray issue
-	ansiStyles.dim.open = originalDim;
-
-	return str;
-}
-
-function chalkTag(chalk, strings) {
-	if (!Array.isArray(strings)) {
-		// If chalk() was called by itself or with a string,
-		// return the string itself as a string.
-		return [].slice.call(arguments, 1).join(' ');
-	}
-
-	const args = [].slice.call(arguments, 2);
-	const parts = [strings.raw[0]];
-
-	for (let i = 1; i < strings.length; i++) {
-		parts.push(String(args[i - 1]).replace(/[{}\\]/g, '\\$&'));
-		parts.push(String(strings.raw[i]));
-	}
-
-	return template(chalk, parts.join(''));
-}
-
-Object.defineProperties(Chalk.prototype, styles);
-
-module.exports = Chalk(); // eslint-disable-line new-cap
-module.exports.supportsColor = stdoutColor;
-module.exports["default"] = module.exports; // For TypeScript
-
-
-/***/ }),
-
-/***/ 88142:
-/***/ ((module) => {
-
-"use strict";
-
-const TEMPLATE_REGEX = /(?:\\(u[a-f\d]{4}|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
-const STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
-const STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-const ESCAPE_REGEX = /\\(u[a-f\d]{4}|x[a-f\d]{2}|.)|([^\\])/gi;
-
-const ESCAPES = new Map([
-	['n', '\n'],
-	['r', '\r'],
-	['t', '\t'],
-	['b', '\b'],
-	['f', '\f'],
-	['v', '\v'],
-	['0', '\0'],
-	['\\', '\\'],
-	['e', '\u001B'],
-	['a', '\u0007']
-]);
-
-function unescape(c) {
-	if ((c[0] === 'u' && c.length === 5) || (c[0] === 'x' && c.length === 3)) {
-		return String.fromCharCode(parseInt(c.slice(1), 16));
-	}
-
-	return ESCAPES.get(c) || c;
-}
-
-function parseArguments(name, args) {
-	const results = [];
-	const chunks = args.trim().split(/\s*,\s*/g);
-	let matches;
-
-	for (const chunk of chunks) {
-		if (!isNaN(chunk)) {
-			results.push(Number(chunk));
-		} else if ((matches = chunk.match(STRING_REGEX))) {
-			results.push(matches[2].replace(ESCAPE_REGEX, (m, escape, chr) => escape ? unescape(escape) : chr));
-		} else {
-			throw new Error(`Invalid Chalk template style argument: ${chunk} (in style '${name}')`);
-		}
-	}
-
-	return results;
-}
-
-function parseStyle(style) {
-	STYLE_REGEX.lastIndex = 0;
-
-	const results = [];
-	let matches;
-
-	while ((matches = STYLE_REGEX.exec(style)) !== null) {
-		const name = matches[1];
-
-		if (matches[2]) {
-			const args = parseArguments(name, matches[2]);
-			results.push([name].concat(args));
-		} else {
-			results.push([name]);
-		}
-	}
-
-	return results;
-}
-
-function buildStyle(chalk, styles) {
-	const enabled = {};
-
-	for (const layer of styles) {
-		for (const style of layer.styles) {
-			enabled[style[0]] = layer.inverse ? null : style.slice(1);
-		}
-	}
-
-	let current = chalk;
-	for (const styleName of Object.keys(enabled)) {
-		if (Array.isArray(enabled[styleName])) {
-			if (!(styleName in current)) {
-				throw new Error(`Unknown Chalk style: ${styleName}`);
-			}
-
-			if (enabled[styleName].length > 0) {
-				current = current[styleName].apply(current, enabled[styleName]);
-			} else {
-				current = current[styleName];
-			}
-		}
-	}
-
-	return current;
-}
-
-module.exports = (chalk, tmp) => {
-	const styles = [];
-	const chunks = [];
-	let chunk = [];
-
-	// eslint-disable-next-line max-params
-	tmp.replace(TEMPLATE_REGEX, (m, escapeChar, inverse, style, close, chr) => {
-		if (escapeChar) {
-			chunk.push(unescape(escapeChar));
-		} else if (style) {
-			const str = chunk.join('');
-			chunk = [];
-			chunks.push(styles.length === 0 ? str : buildStyle(chalk, styles)(str));
-			styles.push({inverse, styles: parseStyle(style)});
-		} else if (close) {
-			if (styles.length === 0) {
-				throw new Error('Found extraneous } in Chalk template literal');
-			}
-
-			chunks.push(buildStyle(chalk, styles)(chunk.join('')));
-			chunk = [];
-			styles.pop();
-		} else {
-			chunk.push(chr);
-		}
-	});
-
-	chunks.push(chunk.join(''));
-
-	if (styles.length > 0) {
-		const errMsg = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? '' : 's'} (\`}\`)`;
-		throw new Error(errMsg);
-	}
-
-	return chunks.join('');
-};
-
-
-/***/ }),
-
-/***/ 92606:
+/***/ 79634:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -15750,7 +15309,7 @@ exports.CommitError = CommitError;
 
 /***/ }),
 
-/***/ 4825:
+/***/ 97653:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -15769,10 +15328,13 @@ exports.CommitError = CommitError;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.commitAndPush = exports.updateRef = exports.createTree = exports.generateTreeObjects = void 0;
-const logger_1 = __nccwpck_require__(51449);
-const create_commit_1 = __nccwpck_require__(26335);
-const errors_1 = __nccwpck_require__(92606);
+exports.generateTreeObjects = generateTreeObjects;
+exports.createTree = createTree;
+exports.updateRef = updateRef;
+exports.commitAndPush = commitAndPush;
+const logger_1 = __nccwpck_require__(32885);
+const create_commit_1 = __nccwpck_require__(30051);
+const errors_1 = __nccwpck_require__(79634);
 const DEFAULT_FILES_PER_COMMIT = 100;
 /**
  * Generate and return a GitHub tree object structure
@@ -15805,7 +15367,6 @@ function generateTreeObjects(changes) {
     });
     return tree;
 }
-exports.generateTreeObjects = generateTreeObjects;
 function* inGroupsOf(all, groupSize) {
     for (let i = 0; i < all.length; i += groupSize) {
         yield all.slice(i, i + groupSize);
@@ -15843,7 +15404,6 @@ async function createTree(octokit, origin, refHead, tree) {
         throw new errors_1.CommitError(`Error adding to tree: ${refHead}`, e);
     }
 }
-exports.createTree = createTree;
 /**
  * Update a reference to a SHA
  * Rejects if GitHub V3 API fails with the GitHub error response
@@ -15869,7 +15429,6 @@ async function updateRef(octokit, origin, newSha, force) {
         throw new errors_1.CommitError(`Error updating ref heads/${origin.branch} to ${newSha}`, e);
     }
 }
-exports.updateRef = updateRef;
 /**
  * Given a set of changes, apply the commit(s) on top of the given branch's head and upload it to GitHub
  * Rejects if GitHub V3 API fails with the GitHub error response
@@ -15893,12 +15452,11 @@ async function commitAndPush(octokit, refHead, changes, originBranch, commitMess
     }
     await updateRef(octokit, originBranch, refHead, force);
 }
-exports.commitAndPush = commitAndPush;
 //# sourceMappingURL=commit-and-push.js.map
 
 /***/ }),
 
-/***/ 26335:
+/***/ 30051:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -15917,9 +15475,9 @@ exports.commitAndPush = commitAndPush;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createCommit = void 0;
-const logger_1 = __nccwpck_require__(51449);
-const errors_1 = __nccwpck_require__(92606);
+exports.createCommit = createCommit;
+const logger_1 = __nccwpck_require__(32885);
+const errors_1 = __nccwpck_require__(79634);
 /**
  * Create a commit with a repo snapshot SHA on top of the reference HEAD
  * and resolves with the SHA of the commit.
@@ -15960,12 +15518,11 @@ async function createCommit(octokit, origin, refHead, treeSha, message, options 
         throw new errors_1.CommitError(`Error creating commit for: ${treeSha}`, e);
     }
 }
-exports.createCommit = createCommit;
 //# sourceMappingURL=create-commit.js.map
 
 /***/ }),
 
-/***/ 17522:
+/***/ 75478:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -15984,8 +15541,8 @@ exports.createCommit = createCommit;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.addLabels = void 0;
-const logger_1 = __nccwpck_require__(51449);
+exports.addLabels = addLabels;
+const logger_1 = __nccwpck_require__(32885);
 /**
  * Create a GitHub PR on the upstream organization's repo
  * Throws an error if the GitHub API fails
@@ -16009,12 +15566,11 @@ async function addLabels(octokit, upstream, origin, issue_number, labels) {
     logger_1.logger.info(`Successfully added labels ${labels} to issue: ${issue_number}`);
     return labelsResponseData.map(l => l.name);
 }
-exports.addLabels = addLabels;
 //# sourceMappingURL=labels.js.map
 
 /***/ }),
 
-/***/ 51449:
+/***/ 32885:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -16033,7 +15589,8 @@ exports.addLabels = addLabels;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.setupLogger = exports.logger = void 0;
+exports.logger = void 0;
+exports.setupLogger = setupLogger;
 class NullLogger {
     constructor() {
         this.error = () => { };
@@ -16053,1232 +15610,7 @@ function setupLogger(userLogger) {
         exports.logger = logger = new NullLogger();
     }
 }
-exports.setupLogger = setupLogger;
 //# sourceMappingURL=logger.js.map
-
-/***/ }),
-
-/***/ 71923:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/* MIT license */
-var cssKeywords = __nccwpck_require__(17594);
-
-// NOTE: conversions should only return primitive values (i.e. arrays, or
-//       values that give correct `typeof` results).
-//       do not use box values types (i.e. Number(), String(), etc.)
-
-var reverseKeywords = {};
-for (var key in cssKeywords) {
-	if (cssKeywords.hasOwnProperty(key)) {
-		reverseKeywords[cssKeywords[key]] = key;
-	}
-}
-
-var convert = module.exports = {
-	rgb: {channels: 3, labels: 'rgb'},
-	hsl: {channels: 3, labels: 'hsl'},
-	hsv: {channels: 3, labels: 'hsv'},
-	hwb: {channels: 3, labels: 'hwb'},
-	cmyk: {channels: 4, labels: 'cmyk'},
-	xyz: {channels: 3, labels: 'xyz'},
-	lab: {channels: 3, labels: 'lab'},
-	lch: {channels: 3, labels: 'lch'},
-	hex: {channels: 1, labels: ['hex']},
-	keyword: {channels: 1, labels: ['keyword']},
-	ansi16: {channels: 1, labels: ['ansi16']},
-	ansi256: {channels: 1, labels: ['ansi256']},
-	hcg: {channels: 3, labels: ['h', 'c', 'g']},
-	apple: {channels: 3, labels: ['r16', 'g16', 'b16']},
-	gray: {channels: 1, labels: ['gray']}
-};
-
-// hide .channels and .labels properties
-for (var model in convert) {
-	if (convert.hasOwnProperty(model)) {
-		if (!('channels' in convert[model])) {
-			throw new Error('missing channels property: ' + model);
-		}
-
-		if (!('labels' in convert[model])) {
-			throw new Error('missing channel labels property: ' + model);
-		}
-
-		if (convert[model].labels.length !== convert[model].channels) {
-			throw new Error('channel and label counts mismatch: ' + model);
-		}
-
-		var channels = convert[model].channels;
-		var labels = convert[model].labels;
-		delete convert[model].channels;
-		delete convert[model].labels;
-		Object.defineProperty(convert[model], 'channels', {value: channels});
-		Object.defineProperty(convert[model], 'labels', {value: labels});
-	}
-}
-
-convert.rgb.hsl = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var min = Math.min(r, g, b);
-	var max = Math.max(r, g, b);
-	var delta = max - min;
-	var h;
-	var s;
-	var l;
-
-	if (max === min) {
-		h = 0;
-	} else if (r === max) {
-		h = (g - b) / delta;
-	} else if (g === max) {
-		h = 2 + (b - r) / delta;
-	} else if (b === max) {
-		h = 4 + (r - g) / delta;
-	}
-
-	h = Math.min(h * 60, 360);
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	l = (min + max) / 2;
-
-	if (max === min) {
-		s = 0;
-	} else if (l <= 0.5) {
-		s = delta / (max + min);
-	} else {
-		s = delta / (2 - max - min);
-	}
-
-	return [h, s * 100, l * 100];
-};
-
-convert.rgb.hsv = function (rgb) {
-	var rdif;
-	var gdif;
-	var bdif;
-	var h;
-	var s;
-
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var v = Math.max(r, g, b);
-	var diff = v - Math.min(r, g, b);
-	var diffc = function (c) {
-		return (v - c) / 6 / diff + 1 / 2;
-	};
-
-	if (diff === 0) {
-		h = s = 0;
-	} else {
-		s = diff / v;
-		rdif = diffc(r);
-		gdif = diffc(g);
-		bdif = diffc(b);
-
-		if (r === v) {
-			h = bdif - gdif;
-		} else if (g === v) {
-			h = (1 / 3) + rdif - bdif;
-		} else if (b === v) {
-			h = (2 / 3) + gdif - rdif;
-		}
-		if (h < 0) {
-			h += 1;
-		} else if (h > 1) {
-			h -= 1;
-		}
-	}
-
-	return [
-		h * 360,
-		s * 100,
-		v * 100
-	];
-};
-
-convert.rgb.hwb = function (rgb) {
-	var r = rgb[0];
-	var g = rgb[1];
-	var b = rgb[2];
-	var h = convert.rgb.hsl(rgb)[0];
-	var w = 1 / 255 * Math.min(r, Math.min(g, b));
-
-	b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
-
-	return [h, w * 100, b * 100];
-};
-
-convert.rgb.cmyk = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var c;
-	var m;
-	var y;
-	var k;
-
-	k = Math.min(1 - r, 1 - g, 1 - b);
-	c = (1 - r - k) / (1 - k) || 0;
-	m = (1 - g - k) / (1 - k) || 0;
-	y = (1 - b - k) / (1 - k) || 0;
-
-	return [c * 100, m * 100, y * 100, k * 100];
-};
-
-/**
- * See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
- * */
-function comparativeDistance(x, y) {
-	return (
-		Math.pow(x[0] - y[0], 2) +
-		Math.pow(x[1] - y[1], 2) +
-		Math.pow(x[2] - y[2], 2)
-	);
-}
-
-convert.rgb.keyword = function (rgb) {
-	var reversed = reverseKeywords[rgb];
-	if (reversed) {
-		return reversed;
-	}
-
-	var currentClosestDistance = Infinity;
-	var currentClosestKeyword;
-
-	for (var keyword in cssKeywords) {
-		if (cssKeywords.hasOwnProperty(keyword)) {
-			var value = cssKeywords[keyword];
-
-			// Compute comparative distance
-			var distance = comparativeDistance(rgb, value);
-
-			// Check if its less, if so set as closest
-			if (distance < currentClosestDistance) {
-				currentClosestDistance = distance;
-				currentClosestKeyword = keyword;
-			}
-		}
-	}
-
-	return currentClosestKeyword;
-};
-
-convert.keyword.rgb = function (keyword) {
-	return cssKeywords[keyword];
-};
-
-convert.rgb.xyz = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-
-	// assume sRGB
-	r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
-	g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
-	b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
-
-	var x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-	var y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-	var z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
-
-	return [x * 100, y * 100, z * 100];
-};
-
-convert.rgb.lab = function (rgb) {
-	var xyz = convert.rgb.xyz(rgb);
-	var x = xyz[0];
-	var y = xyz[1];
-	var z = xyz[2];
-	var l;
-	var a;
-	var b;
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? Math.pow(y, 1 / 3) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? Math.pow(z, 1 / 3) : (7.787 * z) + (16 / 116);
-
-	l = (116 * y) - 16;
-	a = 500 * (x - y);
-	b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.hsl.rgb = function (hsl) {
-	var h = hsl[0] / 360;
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var t1;
-	var t2;
-	var t3;
-	var rgb;
-	var val;
-
-	if (s === 0) {
-		val = l * 255;
-		return [val, val, val];
-	}
-
-	if (l < 0.5) {
-		t2 = l * (1 + s);
-	} else {
-		t2 = l + s - l * s;
-	}
-
-	t1 = 2 * l - t2;
-
-	rgb = [0, 0, 0];
-	for (var i = 0; i < 3; i++) {
-		t3 = h + 1 / 3 * -(i - 1);
-		if (t3 < 0) {
-			t3++;
-		}
-		if (t3 > 1) {
-			t3--;
-		}
-
-		if (6 * t3 < 1) {
-			val = t1 + (t2 - t1) * 6 * t3;
-		} else if (2 * t3 < 1) {
-			val = t2;
-		} else if (3 * t3 < 2) {
-			val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-		} else {
-			val = t1;
-		}
-
-		rgb[i] = val * 255;
-	}
-
-	return rgb;
-};
-
-convert.hsl.hsv = function (hsl) {
-	var h = hsl[0];
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var smin = s;
-	var lmin = Math.max(l, 0.01);
-	var sv;
-	var v;
-
-	l *= 2;
-	s *= (l <= 1) ? l : 2 - l;
-	smin *= lmin <= 1 ? lmin : 2 - lmin;
-	v = (l + s) / 2;
-	sv = l === 0 ? (2 * smin) / (lmin + smin) : (2 * s) / (l + s);
-
-	return [h, sv * 100, v * 100];
-};
-
-convert.hsv.rgb = function (hsv) {
-	var h = hsv[0] / 60;
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-	var hi = Math.floor(h) % 6;
-
-	var f = h - Math.floor(h);
-	var p = 255 * v * (1 - s);
-	var q = 255 * v * (1 - (s * f));
-	var t = 255 * v * (1 - (s * (1 - f)));
-	v *= 255;
-
-	switch (hi) {
-		case 0:
-			return [v, t, p];
-		case 1:
-			return [q, v, p];
-		case 2:
-			return [p, v, t];
-		case 3:
-			return [p, q, v];
-		case 4:
-			return [t, p, v];
-		case 5:
-			return [v, p, q];
-	}
-};
-
-convert.hsv.hsl = function (hsv) {
-	var h = hsv[0];
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-	var vmin = Math.max(v, 0.01);
-	var lmin;
-	var sl;
-	var l;
-
-	l = (2 - s) * v;
-	lmin = (2 - s) * vmin;
-	sl = s * vmin;
-	sl /= (lmin <= 1) ? lmin : 2 - lmin;
-	sl = sl || 0;
-	l /= 2;
-
-	return [h, sl * 100, l * 100];
-};
-
-// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
-convert.hwb.rgb = function (hwb) {
-	var h = hwb[0] / 360;
-	var wh = hwb[1] / 100;
-	var bl = hwb[2] / 100;
-	var ratio = wh + bl;
-	var i;
-	var v;
-	var f;
-	var n;
-
-	// wh + bl cant be > 1
-	if (ratio > 1) {
-		wh /= ratio;
-		bl /= ratio;
-	}
-
-	i = Math.floor(6 * h);
-	v = 1 - bl;
-	f = 6 * h - i;
-
-	if ((i & 0x01) !== 0) {
-		f = 1 - f;
-	}
-
-	n = wh + f * (v - wh); // linear interpolation
-
-	var r;
-	var g;
-	var b;
-	switch (i) {
-		default:
-		case 6:
-		case 0: r = v; g = n; b = wh; break;
-		case 1: r = n; g = v; b = wh; break;
-		case 2: r = wh; g = v; b = n; break;
-		case 3: r = wh; g = n; b = v; break;
-		case 4: r = n; g = wh; b = v; break;
-		case 5: r = v; g = wh; b = n; break;
-	}
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.cmyk.rgb = function (cmyk) {
-	var c = cmyk[0] / 100;
-	var m = cmyk[1] / 100;
-	var y = cmyk[2] / 100;
-	var k = cmyk[3] / 100;
-	var r;
-	var g;
-	var b;
-
-	r = 1 - Math.min(1, c * (1 - k) + k);
-	g = 1 - Math.min(1, m * (1 - k) + k);
-	b = 1 - Math.min(1, y * (1 - k) + k);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.rgb = function (xyz) {
-	var x = xyz[0] / 100;
-	var y = xyz[1] / 100;
-	var z = xyz[2] / 100;
-	var r;
-	var g;
-	var b;
-
-	r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
-	g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
-	b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
-
-	// assume sRGB
-	r = r > 0.0031308
-		? ((1.055 * Math.pow(r, 1.0 / 2.4)) - 0.055)
-		: r * 12.92;
-
-	g = g > 0.0031308
-		? ((1.055 * Math.pow(g, 1.0 / 2.4)) - 0.055)
-		: g * 12.92;
-
-	b = b > 0.0031308
-		? ((1.055 * Math.pow(b, 1.0 / 2.4)) - 0.055)
-		: b * 12.92;
-
-	r = Math.min(Math.max(0, r), 1);
-	g = Math.min(Math.max(0, g), 1);
-	b = Math.min(Math.max(0, b), 1);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.lab = function (xyz) {
-	var x = xyz[0];
-	var y = xyz[1];
-	var z = xyz[2];
-	var l;
-	var a;
-	var b;
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? Math.pow(y, 1 / 3) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? Math.pow(z, 1 / 3) : (7.787 * z) + (16 / 116);
-
-	l = (116 * y) - 16;
-	a = 500 * (x - y);
-	b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.lab.xyz = function (lab) {
-	var l = lab[0];
-	var a = lab[1];
-	var b = lab[2];
-	var x;
-	var y;
-	var z;
-
-	y = (l + 16) / 116;
-	x = a / 500 + y;
-	z = y - b / 200;
-
-	var y2 = Math.pow(y, 3);
-	var x2 = Math.pow(x, 3);
-	var z2 = Math.pow(z, 3);
-	y = y2 > 0.008856 ? y2 : (y - 16 / 116) / 7.787;
-	x = x2 > 0.008856 ? x2 : (x - 16 / 116) / 7.787;
-	z = z2 > 0.008856 ? z2 : (z - 16 / 116) / 7.787;
-
-	x *= 95.047;
-	y *= 100;
-	z *= 108.883;
-
-	return [x, y, z];
-};
-
-convert.lab.lch = function (lab) {
-	var l = lab[0];
-	var a = lab[1];
-	var b = lab[2];
-	var hr;
-	var h;
-	var c;
-
-	hr = Math.atan2(b, a);
-	h = hr * 360 / 2 / Math.PI;
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	c = Math.sqrt(a * a + b * b);
-
-	return [l, c, h];
-};
-
-convert.lch.lab = function (lch) {
-	var l = lch[0];
-	var c = lch[1];
-	var h = lch[2];
-	var a;
-	var b;
-	var hr;
-
-	hr = h / 360 * 2 * Math.PI;
-	a = c * Math.cos(hr);
-	b = c * Math.sin(hr);
-
-	return [l, a, b];
-};
-
-convert.rgb.ansi16 = function (args) {
-	var r = args[0];
-	var g = args[1];
-	var b = args[2];
-	var value = 1 in arguments ? arguments[1] : convert.rgb.hsv(args)[2]; // hsv -> ansi16 optimization
-
-	value = Math.round(value / 50);
-
-	if (value === 0) {
-		return 30;
-	}
-
-	var ansi = 30
-		+ ((Math.round(b / 255) << 2)
-		| (Math.round(g / 255) << 1)
-		| Math.round(r / 255));
-
-	if (value === 2) {
-		ansi += 60;
-	}
-
-	return ansi;
-};
-
-convert.hsv.ansi16 = function (args) {
-	// optimization here; we already know the value and don't need to get
-	// it converted for us.
-	return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
-};
-
-convert.rgb.ansi256 = function (args) {
-	var r = args[0];
-	var g = args[1];
-	var b = args[2];
-
-	// we use the extended greyscale palette here, with the exception of
-	// black and white. normal palette only has 4 greyscale shades.
-	if (r === g && g === b) {
-		if (r < 8) {
-			return 16;
-		}
-
-		if (r > 248) {
-			return 231;
-		}
-
-		return Math.round(((r - 8) / 247) * 24) + 232;
-	}
-
-	var ansi = 16
-		+ (36 * Math.round(r / 255 * 5))
-		+ (6 * Math.round(g / 255 * 5))
-		+ Math.round(b / 255 * 5);
-
-	return ansi;
-};
-
-convert.ansi16.rgb = function (args) {
-	var color = args % 10;
-
-	// handle greyscale
-	if (color === 0 || color === 7) {
-		if (args > 50) {
-			color += 3.5;
-		}
-
-		color = color / 10.5 * 255;
-
-		return [color, color, color];
-	}
-
-	var mult = (~~(args > 50) + 1) * 0.5;
-	var r = ((color & 1) * mult) * 255;
-	var g = (((color >> 1) & 1) * mult) * 255;
-	var b = (((color >> 2) & 1) * mult) * 255;
-
-	return [r, g, b];
-};
-
-convert.ansi256.rgb = function (args) {
-	// handle greyscale
-	if (args >= 232) {
-		var c = (args - 232) * 10 + 8;
-		return [c, c, c];
-	}
-
-	args -= 16;
-
-	var rem;
-	var r = Math.floor(args / 36) / 5 * 255;
-	var g = Math.floor((rem = args % 36) / 6) / 5 * 255;
-	var b = (rem % 6) / 5 * 255;
-
-	return [r, g, b];
-};
-
-convert.rgb.hex = function (args) {
-	var integer = ((Math.round(args[0]) & 0xFF) << 16)
-		+ ((Math.round(args[1]) & 0xFF) << 8)
-		+ (Math.round(args[2]) & 0xFF);
-
-	var string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.hex.rgb = function (args) {
-	var match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-	if (!match) {
-		return [0, 0, 0];
-	}
-
-	var colorString = match[0];
-
-	if (match[0].length === 3) {
-		colorString = colorString.split('').map(function (char) {
-			return char + char;
-		}).join('');
-	}
-
-	var integer = parseInt(colorString, 16);
-	var r = (integer >> 16) & 0xFF;
-	var g = (integer >> 8) & 0xFF;
-	var b = integer & 0xFF;
-
-	return [r, g, b];
-};
-
-convert.rgb.hcg = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var max = Math.max(Math.max(r, g), b);
-	var min = Math.min(Math.min(r, g), b);
-	var chroma = (max - min);
-	var grayscale;
-	var hue;
-
-	if (chroma < 1) {
-		grayscale = min / (1 - chroma);
-	} else {
-		grayscale = 0;
-	}
-
-	if (chroma <= 0) {
-		hue = 0;
-	} else
-	if (max === r) {
-		hue = ((g - b) / chroma) % 6;
-	} else
-	if (max === g) {
-		hue = 2 + (b - r) / chroma;
-	} else {
-		hue = 4 + (r - g) / chroma + 4;
-	}
-
-	hue /= 6;
-	hue %= 1;
-
-	return [hue * 360, chroma * 100, grayscale * 100];
-};
-
-convert.hsl.hcg = function (hsl) {
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var c = 1;
-	var f = 0;
-
-	if (l < 0.5) {
-		c = 2.0 * s * l;
-	} else {
-		c = 2.0 * s * (1.0 - l);
-	}
-
-	if (c < 1.0) {
-		f = (l - 0.5 * c) / (1.0 - c);
-	}
-
-	return [hsl[0], c * 100, f * 100];
-};
-
-convert.hsv.hcg = function (hsv) {
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-
-	var c = s * v;
-	var f = 0;
-
-	if (c < 1.0) {
-		f = (v - c) / (1 - c);
-	}
-
-	return [hsv[0], c * 100, f * 100];
-};
-
-convert.hcg.rgb = function (hcg) {
-	var h = hcg[0] / 360;
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	if (c === 0.0) {
-		return [g * 255, g * 255, g * 255];
-	}
-
-	var pure = [0, 0, 0];
-	var hi = (h % 1) * 6;
-	var v = hi % 1;
-	var w = 1 - v;
-	var mg = 0;
-
-	switch (Math.floor(hi)) {
-		case 0:
-			pure[0] = 1; pure[1] = v; pure[2] = 0; break;
-		case 1:
-			pure[0] = w; pure[1] = 1; pure[2] = 0; break;
-		case 2:
-			pure[0] = 0; pure[1] = 1; pure[2] = v; break;
-		case 3:
-			pure[0] = 0; pure[1] = w; pure[2] = 1; break;
-		case 4:
-			pure[0] = v; pure[1] = 0; pure[2] = 1; break;
-		default:
-			pure[0] = 1; pure[1] = 0; pure[2] = w;
-	}
-
-	mg = (1.0 - c) * g;
-
-	return [
-		(c * pure[0] + mg) * 255,
-		(c * pure[1] + mg) * 255,
-		(c * pure[2] + mg) * 255
-	];
-};
-
-convert.hcg.hsv = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	var v = c + g * (1.0 - c);
-	var f = 0;
-
-	if (v > 0.0) {
-		f = c / v;
-	}
-
-	return [hcg[0], f * 100, v * 100];
-};
-
-convert.hcg.hsl = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	var l = g * (1.0 - c) + 0.5 * c;
-	var s = 0;
-
-	if (l > 0.0 && l < 0.5) {
-		s = c / (2 * l);
-	} else
-	if (l >= 0.5 && l < 1.0) {
-		s = c / (2 * (1 - l));
-	}
-
-	return [hcg[0], s * 100, l * 100];
-};
-
-convert.hcg.hwb = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-	var v = c + g * (1.0 - c);
-	return [hcg[0], (v - c) * 100, (1 - v) * 100];
-};
-
-convert.hwb.hcg = function (hwb) {
-	var w = hwb[1] / 100;
-	var b = hwb[2] / 100;
-	var v = 1 - b;
-	var c = v - w;
-	var g = 0;
-
-	if (c < 1) {
-		g = (v - c) / (1 - c);
-	}
-
-	return [hwb[0], c * 100, g * 100];
-};
-
-convert.apple.rgb = function (apple) {
-	return [(apple[0] / 65535) * 255, (apple[1] / 65535) * 255, (apple[2] / 65535) * 255];
-};
-
-convert.rgb.apple = function (rgb) {
-	return [(rgb[0] / 255) * 65535, (rgb[1] / 255) * 65535, (rgb[2] / 255) * 65535];
-};
-
-convert.gray.rgb = function (args) {
-	return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
-};
-
-convert.gray.hsl = convert.gray.hsv = function (args) {
-	return [0, 0, args[0]];
-};
-
-convert.gray.hwb = function (gray) {
-	return [0, 100, gray[0]];
-};
-
-convert.gray.cmyk = function (gray) {
-	return [0, 0, 0, gray[0]];
-};
-
-convert.gray.lab = function (gray) {
-	return [gray[0], 0, 0];
-};
-
-convert.gray.hex = function (gray) {
-	var val = Math.round(gray[0] / 100 * 255) & 0xFF;
-	var integer = (val << 16) + (val << 8) + val;
-
-	var string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.rgb.gray = function (rgb) {
-	var val = (rgb[0] + rgb[1] + rgb[2]) / 3;
-	return [val / 255 * 100];
-};
-
-
-/***/ }),
-
-/***/ 87414:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var conversions = __nccwpck_require__(71923);
-var route = __nccwpck_require__(31523);
-
-var convert = {};
-
-var models = Object.keys(conversions);
-
-function wrapRaw(fn) {
-	var wrappedFn = function (args) {
-		if (args === undefined || args === null) {
-			return args;
-		}
-
-		if (arguments.length > 1) {
-			args = Array.prototype.slice.call(arguments);
-		}
-
-		return fn(args);
-	};
-
-	// preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-function wrapRounded(fn) {
-	var wrappedFn = function (args) {
-		if (args === undefined || args === null) {
-			return args;
-		}
-
-		if (arguments.length > 1) {
-			args = Array.prototype.slice.call(arguments);
-		}
-
-		var result = fn(args);
-
-		// we're assuming the result is an array here.
-		// see notice in conversions.js; don't use box types
-		// in conversion functions.
-		if (typeof result === 'object') {
-			for (var len = result.length, i = 0; i < len; i++) {
-				result[i] = Math.round(result[i]);
-			}
-		}
-
-		return result;
-	};
-
-	// preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-models.forEach(function (fromModel) {
-	convert[fromModel] = {};
-
-	Object.defineProperty(convert[fromModel], 'channels', {value: conversions[fromModel].channels});
-	Object.defineProperty(convert[fromModel], 'labels', {value: conversions[fromModel].labels});
-
-	var routes = route(fromModel);
-	var routeModels = Object.keys(routes);
-
-	routeModels.forEach(function (toModel) {
-		var fn = routes[toModel];
-
-		convert[fromModel][toModel] = wrapRounded(fn);
-		convert[fromModel][toModel].raw = wrapRaw(fn);
-	});
-});
-
-module.exports = convert;
-
-
-/***/ }),
-
-/***/ 31523:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var conversions = __nccwpck_require__(71923);
-
-/*
-	this function routes a model to all other models.
-
-	all functions that are routed have a property `.conversion` attached
-	to the returned synthetic function. This property is an array
-	of strings, each with the steps in between the 'from' and 'to'
-	color models (inclusive).
-
-	conversions that are not possible simply are not included.
-*/
-
-function buildGraph() {
-	var graph = {};
-	// https://jsperf.com/object-keys-vs-for-in-with-closure/3
-	var models = Object.keys(conversions);
-
-	for (var len = models.length, i = 0; i < len; i++) {
-		graph[models[i]] = {
-			// http://jsperf.com/1-vs-infinity
-			// micro-opt, but this is simple.
-			distance: -1,
-			parent: null
-		};
-	}
-
-	return graph;
-}
-
-// https://en.wikipedia.org/wiki/Breadth-first_search
-function deriveBFS(fromModel) {
-	var graph = buildGraph();
-	var queue = [fromModel]; // unshift -> queue -> pop
-
-	graph[fromModel].distance = 0;
-
-	while (queue.length) {
-		var current = queue.pop();
-		var adjacents = Object.keys(conversions[current]);
-
-		for (var len = adjacents.length, i = 0; i < len; i++) {
-			var adjacent = adjacents[i];
-			var node = graph[adjacent];
-
-			if (node.distance === -1) {
-				node.distance = graph[current].distance + 1;
-				node.parent = current;
-				queue.unshift(adjacent);
-			}
-		}
-	}
-
-	return graph;
-}
-
-function link(from, to) {
-	return function (args) {
-		return to(from(args));
-	};
-}
-
-function wrapConversion(toModel, graph) {
-	var path = [graph[toModel].parent, toModel];
-	var fn = conversions[graph[toModel].parent][toModel];
-
-	var cur = graph[toModel].parent;
-	while (graph[cur].parent) {
-		path.unshift(graph[cur].parent);
-		fn = link(conversions[graph[cur].parent][cur], fn);
-		cur = graph[cur].parent;
-	}
-
-	fn.conversion = path;
-	return fn;
-}
-
-module.exports = function (fromModel) {
-	var graph = deriveBFS(fromModel);
-	var conversion = {};
-
-	var models = Object.keys(graph);
-	for (var len = models.length, i = 0; i < len; i++) {
-		var toModel = models[i];
-		var node = graph[toModel];
-
-		if (node.parent === null) {
-			// no possible conversion, or this node is the source model.
-			continue;
-		}
-
-		conversion[toModel] = wrapConversion(toModel, graph);
-	}
-
-	return conversion;
-};
-
-
-
-/***/ }),
-
-/***/ 17594:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = {
-	"aliceblue": [240, 248, 255],
-	"antiquewhite": [250, 235, 215],
-	"aqua": [0, 255, 255],
-	"aquamarine": [127, 255, 212],
-	"azure": [240, 255, 255],
-	"beige": [245, 245, 220],
-	"bisque": [255, 228, 196],
-	"black": [0, 0, 0],
-	"blanchedalmond": [255, 235, 205],
-	"blue": [0, 0, 255],
-	"blueviolet": [138, 43, 226],
-	"brown": [165, 42, 42],
-	"burlywood": [222, 184, 135],
-	"cadetblue": [95, 158, 160],
-	"chartreuse": [127, 255, 0],
-	"chocolate": [210, 105, 30],
-	"coral": [255, 127, 80],
-	"cornflowerblue": [100, 149, 237],
-	"cornsilk": [255, 248, 220],
-	"crimson": [220, 20, 60],
-	"cyan": [0, 255, 255],
-	"darkblue": [0, 0, 139],
-	"darkcyan": [0, 139, 139],
-	"darkgoldenrod": [184, 134, 11],
-	"darkgray": [169, 169, 169],
-	"darkgreen": [0, 100, 0],
-	"darkgrey": [169, 169, 169],
-	"darkkhaki": [189, 183, 107],
-	"darkmagenta": [139, 0, 139],
-	"darkolivegreen": [85, 107, 47],
-	"darkorange": [255, 140, 0],
-	"darkorchid": [153, 50, 204],
-	"darkred": [139, 0, 0],
-	"darksalmon": [233, 150, 122],
-	"darkseagreen": [143, 188, 143],
-	"darkslateblue": [72, 61, 139],
-	"darkslategray": [47, 79, 79],
-	"darkslategrey": [47, 79, 79],
-	"darkturquoise": [0, 206, 209],
-	"darkviolet": [148, 0, 211],
-	"deeppink": [255, 20, 147],
-	"deepskyblue": [0, 191, 255],
-	"dimgray": [105, 105, 105],
-	"dimgrey": [105, 105, 105],
-	"dodgerblue": [30, 144, 255],
-	"firebrick": [178, 34, 34],
-	"floralwhite": [255, 250, 240],
-	"forestgreen": [34, 139, 34],
-	"fuchsia": [255, 0, 255],
-	"gainsboro": [220, 220, 220],
-	"ghostwhite": [248, 248, 255],
-	"gold": [255, 215, 0],
-	"goldenrod": [218, 165, 32],
-	"gray": [128, 128, 128],
-	"green": [0, 128, 0],
-	"greenyellow": [173, 255, 47],
-	"grey": [128, 128, 128],
-	"honeydew": [240, 255, 240],
-	"hotpink": [255, 105, 180],
-	"indianred": [205, 92, 92],
-	"indigo": [75, 0, 130],
-	"ivory": [255, 255, 240],
-	"khaki": [240, 230, 140],
-	"lavender": [230, 230, 250],
-	"lavenderblush": [255, 240, 245],
-	"lawngreen": [124, 252, 0],
-	"lemonchiffon": [255, 250, 205],
-	"lightblue": [173, 216, 230],
-	"lightcoral": [240, 128, 128],
-	"lightcyan": [224, 255, 255],
-	"lightgoldenrodyellow": [250, 250, 210],
-	"lightgray": [211, 211, 211],
-	"lightgreen": [144, 238, 144],
-	"lightgrey": [211, 211, 211],
-	"lightpink": [255, 182, 193],
-	"lightsalmon": [255, 160, 122],
-	"lightseagreen": [32, 178, 170],
-	"lightskyblue": [135, 206, 250],
-	"lightslategray": [119, 136, 153],
-	"lightslategrey": [119, 136, 153],
-	"lightsteelblue": [176, 196, 222],
-	"lightyellow": [255, 255, 224],
-	"lime": [0, 255, 0],
-	"limegreen": [50, 205, 50],
-	"linen": [250, 240, 230],
-	"magenta": [255, 0, 255],
-	"maroon": [128, 0, 0],
-	"mediumaquamarine": [102, 205, 170],
-	"mediumblue": [0, 0, 205],
-	"mediumorchid": [186, 85, 211],
-	"mediumpurple": [147, 112, 219],
-	"mediumseagreen": [60, 179, 113],
-	"mediumslateblue": [123, 104, 238],
-	"mediumspringgreen": [0, 250, 154],
-	"mediumturquoise": [72, 209, 204],
-	"mediumvioletred": [199, 21, 133],
-	"midnightblue": [25, 25, 112],
-	"mintcream": [245, 255, 250],
-	"mistyrose": [255, 228, 225],
-	"moccasin": [255, 228, 181],
-	"navajowhite": [255, 222, 173],
-	"navy": [0, 0, 128],
-	"oldlace": [253, 245, 230],
-	"olive": [128, 128, 0],
-	"olivedrab": [107, 142, 35],
-	"orange": [255, 165, 0],
-	"orangered": [255, 69, 0],
-	"orchid": [218, 112, 214],
-	"palegoldenrod": [238, 232, 170],
-	"palegreen": [152, 251, 152],
-	"paleturquoise": [175, 238, 238],
-	"palevioletred": [219, 112, 147],
-	"papayawhip": [255, 239, 213],
-	"peachpuff": [255, 218, 185],
-	"peru": [205, 133, 63],
-	"pink": [255, 192, 203],
-	"plum": [221, 160, 221],
-	"powderblue": [176, 224, 230],
-	"purple": [128, 0, 128],
-	"rebeccapurple": [102, 51, 153],
-	"red": [255, 0, 0],
-	"rosybrown": [188, 143, 143],
-	"royalblue": [65, 105, 225],
-	"saddlebrown": [139, 69, 19],
-	"salmon": [250, 128, 114],
-	"sandybrown": [244, 164, 96],
-	"seagreen": [46, 139, 87],
-	"seashell": [255, 245, 238],
-	"sienna": [160, 82, 45],
-	"silver": [192, 192, 192],
-	"skyblue": [135, 206, 235],
-	"slateblue": [106, 90, 205],
-	"slategray": [112, 128, 144],
-	"slategrey": [112, 128, 144],
-	"snow": [255, 250, 250],
-	"springgreen": [0, 255, 127],
-	"steelblue": [70, 130, 180],
-	"tan": [210, 180, 140],
-	"teal": [0, 128, 128],
-	"thistle": [216, 191, 216],
-	"tomato": [255, 99, 71],
-	"turquoise": [64, 224, 208],
-	"violet": [238, 130, 238],
-	"wheat": [245, 222, 179],
-	"white": [255, 255, 255],
-	"whitesmoke": [245, 245, 245],
-	"yellow": [255, 255, 0],
-	"yellowgreen": [154, 205, 50]
-};
-
 
 /***/ }),
 
@@ -17623,7 +15955,7 @@ module.exports = conventionalCommitsFilter
 
 /***/ }),
 
-/***/ 56646:
+/***/ 18211:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -17866,7 +16198,7 @@ exports.attributeRules = {
 
 /***/ }),
 
-/***/ 95114:
+/***/ 22417:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -17899,11 +16231,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.compileToken = exports.compileUnsafe = exports.compile = void 0;
-var css_what_1 = __nccwpck_require__(67185);
+var css_what_1 = __nccwpck_require__(39284);
 var boolbase_1 = __importDefault(__nccwpck_require__(344));
-var sort_js_1 = __importStar(__nccwpck_require__(59879));
-var general_js_1 = __nccwpck_require__(68155);
-var subselects_js_1 = __nccwpck_require__(71734);
+var sort_js_1 = __importStar(__nccwpck_require__(60490));
+var general_js_1 = __nccwpck_require__(8048);
+var subselects_js_1 = __nccwpck_require__(37477);
 /**
  * Compiles a selector to an executable function.
  *
@@ -18024,16 +16356,16 @@ function reduceRules(a, b) {
 
 /***/ }),
 
-/***/ 68155:
+/***/ 8048:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.compileGeneralSelector = void 0;
-var attributes_js_1 = __nccwpck_require__(56646);
-var index_js_1 = __nccwpck_require__(12765);
-var css_what_1 = __nccwpck_require__(67185);
+var attributes_js_1 = __nccwpck_require__(18211);
+var index_js_1 = __nccwpck_require__(69360);
+var css_what_1 = __nccwpck_require__(39284);
 function getElementParent(node, adapter) {
     var parent = adapter.getParent(node);
     if (parent && adapter.isTag(parent)) {
@@ -18179,7 +16511,7 @@ exports.compileGeneralSelector = compileGeneralSelector;
 
 /***/ }),
 
-/***/ 663:
+/***/ 87856:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -18212,10 +16544,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.aliases = exports.pseudos = exports.filters = exports.is = exports.selectOne = exports.selectAll = exports.prepareContext = exports._compileToken = exports._compileUnsafe = exports.compile = void 0;
-var DomUtils = __importStar(__nccwpck_require__(83821));
+var DomUtils = __importStar(__nccwpck_require__(96178));
 var boolbase_1 = __importDefault(__nccwpck_require__(344));
-var compile_js_1 = __nccwpck_require__(95114);
-var subselects_js_1 = __nccwpck_require__(71734);
+var compile_js_1 = __nccwpck_require__(22417);
+var subselects_js_1 = __nccwpck_require__(37477);
 var defaultEquals = function (a, b) { return a === b; };
 var defaultOptions = {
     adapter: DomUtils,
@@ -18332,7 +16664,7 @@ exports.is = is;
 exports["default"] = exports.selectAll;
 // Export filters, pseudos and aliases to allow users to supply their own.
 /** @deprecated Use the `pseudos` option instead. */
-var index_js_1 = __nccwpck_require__(12765);
+var index_js_1 = __nccwpck_require__(69360);
 Object.defineProperty(exports, "filters", ({ enumerable: true, get: function () { return index_js_1.filters; } }));
 Object.defineProperty(exports, "pseudos", ({ enumerable: true, get: function () { return index_js_1.pseudos; } }));
 Object.defineProperty(exports, "aliases", ({ enumerable: true, get: function () { return index_js_1.aliases; } }));
@@ -18340,7 +16672,7 @@ Object.defineProperty(exports, "aliases", ({ enumerable: true, get: function () 
 
 /***/ }),
 
-/***/ 4045:
+/***/ 75972:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -18381,7 +16713,7 @@ exports.aliases = {
 
 /***/ }),
 
-/***/ 68250:
+/***/ 17611:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -18545,21 +16877,21 @@ function dynamicStatePseudo(name) {
 
 /***/ }),
 
-/***/ 12765:
+/***/ 69360:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.compilePseudoSelector = exports.aliases = exports.pseudos = exports.filters = void 0;
-var css_what_1 = __nccwpck_require__(67185);
-var filters_js_1 = __nccwpck_require__(68250);
+var css_what_1 = __nccwpck_require__(39284);
+var filters_js_1 = __nccwpck_require__(17611);
 Object.defineProperty(exports, "filters", ({ enumerable: true, get: function () { return filters_js_1.filters; } }));
-var pseudos_js_1 = __nccwpck_require__(7022);
+var pseudos_js_1 = __nccwpck_require__(45467);
 Object.defineProperty(exports, "pseudos", ({ enumerable: true, get: function () { return pseudos_js_1.pseudos; } }));
-var aliases_js_1 = __nccwpck_require__(4045);
+var aliases_js_1 = __nccwpck_require__(75972);
 Object.defineProperty(exports, "aliases", ({ enumerable: true, get: function () { return aliases_js_1.aliases; } }));
-var subselects_js_1 = __nccwpck_require__(71734);
+var subselects_js_1 = __nccwpck_require__(37477);
 function compilePseudoSelector(next, selector, options, context, compileToken) {
     var _a;
     var name = selector.name, data = selector.data;
@@ -18598,7 +16930,7 @@ exports.compilePseudoSelector = compilePseudoSelector;
 
 /***/ }),
 
-/***/ 7022:
+/***/ 45467:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -18698,7 +17030,7 @@ exports.verifyPseudoArgs = verifyPseudoArgs;
 
 /***/ }),
 
-/***/ 71734:
+/***/ 37477:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -18718,7 +17050,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.subselects = exports.getNextSiblings = exports.ensureIsTag = exports.PLACEHOLDER_ELEMENT = void 0;
 var boolbase_1 = __importDefault(__nccwpck_require__(344));
-var sort_js_1 = __nccwpck_require__(59879);
+var sort_js_1 = __nccwpck_require__(60490);
 /** Used as a placeholder for :has. Will be replaced with the actual element. */
 exports.PLACEHOLDER_ELEMENT = {};
 function ensureIsTag(next, adapter) {
@@ -18817,14 +17149,14 @@ exports.subselects = {
 
 /***/ }),
 
-/***/ 59879:
+/***/ 60490:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.isTraversal = void 0;
-var css_what_1 = __nccwpck_require__(67185);
+var css_what_1 = __nccwpck_require__(39284);
 var procedure = new Map([
     [css_what_1.SelectorType.Universal, 50],
     [css_what_1.SelectorType.Tag, 30],
@@ -18908,7 +17240,7 @@ function getProcedure(token) {
 
 /***/ }),
 
-/***/ 67185:
+/***/ 39284:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -18929,24 +17261,24 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stringify = exports.parse = exports.isTraversal = void 0;
-__exportStar(__nccwpck_require__(44192), exports);
-var parse_1 = __nccwpck_require__(32358);
+__exportStar(__nccwpck_require__(9809), exports);
+var parse_1 = __nccwpck_require__(49303);
 Object.defineProperty(exports, "isTraversal", ({ enumerable: true, get: function () { return parse_1.isTraversal; } }));
 Object.defineProperty(exports, "parse", ({ enumerable: true, get: function () { return parse_1.parse; } }));
-var stringify_1 = __nccwpck_require__(73960);
+var stringify_1 = __nccwpck_require__(35513);
 Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return stringify_1.stringify; } }));
 
 
 /***/ }),
 
-/***/ 32358:
+/***/ 49303:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parse = exports.isTraversal = void 0;
-var types_1 = __nccwpck_require__(44192);
+var types_1 = __nccwpck_require__(9809);
 var reName = /^[^\\#]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/;
 var reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi;
 var actionTypes = new Map([
@@ -19372,7 +17704,7 @@ function parseSelector(subselects, selector, selectorIndex) {
 
 /***/ }),
 
-/***/ 73960:
+/***/ 35513:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -19388,7 +17720,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stringify = void 0;
-var types_1 = __nccwpck_require__(44192);
+var types_1 = __nccwpck_require__(9809);
 var attribValChars = ["\\", '"'];
 var pseudoValChars = __spreadArray(__spreadArray([], attribValChars, true), ["(", ")"], false);
 var charsToEscapeInAttributeValue = new Set(attribValChars.map(function (c) { return c.charCodeAt(0); }));
@@ -19518,7 +17850,7 @@ function escapeName(str, charsToEscape) {
 
 /***/ }),
 
-/***/ 44192:
+/***/ 9809:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -19568,7 +17900,7 @@ var AttributeAction;
 
 /***/ }),
 
-/***/ 38463:
+/***/ 57451:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
@@ -19698,14 +18030,17 @@ function useColors() {
 		return false;
 	}
 
+	let m;
+
 	// Is webkit? http://stackoverflow.com/a/16459606/376773
 	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	// eslint-disable-next-line no-return-assign
 	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
 		// Is firebug? http://stackoverflow.com/a/398120/376773
 		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
 		// Is firefox >= v31?
 		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		(typeof navigator !== 'undefined' && navigator.userAgent && (m = navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/)) && parseInt(m[1], 10) >= 31) ||
 		// Double check webkit in userAgent just in case we are in a worker
 		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
 }
@@ -19789,7 +18124,7 @@ function save(namespaces) {
 function load() {
 	let r;
 	try {
-		r = exports.storage.getItem('debug');
+		r = exports.storage.getItem('debug') || exports.storage.getItem('DEBUG') ;
 	} catch (error) {
 		// Swallow
 		// XXX (@Qix-) should we be logging these?
@@ -19825,7 +18160,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __nccwpck_require__(21122)(exports);
+module.exports = __nccwpck_require__(63350)(exports);
 
 const {formatters} = module.exports;
 
@@ -19844,7 +18179,7 @@ formatters.j = function (v) {
 
 /***/ }),
 
-/***/ 21122:
+/***/ 63350:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -19860,7 +18195,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __nccwpck_require__(91940);
+	createDebug.humanize = __nccwpck_require__(26647);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -20015,24 +18350,62 @@ function setup(env) {
 		createDebug.names = [];
 		createDebug.skips = [];
 
-		let i;
-		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-		const len = split.length;
+		const split = (typeof namespaces === 'string' ? namespaces : '')
+			.trim()
+			.replace(/\s+/g, ',')
+			.split(',')
+			.filter(Boolean);
 
-		for (i = 0; i < len; i++) {
-			if (!split[i]) {
-				// ignore empty strings
-				continue;
-			}
-
-			namespaces = split[i].replace(/\*/g, '.*?');
-
-			if (namespaces[0] === '-') {
-				createDebug.skips.push(new RegExp('^' + namespaces.slice(1) + '$'));
+		for (const ns of split) {
+			if (ns[0] === '-') {
+				createDebug.skips.push(ns.slice(1));
 			} else {
-				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+				createDebug.names.push(ns);
 			}
 		}
+	}
+
+	/**
+	 * Checks if the given string matches a namespace template, honoring
+	 * asterisks as wildcards.
+	 *
+	 * @param {String} search
+	 * @param {String} template
+	 * @return {Boolean}
+	 */
+	function matchesTemplate(search, template) {
+		let searchIndex = 0;
+		let templateIndex = 0;
+		let starIndex = -1;
+		let matchIndex = 0;
+
+		while (searchIndex < search.length) {
+			if (templateIndex < template.length && (template[templateIndex] === search[searchIndex] || template[templateIndex] === '*')) {
+				// Match character or proceed with wildcard
+				if (template[templateIndex] === '*') {
+					starIndex = templateIndex;
+					matchIndex = searchIndex;
+					templateIndex++; // Skip the '*'
+				} else {
+					searchIndex++;
+					templateIndex++;
+				}
+			} else if (starIndex !== -1) { // eslint-disable-line no-negated-condition
+				// Backtrack to the last '*' and try to match more characters
+				templateIndex = starIndex + 1;
+				matchIndex++;
+				searchIndex = matchIndex;
+			} else {
+				return false; // No match
+			}
+		}
+
+		// Handle trailing '*' in template
+		while (templateIndex < template.length && template[templateIndex] === '*') {
+			templateIndex++;
+		}
+
+		return templateIndex === template.length;
 	}
 
 	/**
@@ -20043,8 +18416,8 @@ function setup(env) {
 	*/
 	function disable() {
 		const namespaces = [
-			...createDebug.names.map(toNamespace),
-			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+			...createDebug.names,
+			...createDebug.skips.map(namespace => '-' + namespace)
 		].join(',');
 		createDebug.enable('');
 		return namespaces;
@@ -20058,39 +18431,19 @@ function setup(env) {
 	* @api public
 	*/
 	function enabled(name) {
-		if (name[name.length - 1] === '*') {
-			return true;
-		}
-
-		let i;
-		let len;
-
-		for (i = 0, len = createDebug.skips.length; i < len; i++) {
-			if (createDebug.skips[i].test(name)) {
+		for (const skip of createDebug.skips) {
+			if (matchesTemplate(name, skip)) {
 				return false;
 			}
 		}
 
-		for (i = 0, len = createDebug.names.length; i < len; i++) {
-			if (createDebug.names[i].test(name)) {
+		for (const ns of createDebug.names) {
+			if (matchesTemplate(name, ns)) {
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	/**
-	* Convert regexp to namespace
-	*
-	* @param {RegExp} regxep
-	* @return {String} namespace
-	* @api private
-	*/
-	function toNamespace(regexp) {
-		return regexp.toString()
-			.substring(2, regexp.toString().length - 2)
-			.replace(/\.\*\?$/, '*');
 	}
 
 	/**
@@ -20125,7 +18478,7 @@ module.exports = setup;
 
 /***/ }),
 
-/***/ 55099:
+/***/ 18263:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
@@ -20134,15 +18487,15 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __nccwpck_require__(38463);
+	module.exports = __nccwpck_require__(57451);
 } else {
-	module.exports = __nccwpck_require__(46395);
+	module.exports = __nccwpck_require__(76423);
 }
 
 
 /***/ }),
 
-/***/ 46395:
+/***/ 76423:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /**
@@ -20334,11 +18687,11 @@ function getDate() {
 }
 
 /**
- * Invokes `util.format()` with the specified arguments and writes to stderr.
+ * Invokes `util.formatWithOptions()` with the specified arguments and writes to stderr.
  */
 
 function log(...args) {
-	return process.stderr.write(util.format(...args) + '\n');
+	return process.stderr.write(util.formatWithOptions(exports.inspectOpts, ...args) + '\n');
 }
 
 /**
@@ -20384,7 +18737,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __nccwpck_require__(21122)(exports);
+module.exports = __nccwpck_require__(63350)(exports);
 
 const {formatters} = module.exports;
 
@@ -21736,15 +20089,15 @@ function cloneChildren(childs) {
 
 /***/ }),
 
-/***/ 95164:
+/***/ 28771:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFeed = void 0;
-var stringify_js_1 = __nccwpck_require__(25452);
-var legacy_js_1 = __nccwpck_require__(45022);
+exports.getFeed = getFeed;
+var stringify_js_1 = __nccwpck_require__(25967);
+var legacy_js_1 = __nccwpck_require__(75891);
 /**
  * Get the feed object from the root of a DOM tree.
  *
@@ -21760,7 +20113,6 @@ function getFeed(doc) {
             ? getAtomFeed(feedRoot)
             : getRssFeed(feedRoot);
 }
-exports.getFeed = getFeed;
 /**
  * Parse an Atom feed.
  *
@@ -21934,13 +20286,16 @@ function isValidFeed(value) {
 
 /***/ }),
 
-/***/ 84840:
+/***/ 12403:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.uniqueSort = exports.compareDocumentPosition = exports.DocumentPosition = exports.removeSubsets = void 0;
+exports.DocumentPosition = void 0;
+exports.removeSubsets = removeSubsets;
+exports.compareDocumentPosition = compareDocumentPosition;
+exports.uniqueSort = uniqueSort;
 var domhandler_1 = __nccwpck_require__(62377);
 /**
  * Given an array of nodes, remove any member that is contained by another
@@ -21976,7 +20331,6 @@ function removeSubsets(nodes) {
     }
     return nodes;
 }
-exports.removeSubsets = removeSubsets;
 /**
  * @category Helpers
  * @see {@link http://dom.spec.whatwg.org/#dom-node-comparedocumentposition}
@@ -21988,7 +20342,7 @@ var DocumentPosition;
     DocumentPosition[DocumentPosition["FOLLOWING"] = 4] = "FOLLOWING";
     DocumentPosition[DocumentPosition["CONTAINS"] = 8] = "CONTAINS";
     DocumentPosition[DocumentPosition["CONTAINED_BY"] = 16] = "CONTAINED_BY";
-})(DocumentPosition = exports.DocumentPosition || (exports.DocumentPosition = {}));
+})(DocumentPosition || (exports.DocumentPosition = DocumentPosition = {}));
 /**
  * Compare the position of one node against another node in any other document,
  * returning a bitmask with the values from {@link DocumentPosition}.
@@ -22054,7 +20408,6 @@ function compareDocumentPosition(nodeA, nodeB) {
     }
     return DocumentPosition.PRECEDING;
 }
-exports.compareDocumentPosition = compareDocumentPosition;
 /**
  * Sort an array of nodes based on their relative position in the document,
  * removing any duplicate nodes. If the array contains nodes that do not belong
@@ -22078,12 +20431,11 @@ function uniqueSort(nodes) {
     });
     return nodes;
 }
-exports.uniqueSort = uniqueSort;
 //# sourceMappingURL=helpers.js.map
 
 /***/ }),
 
-/***/ 83821:
+/***/ 96178:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -22104,13 +20456,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.hasChildren = exports.isDocument = exports.isComment = exports.isText = exports.isCDATA = exports.isTag = void 0;
-__exportStar(__nccwpck_require__(25452), exports);
-__exportStar(__nccwpck_require__(23115), exports);
-__exportStar(__nccwpck_require__(85440), exports);
-__exportStar(__nccwpck_require__(39313), exports);
-__exportStar(__nccwpck_require__(45022), exports);
-__exportStar(__nccwpck_require__(84840), exports);
-__exportStar(__nccwpck_require__(95164), exports);
+__exportStar(__nccwpck_require__(25967), exports);
+__exportStar(__nccwpck_require__(45856), exports);
+__exportStar(__nccwpck_require__(37529), exports);
+__exportStar(__nccwpck_require__(73180), exports);
+__exportStar(__nccwpck_require__(75891), exports);
+__exportStar(__nccwpck_require__(12403), exports);
+__exportStar(__nccwpck_require__(28771), exports);
 /** @deprecated Use these methods from `domhandler` directly. */
 var domhandler_1 = __nccwpck_require__(62377);
 Object.defineProperty(exports, "isTag", ({ enumerable: true, get: function () { return domhandler_1.isTag; } }));
@@ -22123,15 +20475,20 @@ Object.defineProperty(exports, "hasChildren", ({ enumerable: true, get: function
 
 /***/ }),
 
-/***/ 45022:
+/***/ 75891:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getElementsByTagType = exports.getElementsByTagName = exports.getElementById = exports.getElements = exports.testElement = void 0;
+exports.testElement = testElement;
+exports.getElements = getElements;
+exports.getElementById = getElementById;
+exports.getElementsByTagName = getElementsByTagName;
+exports.getElementsByClassName = getElementsByClassName;
+exports.getElementsByTagType = getElementsByTagType;
 var domhandler_1 = __nccwpck_require__(62377);
-var querying_js_1 = __nccwpck_require__(39313);
+var querying_js_1 = __nccwpck_require__(73180);
 /**
  * A map of functions to check nodes against.
  */
@@ -22214,7 +20571,6 @@ function testElement(options, node) {
     var test = compileTest(options);
     return test ? test(node) : true;
 }
-exports.testElement = testElement;
 /**
  * Returns all nodes that match `options`.
  *
@@ -22230,7 +20586,6 @@ function getElements(options, nodes, recurse, limit) {
     var test = compileTest(options);
     return test ? (0, querying_js_1.filter)(test, nodes, recurse, limit) : [];
 }
-exports.getElements = getElements;
 /**
  * Returns the node with the supplied ID.
  *
@@ -22246,7 +20601,6 @@ function getElementById(id, nodes, recurse) {
         nodes = [nodes];
     return (0, querying_js_1.findOne)(getAttribCheck("id", id), nodes, recurse);
 }
-exports.getElementById = getElementById;
 /**
  * Returns all nodes with the supplied `tagName`.
  *
@@ -22262,7 +20616,21 @@ function getElementsByTagName(tagName, nodes, recurse, limit) {
     if (limit === void 0) { limit = Infinity; }
     return (0, querying_js_1.filter)(Checks["tag_name"](tagName), nodes, recurse, limit);
 }
-exports.getElementsByTagName = getElementsByTagName;
+/**
+ * Returns all nodes with the supplied `className`.
+ *
+ * @category Legacy Query Functions
+ * @param className Class name to search for.
+ * @param nodes Nodes to search through.
+ * @param recurse Also consider child nodes.
+ * @param limit Maximum number of nodes to return.
+ * @returns All nodes with the supplied `className`.
+ */
+function getElementsByClassName(className, nodes, recurse, limit) {
+    if (recurse === void 0) { recurse = true; }
+    if (limit === void 0) { limit = Infinity; }
+    return (0, querying_js_1.filter)(getAttribCheck("class", className), nodes, recurse, limit);
+}
 /**
  * Returns all nodes with the supplied `type`.
  *
@@ -22278,18 +20646,22 @@ function getElementsByTagType(type, nodes, recurse, limit) {
     if (limit === void 0) { limit = Infinity; }
     return (0, querying_js_1.filter)(Checks["tag_type"](type), nodes, recurse, limit);
 }
-exports.getElementsByTagType = getElementsByTagType;
 //# sourceMappingURL=legacy.js.map
 
 /***/ }),
 
-/***/ 85440:
+/***/ 37529:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.prepend = exports.prependChild = exports.append = exports.appendChild = exports.replaceElement = exports.removeElement = void 0;
+exports.removeElement = removeElement;
+exports.replaceElement = replaceElement;
+exports.appendChild = appendChild;
+exports.append = append;
+exports.prependChild = prependChild;
+exports.prepend = prepend;
 /**
  * Remove an element from the dom
  *
@@ -22312,7 +20684,6 @@ function removeElement(elem) {
     elem.prev = null;
     elem.parent = null;
 }
-exports.removeElement = removeElement;
 /**
  * Replace an element in the dom
  *
@@ -22336,7 +20707,6 @@ function replaceElement(elem, replacement) {
         elem.parent = null;
     }
 }
-exports.replaceElement = replaceElement;
 /**
  * Append a child to an element.
  *
@@ -22357,7 +20727,6 @@ function appendChild(parent, child) {
         child.prev = null;
     }
 }
-exports.appendChild = appendChild;
 /**
  * Append an element after another.
  *
@@ -22384,7 +20753,6 @@ function append(elem, next) {
         parent.children.push(next);
     }
 }
-exports.append = append;
 /**
  * Prepend a child to an element.
  *
@@ -22405,7 +20773,6 @@ function prependChild(parent, child) {
         child.next = null;
     }
 }
-exports.prependChild = prependChild;
 /**
  * Prepend an element before another.
  *
@@ -22428,18 +20795,22 @@ function prepend(elem, prev) {
     prev.next = elem;
     elem.prev = prev;
 }
-exports.prepend = prepend;
 //# sourceMappingURL=manipulation.js.map
 
 /***/ }),
 
-/***/ 39313:
+/***/ 73180:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.findAll = exports.existsOne = exports.findOne = exports.findOneChild = exports.find = exports.filter = void 0;
+exports.filter = filter;
+exports.find = find;
+exports.findOneChild = findOneChild;
+exports.findOne = findOne;
+exports.existsOne = existsOne;
+exports.findAll = findAll;
 var domhandler_1 = __nccwpck_require__(62377);
 /**
  * Search a node and its children for nodes passing a test function. If `node` is not an array, it will be wrapped in one.
@@ -22456,7 +20827,6 @@ function filter(test, node, recurse, limit) {
     if (limit === void 0) { limit = Infinity; }
     return find(test, Array.isArray(node) ? node : [node], recurse, limit);
 }
-exports.filter = filter;
 /**
  * Search an array of nodes and their children for nodes passing a test function.
  *
@@ -22470,7 +20840,7 @@ exports.filter = filter;
 function find(test, nodes, recurse, limit) {
     var result = [];
     /** Stack of the arrays we are looking at. */
-    var nodeStack = [nodes];
+    var nodeStack = [Array.isArray(nodes) ? nodes : [nodes]];
     /** Stack of the indices within the arrays. */
     var indexStack = [0];
     for (;;) {
@@ -22502,7 +20872,6 @@ function find(test, nodes, recurse, limit) {
         }
     }
 }
-exports.find = find;
 /**
  * Finds the first element inside of an array that matches a test function. This is an alias for `Array.prototype.find`.
  *
@@ -22515,7 +20884,6 @@ exports.find = find;
 function findOneChild(test, nodes) {
     return nodes.find(test);
 }
-exports.findOneChild = findOneChild;
 /**
  * Finds one element in a tree that passes a test.
  *
@@ -22527,22 +20895,20 @@ exports.findOneChild = findOneChild;
  */
 function findOne(test, nodes, recurse) {
     if (recurse === void 0) { recurse = true; }
-    var elem = null;
-    for (var i = 0; i < nodes.length && !elem; i++) {
-        var node = nodes[i];
-        if (!(0, domhandler_1.isTag)(node)) {
-            continue;
+    var searchedNodes = Array.isArray(nodes) ? nodes : [nodes];
+    for (var i = 0; i < searchedNodes.length; i++) {
+        var node = searchedNodes[i];
+        if ((0, domhandler_1.isTag)(node) && test(node)) {
+            return node;
         }
-        else if (test(node)) {
-            elem = node;
-        }
-        else if (recurse && node.children.length > 0) {
-            elem = findOne(test, node.children, true);
+        if (recurse && (0, domhandler_1.hasChildren)(node) && node.children.length > 0) {
+            var found = findOne(test, node.children, true);
+            if (found)
+                return found;
         }
     }
-    return elem;
+    return null;
 }
-exports.findOne = findOne;
 /**
  * Checks if a tree of nodes contains at least one node passing a test.
  *
@@ -22552,12 +20918,11 @@ exports.findOne = findOne;
  * @returns Whether a tree of nodes contains at least one node passing the test.
  */
 function existsOne(test, nodes) {
-    return nodes.some(function (checked) {
-        return (0, domhandler_1.isTag)(checked) &&
-            (test(checked) || existsOne(test, checked.children));
+    return (Array.isArray(nodes) ? nodes : [nodes]).some(function (node) {
+        return ((0, domhandler_1.isTag)(node) && test(node)) ||
+            ((0, domhandler_1.hasChildren)(node) && existsOne(test, node.children));
     });
 }
-exports.existsOne = existsOne;
 /**
  * Search an array of nodes and their children for elements passing a test function.
  *
@@ -22570,7 +20935,7 @@ exports.existsOne = existsOne;
  */
 function findAll(test, nodes) {
     var result = [];
-    var nodeStack = [nodes];
+    var nodeStack = [Array.isArray(nodes) ? nodes : [nodes]];
     var indexStack = [0];
     for (;;) {
         if (indexStack[0] >= nodeStack[0].length) {
@@ -22584,22 +20949,19 @@ function findAll(test, nodes) {
             continue;
         }
         var elem = nodeStack[0][indexStack[0]++];
-        if (!(0, domhandler_1.isTag)(elem))
-            continue;
-        if (test(elem))
+        if ((0, domhandler_1.isTag)(elem) && test(elem))
             result.push(elem);
-        if (elem.children.length > 0) {
+        if ((0, domhandler_1.hasChildren)(elem) && elem.children.length > 0) {
             indexStack.unshift(0);
             nodeStack.unshift(elem.children);
         }
     }
 }
-exports.findAll = findAll;
 //# sourceMappingURL=querying.js.map
 
 /***/ }),
 
-/***/ 25452:
+/***/ 25967:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -22608,7 +20970,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.innerText = exports.textContent = exports.getText = exports.getInnerHTML = exports.getOuterHTML = void 0;
+exports.getOuterHTML = getOuterHTML;
+exports.getInnerHTML = getInnerHTML;
+exports.getText = getText;
+exports.textContent = textContent;
+exports.innerText = innerText;
 var domhandler_1 = __nccwpck_require__(62377);
 var dom_serializer_1 = __importDefault(__nccwpck_require__(38145));
 var domelementtype_1 = __nccwpck_require__(51368);
@@ -22622,7 +20988,6 @@ var domelementtype_1 = __nccwpck_require__(51368);
 function getOuterHTML(node, options) {
     return (0, dom_serializer_1.default)(node, options);
 }
-exports.getOuterHTML = getOuterHTML;
 /**
  * @category Stringify
  * @deprecated Use the `dom-serializer` module directly.
@@ -22635,7 +21000,6 @@ function getInnerHTML(node, options) {
         ? node.children.map(function (node) { return getOuterHTML(node, options); }).join("")
         : "";
 }
-exports.getInnerHTML = getInnerHTML;
 /**
  * Get a node's inner text. Same as `textContent`, but inserts newlines for `<br>` tags. Ignores comments.
  *
@@ -22655,7 +21019,6 @@ function getText(node) {
         return node.data;
     return "";
 }
-exports.getText = getText;
 /**
  * Get a node's text content. Ignores comments.
  *
@@ -22674,7 +21037,6 @@ function textContent(node) {
         return node.data;
     return "";
 }
-exports.textContent = textContent;
 /**
  * Get a node's inner text, ignoring `<script>` and `<style>` tags. Ignores comments.
  *
@@ -22693,18 +21055,24 @@ function innerText(node) {
         return node.data;
     return "";
 }
-exports.innerText = innerText;
 //# sourceMappingURL=stringify.js.map
 
 /***/ }),
 
-/***/ 23115:
+/***/ 45856:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.prevElementSibling = exports.nextElementSibling = exports.getName = exports.hasAttrib = exports.getAttributeValue = exports.getSiblings = exports.getParent = exports.getChildren = void 0;
+exports.getChildren = getChildren;
+exports.getParent = getParent;
+exports.getSiblings = getSiblings;
+exports.getAttributeValue = getAttributeValue;
+exports.hasAttrib = hasAttrib;
+exports.getName = getName;
+exports.nextElementSibling = nextElementSibling;
+exports.prevElementSibling = prevElementSibling;
 var domhandler_1 = __nccwpck_require__(62377);
 /**
  * Get a node's children.
@@ -22716,7 +21084,6 @@ var domhandler_1 = __nccwpck_require__(62377);
 function getChildren(elem) {
     return (0, domhandler_1.hasChildren)(elem) ? elem.children : [];
 }
-exports.getChildren = getChildren;
 /**
  * Get a node's parent.
  *
@@ -22727,7 +21094,6 @@ exports.getChildren = getChildren;
 function getParent(elem) {
     return elem.parent || null;
 }
-exports.getParent = getParent;
 /**
  * Gets an elements siblings, including the element itself.
  *
@@ -22756,7 +21122,6 @@ function getSiblings(elem) {
     }
     return siblings;
 }
-exports.getSiblings = getSiblings;
 /**
  * Gets an attribute from an element.
  *
@@ -22769,7 +21134,6 @@ function getAttributeValue(elem, name) {
     var _a;
     return (_a = elem.attribs) === null || _a === void 0 ? void 0 : _a[name];
 }
-exports.getAttributeValue = getAttributeValue;
 /**
  * Checks whether an element has an attribute.
  *
@@ -22783,7 +21147,6 @@ function hasAttrib(elem, name) {
         Object.prototype.hasOwnProperty.call(elem.attribs, name) &&
         elem.attribs[name] != null);
 }
-exports.hasAttrib = hasAttrib;
 /**
  * Get the tag name of an element.
  *
@@ -22794,7 +21157,6 @@ exports.hasAttrib = hasAttrib;
 function getName(elem) {
     return elem.name;
 }
-exports.getName = getName;
 /**
  * Returns the next element sibling of a node.
  *
@@ -22810,7 +21172,6 @@ function nextElementSibling(elem) {
         (_a = next, next = _a.next);
     return next;
 }
-exports.nextElementSibling = nextElementSibling;
 /**
  * Returns the previous element sibling of a node.
  *
@@ -22826,7 +21187,6 @@ function prevElementSibling(elem) {
         (_a = prev, prev = _a.prev);
     return prev;
 }
-exports.prevElementSibling = prevElementSibling;
 //# sourceMappingURL=traversal.js.map
 
 /***/ }),
@@ -23868,7 +22228,7 @@ Object.defineProperty(exports, "decodeXMLStrict", ({ enumerable: true, get: func
 
 /***/ }),
 
-/***/ 1263:
+/***/ 81625:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -24013,25 +22373,6 @@ errorEx.line = function (str, def) {
 };
 
 module.exports = errorEx;
-
-
-/***/ }),
-
-/***/ 28799:
-/***/ ((module) => {
-
-"use strict";
-
-
-var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
-
-module.exports = function (str) {
-	if (typeof str !== 'string') {
-		throw new TypeError('Expected a string');
-	}
-
-	return str.replace(matchOperatorsRe, '\\$&');
-};
 
 
 /***/ }),
@@ -28402,7 +26743,7 @@ Gauge.prototype._doRedraw = function () {
 
 var consoleControl = __nccwpck_require__(82447)
 var renderTemplate = __nccwpck_require__(43916)
-var validate = __nccwpck_require__(617)
+var validate = __nccwpck_require__(55346)
 
 var Plumbing = module.exports = function (theme, template, width) {
   if (!width) {
@@ -28469,7 +26810,7 @@ module.exports = process
 
 "use strict";
 
-var validate = __nccwpck_require__(617)
+var validate = __nccwpck_require__(55346)
 var renderTemplate = __nccwpck_require__(43916)
 var wideTruncate = __nccwpck_require__(89805)
 var stringWidth = __nccwpck_require__(23968)
@@ -28519,7 +26860,7 @@ function repeat (string, width) {
 "use strict";
 
 var align = __nccwpck_require__(63669)
-var validate = __nccwpck_require__(617)
+var validate = __nccwpck_require__(55346)
 var wideTruncate = __nccwpck_require__(89805)
 var error = __nccwpck_require__(89131)
 var TemplateItem = __nccwpck_require__(63299)
@@ -29110,7 +27451,7 @@ function wideTruncate (str, target) {
 
 /***/ }),
 
-/***/ 73797:
+/***/ 17340:
 /***/ ((module) => {
 
 "use strict";
@@ -29141,13 +27482,13 @@ function clone (obj) {
 
 /***/ }),
 
-/***/ 17301:
+/***/ 6768:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var fs = __nccwpck_require__(79896)
-var polyfills = __nccwpck_require__(97132)
-var legacy = __nccwpck_require__(26929)
-var clone = __nccwpck_require__(73797)
+var polyfills = __nccwpck_require__(27805)
+var legacy = __nccwpck_require__(90366)
+var clone = __nccwpck_require__(17340)
 
 var util = __nccwpck_require__(39023)
 
@@ -29596,7 +27937,7 @@ function retry () {
 
 /***/ }),
 
-/***/ 26929:
+/***/ 90366:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var Stream = (__nccwpck_require__(2203).Stream)
@@ -29721,7 +28062,7 @@ function legacy (fs) {
 
 /***/ }),
 
-/***/ 97132:
+/***/ 27805:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var constants = __nccwpck_require__(49140)
@@ -29827,7 +28168,7 @@ function patch (fs) {
         var backoff = 0;
         fs$rename(from, to, function CB (er) {
           if (er
-              && (er.code === "EACCES" || er.code === "EPERM")
+              && (er.code === "EACCES" || er.code === "EPERM" || er.code === "EBUSY")
               && Date.now() - start < 60000) {
             setTimeout(function() {
               fs.stat(to, function (stater, st) {
@@ -35328,22 +33669,6 @@ if ( true && require.extensions) {
 
 /***/ }),
 
-/***/ 25614:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = (flag, argv) => {
-	argv = argv || process.argv;
-	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-	const pos = argv.indexOf(prefix + flag);
-	const terminatorPos = argv.indexOf('--');
-	return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
-};
-
-
-/***/ }),
-
 /***/ 37435:
 /***/ ((module) => {
 
@@ -36178,7 +34503,7 @@ exports.HttpsProxyAgent = void 0;
 const net = __importStar(__nccwpck_require__(69278));
 const tls = __importStar(__nccwpck_require__(64756));
 const assert_1 = __importDefault(__nccwpck_require__(42613));
-const debug_1 = __importDefault(__nccwpck_require__(55099));
+const debug_1 = __importDefault(__nccwpck_require__(18263));
 const agent_base_1 = __nccwpck_require__(10646);
 const url_1 = __nccwpck_require__(87016);
 const parse_proxy_response_1 = __nccwpck_require__(20625);
@@ -36339,7 +34664,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseProxyResponse = void 0;
-const debug_1 = __importDefault(__nccwpck_require__(55099));
+const debug_1 = __importDefault(__nccwpck_require__(18263));
 const debug = (0, debug_1.default)('https-proxy-agent:parse-proxy-response');
 function parseProxyResponse(socket) {
     return new Promise((resolve, reject) => {
@@ -38645,7 +36970,7 @@ exports["default"] = LinesAndColumns;
 
 const path = __nccwpck_require__(16928);
 const {promisify} = __nccwpck_require__(39023);
-const fs = __nccwpck_require__(17301);
+const fs = __nccwpck_require__(6768);
 const stripBom = __nccwpck_require__(1773);
 const parseJson = __nccwpck_require__(26418);
 
@@ -40920,7 +39245,7 @@ module.exports = function (obj, modifier) {
 
 /***/ }),
 
-/***/ 91940:
+/***/ 26647:
 /***/ ((module) => {
 
 /**
@@ -40948,7 +39273,7 @@ var y = d * 365.25;
  * @api public
  */
 
-module.exports = function(val, options) {
+module.exports = function (val, options) {
   options = options || {};
   var type = typeof val;
   if (type === 'string' && val.length > 0) {
@@ -41367,7 +39692,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parse = exports.base_parse = void 0;
-var css_select_1 = __nccwpck_require__(663);
+var css_select_1 = __nccwpck_require__(87856);
 var he_1 = __importDefault(__nccwpck_require__(59515));
 var back_1 = __importDefault(__nccwpck_require__(94096));
 var matcher_1 = __importDefault(__nccwpck_require__(46845));
@@ -43866,10 +42191,10 @@ exports.parse = parse;
 
 "use strict";
 
-const errorEx = __nccwpck_require__(1263);
+const errorEx = __nccwpck_require__(81625);
 const fallback = __nccwpck_require__(45047);
 const {default: LinesAndColumns} = __nccwpck_require__(59805);
-const {codeFrameColumns} = __nccwpck_require__(45377);
+const {codeFrameColumns} = __nccwpck_require__(56523);
 
 const JSONError = errorEx('JSONError', {
 	fileName: errorEx.append('in %s'),
@@ -43919,6 +42244,88 @@ const parseJson = (string, reviver, filename) => {
 parseJson.JSONError = JSONError;
 
 module.exports = parseJson;
+
+
+/***/ }),
+
+/***/ 71019:
+/***/ ((module) => {
+
+let p = process || {}, argv = p.argv || [], env = p.env || {}
+let isColorSupported =
+	!(!!env.NO_COLOR || argv.includes("--no-color")) &&
+	(!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || ((p.stdout || {}).isTTY && env.TERM !== "dumb") || !!env.CI)
+
+let formatter = (open, close, replace = open) =>
+	input => {
+		let string = "" + input, index = string.indexOf(close, open.length)
+		return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close
+	}
+
+let replaceClose = (string, close, replace, index) => {
+	let result = "", cursor = 0
+	do {
+		result += string.substring(cursor, index) + replace
+		cursor = index + close.length
+		index = string.indexOf(close, cursor)
+	} while (~index)
+	return result + string.substring(cursor)
+}
+
+let createColors = (enabled = isColorSupported) => {
+	let f = enabled ? formatter : () => String
+	return {
+		isColorSupported: enabled,
+		reset: f("\x1b[0m", "\x1b[0m"),
+		bold: f("\x1b[1m", "\x1b[22m", "\x1b[22m\x1b[1m"),
+		dim: f("\x1b[2m", "\x1b[22m", "\x1b[22m\x1b[2m"),
+		italic: f("\x1b[3m", "\x1b[23m"),
+		underline: f("\x1b[4m", "\x1b[24m"),
+		inverse: f("\x1b[7m", "\x1b[27m"),
+		hidden: f("\x1b[8m", "\x1b[28m"),
+		strikethrough: f("\x1b[9m", "\x1b[29m"),
+
+		black: f("\x1b[30m", "\x1b[39m"),
+		red: f("\x1b[31m", "\x1b[39m"),
+		green: f("\x1b[32m", "\x1b[39m"),
+		yellow: f("\x1b[33m", "\x1b[39m"),
+		blue: f("\x1b[34m", "\x1b[39m"),
+		magenta: f("\x1b[35m", "\x1b[39m"),
+		cyan: f("\x1b[36m", "\x1b[39m"),
+		white: f("\x1b[37m", "\x1b[39m"),
+		gray: f("\x1b[90m", "\x1b[39m"),
+
+		bgBlack: f("\x1b[40m", "\x1b[49m"),
+		bgRed: f("\x1b[41m", "\x1b[49m"),
+		bgGreen: f("\x1b[42m", "\x1b[49m"),
+		bgYellow: f("\x1b[43m", "\x1b[49m"),
+		bgBlue: f("\x1b[44m", "\x1b[49m"),
+		bgMagenta: f("\x1b[45m", "\x1b[49m"),
+		bgCyan: f("\x1b[46m", "\x1b[49m"),
+		bgWhite: f("\x1b[47m", "\x1b[49m"),
+
+		blackBright: f("\x1b[90m", "\x1b[39m"),
+		redBright: f("\x1b[91m", "\x1b[39m"),
+		greenBright: f("\x1b[92m", "\x1b[39m"),
+		yellowBright: f("\x1b[93m", "\x1b[39m"),
+		blueBright: f("\x1b[94m", "\x1b[39m"),
+		magentaBright: f("\x1b[95m", "\x1b[39m"),
+		cyanBright: f("\x1b[96m", "\x1b[39m"),
+		whiteBright: f("\x1b[97m", "\x1b[39m"),
+
+		bgBlackBright: f("\x1b[100m", "\x1b[49m"),
+		bgRedBright: f("\x1b[101m", "\x1b[49m"),
+		bgGreenBright: f("\x1b[102m", "\x1b[49m"),
+		bgYellowBright: f("\x1b[103m", "\x1b[49m"),
+		bgBlueBright: f("\x1b[104m", "\x1b[49m"),
+		bgMagentaBright: f("\x1b[105m", "\x1b[49m"),
+		bgCyanBright: f("\x1b[106m", "\x1b[49m"),
+		bgWhiteBright: f("\x1b[107m", "\x1b[49m"),
+	}
+}
+
+module.exports = createColors()
+module.exports.createColors = createColors
 
 
 /***/ }),
@@ -43999,7 +42406,7 @@ module.exports = (input, options) => {
 
 /***/ }),
 
-/***/ 33565:
+/***/ 99479:
 /***/ ((module) => {
 
 "use strict";
@@ -44123,7 +42530,7 @@ module.exports.F = codes;
 
 /***/ }),
 
-/***/ 19594:
+/***/ 36592:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44147,60 +42554,48 @@ module.exports.F = codes;
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
 // Writable.
 
-/*<replacement>*/
 
+
+/*<replacement>*/
 var objectKeys = Object.keys || function (obj) {
   var keys = [];
-
-  for (var key in obj) {
-    keys.push(key);
-  }
-
+  for (var key in obj) keys.push(key);
   return keys;
 };
 /*</replacement>*/
 
-
 module.exports = Duplex;
-
-var Readable = __nccwpck_require__(99544);
-
-var Writable = __nccwpck_require__(50472);
-
+var Readable = __nccwpck_require__(74870);
+var Writable = __nccwpck_require__(25050);
 __nccwpck_require__(76153)(Duplex, Readable);
-
 {
   // Allow the keys array to be GC'ed.
   var keys = objectKeys(Writable.prototype);
-
   for (var v = 0; v < keys.length; v++) {
     var method = keys[v];
     if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
   }
 }
-
 function Duplex(options) {
   if (!(this instanceof Duplex)) return new Duplex(options);
   Readable.call(this, options);
   Writable.call(this, options);
   this.allowHalfOpen = true;
-
   if (options) {
     if (options.readable === false) this.readable = false;
     if (options.writable === false) this.writable = false;
-
     if (options.allowHalfOpen === false) {
       this.allowHalfOpen = false;
       this.once('end', onend);
     }
   }
 }
-
 Object.defineProperty(Duplex.prototype, 'writableHighWaterMark', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -44227,20 +42622,20 @@ Object.defineProperty(Duplex.prototype, 'writableLength', {
   get: function get() {
     return this._writableState.length;
   }
-}); // the no-half-open enforcer
+});
 
+// the no-half-open enforcer
 function onend() {
   // If the writable side ended, then we're ok.
-  if (this._writableState.ended) return; // no more data can be written.
-  // But allow more writes to happen in this tick.
+  if (this._writableState.ended) return;
 
+  // no more data can be written.
+  // But allow more writes to happen in this tick.
   process.nextTick(onEndNT, this);
 }
-
 function onEndNT(self) {
   self.end();
 }
-
 Object.defineProperty(Duplex.prototype, 'destroyed', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -44250,7 +42645,6 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
     if (this._readableState === undefined || this._writableState === undefined) {
       return false;
     }
-
     return this._readableState.destroyed && this._writableState.destroyed;
   },
   set: function set(value) {
@@ -44258,10 +42652,10 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
     // has not been initialized yet
     if (this._readableState === undefined || this._writableState === undefined) {
       return;
-    } // backward compatibility, the user is explicitly
+    }
+
+    // backward compatibility, the user is explicitly
     // managing destroyed
-
-
     this._readableState.destroyed = value;
     this._writableState.destroyed = value;
   }
@@ -44269,7 +42663,7 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 
 /***/ }),
 
-/***/ 72140:
+/***/ 26450:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44293,29 +42687,27 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
 
 
+
 module.exports = PassThrough;
-
-var Transform = __nccwpck_require__(32822);
-
+var Transform = __nccwpck_require__(23264);
 __nccwpck_require__(76153)(PassThrough, Transform);
-
 function PassThrough(options) {
   if (!(this instanceof PassThrough)) return new PassThrough(options);
   Transform.call(this, options);
 }
-
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
 
 /***/ }),
 
-/***/ 99544:
+/***/ 74870:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44341,47 +42733,38 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-module.exports = Readable;
-/*<replacement>*/
 
+module.exports = Readable;
+
+/*<replacement>*/
 var Duplex;
 /*</replacement>*/
 
 Readable.ReadableState = ReadableState;
+
 /*<replacement>*/
-
 var EE = (__nccwpck_require__(24434).EventEmitter);
-
 var EElistenerCount = function EElistenerCount(emitter, type) {
   return emitter.listeners(type).length;
 };
 /*</replacement>*/
 
 /*<replacement>*/
-
-
-var Stream = __nccwpck_require__(52772);
+var Stream = __nccwpck_require__(26254);
 /*</replacement>*/
 
-
 var Buffer = (__nccwpck_require__(20181).Buffer);
-
-var OurUint8Array = global.Uint8Array || function () {};
-
+var OurUint8Array = (typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : {}).Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
 }
-
 function _isUint8Array(obj) {
   return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
 }
+
 /*<replacement>*/
-
-
 var debugUtil = __nccwpck_require__(39023);
-
 var debug;
-
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
 } else {
@@ -44389,60 +42772,57 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
+var BufferList = __nccwpck_require__(96811);
+var destroyImpl = __nccwpck_require__(1982);
+var _require = __nccwpck_require__(26942),
+  getHighWaterMark = _require.getHighWaterMark;
+var _require$codes = (__nccwpck_require__(99479)/* .codes */ .F),
+  ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
+  ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF,
+  ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+  ERR_STREAM_UNSHIFT_AFTER_END_EVENT = _require$codes.ERR_STREAM_UNSHIFT_AFTER_END_EVENT;
 
-var BufferList = __nccwpck_require__(13805);
-
-var destroyImpl = __nccwpck_require__(43988);
-
-var _require = __nccwpck_require__(42943),
-    getHighWaterMark = _require.getHighWaterMark;
-
-var _require$codes = (__nccwpck_require__(33565)/* .codes */ .F),
-    ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
-    ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF,
-    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
-    ERR_STREAM_UNSHIFT_AFTER_END_EVENT = _require$codes.ERR_STREAM_UNSHIFT_AFTER_END_EVENT; // Lazy loaded to improve the startup performance.
-
-
+// Lazy loaded to improve the startup performance.
 var StringDecoder;
 var createReadableStreamAsyncIterator;
 var from;
-
 __nccwpck_require__(76153)(Readable, Stream);
-
 var errorOrDestroy = destroyImpl.errorOrDestroy;
 var kProxyEvents = ['error', 'close', 'destroy', 'pause', 'resume'];
-
 function prependListener(emitter, event, fn) {
   // Sadly this is not cacheable as some libraries bundle their own
   // event emitter implementation with them.
-  if (typeof emitter.prependListener === 'function') return emitter.prependListener(event, fn); // This is a hack to make sure that our error handler is attached before any
+  if (typeof emitter.prependListener === 'function') return emitter.prependListener(event, fn);
+
+  // This is a hack to make sure that our error handler is attached before any
   // userland ones.  NEVER DO THIS. This is here only because this code needs
   // to continue to work with older versions of Node.js that do not include
   // the prependListener() method. The goal is to eventually remove this hack.
-
   if (!emitter._events || !emitter._events[event]) emitter.on(event, fn);else if (Array.isArray(emitter._events[event])) emitter._events[event].unshift(fn);else emitter._events[event] = [fn, emitter._events[event]];
 }
-
 function ReadableState(options, stream, isDuplex) {
-  Duplex = Duplex || __nccwpck_require__(19594);
-  options = options || {}; // Duplex streams are both readable and writable, but share
+  Duplex = Duplex || __nccwpck_require__(36592);
+  options = options || {};
+
+  // Duplex streams are both readable and writable, but share
   // the same options object.
   // However, some cases require setting options to different
   // values for the readable and the writable sides of the duplex stream.
   // These options can be provided separately as readableXXX and writableXXX.
+  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex;
 
-  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex; // object stream flag. Used to make read(n) ignore n and to
+  // object stream flag. Used to make read(n) ignore n and to
   // make all the buffer merging and length checks go away
-
   this.objectMode = !!options.objectMode;
-  if (isDuplex) this.objectMode = this.objectMode || !!options.readableObjectMode; // the point at which it stops calling _read() to fill the buffer
-  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+  if (isDuplex) this.objectMode = this.objectMode || !!options.readableObjectMode;
 
-  this.highWaterMark = getHighWaterMark(this, options, 'readableHighWaterMark', isDuplex); // A linked list is used to store data chunks instead of an array because the
+  // the point at which it stops calling _read() to fill the buffer
+  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+  this.highWaterMark = getHighWaterMark(this, options, 'readableHighWaterMark', isDuplex);
+
+  // A linked list is used to store data chunks instead of an array because the
   // linked list can remove elements from the beginning faster than
   // array.shift()
-
   this.buffer = new BufferList();
   this.length = 0;
   this.pipes = null;
@@ -44450,61 +42830,66 @@ function ReadableState(options, stream, isDuplex) {
   this.flowing = null;
   this.ended = false;
   this.endEmitted = false;
-  this.reading = false; // a flag to be able to tell if the event 'readable'/'data' is emitted
+  this.reading = false;
+
+  // a flag to be able to tell if the event 'readable'/'data' is emitted
   // immediately, or on a later tick.  We set this to true at first, because
   // any actions that shouldn't happen until "later" should generally also
   // not happen before the first read call.
+  this.sync = true;
 
-  this.sync = true; // whenever we return null, then we set a flag to say
+  // whenever we return null, then we set a flag to say
   // that we're awaiting a 'readable' event emission.
-
   this.needReadable = false;
   this.emittedReadable = false;
   this.readableListening = false;
   this.resumeScheduled = false;
-  this.paused = true; // Should close be emitted on destroy. Defaults to true.
+  this.paused = true;
 
-  this.emitClose = options.emitClose !== false; // Should .destroy() be called after 'end' (and potentially 'finish')
+  // Should close be emitted on destroy. Defaults to true.
+  this.emitClose = options.emitClose !== false;
 
-  this.autoDestroy = !!options.autoDestroy; // has it been destroyed
+  // Should .destroy() be called after 'end' (and potentially 'finish')
+  this.autoDestroy = !!options.autoDestroy;
 
-  this.destroyed = false; // Crypto is kind of old and crusty.  Historically, its default string
+  // has it been destroyed
+  this.destroyed = false;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
   // encoding is 'binary' so we have to make this configurable.
   // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
 
-  this.defaultEncoding = options.defaultEncoding || 'utf8'; // the number of writers that are awaiting a drain event in .pipe()s
+  // the number of writers that are awaiting a drain event in .pipe()s
+  this.awaitDrain = 0;
 
-  this.awaitDrain = 0; // if true, a maybeReadMore has been scheduled
-
+  // if true, a maybeReadMore has been scheduled
   this.readingMore = false;
   this.decoder = null;
   this.encoding = null;
-
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = (__nccwpck_require__(8112)/* .StringDecoder */ .I);
+    if (!StringDecoder) StringDecoder = (__nccwpck_require__(93243)/* .StringDecoder */ .I);
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
 }
-
 function Readable(options) {
-  Duplex = Duplex || __nccwpck_require__(19594);
-  if (!(this instanceof Readable)) return new Readable(options); // Checking for a Stream.Duplex instance is faster here instead of inside
+  Duplex = Duplex || __nccwpck_require__(36592);
+  if (!(this instanceof Readable)) return new Readable(options);
+
+  // Checking for a Stream.Duplex instance is faster here instead of inside
   // the ReadableState constructor, at least with V8 6.5
-
   var isDuplex = this instanceof Duplex;
-  this._readableState = new ReadableState(options, this, isDuplex); // legacy
+  this._readableState = new ReadableState(options, this, isDuplex);
 
+  // legacy
   this.readable = true;
-
   if (options) {
     if (typeof options.read === 'function') this._read = options.read;
     if (typeof options.destroy === 'function') this._destroy = options.destroy;
   }
-
   Stream.call(this);
 }
-
 Object.defineProperty(Readable.prototype, 'destroyed', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -44514,7 +42899,6 @@ Object.defineProperty(Readable.prototype, 'destroyed', {
     if (this._readableState === undefined) {
       return false;
     }
-
     return this._readableState.destroyed;
   },
   set: function set(value) {
@@ -44522,69 +42906,60 @@ Object.defineProperty(Readable.prototype, 'destroyed', {
     // has not been initialized yet
     if (!this._readableState) {
       return;
-    } // backward compatibility, the user is explicitly
+    }
+
+    // backward compatibility, the user is explicitly
     // managing destroyed
-
-
     this._readableState.destroyed = value;
   }
 });
 Readable.prototype.destroy = destroyImpl.destroy;
 Readable.prototype._undestroy = destroyImpl.undestroy;
-
 Readable.prototype._destroy = function (err, cb) {
   cb(err);
-}; // Manually shove something into the read() buffer.
+};
+
+// Manually shove something into the read() buffer.
 // This returns true if the highWaterMark has not been hit yet,
 // similar to how Writable.write() returns true if you should
 // write() some more.
-
-
 Readable.prototype.push = function (chunk, encoding) {
   var state = this._readableState;
   var skipChunkCheck;
-
   if (!state.objectMode) {
     if (typeof chunk === 'string') {
       encoding = encoding || state.defaultEncoding;
-
       if (encoding !== state.encoding) {
         chunk = Buffer.from(chunk, encoding);
         encoding = '';
       }
-
       skipChunkCheck = true;
     }
   } else {
     skipChunkCheck = true;
   }
-
   return readableAddChunk(this, chunk, encoding, false, skipChunkCheck);
-}; // Unshift should *always* be something directly out of read()
+};
 
-
+// Unshift should *always* be something directly out of read()
 Readable.prototype.unshift = function (chunk) {
   return readableAddChunk(this, chunk, null, true, false);
 };
-
 function readableAddChunk(stream, chunk, encoding, addToFront, skipChunkCheck) {
   debug('readableAddChunk', chunk);
   var state = stream._readableState;
-
   if (chunk === null) {
     state.reading = false;
     onEofChunk(stream, state);
   } else {
     var er;
     if (!skipChunkCheck) er = chunkInvalid(state, chunk);
-
     if (er) {
       errorOrDestroy(stream, er);
     } else if (state.objectMode || chunk && chunk.length > 0) {
       if (typeof chunk !== 'string' && !state.objectMode && Object.getPrototypeOf(chunk) !== Buffer.prototype) {
         chunk = _uint8ArrayToBuffer(chunk);
       }
-
       if (addToFront) {
         if (state.endEmitted) errorOrDestroy(stream, new ERR_STREAM_UNSHIFT_AFTER_END_EVENT());else addChunk(stream, state, chunk, true);
       } else if (state.ended) {
@@ -44593,7 +42968,6 @@ function readableAddChunk(stream, chunk, encoding, addToFront, skipChunkCheck) {
         return false;
       } else {
         state.reading = false;
-
         if (state.decoder && !encoding) {
           chunk = state.decoder.write(chunk);
           if (state.objectMode || chunk.length !== 0) addChunk(stream, state, chunk, false);else maybeReadMore(stream, state);
@@ -44605,14 +42979,13 @@ function readableAddChunk(stream, chunk, encoding, addToFront, skipChunkCheck) {
       state.reading = false;
       maybeReadMore(stream, state);
     }
-  } // We can push more data if we are below the highWaterMark.
+  }
+
+  // We can push more data if we are below the highWaterMark.
   // Also, if we have no data yet, we can stand some more bytes.
   // This is to work around cases where hwm=0, such as the repl.
-
-
   return !state.ended && (state.length < state.highWaterMark || state.length === 0);
 }
-
 function addChunk(stream, state, chunk, addToFront) {
   if (state.flowing && state.length === 0 && !state.sync) {
     state.awaitDrain = 0;
@@ -44623,50 +42996,42 @@ function addChunk(stream, state, chunk, addToFront) {
     if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
     if (state.needReadable) emitReadable(stream);
   }
-
   maybeReadMore(stream, state);
 }
-
 function chunkInvalid(state, chunk) {
   var er;
-
   if (!_isUint8Array(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
     er = new ERR_INVALID_ARG_TYPE('chunk', ['string', 'Buffer', 'Uint8Array'], chunk);
   }
-
   return er;
 }
-
 Readable.prototype.isPaused = function () {
   return this._readableState.flowing === false;
-}; // backwards compatibility.
+};
 
-
+// backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = (__nccwpck_require__(8112)/* .StringDecoder */ .I);
+  if (!StringDecoder) StringDecoder = (__nccwpck_require__(93243)/* .StringDecoder */ .I);
   var decoder = new StringDecoder(enc);
-  this._readableState.decoder = decoder; // If setEncoding(null), decoder.encoding equals utf8
+  this._readableState.decoder = decoder;
+  // If setEncoding(null), decoder.encoding equals utf8
+  this._readableState.encoding = this._readableState.decoder.encoding;
 
-  this._readableState.encoding = this._readableState.decoder.encoding; // Iterate over current buffer to convert already stored Buffers:
-
+  // Iterate over current buffer to convert already stored Buffers:
   var p = this._readableState.buffer.head;
   var content = '';
-
   while (p !== null) {
     content += decoder.write(p.data);
     p = p.next;
   }
-
   this._readableState.buffer.clear();
-
   if (content !== '') this._readableState.buffer.push(content);
   this._readableState.length = content.length;
   return this;
-}; // Don't raise the hwm > 1GB
+};
 
-
+// Don't raise the hwm > 1GB
 var MAX_HWM = 0x40000000;
-
 function computeNewHighWaterMark(n) {
   if (n >= MAX_HWM) {
     // TODO(ronag): Throw ERR_VALUE_OUT_OF_RANGE.
@@ -44682,55 +43047,54 @@ function computeNewHighWaterMark(n) {
     n |= n >>> 16;
     n++;
   }
-
   return n;
-} // This function is designed to be inlinable, so please take care when making
+}
+
+// This function is designed to be inlinable, so please take care when making
 // changes to the function body.
-
-
 function howMuchToRead(n, state) {
   if (n <= 0 || state.length === 0 && state.ended) return 0;
   if (state.objectMode) return 1;
-
   if (n !== n) {
     // Only flow one buffer at a time
     if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
-  } // If we're asking for more than the current hwm, then raise the hwm.
-
-
+  }
+  // If we're asking for more than the current hwm, then raise the hwm.
   if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
-  if (n <= state.length) return n; // Don't have enough
-
+  if (n <= state.length) return n;
+  // Don't have enough
   if (!state.ended) {
     state.needReadable = true;
     return 0;
   }
-
   return state.length;
-} // you can override either this method, or the async _read(n) below.
+}
 
-
+// you can override either this method, or the async _read(n) below.
 Readable.prototype.read = function (n) {
   debug('read', n);
   n = parseInt(n, 10);
   var state = this._readableState;
   var nOrig = n;
-  if (n !== 0) state.emittedReadable = false; // if we're doing read(0) to trigger a readable event, but we
+  if (n !== 0) state.emittedReadable = false;
+
+  // if we're doing read(0) to trigger a readable event, but we
   // already have a bunch of data in the buffer, then just trigger
   // the 'readable' event and move on.
-
   if (n === 0 && state.needReadable && ((state.highWaterMark !== 0 ? state.length >= state.highWaterMark : state.length > 0) || state.ended)) {
     debug('read: emitReadable', state.length, state.ended);
     if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
     return null;
   }
+  n = howMuchToRead(n, state);
 
-  n = howMuchToRead(n, state); // if we've ended, and we're now clear, then finish it up.
-
+  // if we've ended, and we're now clear, then finish it up.
   if (n === 0 && state.ended) {
     if (state.length === 0) endReadable(this);
     return null;
-  } // All the actual chunk generation logic needs to be
+  }
+
+  // All the actual chunk generation logic needs to be
   // *below* the call to _read.  The reason is that in certain
   // synthetic stream cases, such as passthrough streams, _read
   // may be a completely synchronous operation which may change
@@ -44751,40 +43115,37 @@ Readable.prototype.read = function (n) {
   // 'readable' etc.
   //
   // 3. Actually pull the requested chunks out of the buffer and return.
+
   // if we need a readable event, then we need to do some reading.
-
-
   var doRead = state.needReadable;
-  debug('need readable', doRead); // if we currently have less than the highWaterMark, then also read some
+  debug('need readable', doRead);
 
+  // if we currently have less than the highWaterMark, then also read some
   if (state.length === 0 || state.length - n < state.highWaterMark) {
     doRead = true;
     debug('length less than watermark', doRead);
-  } // however, if we've ended, then there's no point, and if we're already
+  }
+
+  // however, if we've ended, then there's no point, and if we're already
   // reading, then it's unnecessary.
-
-
   if (state.ended || state.reading) {
     doRead = false;
     debug('reading or ended', doRead);
   } else if (doRead) {
     debug('do read');
     state.reading = true;
-    state.sync = true; // if the length is currently zero, then we *need* a readable event.
-
-    if (state.length === 0) state.needReadable = true; // call internal read method
-
+    state.sync = true;
+    // if the length is currently zero, then we *need* a readable event.
+    if (state.length === 0) state.needReadable = true;
+    // call internal read method
     this._read(state.highWaterMark);
-
-    state.sync = false; // If _read pushed data synchronously, then `reading` will be false,
+    state.sync = false;
+    // If _read pushed data synchronously, then `reading` will be false,
     // and we need to re-evaluate how much data we can return to the user.
-
     if (!state.reading) n = howMuchToRead(nOrig, state);
   }
-
   var ret;
   if (n > 0) ret = fromList(n, state);else ret = null;
-
   if (ret === null) {
     state.needReadable = state.length <= state.highWaterMark;
     n = 0;
@@ -44792,34 +43153,28 @@ Readable.prototype.read = function (n) {
     state.length -= n;
     state.awaitDrain = 0;
   }
-
   if (state.length === 0) {
     // If we have nothing in the buffer, then we want to know
     // as soon as we *do* get something into the buffer.
-    if (!state.ended) state.needReadable = true; // If we tried to read() past the EOF, then emit end on the next tick.
+    if (!state.ended) state.needReadable = true;
 
+    // If we tried to read() past the EOF, then emit end on the next tick.
     if (nOrig !== n && state.ended) endReadable(this);
   }
-
   if (ret !== null) this.emit('data', ret);
   return ret;
 };
-
 function onEofChunk(stream, state) {
   debug('onEofChunk');
   if (state.ended) return;
-
   if (state.decoder) {
     var chunk = state.decoder.end();
-
     if (chunk && chunk.length) {
       state.buffer.push(chunk);
       state.length += state.objectMode ? 1 : chunk.length;
     }
   }
-
   state.ended = true;
-
   if (state.sync) {
     // if we are sync, wait until next tick to emit the data.
     // Otherwise we risk emitting data in the flow()
@@ -44828,61 +43183,56 @@ function onEofChunk(stream, state) {
   } else {
     // emit 'readable' now to make sure it gets picked up.
     state.needReadable = false;
-
     if (!state.emittedReadable) {
       state.emittedReadable = true;
       emitReadable_(stream);
     }
   }
-} // Don't emit readable right away in sync mode, because this can trigger
+}
+
+// Don't emit readable right away in sync mode, because this can trigger
 // another read() call => stack overflow.  This way, it might trigger
 // a nextTick recursion warning, but that's not so bad.
-
-
 function emitReadable(stream) {
   var state = stream._readableState;
   debug('emitReadable', state.needReadable, state.emittedReadable);
   state.needReadable = false;
-
   if (!state.emittedReadable) {
     debug('emitReadable', state.flowing);
     state.emittedReadable = true;
     process.nextTick(emitReadable_, stream);
   }
 }
-
 function emitReadable_(stream) {
   var state = stream._readableState;
   debug('emitReadable_', state.destroyed, state.length, state.ended);
-
   if (!state.destroyed && (state.length || state.ended)) {
     stream.emit('readable');
     state.emittedReadable = false;
-  } // The stream needs another readable event if
+  }
+
+  // The stream needs another readable event if
   // 1. It is not flowing, as the flow mechanism will take
   //    care of it.
   // 2. It is not ended.
   // 3. It is below the highWaterMark, so we can schedule
   //    another readable later.
-
-
   state.needReadable = !state.flowing && !state.ended && state.length <= state.highWaterMark;
   flow(stream);
-} // at this point, the user has presumably seen the 'readable' event,
+}
+
+// at this point, the user has presumably seen the 'readable' event,
 // and called read() to consume some data.  that may have triggered
 // in turn another _read(n) call, in which case reading = true if
 // it's in progress.
 // However, if we're not ended, or reading, and the length < hwm,
 // then go ahead and try to read some more preemptively.
-
-
 function maybeReadMore(stream, state) {
   if (!state.readingMore) {
     state.readingMore = true;
     process.nextTick(maybeReadMore_, stream, state);
   }
 }
-
 function maybeReadMore_(stream, state) {
   // Attempt to read more data if we should.
   //
@@ -44911,49 +43261,42 @@ function maybeReadMore_(stream, state) {
     var len = state.length;
     debug('maybeReadMore read 0');
     stream.read(0);
-    if (len === state.length) // didn't get any data, stop spinning.
+    if (len === state.length)
+      // didn't get any data, stop spinning.
       break;
   }
-
   state.readingMore = false;
-} // abstract method.  to be overridden in specific implementation classes.
+}
+
+// abstract method.  to be overridden in specific implementation classes.
 // call cb(er, data) where data is <= n in length.
 // for virtual (non-string, non-buffer) streams, "length" is somewhat
 // arbitrary, and perhaps not very meaningful.
-
-
 Readable.prototype._read = function (n) {
   errorOrDestroy(this, new ERR_METHOD_NOT_IMPLEMENTED('_read()'));
 };
-
 Readable.prototype.pipe = function (dest, pipeOpts) {
   var src = this;
   var state = this._readableState;
-
   switch (state.pipesCount) {
     case 0:
       state.pipes = dest;
       break;
-
     case 1:
       state.pipes = [state.pipes, dest];
       break;
-
     default:
       state.pipes.push(dest);
       break;
   }
-
   state.pipesCount += 1;
   debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
   var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
   var endFn = doEnd ? onend : unpipe;
   if (state.endEmitted) process.nextTick(endFn);else src.once('end', endFn);
   dest.on('unpipe', onunpipe);
-
   function onunpipe(readable, unpipeInfo) {
     debug('onunpipe');
-
     if (readable === src) {
       if (unpipeInfo && unpipeInfo.hasUnpiped === false) {
         unpipeInfo.hasUnpiped = true;
@@ -44961,23 +43304,21 @@ Readable.prototype.pipe = function (dest, pipeOpts) {
       }
     }
   }
-
   function onend() {
     debug('onend');
     dest.end();
-  } // when the dest drains, it reduces the awaitDrain counter
+  }
+
+  // when the dest drains, it reduces the awaitDrain counter
   // on the source.  This would be more elegant with a .once()
   // handler in flow(), but adding and removing repeatedly is
   // too slow.
-
-
   var ondrain = pipeOnDrain(src);
   dest.on('drain', ondrain);
   var cleanedUp = false;
-
   function cleanup() {
-    debug('cleanup'); // cleanup event handlers once the pipe is broken
-
+    debug('cleanup');
+    // cleanup event handlers once the pipe is broken
     dest.removeListener('close', onclose);
     dest.removeListener('finish', onfinish);
     dest.removeListener('drain', ondrain);
@@ -44986,22 +43327,20 @@ Readable.prototype.pipe = function (dest, pipeOpts) {
     src.removeListener('end', onend);
     src.removeListener('end', unpipe);
     src.removeListener('data', ondata);
-    cleanedUp = true; // if the reader is waiting for a drain event from this
+    cleanedUp = true;
+
+    // if the reader is waiting for a drain event from this
     // specific writer, then it would cause it to never start
     // flowing again.
     // So, if this is awaiting a drain, then we just call it now.
     // If we don't know, then assume that we are waiting for one.
-
     if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
   }
-
   src.on('data', ondata);
-
   function ondata(chunk) {
     debug('ondata');
     var ret = dest.write(chunk);
     debug('dest.write', ret);
-
     if (ret === false) {
       // If the user unpiped during `dest.write()`, it is possible
       // to get stuck in a permanently paused state if that write
@@ -45011,87 +43350,84 @@ Readable.prototype.pipe = function (dest, pipeOpts) {
         debug('false write response, pause', state.awaitDrain);
         state.awaitDrain++;
       }
-
       src.pause();
     }
-  } // if the dest has an error, then stop piping into it.
+  }
+
+  // if the dest has an error, then stop piping into it.
   // however, don't suppress the throwing behavior for this.
-
-
   function onerror(er) {
     debug('onerror', er);
     unpipe();
     dest.removeListener('error', onerror);
     if (EElistenerCount(dest, 'error') === 0) errorOrDestroy(dest, er);
-  } // Make sure our error handler is attached before userland ones.
+  }
 
+  // Make sure our error handler is attached before userland ones.
+  prependListener(dest, 'error', onerror);
 
-  prependListener(dest, 'error', onerror); // Both close and finish should trigger unpipe, but only once.
-
+  // Both close and finish should trigger unpipe, but only once.
   function onclose() {
     dest.removeListener('finish', onfinish);
     unpipe();
   }
-
   dest.once('close', onclose);
-
   function onfinish() {
     debug('onfinish');
     dest.removeListener('close', onclose);
     unpipe();
   }
-
   dest.once('finish', onfinish);
-
   function unpipe() {
     debug('unpipe');
     src.unpipe(dest);
-  } // tell the dest that it's being piped to
+  }
 
+  // tell the dest that it's being piped to
+  dest.emit('pipe', src);
 
-  dest.emit('pipe', src); // start the flow if it hasn't been started already.
-
+  // start the flow if it hasn't been started already.
   if (!state.flowing) {
     debug('pipe resume');
     src.resume();
   }
-
   return dest;
 };
-
 function pipeOnDrain(src) {
   return function pipeOnDrainFunctionResult() {
     var state = src._readableState;
     debug('pipeOnDrain', state.awaitDrain);
     if (state.awaitDrain) state.awaitDrain--;
-
     if (state.awaitDrain === 0 && EElistenerCount(src, 'data')) {
       state.flowing = true;
       flow(src);
     }
   };
 }
-
 Readable.prototype.unpipe = function (dest) {
   var state = this._readableState;
   var unpipeInfo = {
     hasUnpiped: false
-  }; // if we're not piping anywhere, then do nothing.
+  };
 
-  if (state.pipesCount === 0) return this; // just one destination.  most common case.
+  // if we're not piping anywhere, then do nothing.
+  if (state.pipesCount === 0) return this;
 
+  // just one destination.  most common case.
   if (state.pipesCount === 1) {
     // passed in one, but it's not the right one.
     if (dest && dest !== state.pipes) return this;
-    if (!dest) dest = state.pipes; // got a match.
+    if (!dest) dest = state.pipes;
 
+    // got a match.
     state.pipes = null;
     state.pipesCount = 0;
     state.flowing = false;
     if (dest) dest.emit('unpipe', this, unpipeInfo);
     return this;
-  } // slow case. multiple pipe destinations.
+  }
 
+  // slow case. multiple pipe destinations.
 
   if (!dest) {
     // remove all.
@@ -45100,17 +43436,13 @@ Readable.prototype.unpipe = function (dest) {
     state.pipes = null;
     state.pipesCount = 0;
     state.flowing = false;
-
-    for (var i = 0; i < len; i++) {
-      dests[i].emit('unpipe', this, {
-        hasUnpiped: false
-      });
-    }
-
+    for (var i = 0; i < len; i++) dests[i].emit('unpipe', this, {
+      hasUnpiped: false
+    });
     return this;
-  } // try to find the right one.
+  }
 
-
+  // try to find the right one.
   var index = indexOf(state.pipes, dest);
   if (index === -1) return this;
   state.pipes.splice(index, 1);
@@ -45118,19 +43450,19 @@ Readable.prototype.unpipe = function (dest) {
   if (state.pipesCount === 1) state.pipes = state.pipes[0];
   dest.emit('unpipe', this, unpipeInfo);
   return this;
-}; // set up data events if they are asked for
+};
+
+// set up data events if they are asked for
 // Ensure readable listeners eventually get something
-
-
 Readable.prototype.on = function (ev, fn) {
   var res = Stream.prototype.on.call(this, ev, fn);
   var state = this._readableState;
-
   if (ev === 'data') {
     // update readableListening so that resume() may be a no-op
     // a few lines down. This is needed to support once('readable').
-    state.readableListening = this.listenerCount('readable') > 0; // Try start flowing on next tick if stream isn't explicitly paused
+    state.readableListening = this.listenerCount('readable') > 0;
 
+    // Try start flowing on next tick if stream isn't explicitly paused
     if (state.flowing !== false) this.resume();
   } else if (ev === 'readable') {
     if (!state.endEmitted && !state.readableListening) {
@@ -45138,7 +43470,6 @@ Readable.prototype.on = function (ev, fn) {
       state.flowing = false;
       state.emittedReadable = false;
       debug('on readable', state.length, state.reading);
-
       if (state.length) {
         emitReadable(this);
       } else if (!state.reading) {
@@ -45146,15 +43477,11 @@ Readable.prototype.on = function (ev, fn) {
       }
     }
   }
-
   return res;
 };
-
 Readable.prototype.addListener = Readable.prototype.on;
-
 Readable.prototype.removeListener = function (ev, fn) {
   var res = Stream.prototype.removeListener.call(this, ev, fn);
-
   if (ev === 'readable') {
     // We need to check if there is someone still listening to
     // readable and reset the state. However this needs to happen
@@ -45164,13 +43491,10 @@ Readable.prototype.removeListener = function (ev, fn) {
     // effect.
     process.nextTick(updateReadableListening, this);
   }
-
   return res;
 };
-
 Readable.prototype.removeAllListeners = function (ev) {
   var res = Stream.prototype.removeAllListeners.apply(this, arguments);
-
   if (ev === 'readable' || ev === undefined) {
     // We need to check if there is someone still listening to
     // readable and reset the state. However this needs to happen
@@ -45180,121 +43504,103 @@ Readable.prototype.removeAllListeners = function (ev) {
     // effect.
     process.nextTick(updateReadableListening, this);
   }
-
   return res;
 };
-
 function updateReadableListening(self) {
   var state = self._readableState;
   state.readableListening = self.listenerCount('readable') > 0;
-
   if (state.resumeScheduled && !state.paused) {
     // flowing needs to be set to true now, otherwise
     // the upcoming resume will not flow.
-    state.flowing = true; // crude way to check if we should resume
+    state.flowing = true;
+
+    // crude way to check if we should resume
   } else if (self.listenerCount('data') > 0) {
     self.resume();
   }
 }
-
 function nReadingNextTick(self) {
   debug('readable nexttick read 0');
   self.read(0);
-} // pause() and resume() are remnants of the legacy readable stream API
+}
+
+// pause() and resume() are remnants of the legacy readable stream API
 // If the user uses them, then switch into old mode.
-
-
 Readable.prototype.resume = function () {
   var state = this._readableState;
-
   if (!state.flowing) {
-    debug('resume'); // we flow only if there is no one listening
+    debug('resume');
+    // we flow only if there is no one listening
     // for readable, but we still have to call
     // resume()
-
     state.flowing = !state.readableListening;
     resume(this, state);
   }
-
   state.paused = false;
   return this;
 };
-
 function resume(stream, state) {
   if (!state.resumeScheduled) {
     state.resumeScheduled = true;
     process.nextTick(resume_, stream, state);
   }
 }
-
 function resume_(stream, state) {
   debug('resume', state.reading);
-
   if (!state.reading) {
     stream.read(0);
   }
-
   state.resumeScheduled = false;
   stream.emit('resume');
   flow(stream);
   if (state.flowing && !state.reading) stream.read(0);
 }
-
 Readable.prototype.pause = function () {
   debug('call pause flowing=%j', this._readableState.flowing);
-
   if (this._readableState.flowing !== false) {
     debug('pause');
     this._readableState.flowing = false;
     this.emit('pause');
   }
-
   this._readableState.paused = true;
   return this;
 };
-
 function flow(stream) {
   var state = stream._readableState;
   debug('flow', state.flowing);
+  while (state.flowing && stream.read() !== null);
+}
 
-  while (state.flowing && stream.read() !== null) {
-    ;
-  }
-} // wrap an old-style stream as the async data source.
+// wrap an old-style stream as the async data source.
 // This is *not* part of the readable stream interface.
 // It is an ugly unfortunate mess of history.
-
-
 Readable.prototype.wrap = function (stream) {
   var _this = this;
-
   var state = this._readableState;
   var paused = false;
   stream.on('end', function () {
     debug('wrapped end');
-
     if (state.decoder && !state.ended) {
       var chunk = state.decoder.end();
       if (chunk && chunk.length) _this.push(chunk);
     }
-
     _this.push(null);
   });
   stream.on('data', function (chunk) {
     debug('wrapped data');
-    if (state.decoder) chunk = state.decoder.write(chunk); // don't skip over falsy values in objectMode
+    if (state.decoder) chunk = state.decoder.write(chunk);
 
+    // don't skip over falsy values in objectMode
     if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
-
     var ret = _this.push(chunk);
-
     if (!ret) {
       paused = true;
       stream.pause();
     }
-  }); // proxy all the other methods.
-  // important when wrapping filters and duplexes.
+  });
 
+  // proxy all the other methods.
+  // important when wrapping filters and duplexes.
   for (var i in stream) {
     if (this[i] === undefined && typeof stream[i] === 'function') {
       this[i] = function methodWrap(method) {
@@ -45303,37 +43609,32 @@ Readable.prototype.wrap = function (stream) {
         };
       }(i);
     }
-  } // proxy certain important events.
+  }
 
-
+  // proxy certain important events.
   for (var n = 0; n < kProxyEvents.length; n++) {
     stream.on(kProxyEvents[n], this.emit.bind(this, kProxyEvents[n]));
-  } // when we try to consume some more bytes, simply unpause the
+  }
+
+  // when we try to consume some more bytes, simply unpause the
   // underlying stream.
-
-
   this._read = function (n) {
     debug('wrapped _read', n);
-
     if (paused) {
       paused = false;
       stream.resume();
     }
   };
-
   return this;
 };
-
 if (typeof Symbol === 'function') {
   Readable.prototype[Symbol.asyncIterator] = function () {
     if (createReadableStreamAsyncIterator === undefined) {
-      createReadableStreamAsyncIterator = __nccwpck_require__(11727);
+      createReadableStreamAsyncIterator = __nccwpck_require__(13261);
     }
-
     return createReadableStreamAsyncIterator(this);
   };
 }
-
 Object.defineProperty(Readable.prototype, 'readableHighWaterMark', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -45365,8 +43666,9 @@ Object.defineProperty(Readable.prototype, 'readableFlowing', {
       this._readableState.flowing = state;
     }
   }
-}); // exposed for testing purposes only.
+});
 
+// exposed for testing purposes only.
 Readable._fromList = fromList;
 Object.defineProperty(Readable.prototype, 'readableLength', {
   // making it explicit this property is not enumerable
@@ -45376,11 +43678,12 @@ Object.defineProperty(Readable.prototype, 'readableLength', {
   get: function get() {
     return this._readableState.length;
   }
-}); // Pluck off n bytes from an array of buffers.
+});
+
+// Pluck off n bytes from an array of buffers.
 // Length is the combined lengths of all the buffers in the list.
 // This function is designed to be inlinable, so please take care when making
 // changes to the function body.
-
 function fromList(n, state) {
   // nothing buffered
   if (state.length === 0) return null;
@@ -45395,58 +43698,50 @@ function fromList(n, state) {
   }
   return ret;
 }
-
 function endReadable(stream) {
   var state = stream._readableState;
   debug('endReadable', state.endEmitted);
-
   if (!state.endEmitted) {
     state.ended = true;
     process.nextTick(endReadableNT, state, stream);
   }
 }
-
 function endReadableNT(state, stream) {
-  debug('endReadableNT', state.endEmitted, state.length); // Check that we didn't get one last unshift.
+  debug('endReadableNT', state.endEmitted, state.length);
 
+  // Check that we didn't get one last unshift.
   if (!state.endEmitted && state.length === 0) {
     state.endEmitted = true;
     stream.readable = false;
     stream.emit('end');
-
     if (state.autoDestroy) {
       // In case of duplex streams we need a way to detect
       // if the writable side is ready for autoDestroy as well
       var wState = stream._writableState;
-
       if (!wState || wState.autoDestroy && wState.finished) {
         stream.destroy();
       }
     }
   }
 }
-
 if (typeof Symbol === 'function') {
   Readable.from = function (iterable, opts) {
     if (from === undefined) {
-      from = __nccwpck_require__(54704);
+      from = __nccwpck_require__(36814);
     }
-
     return from(Readable, iterable, opts);
   };
 }
-
 function indexOf(xs, x) {
   for (var i = 0, l = xs.length; i < l; i++) {
     if (xs[i] === x) return i;
   }
-
   return -1;
 }
 
 /***/ }),
 
-/***/ 32822:
+/***/ 23264:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -45470,6 +43765,7 @@ function indexOf(xs, x) {
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -45513,40 +43809,34 @@ function indexOf(xs, x) {
 // the results of the previous transformed chunk were consumed.
 
 
+
 module.exports = Transform;
-
-var _require$codes = (__nccwpck_require__(33565)/* .codes */ .F),
-    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
-    ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
-    ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
-    ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes.ERR_TRANSFORM_WITH_LENGTH_0;
-
-var Duplex = __nccwpck_require__(19594);
-
+var _require$codes = (__nccwpck_require__(99479)/* .codes */ .F),
+  ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+  ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
+  ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
+  ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes.ERR_TRANSFORM_WITH_LENGTH_0;
+var Duplex = __nccwpck_require__(36592);
 __nccwpck_require__(76153)(Transform, Duplex);
-
 function afterTransform(er, data) {
   var ts = this._transformState;
   ts.transforming = false;
   var cb = ts.writecb;
-
   if (cb === null) {
     return this.emit('error', new ERR_MULTIPLE_CALLBACK());
   }
-
   ts.writechunk = null;
   ts.writecb = null;
-  if (data != null) // single equals check for both `null` and `undefined`
+  if (data != null)
+    // single equals check for both `null` and `undefined`
     this.push(data);
   cb(er);
   var rs = this._readableState;
   rs.reading = false;
-
   if (rs.needReadable || rs.length < rs.highWaterMark) {
     this._read(rs.highWaterMark);
   }
 }
-
 function Transform(options) {
   if (!(this instanceof Transform)) return new Transform(options);
   Duplex.call(this, options);
@@ -45557,26 +43847,25 @@ function Transform(options) {
     writecb: null,
     writechunk: null,
     writeencoding: null
-  }; // start out asking for a readable event once data is transformed.
+  };
 
-  this._readableState.needReadable = true; // we have implemented the _read method, and done the other things
+  // start out asking for a readable event once data is transformed.
+  this._readableState.needReadable = true;
+
+  // we have implemented the _read method, and done the other things
   // that Readable wants before the first _read call, so unset the
   // sync guard flag.
-
   this._readableState.sync = false;
-
   if (options) {
     if (typeof options.transform === 'function') this._transform = options.transform;
     if (typeof options.flush === 'function') this._flush = options.flush;
-  } // When the writable side finishes, then flush out anything remaining.
+  }
 
-
+  // When the writable side finishes, then flush out anything remaining.
   this.on('prefinish', prefinish);
 }
-
 function prefinish() {
   var _this = this;
-
   if (typeof this._flush === 'function' && !this._readableState.destroyed) {
     this._flush(function (er, data) {
       done(_this, er, data);
@@ -45585,11 +43874,12 @@ function prefinish() {
     done(this, null, null);
   }
 }
-
 Transform.prototype.push = function (chunk, encoding) {
   this._transformState.needTransform = false;
   return Duplex.prototype.push.call(this, chunk, encoding);
-}; // This is the part where you do stuff!
+};
+
+// This is the part where you do stuff!
 // override this function in implementation classes.
 // 'chunk' is an input chunk.
 //
@@ -45599,33 +43889,27 @@ Transform.prototype.push = function (chunk, encoding) {
 // Call `cb(err)` when you are done with this chunk.  If you pass
 // an error, then that'll put the hurt on the whole operation.  If you
 // never call cb(), then you'll never get another chunk.
-
-
 Transform.prototype._transform = function (chunk, encoding, cb) {
   cb(new ERR_METHOD_NOT_IMPLEMENTED('_transform()'));
 };
-
 Transform.prototype._write = function (chunk, encoding, cb) {
   var ts = this._transformState;
   ts.writecb = cb;
   ts.writechunk = chunk;
   ts.writeencoding = encoding;
-
   if (!ts.transforming) {
     var rs = this._readableState;
     if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
   }
-}; // Doesn't matter what the args are here.
+};
+
+// Doesn't matter what the args are here.
 // _transform does all the work.
 // That we got here means that the readable side wants more data.
-
-
 Transform.prototype._read = function (n) {
   var ts = this._transformState;
-
   if (ts.writechunk !== null && !ts.transforming) {
     ts.transforming = true;
-
     this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
   } else {
     // mark that we need a transform, so that any data that comes in
@@ -45633,20 +43917,20 @@ Transform.prototype._read = function (n) {
     ts.needTransform = true;
   }
 };
-
 Transform.prototype._destroy = function (err, cb) {
   Duplex.prototype._destroy.call(this, err, function (err2) {
     cb(err2);
   });
 };
-
 function done(stream, er, data) {
   if (er) return stream.emit('error', er);
-  if (data != null) // single equals check for both `null` and `undefined`
-    stream.push(data); // TODO(BridgeAR): Write a test for these two error cases
+  if (data != null)
+    // single equals check for both `null` and `undefined`
+    stream.push(data);
+
+  // TODO(BridgeAR): Write a test for these two error cases
   // if there's nothing in the write buffer, then that means
   // that nothing more will ever be provided
-
   if (stream._writableState.length) throw new ERR_TRANSFORM_WITH_LENGTH_0();
   if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
   return stream.push(null);
@@ -45654,7 +43938,7 @@ function done(stream, er, data) {
 
 /***/ }),
 
-/***/ 50472:
+/***/ 25050:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -45678,29 +43962,29 @@ function done(stream, er, data) {
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
 // the drain event emission and buffering.
 
 
-module.exports = Writable;
-/* <replacement> */
 
+module.exports = Writable;
+
+/* <replacement> */
 function WriteReq(chunk, encoding, cb) {
   this.chunk = chunk;
   this.encoding = encoding;
   this.callback = cb;
   this.next = null;
-} // It seems a linked list but it is not
+}
+
+// It seems a linked list but it is not
 // there will be only 2 of these for each stream
-
-
 function CorkedRequest(state) {
   var _this = this;
-
   this.next = null;
   this.entry = null;
-
   this.finish = function () {
     onCorkedFinish(_this, state);
   };
@@ -45708,155 +43992,159 @@ function CorkedRequest(state) {
 /* </replacement> */
 
 /*<replacement>*/
-
-
 var Duplex;
 /*</replacement>*/
 
 Writable.WritableState = WritableState;
-/*<replacement>*/
 
+/*<replacement>*/
 var internalUtil = {
   deprecate: __nccwpck_require__(48728)
 };
 /*</replacement>*/
 
 /*<replacement>*/
-
-var Stream = __nccwpck_require__(52772);
+var Stream = __nccwpck_require__(26254);
 /*</replacement>*/
 
-
 var Buffer = (__nccwpck_require__(20181).Buffer);
-
-var OurUint8Array = global.Uint8Array || function () {};
-
+var OurUint8Array = (typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : {}).Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
 }
-
 function _isUint8Array(obj) {
   return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
 }
-
-var destroyImpl = __nccwpck_require__(43988);
-
-var _require = __nccwpck_require__(42943),
-    getHighWaterMark = _require.getHighWaterMark;
-
-var _require$codes = (__nccwpck_require__(33565)/* .codes */ .F),
-    ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
-    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
-    ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
-    ERR_STREAM_CANNOT_PIPE = _require$codes.ERR_STREAM_CANNOT_PIPE,
-    ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED,
-    ERR_STREAM_NULL_VALUES = _require$codes.ERR_STREAM_NULL_VALUES,
-    ERR_STREAM_WRITE_AFTER_END = _require$codes.ERR_STREAM_WRITE_AFTER_END,
-    ERR_UNKNOWN_ENCODING = _require$codes.ERR_UNKNOWN_ENCODING;
-
+var destroyImpl = __nccwpck_require__(1982);
+var _require = __nccwpck_require__(26942),
+  getHighWaterMark = _require.getHighWaterMark;
+var _require$codes = (__nccwpck_require__(99479)/* .codes */ .F),
+  ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
+  ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+  ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
+  ERR_STREAM_CANNOT_PIPE = _require$codes.ERR_STREAM_CANNOT_PIPE,
+  ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED,
+  ERR_STREAM_NULL_VALUES = _require$codes.ERR_STREAM_NULL_VALUES,
+  ERR_STREAM_WRITE_AFTER_END = _require$codes.ERR_STREAM_WRITE_AFTER_END,
+  ERR_UNKNOWN_ENCODING = _require$codes.ERR_UNKNOWN_ENCODING;
 var errorOrDestroy = destroyImpl.errorOrDestroy;
-
 __nccwpck_require__(76153)(Writable, Stream);
-
 function nop() {}
-
 function WritableState(options, stream, isDuplex) {
-  Duplex = Duplex || __nccwpck_require__(19594);
-  options = options || {}; // Duplex streams are both readable and writable, but share
+  Duplex = Duplex || __nccwpck_require__(36592);
+  options = options || {};
+
+  // Duplex streams are both readable and writable, but share
   // the same options object.
   // However, some cases require setting options to different
   // values for the readable and the writable sides of the duplex stream,
   // e.g. options.readableObjectMode vs. options.writableObjectMode, etc.
+  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex;
 
-  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex; // object stream flag to indicate whether or not this stream
+  // object stream flag to indicate whether or not this stream
   // contains buffers or objects.
-
   this.objectMode = !!options.objectMode;
-  if (isDuplex) this.objectMode = this.objectMode || !!options.writableObjectMode; // the point at which write() starts returning false
+  if (isDuplex) this.objectMode = this.objectMode || !!options.writableObjectMode;
+
+  // the point at which write() starts returning false
   // Note: 0 is a valid value, means that we always return false if
   // the entire buffer is not flushed immediately on write()
+  this.highWaterMark = getHighWaterMark(this, options, 'writableHighWaterMark', isDuplex);
 
-  this.highWaterMark = getHighWaterMark(this, options, 'writableHighWaterMark', isDuplex); // if _final has been called
+  // if _final has been called
+  this.finalCalled = false;
 
-  this.finalCalled = false; // drain event flag.
+  // drain event flag.
+  this.needDrain = false;
+  // at the start of calling end()
+  this.ending = false;
+  // when end() has been called, and returned
+  this.ended = false;
+  // when 'finish' is emitted
+  this.finished = false;
 
-  this.needDrain = false; // at the start of calling end()
+  // has it been destroyed
+  this.destroyed = false;
 
-  this.ending = false; // when end() has been called, and returned
-
-  this.ended = false; // when 'finish' is emitted
-
-  this.finished = false; // has it been destroyed
-
-  this.destroyed = false; // should we decode strings into buffers before passing to _write?
+  // should we decode strings into buffers before passing to _write?
   // this is here so that some node-core streams can optimize string
   // handling at a lower level.
-
   var noDecode = options.decodeStrings === false;
-  this.decodeStrings = !noDecode; // Crypto is kind of old and crusty.  Historically, its default string
+  this.decodeStrings = !noDecode;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
   // encoding is 'binary' so we have to make this configurable.
   // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
 
-  this.defaultEncoding = options.defaultEncoding || 'utf8'; // not an actual buffer we keep track of, but a measurement
+  // not an actual buffer we keep track of, but a measurement
   // of how much we're waiting to get pushed to some underlying
   // socket or file.
+  this.length = 0;
 
-  this.length = 0; // a flag to see when we're in the middle of a write.
+  // a flag to see when we're in the middle of a write.
+  this.writing = false;
 
-  this.writing = false; // when true all writes will be buffered until .uncork() call
+  // when true all writes will be buffered until .uncork() call
+  this.corked = 0;
 
-  this.corked = 0; // a flag to be able to tell if the onwrite cb is called immediately,
+  // a flag to be able to tell if the onwrite cb is called immediately,
   // or on a later tick.  We set this to true at first, because any
   // actions that shouldn't happen until "later" should generally also
   // not happen before the first write call.
+  this.sync = true;
 
-  this.sync = true; // a flag to know if we're processing previously buffered items, which
+  // a flag to know if we're processing previously buffered items, which
   // may call the _write() callback in the same tick, so that we don't
   // end up in an overlapped onwrite situation.
+  this.bufferProcessing = false;
 
-  this.bufferProcessing = false; // the callback that's passed to _write(chunk,cb)
-
+  // the callback that's passed to _write(chunk,cb)
   this.onwrite = function (er) {
     onwrite(stream, er);
-  }; // the callback that the user supplies to write(chunk,encoding,cb)
+  };
 
+  // the callback that the user supplies to write(chunk,encoding,cb)
+  this.writecb = null;
 
-  this.writecb = null; // the amount that is being written when _write is called.
-
+  // the amount that is being written when _write is called.
   this.writelen = 0;
   this.bufferedRequest = null;
-  this.lastBufferedRequest = null; // number of pending user-supplied write callbacks
+  this.lastBufferedRequest = null;
+
+  // number of pending user-supplied write callbacks
   // this must be 0 before 'finish' can be emitted
+  this.pendingcb = 0;
 
-  this.pendingcb = 0; // emit prefinish if the only thing we're waiting for is _write cbs
+  // emit prefinish if the only thing we're waiting for is _write cbs
   // This is relevant for synchronous Transform streams
+  this.prefinished = false;
 
-  this.prefinished = false; // True if the error was already emitted and should not be thrown again
+  // True if the error was already emitted and should not be thrown again
+  this.errorEmitted = false;
 
-  this.errorEmitted = false; // Should close be emitted on destroy. Defaults to true.
+  // Should close be emitted on destroy. Defaults to true.
+  this.emitClose = options.emitClose !== false;
 
-  this.emitClose = options.emitClose !== false; // Should .destroy() be called after 'finish' (and potentially 'end')
+  // Should .destroy() be called after 'finish' (and potentially 'end')
+  this.autoDestroy = !!options.autoDestroy;
 
-  this.autoDestroy = !!options.autoDestroy; // count buffered requests
+  // count buffered requests
+  this.bufferedRequestCount = 0;
 
-  this.bufferedRequestCount = 0; // allocate the first CorkedRequest, there is always
+  // allocate the first CorkedRequest, there is always
   // one allocated and free to use, and we maintain at most two
-
   this.corkedRequestsFree = new CorkedRequest(this);
 }
-
 WritableState.prototype.getBuffer = function getBuffer() {
   var current = this.bufferedRequest;
   var out = [];
-
   while (current) {
     out.push(current);
     current = current.next;
   }
-
   return out;
 };
-
 (function () {
   try {
     Object.defineProperty(WritableState.prototype, 'buffer', {
@@ -45865,12 +44153,11 @@ WritableState.prototype.getBuffer = function getBuffer() {
       }, '_writableState.buffer is deprecated. Use _writableState.getBuffer ' + 'instead.', 'DEP0003')
     });
   } catch (_) {}
-})(); // Test _writableState for inheritance to account for Duplex streams,
+})();
+
+// Test _writableState for inheritance to account for Duplex streams,
 // whose prototype chain only points to Readable.
-
-
 var realHasInstance;
-
 if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] === 'function') {
   realHasInstance = Function.prototype[Symbol.hasInstance];
   Object.defineProperty(Writable, Symbol.hasInstance, {
@@ -45885,81 +44172,73 @@ if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.protot
     return object instanceof this;
   };
 }
-
 function Writable(options) {
-  Duplex = Duplex || __nccwpck_require__(19594); // Writable ctor is applied to Duplexes, too.
+  Duplex = Duplex || __nccwpck_require__(36592);
+
+  // Writable ctor is applied to Duplexes, too.
   // `realHasInstance` is necessary because using plain `instanceof`
   // would return false, as no `_writableState` property is attached.
+
   // Trying to use the custom `instanceof` for Writable here will also break the
   // Node.js LazyTransform implementation, which has a non-trivial getter for
   // `_writableState` that would lead to infinite recursion.
+
   // Checking for a Stream.Duplex instance is faster here instead of inside
   // the WritableState constructor, at least with V8 6.5
-
   var isDuplex = this instanceof Duplex;
   if (!isDuplex && !realHasInstance.call(Writable, this)) return new Writable(options);
-  this._writableState = new WritableState(options, this, isDuplex); // legacy.
+  this._writableState = new WritableState(options, this, isDuplex);
 
+  // legacy.
   this.writable = true;
-
   if (options) {
     if (typeof options.write === 'function') this._write = options.write;
     if (typeof options.writev === 'function') this._writev = options.writev;
     if (typeof options.destroy === 'function') this._destroy = options.destroy;
     if (typeof options.final === 'function') this._final = options.final;
   }
-
   Stream.call(this);
-} // Otherwise people can pipe Writable streams, which is just wrong.
+}
 
-
+// Otherwise people can pipe Writable streams, which is just wrong.
 Writable.prototype.pipe = function () {
   errorOrDestroy(this, new ERR_STREAM_CANNOT_PIPE());
 };
-
 function writeAfterEnd(stream, cb) {
-  var er = new ERR_STREAM_WRITE_AFTER_END(); // TODO: defer error events consistently everywhere, not just the cb
-
+  var er = new ERR_STREAM_WRITE_AFTER_END();
+  // TODO: defer error events consistently everywhere, not just the cb
   errorOrDestroy(stream, er);
   process.nextTick(cb, er);
-} // Checks that a user-supplied chunk is valid, especially for the particular
+}
+
+// Checks that a user-supplied chunk is valid, especially for the particular
 // mode the stream is in. Currently this means that `null` is never accepted
 // and undefined/non-string values are only allowed in object mode.
-
-
 function validChunk(stream, state, chunk, cb) {
   var er;
-
   if (chunk === null) {
     er = new ERR_STREAM_NULL_VALUES();
   } else if (typeof chunk !== 'string' && !state.objectMode) {
     er = new ERR_INVALID_ARG_TYPE('chunk', ['string', 'Buffer'], chunk);
   }
-
   if (er) {
     errorOrDestroy(stream, er);
     process.nextTick(cb, er);
     return false;
   }
-
   return true;
 }
-
 Writable.prototype.write = function (chunk, encoding, cb) {
   var state = this._writableState;
   var ret = false;
-
   var isBuf = !state.objectMode && _isUint8Array(chunk);
-
   if (isBuf && !Buffer.isBuffer(chunk)) {
     chunk = _uint8ArrayToBuffer(chunk);
   }
-
   if (typeof encoding === 'function') {
     cb = encoding;
     encoding = null;
   }
-
   if (isBuf) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
   if (typeof cb !== 'function') cb = nop;
   if (state.ending) writeAfterEnd(this, cb);else if (isBuf || validChunk(this, state, chunk, cb)) {
@@ -45968,20 +44247,16 @@ Writable.prototype.write = function (chunk, encoding, cb) {
   }
   return ret;
 };
-
 Writable.prototype.cork = function () {
   this._writableState.corked++;
 };
-
 Writable.prototype.uncork = function () {
   var state = this._writableState;
-
   if (state.corked) {
     state.corked--;
     if (!state.writing && !state.corked && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
   }
 };
-
 Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
   // node::ParseEncoding() requires lower case.
   if (typeof encoding === 'string') encoding = encoding.toLowerCase();
@@ -45989,7 +44264,6 @@ Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
   this._writableState.defaultEncoding = encoding;
   return this;
 };
-
 Object.defineProperty(Writable.prototype, 'writableBuffer', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -45999,15 +44273,12 @@ Object.defineProperty(Writable.prototype, 'writableBuffer', {
     return this._writableState && this._writableState.getBuffer();
   }
 });
-
 function decodeChunk(state, chunk, encoding) {
   if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
     chunk = Buffer.from(chunk, encoding);
   }
-
   return chunk;
 }
-
 Object.defineProperty(Writable.prototype, 'writableHighWaterMark', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -46016,27 +44287,25 @@ Object.defineProperty(Writable.prototype, 'writableHighWaterMark', {
   get: function get() {
     return this._writableState.highWaterMark;
   }
-}); // if we're already writing something, then just put this
+});
+
+// if we're already writing something, then just put this
 // in the queue, and wait our turn.  Otherwise, call _write
 // If we return false, then we need a drain event, so set that flag.
-
 function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
   if (!isBuf) {
     var newChunk = decodeChunk(state, chunk, encoding);
-
     if (chunk !== newChunk) {
       isBuf = true;
       encoding = 'buffer';
       chunk = newChunk;
     }
   }
-
   var len = state.objectMode ? 1 : chunk.length;
   state.length += len;
-  var ret = state.length < state.highWaterMark; // we must ensure that previous needDrain will not be reset to false.
-
+  var ret = state.length < state.highWaterMark;
+  // we must ensure that previous needDrain will not be reset to false.
   if (!ret) state.needDrain = true;
-
   if (state.writing || state.corked) {
     var last = state.lastBufferedRequest;
     state.lastBufferedRequest = {
@@ -46046,21 +44315,17 @@ function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
       callback: cb,
       next: null
     };
-
     if (last) {
       last.next = state.lastBufferedRequest;
     } else {
       state.bufferedRequest = state.lastBufferedRequest;
     }
-
     state.bufferedRequestCount += 1;
   } else {
     doWrite(stream, state, false, len, chunk, encoding, cb);
   }
-
   return ret;
 }
-
 function doWrite(stream, state, writev, len, chunk, encoding, cb) {
   state.writelen = len;
   state.writecb = cb;
@@ -46069,16 +44334,14 @@ function doWrite(stream, state, writev, len, chunk, encoding, cb) {
   if (state.destroyed) state.onwrite(new ERR_STREAM_DESTROYED('write'));else if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
   state.sync = false;
 }
-
 function onwriteError(stream, state, sync, er, cb) {
   --state.pendingcb;
-
   if (sync) {
     // defer the callback if we are being called synchronously
     // to avoid piling up things on the stack
-    process.nextTick(cb, er); // this can emit finish, and it will always happen
+    process.nextTick(cb, er);
+    // this can emit finish, and it will always happen
     // after error
-
     process.nextTick(finishMaybe, stream, state);
     stream._writableState.errorEmitted = true;
     errorOrDestroy(stream, er);
@@ -46087,20 +44350,18 @@ function onwriteError(stream, state, sync, er, cb) {
     // it is async
     cb(er);
     stream._writableState.errorEmitted = true;
-    errorOrDestroy(stream, er); // this can emit finish, but finish must
+    errorOrDestroy(stream, er);
+    // this can emit finish, but finish must
     // always follow error
-
     finishMaybe(stream, state);
   }
 }
-
 function onwriteStateUpdate(state) {
   state.writing = false;
   state.writecb = null;
   state.length -= state.writelen;
   state.writelen = 0;
 }
-
 function onwrite(stream, er) {
   var state = stream._writableState;
   var sync = state.sync;
@@ -46110,11 +44371,9 @@ function onwrite(stream, er) {
   if (er) onwriteError(stream, state, sync, er, cb);else {
     // Check if we're actually ready to finish, but don't emit yet
     var finished = needFinish(state) || stream.destroyed;
-
     if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
       clearBuffer(stream, state);
     }
-
     if (sync) {
       process.nextTick(afterWrite, stream, state, finished, cb);
     } else {
@@ -46122,29 +44381,27 @@ function onwrite(stream, er) {
     }
   }
 }
-
 function afterWrite(stream, state, finished, cb) {
   if (!finished) onwriteDrain(stream, state);
   state.pendingcb--;
   cb();
   finishMaybe(stream, state);
-} // Must force callback to be called on nextTick, so that we don't
+}
+
+// Must force callback to be called on nextTick, so that we don't
 // emit 'drain' before the write() consumer gets the 'false' return
 // value, and has a chance to attach a 'drain' listener.
-
-
 function onwriteDrain(stream, state) {
   if (state.length === 0 && state.needDrain) {
     state.needDrain = false;
     stream.emit('drain');
   }
-} // if there's something in the buffer waiting, then process it
+}
 
-
+// if there's something in the buffer waiting, then process it
 function clearBuffer(stream, state) {
   state.bufferProcessing = true;
   var entry = state.bufferedRequest;
-
   if (stream._writev && entry && entry.next) {
     // Fast case, write everything using _writev()
     var l = state.bufferedRequestCount;
@@ -46153,28 +44410,25 @@ function clearBuffer(stream, state) {
     holder.entry = entry;
     var count = 0;
     var allBuffers = true;
-
     while (entry) {
       buffer[count] = entry;
       if (!entry.isBuf) allBuffers = false;
       entry = entry.next;
       count += 1;
     }
-
     buffer.allBuffers = allBuffers;
-    doWrite(stream, state, true, state.length, buffer, '', holder.finish); // doWrite is almost always async, defer these to save a bit of time
-    // as the hot path ends with doWrite
+    doWrite(stream, state, true, state.length, buffer, '', holder.finish);
 
+    // doWrite is almost always async, defer these to save a bit of time
+    // as the hot path ends with doWrite
     state.pendingcb++;
     state.lastBufferedRequest = null;
-
     if (holder.next) {
       state.corkedRequestsFree = holder.next;
       holder.next = null;
     } else {
       state.corkedRequestsFree = new CorkedRequest(state);
     }
-
     state.bufferedRequestCount = 0;
   } else {
     // Slow case, write chunks one-by-one
@@ -46185,32 +44439,26 @@ function clearBuffer(stream, state) {
       var len = state.objectMode ? 1 : chunk.length;
       doWrite(stream, state, false, len, chunk, encoding, cb);
       entry = entry.next;
-      state.bufferedRequestCount--; // if we didn't call the onwrite immediately, then
+      state.bufferedRequestCount--;
+      // if we didn't call the onwrite immediately, then
       // it means that we need to wait until it does.
       // also, that means that the chunk and cb are currently
       // being processed, so move the buffer counter past them.
-
       if (state.writing) {
         break;
       }
     }
-
     if (entry === null) state.lastBufferedRequest = null;
   }
-
   state.bufferedRequest = entry;
   state.bufferProcessing = false;
 }
-
 Writable.prototype._write = function (chunk, encoding, cb) {
   cb(new ERR_METHOD_NOT_IMPLEMENTED('_write()'));
 };
-
 Writable.prototype._writev = null;
-
 Writable.prototype.end = function (chunk, encoding, cb) {
   var state = this._writableState;
-
   if (typeof chunk === 'function') {
     cb = chunk;
     chunk = null;
@@ -46219,19 +44467,18 @@ Writable.prototype.end = function (chunk, encoding, cb) {
     cb = encoding;
     encoding = null;
   }
+  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
 
-  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding); // .end() fully uncorks
-
+  // .end() fully uncorks
   if (state.corked) {
     state.corked = 1;
     this.uncork();
-  } // ignore unnecessary end() calls.
+  }
 
-
+  // ignore unnecessary end() calls.
   if (!state.ending) endWritable(this, state, cb);
   return this;
 };
-
 Object.defineProperty(Writable.prototype, 'writableLength', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -46241,25 +44488,20 @@ Object.defineProperty(Writable.prototype, 'writableLength', {
     return this._writableState.length;
   }
 });
-
 function needFinish(state) {
   return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing;
 }
-
 function callFinal(stream, state) {
   stream._final(function (err) {
     state.pendingcb--;
-
     if (err) {
       errorOrDestroy(stream, err);
     }
-
     state.prefinished = true;
     stream.emit('prefinish');
     finishMaybe(stream, state);
   });
 }
-
 function prefinish(stream, state) {
   if (!state.prefinished && !state.finalCalled) {
     if (typeof stream._final === 'function' && !state.destroyed) {
@@ -46272,59 +44514,47 @@ function prefinish(stream, state) {
     }
   }
 }
-
 function finishMaybe(stream, state) {
   var need = needFinish(state);
-
   if (need) {
     prefinish(stream, state);
-
     if (state.pendingcb === 0) {
       state.finished = true;
       stream.emit('finish');
-
       if (state.autoDestroy) {
         // In case of duplex streams we need a way to detect
         // if the readable side is ready for autoDestroy as well
         var rState = stream._readableState;
-
         if (!rState || rState.autoDestroy && rState.endEmitted) {
           stream.destroy();
         }
       }
     }
   }
-
   return need;
 }
-
 function endWritable(stream, state, cb) {
   state.ending = true;
   finishMaybe(stream, state);
-
   if (cb) {
     if (state.finished) process.nextTick(cb);else stream.once('finish', cb);
   }
-
   state.ended = true;
   stream.writable = false;
 }
-
 function onCorkedFinish(corkReq, state, err) {
   var entry = corkReq.entry;
   corkReq.entry = null;
-
   while (entry) {
     var cb = entry.callback;
     state.pendingcb--;
     cb(err);
     entry = entry.next;
-  } // reuse the free corkReq.
+  }
 
-
+  // reuse the free corkReq.
   state.corkedRequestsFree.next = corkReq;
 }
-
 Object.defineProperty(Writable.prototype, 'destroyed', {
   // making it explicit this property is not enumerable
   // because otherwise some prototype manipulation in
@@ -46334,7 +44564,6 @@ Object.defineProperty(Writable.prototype, 'destroyed', {
     if (this._writableState === undefined) {
       return false;
     }
-
     return this._writableState.destroyed;
   },
   set: function set(value) {
@@ -46342,34 +44571,32 @@ Object.defineProperty(Writable.prototype, 'destroyed', {
     // has not been initialized yet
     if (!this._writableState) {
       return;
-    } // backward compatibility, the user is explicitly
+    }
+
+    // backward compatibility, the user is explicitly
     // managing destroyed
-
-
     this._writableState.destroyed = value;
   }
 });
 Writable.prototype.destroy = destroyImpl.destroy;
 Writable.prototype._undestroy = destroyImpl.undestroy;
-
 Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 
 /***/ }),
 
-/***/ 11727:
+/***/ 13261:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 var _Object$setPrototypeO;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var finished = __nccwpck_require__(26378);
-
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var finished = __nccwpck_require__(99460);
 var kLastResolve = Symbol('lastResolve');
 var kLastReject = Symbol('lastReject');
 var kError = Symbol('error');
@@ -46377,22 +44604,19 @@ var kEnded = Symbol('ended');
 var kLastPromise = Symbol('lastPromise');
 var kHandlePromise = Symbol('handlePromise');
 var kStream = Symbol('stream');
-
 function createIterResult(value, done) {
   return {
     value: value,
     done: done
   };
 }
-
 function readAndResolve(iter) {
   var resolve = iter[kLastResolve];
-
   if (resolve !== null) {
-    var data = iter[kStream].read(); // we defer if data is null
+    var data = iter[kStream].read();
+    // we defer if data is null
     // we can be expecting either 'end' or
     // 'error'
-
     if (data !== null) {
       iter[kLastPromise] = null;
       iter[kLastResolve] = null;
@@ -46401,13 +44625,11 @@ function readAndResolve(iter) {
     }
   }
 }
-
 function onReadable(iter) {
   // we wait for the next tick, because it might
   // emit an error with process.nextTick
   process.nextTick(readAndResolve, iter);
 }
-
 function wrapForNext(lastPromise, iter) {
   return function (resolve, reject) {
     lastPromise.then(function () {
@@ -46415,33 +44637,26 @@ function wrapForNext(lastPromise, iter) {
         resolve(createIterResult(undefined, true));
         return;
       }
-
       iter[kHandlePromise](resolve, reject);
     }, reject);
   };
 }
-
 var AsyncIteratorPrototype = Object.getPrototypeOf(function () {});
 var ReadableStreamAsyncIteratorPrototype = Object.setPrototypeOf((_Object$setPrototypeO = {
   get stream() {
     return this[kStream];
   },
-
   next: function next() {
     var _this = this;
-
     // if we have detected an error in the meanwhile
     // reject straight away
     var error = this[kError];
-
     if (error !== null) {
       return Promise.reject(error);
     }
-
     if (this[kEnded]) {
       return Promise.resolve(createIterResult(undefined, true));
     }
-
     if (this[kStream].destroyed) {
       // We need to defer via nextTick because if .destroy(err) is
       // called, the error will be emitted via nextTick, and
@@ -46456,29 +44671,25 @@ var ReadableStreamAsyncIteratorPrototype = Object.setPrototypeOf((_Object$setPro
           }
         });
       });
-    } // if we have multiple next() calls
+    }
+
+    // if we have multiple next() calls
     // we will wait for the previous Promise to finish
     // this logic is optimized to support for await loops,
     // where next() is only called once at a time
-
-
     var lastPromise = this[kLastPromise];
     var promise;
-
     if (lastPromise) {
       promise = new Promise(wrapForNext(lastPromise, this));
     } else {
       // fast path needed to support multiple this.push()
       // without triggering the next() queue
       var data = this[kStream].read();
-
       if (data !== null) {
         return Promise.resolve(createIterResult(data, false));
       }
-
       promise = new Promise(this[kHandlePromise]);
     }
-
     this[kLastPromise] = promise;
     return promise;
   }
@@ -46486,7 +44697,6 @@ var ReadableStreamAsyncIteratorPrototype = Object.setPrototypeOf((_Object$setPro
   return this;
 }), _defineProperty(_Object$setPrototypeO, "return", function _return() {
   var _this2 = this;
-
   // destroy(err, cb) is a private API
   // we can guarantee we have that here, because we control the
   // Readable class this is attached to
@@ -46496,15 +44706,12 @@ var ReadableStreamAsyncIteratorPrototype = Object.setPrototypeOf((_Object$setPro
         reject(err);
         return;
       }
-
       resolve(createIterResult(undefined, true));
     });
   });
 }), _Object$setPrototypeO), AsyncIteratorPrototype);
-
 var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterator(stream) {
   var _Object$create;
-
   var iterator = Object.create(ReadableStreamAsyncIteratorPrototype, (_Object$create = {}, _defineProperty(_Object$create, kStream, {
     value: stream,
     writable: true
@@ -46523,7 +44730,6 @@ var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterat
   }), _defineProperty(_Object$create, kHandlePromise, {
     value: function value(resolve, reject) {
       var data = iterator[kStream].read();
-
       if (data) {
         iterator[kLastPromise] = null;
         iterator[kLastResolve] = null;
@@ -46539,80 +44745,63 @@ var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterat
   iterator[kLastPromise] = null;
   finished(stream, function (err) {
     if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
-      var reject = iterator[kLastReject]; // reject if we are waiting for data in the Promise
+      var reject = iterator[kLastReject];
+      // reject if we are waiting for data in the Promise
       // returned by next() and store the error
-
       if (reject !== null) {
         iterator[kLastPromise] = null;
         iterator[kLastResolve] = null;
         iterator[kLastReject] = null;
         reject(err);
       }
-
       iterator[kError] = err;
       return;
     }
-
     var resolve = iterator[kLastResolve];
-
     if (resolve !== null) {
       iterator[kLastPromise] = null;
       iterator[kLastResolve] = null;
       iterator[kLastReject] = null;
       resolve(createIterResult(undefined, true));
     }
-
     iterator[kEnded] = true;
   });
   stream.on('readable', onReadable.bind(null, iterator));
   return iterator;
 };
-
 module.exports = createReadableStreamAsyncIterator;
 
 /***/ }),
 
-/***/ 13805:
+/***/ 96811:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var _require = __nccwpck_require__(20181),
-    Buffer = _require.Buffer;
-
+  Buffer = _require.Buffer;
 var _require2 = __nccwpck_require__(39023),
-    inspect = _require2.inspect;
-
+  inspect = _require2.inspect;
 var custom = inspect && inspect.custom || 'inspect';
-
 function copyBuffer(src, target, offset) {
   Buffer.prototype.copy.call(src, target, offset);
 }
-
-module.exports =
-/*#__PURE__*/
-function () {
+module.exports = /*#__PURE__*/function () {
   function BufferList() {
     _classCallCheck(this, BufferList);
-
     this.head = null;
     this.tail = null;
     this.length = 0;
   }
-
   _createClass(BufferList, [{
     key: "push",
     value: function push(v) {
@@ -46656,11 +44845,7 @@ function () {
       if (this.length === 0) return '';
       var p = this.head;
       var ret = '' + p.data;
-
-      while (p = p.next) {
-        ret += s + p.data;
-      }
-
+      while (p = p.next) ret += s + p.data;
       return ret;
     }
   }, {
@@ -46670,21 +44855,19 @@ function () {
       var ret = Buffer.allocUnsafe(n >>> 0);
       var p = this.head;
       var i = 0;
-
       while (p) {
         copyBuffer(p.data, ret, i);
         i += p.data.length;
         p = p.next;
       }
-
       return ret;
-    } // Consumes a specified amount of bytes or characters from the buffered data.
+    }
 
+    // Consumes a specified amount of bytes or characters from the buffered data.
   }, {
     key: "consume",
     value: function consume(n, hasStrings) {
       var ret;
-
       if (n < this.head.data.length) {
         // `slice` is the same for buffers and strings.
         ret = this.head.data.slice(0, n);
@@ -46696,15 +44879,15 @@ function () {
         // Result spans more than one buffer.
         ret = hasStrings ? this._getString(n) : this._getBuffer(n);
       }
-
       return ret;
     }
   }, {
     key: "first",
     value: function first() {
       return this.head.data;
-    } // Consumes a specified amount of characters from the buffered data.
+    }
 
+    // Consumes a specified amount of characters from the buffered data.
   }, {
     key: "_getString",
     value: function _getString(n) {
@@ -46712,13 +44895,11 @@ function () {
       var c = 1;
       var ret = p.data;
       n -= ret.length;
-
       while (p = p.next) {
         var str = p.data;
         var nb = n > str.length ? str.length : n;
         if (nb === str.length) ret += str;else ret += str.slice(0, n);
         n -= nb;
-
         if (n === 0) {
           if (nb === str.length) {
             ++c;
@@ -46727,17 +44908,15 @@ function () {
             this.head = p;
             p.data = str.slice(nb);
           }
-
           break;
         }
-
         ++c;
       }
-
       this.length -= c;
       return ret;
-    } // Consumes a specified amount of bytes from the buffered data.
+    }
 
+    // Consumes a specified amount of bytes from the buffered data.
   }, {
     key: "_getBuffer",
     value: function _getBuffer(n) {
@@ -46746,13 +44925,11 @@ function () {
       var c = 1;
       p.data.copy(ret);
       n -= p.data.length;
-
       while (p = p.next) {
         var buf = p.data;
         var nb = n > buf.length ? buf.length : n;
         buf.copy(ret, ret.length - n, 0, nb);
         n -= nb;
-
         if (n === 0) {
           if (nb === buf.length) {
             ++c;
@@ -46761,21 +44938,19 @@ function () {
             this.head = p;
             p.data = buf.slice(nb);
           }
-
           break;
         }
-
         ++c;
       }
-
       this.length -= c;
       return ret;
-    } // Make sure the linked list only shows the minimal necessary information.
+    }
 
+    // Make sure the linked list only shows the minimal necessary information.
   }, {
     key: custom,
     value: function value(_, options) {
-      return inspect(this, _objectSpread({}, options, {
+      return inspect(this, _objectSpread(_objectSpread({}, options), {}, {
         // Only inspect one level.
         depth: 0,
         // It should not recurse.
@@ -46783,24 +44958,22 @@ function () {
       }));
     }
   }]);
-
   return BufferList;
 }();
 
 /***/ }),
 
-/***/ 43988:
+/***/ 1982:
 /***/ ((module) => {
 
 "use strict";
- // undocumented cb() API, needed for core, not for public API
 
+
+// undocumented cb() API, needed for core, not for public API
 function destroy(err, cb) {
   var _this = this;
-
   var readableDestroyed = this._readableState && this._readableState.destroyed;
   var writableDestroyed = this._writableState && this._writableState.destroyed;
-
   if (readableDestroyed || writableDestroyed) {
     if (cb) {
       cb(err);
@@ -46812,21 +44985,20 @@ function destroy(err, cb) {
         process.nextTick(emitErrorNT, this, err);
       }
     }
-
     return this;
-  } // we set destroyed to true before firing error callbacks in order
-  // to make it re-entrance safe in case destroy() is called within callbacks
+  }
 
+  // we set destroyed to true before firing error callbacks in order
+  // to make it re-entrance safe in case destroy() is called within callbacks
 
   if (this._readableState) {
     this._readableState.destroyed = true;
-  } // if this is a duplex stream mark the writable part as destroyed as well
+  }
 
-
+  // if this is a duplex stream mark the writable part as destroyed as well
   if (this._writableState) {
     this._writableState.destroyed = true;
   }
-
   this._destroy(err || null, function (err) {
     if (!cb && err) {
       if (!_this._writableState) {
@@ -46844,21 +45016,17 @@ function destroy(err, cb) {
       process.nextTick(emitCloseNT, _this);
     }
   });
-
   return this;
 }
-
 function emitErrorAndCloseNT(self, err) {
   emitErrorNT(self, err);
   emitCloseNT(self);
 }
-
 function emitCloseNT(self) {
   if (self._writableState && !self._writableState.emitClose) return;
   if (self._readableState && !self._readableState.emitClose) return;
   self.emit('close');
 }
-
 function undestroy() {
   if (this._readableState) {
     this._readableState.destroyed = false;
@@ -46866,7 +45034,6 @@ function undestroy() {
     this._readableState.ended = false;
     this._readableState.endEmitted = false;
   }
-
   if (this._writableState) {
     this._writableState.destroyed = false;
     this._writableState.ended = false;
@@ -46877,22 +45044,20 @@ function undestroy() {
     this._writableState.errorEmitted = false;
   }
 }
-
 function emitErrorNT(self, err) {
   self.emit('error', err);
 }
-
 function errorOrDestroy(stream, err) {
   // We have tests that rely on errors being emitted
   // in the same tick, so changing this is semver major.
   // For now when you opt-in to autoDestroy we allow
   // the error to be emitted nextTick. In a future
   // semver major update we should change the default to this.
+
   var rState = stream._readableState;
   var wState = stream._writableState;
   if (rState && rState.autoDestroy || wState && wState.autoDestroy) stream.destroy(err);else stream.emit('error', err);
 }
-
 module.exports = {
   destroy: destroy,
   undestroy: undestroy,
@@ -46901,7 +45066,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 26378:
+/***/ 99460:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -46909,77 +45074,61 @@ module.exports = {
 // permission from the author, Mathias Buus (@mafintosh).
 
 
-var ERR_STREAM_PREMATURE_CLOSE = (__nccwpck_require__(33565)/* .codes */ .F).ERR_STREAM_PREMATURE_CLOSE;
 
+var ERR_STREAM_PREMATURE_CLOSE = (__nccwpck_require__(99479)/* .codes */ .F).ERR_STREAM_PREMATURE_CLOSE;
 function once(callback) {
   var called = false;
   return function () {
     if (called) return;
     called = true;
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-
     callback.apply(this, args);
   };
 }
-
 function noop() {}
-
 function isRequest(stream) {
   return stream.setHeader && typeof stream.abort === 'function';
 }
-
 function eos(stream, opts, callback) {
   if (typeof opts === 'function') return eos(stream, null, opts);
   if (!opts) opts = {};
   callback = once(callback || noop);
   var readable = opts.readable || opts.readable !== false && stream.readable;
   var writable = opts.writable || opts.writable !== false && stream.writable;
-
   var onlegacyfinish = function onlegacyfinish() {
     if (!stream.writable) onfinish();
   };
-
   var writableEnded = stream._writableState && stream._writableState.finished;
-
   var onfinish = function onfinish() {
     writable = false;
     writableEnded = true;
     if (!readable) callback.call(stream);
   };
-
   var readableEnded = stream._readableState && stream._readableState.endEmitted;
-
   var onend = function onend() {
     readable = false;
     readableEnded = true;
     if (!writable) callback.call(stream);
   };
-
   var onerror = function onerror(err) {
     callback.call(stream, err);
   };
-
   var onclose = function onclose() {
     var err;
-
     if (readable && !readableEnded) {
       if (!stream._readableState || !stream._readableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
       return callback.call(stream, err);
     }
-
     if (writable && !writableEnded) {
       if (!stream._writableState || !stream._writableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
       return callback.call(stream, err);
     }
   };
-
   var onrequest = function onrequest() {
     stream.req.on('finish', onfinish);
   };
-
   if (isRequest(stream)) {
     stream.on('complete', onfinish);
     stream.on('abort', onclose);
@@ -46989,7 +45138,6 @@ function eos(stream, opts, callback) {
     stream.on('end', onlegacyfinish);
     stream.on('close', onlegacyfinish);
   }
-
   stream.on('end', onend);
   stream.on('finish', onfinish);
   if (opts.error !== false) stream.on('error', onerror);
@@ -47007,64 +45155,53 @@ function eos(stream, opts, callback) {
     stream.removeListener('close', onclose);
   };
 }
-
 module.exports = eos;
 
 /***/ }),
 
-/***/ 54704:
+/***/ 36814:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var ERR_INVALID_ARG_TYPE = (__nccwpck_require__(33565)/* .codes */ .F).ERR_INVALID_ARG_TYPE;
-
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var ERR_INVALID_ARG_TYPE = (__nccwpck_require__(99479)/* .codes */ .F).ERR_INVALID_ARG_TYPE;
 function from(Readable, iterable, opts) {
   var iterator;
-
   if (iterable && typeof iterable.next === 'function') {
     iterator = iterable;
   } else if (iterable && iterable[Symbol.asyncIterator]) iterator = iterable[Symbol.asyncIterator]();else if (iterable && iterable[Symbol.iterator]) iterator = iterable[Symbol.iterator]();else throw new ERR_INVALID_ARG_TYPE('iterable', ['Iterable'], iterable);
-
   var readable = new Readable(_objectSpread({
     objectMode: true
-  }, opts)); // Reading boolean to protect against _read
+  }, opts));
+  // Reading boolean to protect against _read
   // being called before last iteration completion.
-
   var reading = false;
-
   readable._read = function () {
     if (!reading) {
       reading = true;
       next();
     }
   };
-
   function next() {
     return _next2.apply(this, arguments);
   }
-
   function _next2() {
     _next2 = _asyncToGenerator(function* () {
       try {
-        var _ref = yield iterator.next(),
-            value = _ref.value,
-            done = _ref.done;
-
+        var _yield$iterator$next = yield iterator.next(),
+          value = _yield$iterator$next.value,
+          done = _yield$iterator$next.done;
         if (done) {
           readable.push(null);
-        } else if (readable.push((yield value))) {
+        } else if (readable.push(yield value)) {
           next();
         } else {
           reading = false;
@@ -47075,15 +45212,14 @@ function from(Readable, iterable, opts) {
     });
     return _next2.apply(this, arguments);
   }
-
   return readable;
 }
-
 module.exports = from;
+
 
 /***/ }),
 
-/***/ 64546:
+/***/ 6984:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -47091,8 +45227,8 @@ module.exports = from;
 // permission from the author, Mathias Buus (@mafintosh).
 
 
-var eos;
 
+var eos;
 function once(callback) {
   var called = false;
   return function () {
@@ -47101,27 +45237,23 @@ function once(callback) {
     callback.apply(void 0, arguments);
   };
 }
-
-var _require$codes = (__nccwpck_require__(33565)/* .codes */ .F),
-    ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS,
-    ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
-
+var _require$codes = (__nccwpck_require__(99479)/* .codes */ .F),
+  ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS,
+  ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
 function noop(err) {
   // Rethrow the error if it exists to avoid swallowing it
   if (err) throw err;
 }
-
 function isRequest(stream) {
   return stream.setHeader && typeof stream.abort === 'function';
 }
-
 function destroyer(stream, reading, writing, callback) {
   callback = once(callback);
   var closed = false;
   stream.on('close', function () {
     closed = true;
   });
-  if (eos === undefined) eos = __nccwpck_require__(26378);
+  if (eos === undefined) eos = __nccwpck_require__(99460);
   eos(stream, {
     readable: reading,
     writable: writing
@@ -47134,40 +45266,34 @@ function destroyer(stream, reading, writing, callback) {
   return function (err) {
     if (closed) return;
     if (destroyed) return;
-    destroyed = true; // request.destroy just do .end - .abort is what we want
+    destroyed = true;
 
+    // request.destroy just do .end - .abort is what we want
     if (isRequest(stream)) return stream.abort();
     if (typeof stream.destroy === 'function') return stream.destroy();
     callback(err || new ERR_STREAM_DESTROYED('pipe'));
   };
 }
-
 function call(fn) {
   fn();
 }
-
 function pipe(from, to) {
   return from.pipe(to);
 }
-
 function popCallback(streams) {
   if (!streams.length) return noop;
   if (typeof streams[streams.length - 1] !== 'function') return noop;
   return streams.pop();
 }
-
 function pipeline() {
   for (var _len = arguments.length, streams = new Array(_len), _key = 0; _key < _len; _key++) {
     streams[_key] = arguments[_key];
   }
-
   var callback = popCallback(streams);
   if (Array.isArray(streams[0])) streams = streams[0];
-
   if (streams.length < 2) {
     throw new ERR_MISSING_ARGS('streams');
   }
-
   var error;
   var destroys = streams.map(function (stream, i) {
     var reading = i < streams.length - 1;
@@ -47182,46 +45308,40 @@ function pipeline() {
   });
   return streams.reduce(pipe);
 }
-
 module.exports = pipeline;
 
 /***/ }),
 
-/***/ 42943:
+/***/ 26942:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var ERR_INVALID_OPT_VALUE = (__nccwpck_require__(33565)/* .codes */ .F).ERR_INVALID_OPT_VALUE;
-
+var ERR_INVALID_OPT_VALUE = (__nccwpck_require__(99479)/* .codes */ .F).ERR_INVALID_OPT_VALUE;
 function highWaterMarkFrom(options, isDuplex, duplexKey) {
   return options.highWaterMark != null ? options.highWaterMark : isDuplex ? options[duplexKey] : null;
 }
-
 function getHighWaterMark(state, options, duplexKey, isDuplex) {
   var hwm = highWaterMarkFrom(options, isDuplex, duplexKey);
-
   if (hwm != null) {
     if (!(isFinite(hwm) && Math.floor(hwm) === hwm) || hwm < 0) {
       var name = isDuplex ? duplexKey : 'highWaterMark';
       throw new ERR_INVALID_OPT_VALUE(name, hwm);
     }
-
     return Math.floor(hwm);
-  } // Default value
+  }
 
-
+  // Default value
   return state.objectMode ? 16 : 16 * 1024;
 }
-
 module.exports = {
   getHighWaterMark: getHighWaterMark
 };
 
 /***/ }),
 
-/***/ 52772:
+/***/ 26254:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = __nccwpck_require__(2203);
@@ -47229,7 +45349,7 @@ module.exports = __nccwpck_require__(2203);
 
 /***/ }),
 
-/***/ 27714:
+/***/ 45336:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 var Stream = __nccwpck_require__(2203);
@@ -47238,23 +45358,24 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
   Object.assign(module.exports, Stream);
   module.exports.Stream = Stream;
 } else {
-  exports = module.exports = __nccwpck_require__(99544);
+  exports = module.exports = __nccwpck_require__(74870);
   exports.Stream = Stream || exports;
   exports.Readable = exports;
-  exports.Writable = __nccwpck_require__(50472);
-  exports.Duplex = __nccwpck_require__(19594);
-  exports.Transform = __nccwpck_require__(32822);
-  exports.PassThrough = __nccwpck_require__(72140);
-  exports.finished = __nccwpck_require__(26378);
-  exports.pipeline = __nccwpck_require__(64546);
+  exports.Writable = __nccwpck_require__(25050);
+  exports.Duplex = __nccwpck_require__(36592);
+  exports.Transform = __nccwpck_require__(23264);
+  exports.PassThrough = __nccwpck_require__(26450);
+  exports.finished = __nccwpck_require__(99460);
+  exports.pipeline = __nccwpck_require__(6984);
 }
 
 
 /***/ }),
 
-/***/ 79253:
+/***/ 65249:
 /***/ ((module, exports, __nccwpck_require__) => {
 
+/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
 var buffer = __nccwpck_require__(20181)
 var Buffer = buffer.Buffer
@@ -47276,6 +45397,8 @@ if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow)
 function SafeBuffer (arg, encodingOrOffset, length) {
   return Buffer(arg, encodingOrOffset, length)
 }
+
+SafeBuffer.prototype = Object.create(Buffer.prototype)
 
 // Copy static methods from Buffer
 copyProps(Buffer, SafeBuffer)
@@ -48849,2779 +46972,6 @@ function coerce (version) {
     '.' + (match[2] || '0') +
     '.' + (match[3] || '0'))
 }
-
-
-/***/ }),
-
-/***/ 29645:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const ANY = Symbol('SemVer ANY')
-// hoisted class for cyclic dependency
-class Comparator {
-  static get ANY () {
-    return ANY
-  }
-
-  constructor (comp, options) {
-    options = parseOptions(options)
-
-    if (comp instanceof Comparator) {
-      if (comp.loose === !!options.loose) {
-        return comp
-      } else {
-        comp = comp.value
-      }
-    }
-
-    comp = comp.trim().split(/\s+/).join(' ')
-    debug('comparator', comp, options)
-    this.options = options
-    this.loose = !!options.loose
-    this.parse(comp)
-
-    if (this.semver === ANY) {
-      this.value = ''
-    } else {
-      this.value = this.operator + this.semver.version
-    }
-
-    debug('comp', this)
-  }
-
-  parse (comp) {
-    const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
-    const m = comp.match(r)
-
-    if (!m) {
-      throw new TypeError(`Invalid comparator: ${comp}`)
-    }
-
-    this.operator = m[1] !== undefined ? m[1] : ''
-    if (this.operator === '=') {
-      this.operator = ''
-    }
-
-    // if it literally is just '>' or '' then allow anything.
-    if (!m[2]) {
-      this.semver = ANY
-    } else {
-      this.semver = new SemVer(m[2], this.options.loose)
-    }
-  }
-
-  toString () {
-    return this.value
-  }
-
-  test (version) {
-    debug('Comparator.test', version, this.options.loose)
-
-    if (this.semver === ANY || version === ANY) {
-      return true
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options)
-      } catch (er) {
-        return false
-      }
-    }
-
-    return cmp(version, this.operator, this.semver, this.options)
-  }
-
-  intersects (comp, options) {
-    if (!(comp instanceof Comparator)) {
-      throw new TypeError('a Comparator is required')
-    }
-
-    if (this.operator === '') {
-      if (this.value === '') {
-        return true
-      }
-      return new Range(comp.value, options).test(this.value)
-    } else if (comp.operator === '') {
-      if (comp.value === '') {
-        return true
-      }
-      return new Range(this.value, options).test(comp.semver)
-    }
-
-    options = parseOptions(options)
-
-    // Special cases where nothing can possibly be lower
-    if (options.includePrerelease &&
-      (this.value === '<0.0.0-0' || comp.value === '<0.0.0-0')) {
-      return false
-    }
-    if (!options.includePrerelease &&
-      (this.value.startsWith('<0.0.0') || comp.value.startsWith('<0.0.0'))) {
-      return false
-    }
-
-    // Same direction increasing (> or >=)
-    if (this.operator.startsWith('>') && comp.operator.startsWith('>')) {
-      return true
-    }
-    // Same direction decreasing (< or <=)
-    if (this.operator.startsWith('<') && comp.operator.startsWith('<')) {
-      return true
-    }
-    // same SemVer and both sides are inclusive (<= or >=)
-    if (
-      (this.semver.version === comp.semver.version) &&
-      this.operator.includes('=') && comp.operator.includes('=')) {
-      return true
-    }
-    // opposite directions less than
-    if (cmp(this.semver, '<', comp.semver, options) &&
-      this.operator.startsWith('>') && comp.operator.startsWith('<')) {
-      return true
-    }
-    // opposite directions greater than
-    if (cmp(this.semver, '>', comp.semver, options) &&
-      this.operator.startsWith('<') && comp.operator.startsWith('>')) {
-      return true
-    }
-    return false
-  }
-}
-
-module.exports = Comparator
-
-const parseOptions = __nccwpck_require__(80198)
-const { safeRe: re, t } = __nccwpck_require__(56393)
-const cmp = __nccwpck_require__(95476)
-const debug = __nccwpck_require__(43089)
-const SemVer = __nccwpck_require__(91525)
-const Range = __nccwpck_require__(70468)
-
-
-/***/ }),
-
-/***/ 70468:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SPACE_CHARACTERS = /\s+/g
-
-// hoisted class for cyclic dependency
-class Range {
-  constructor (range, options) {
-    options = parseOptions(options)
-
-    if (range instanceof Range) {
-      if (
-        range.loose === !!options.loose &&
-        range.includePrerelease === !!options.includePrerelease
-      ) {
-        return range
-      } else {
-        return new Range(range.raw, options)
-      }
-    }
-
-    if (range instanceof Comparator) {
-      // just put it in the set and return
-      this.raw = range.value
-      this.set = [[range]]
-      this.formatted = undefined
-      return this
-    }
-
-    this.options = options
-    this.loose = !!options.loose
-    this.includePrerelease = !!options.includePrerelease
-
-    // First reduce all whitespace as much as possible so we do not have to rely
-    // on potentially slow regexes like \s*. This is then stored and used for
-    // future error messages as well.
-    this.raw = range.trim().replace(SPACE_CHARACTERS, ' ')
-
-    // First, split on ||
-    this.set = this.raw
-      .split('||')
-      // map the range to a 2d array of comparators
-      .map(r => this.parseRange(r.trim()))
-      // throw out any comparator lists that are empty
-      // this generally means that it was not a valid range, which is allowed
-      // in loose mode, but will still throw if the WHOLE range is invalid.
-      .filter(c => c.length)
-
-    if (!this.set.length) {
-      throw new TypeError(`Invalid SemVer Range: ${this.raw}`)
-    }
-
-    // if we have any that are not the null set, throw out null sets.
-    if (this.set.length > 1) {
-      // keep the first one, in case they're all null sets
-      const first = this.set[0]
-      this.set = this.set.filter(c => !isNullSet(c[0]))
-      if (this.set.length === 0) {
-        this.set = [first]
-      } else if (this.set.length > 1) {
-        // if we have any that are *, then the range is just *
-        for (const c of this.set) {
-          if (c.length === 1 && isAny(c[0])) {
-            this.set = [c]
-            break
-          }
-        }
-      }
-    }
-
-    this.formatted = undefined
-  }
-
-  get range () {
-    if (this.formatted === undefined) {
-      this.formatted = ''
-      for (let i = 0; i < this.set.length; i++) {
-        if (i > 0) {
-          this.formatted += '||'
-        }
-        const comps = this.set[i]
-        for (let k = 0; k < comps.length; k++) {
-          if (k > 0) {
-            this.formatted += ' '
-          }
-          this.formatted += comps[k].toString().trim()
-        }
-      }
-    }
-    return this.formatted
-  }
-
-  format () {
-    return this.range
-  }
-
-  toString () {
-    return this.range
-  }
-
-  parseRange (range) {
-    // memoize range parsing for performance.
-    // this is a very hot path, and fully deterministic.
-    const memoOpts =
-      (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) |
-      (this.options.loose && FLAG_LOOSE)
-    const memoKey = memoOpts + ':' + range
-    const cached = cache.get(memoKey)
-    if (cached) {
-      return cached
-    }
-
-    const loose = this.options.loose
-    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
-    range = range.replace(hr, hyphenReplace(this.options.includePrerelease))
-    debug('hyphen replace', range)
-
-    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
-    debug('comparator trim', range)
-
-    // `~ 1.2.3` => `~1.2.3`
-    range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
-    debug('tilde trim', range)
-
-    // `^ 1.2.3` => `^1.2.3`
-    range = range.replace(re[t.CARETTRIM], caretTrimReplace)
-    debug('caret trim', range)
-
-    // At this point, the range is completely trimmed and
-    // ready to be split into comparators.
-
-    let rangeList = range
-      .split(' ')
-      .map(comp => parseComparator(comp, this.options))
-      .join(' ')
-      .split(/\s+/)
-      // >=0.0.0 is equivalent to *
-      .map(comp => replaceGTE0(comp, this.options))
-
-    if (loose) {
-      // in loose mode, throw out any that are not valid comparators
-      rangeList = rangeList.filter(comp => {
-        debug('loose invalid filter', comp, this.options)
-        return !!comp.match(re[t.COMPARATORLOOSE])
-      })
-    }
-    debug('range list', rangeList)
-
-    // if any comparators are the null set, then replace with JUST null set
-    // if more than one comparator, remove any * comparators
-    // also, don't include the same comparator more than once
-    const rangeMap = new Map()
-    const comparators = rangeList.map(comp => new Comparator(comp, this.options))
-    for (const comp of comparators) {
-      if (isNullSet(comp)) {
-        return [comp]
-      }
-      rangeMap.set(comp.value, comp)
-    }
-    if (rangeMap.size > 1 && rangeMap.has('')) {
-      rangeMap.delete('')
-    }
-
-    const result = [...rangeMap.values()]
-    cache.set(memoKey, result)
-    return result
-  }
-
-  intersects (range, options) {
-    if (!(range instanceof Range)) {
-      throw new TypeError('a Range is required')
-    }
-
-    return this.set.some((thisComparators) => {
-      return (
-        isSatisfiable(thisComparators, options) &&
-        range.set.some((rangeComparators) => {
-          return (
-            isSatisfiable(rangeComparators, options) &&
-            thisComparators.every((thisComparator) => {
-              return rangeComparators.every((rangeComparator) => {
-                return thisComparator.intersects(rangeComparator, options)
-              })
-            })
-          )
-        })
-      )
-    })
-  }
-
-  // if ANY of the sets match ALL of its comparators, then pass
-  test (version) {
-    if (!version) {
-      return false
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options)
-      } catch (er) {
-        return false
-      }
-    }
-
-    for (let i = 0; i < this.set.length; i++) {
-      if (testSet(this.set[i], version, this.options)) {
-        return true
-      }
-    }
-    return false
-  }
-}
-
-module.exports = Range
-
-const LRU = __nccwpck_require__(41417)
-const cache = new LRU()
-
-const parseOptions = __nccwpck_require__(80198)
-const Comparator = __nccwpck_require__(29645)
-const debug = __nccwpck_require__(43089)
-const SemVer = __nccwpck_require__(91525)
-const {
-  safeRe: re,
-  t,
-  comparatorTrimReplace,
-  tildeTrimReplace,
-  caretTrimReplace,
-} = __nccwpck_require__(56393)
-const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = __nccwpck_require__(86935)
-
-const isNullSet = c => c.value === '<0.0.0-0'
-const isAny = c => c.value === ''
-
-// take a set of comparators and determine whether there
-// exists a version which can satisfy it
-const isSatisfiable = (comparators, options) => {
-  let result = true
-  const remainingComparators = comparators.slice()
-  let testComparator = remainingComparators.pop()
-
-  while (result && remainingComparators.length) {
-    result = remainingComparators.every((otherComparator) => {
-      return testComparator.intersects(otherComparator, options)
-    })
-
-    testComparator = remainingComparators.pop()
-  }
-
-  return result
-}
-
-// comprised of xranges, tildes, stars, and gtlt's at this point.
-// already replaced the hyphen ranges
-// turn into a set of JUST comparators.
-const parseComparator = (comp, options) => {
-  comp = comp.replace(re[t.BUILD], '')
-  debug('comp', comp, options)
-  comp = replaceCarets(comp, options)
-  debug('caret', comp)
-  comp = replaceTildes(comp, options)
-  debug('tildes', comp)
-  comp = replaceXRanges(comp, options)
-  debug('xrange', comp)
-  comp = replaceStars(comp, options)
-  debug('stars', comp)
-  return comp
-}
-
-const isX = id => !id || id.toLowerCase() === 'x' || id === '*'
-
-// ~, ~> --> * (any, kinda silly)
-// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
-// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
-// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
-// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
-// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
-// ~0.0.1 --> >=0.0.1 <0.1.0-0
-const replaceTildes = (comp, options) => {
-  return comp
-    .trim()
-    .split(/\s+/)
-    .map((c) => replaceTilde(c, options))
-    .join(' ')
-}
-
-const replaceTilde = (comp, options) => {
-  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug('tilde', comp, _, M, m, p, pr)
-    let ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`
-    } else if (isX(p)) {
-      // ~1.2 == >=1.2.0 <1.3.0-0
-      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`
-    } else if (pr) {
-      debug('replaceTilde pr', pr)
-      ret = `>=${M}.${m}.${p}-${pr
-      } <${M}.${+m + 1}.0-0`
-    } else {
-      // ~1.2.3 == >=1.2.3 <1.3.0-0
-      ret = `>=${M}.${m}.${p
-      } <${M}.${+m + 1}.0-0`
-    }
-
-    debug('tilde return', ret)
-    return ret
-  })
-}
-
-// ^ --> * (any, kinda silly)
-// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
-// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
-// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
-// ^1.2.3 --> >=1.2.3 <2.0.0-0
-// ^1.2.0 --> >=1.2.0 <2.0.0-0
-// ^0.0.1 --> >=0.0.1 <0.0.2-0
-// ^0.1.0 --> >=0.1.0 <0.2.0-0
-const replaceCarets = (comp, options) => {
-  return comp
-    .trim()
-    .split(/\s+/)
-    .map((c) => replaceCaret(c, options))
-    .join(' ')
-}
-
-const replaceCaret = (comp, options) => {
-  debug('caret', comp, options)
-  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
-  const z = options.includePrerelease ? '-0' : ''
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug('caret', comp, _, M, m, p, pr)
-    let ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`
-    } else if (isX(p)) {
-      if (M === '0') {
-        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`
-      } else {
-        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`
-      }
-    } else if (pr) {
-      debug('replaceCaret pr', pr)
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${m}.${+p + 1}-0`
-        } else {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${+m + 1}.0-0`
-        }
-      } else {
-        ret = `>=${M}.${m}.${p}-${pr
-        } <${+M + 1}.0.0-0`
-      }
-    } else {
-      debug('no pr')
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${m}.${+p + 1}-0`
-        } else {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${+m + 1}.0-0`
-        }
-      } else {
-        ret = `>=${M}.${m}.${p
-        } <${+M + 1}.0.0-0`
-      }
-    }
-
-    debug('caret return', ret)
-    return ret
-  })
-}
-
-const replaceXRanges = (comp, options) => {
-  debug('replaceXRanges', comp, options)
-  return comp
-    .split(/\s+/)
-    .map((c) => replaceXRange(c, options))
-    .join(' ')
-}
-
-const replaceXRange = (comp, options) => {
-  comp = comp.trim()
-  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
-  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
-    debug('xRange', comp, ret, gtlt, M, m, p, pr)
-    const xM = isX(M)
-    const xm = xM || isX(m)
-    const xp = xm || isX(p)
-    const anyX = xp
-
-    if (gtlt === '=' && anyX) {
-      gtlt = ''
-    }
-
-    // if we're including prereleases in the match, then we need
-    // to fix this to -0, the lowest possible prerelease value
-    pr = options.includePrerelease ? '-0' : ''
-
-    if (xM) {
-      if (gtlt === '>' || gtlt === '<') {
-        // nothing is allowed
-        ret = '<0.0.0-0'
-      } else {
-        // nothing is forbidden
-        ret = '*'
-      }
-    } else if (gtlt && anyX) {
-      // we know patch is an x, because we have any x at all.
-      // replace X with 0
-      if (xm) {
-        m = 0
-      }
-      p = 0
-
-      if (gtlt === '>') {
-        // >1 => >=2.0.0
-        // >1.2 => >=1.3.0
-        gtlt = '>='
-        if (xm) {
-          M = +M + 1
-          m = 0
-          p = 0
-        } else {
-          m = +m + 1
-          p = 0
-        }
-      } else if (gtlt === '<=') {
-        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-        gtlt = '<'
-        if (xm) {
-          M = +M + 1
-        } else {
-          m = +m + 1
-        }
-      }
-
-      if (gtlt === '<') {
-        pr = '-0'
-      }
-
-      ret = `${gtlt + M}.${m}.${p}${pr}`
-    } else if (xm) {
-      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`
-    } else if (xp) {
-      ret = `>=${M}.${m}.0${pr
-      } <${M}.${+m + 1}.0-0`
-    }
-
-    debug('xRange return', ret)
-
-    return ret
-  })
-}
-
-// Because * is AND-ed with everything else in the comparator,
-// and '' means "any version", just remove the *s entirely.
-const replaceStars = (comp, options) => {
-  debug('replaceStars', comp, options)
-  // Looseness is ignored here.  star is always as loose as it gets!
-  return comp
-    .trim()
-    .replace(re[t.STAR], '')
-}
-
-const replaceGTE0 = (comp, options) => {
-  debug('replaceGTE0', comp, options)
-  return comp
-    .trim()
-    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')
-}
-
-// This function is passed to string.replace(re[t.HYPHENRANGE])
-// M, m, patch, prerelease, build
-// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
-// 1.2 - 3.4 => >=1.2.0 <3.5.0-0
-// TODO build?
-const hyphenReplace = incPr => ($0,
-  from, fM, fm, fp, fpr, fb,
-  to, tM, tm, tp, tpr) => {
-  if (isX(fM)) {
-    from = ''
-  } else if (isX(fm)) {
-    from = `>=${fM}.0.0${incPr ? '-0' : ''}`
-  } else if (isX(fp)) {
-    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`
-  } else if (fpr) {
-    from = `>=${from}`
-  } else {
-    from = `>=${from}${incPr ? '-0' : ''}`
-  }
-
-  if (isX(tM)) {
-    to = ''
-  } else if (isX(tm)) {
-    to = `<${+tM + 1}.0.0-0`
-  } else if (isX(tp)) {
-    to = `<${tM}.${+tm + 1}.0-0`
-  } else if (tpr) {
-    to = `<=${tM}.${tm}.${tp}-${tpr}`
-  } else if (incPr) {
-    to = `<${tM}.${tm}.${+tp + 1}-0`
-  } else {
-    to = `<=${to}`
-  }
-
-  return `${from} ${to}`.trim()
-}
-
-const testSet = (set, version, options) => {
-  for (let i = 0; i < set.length; i++) {
-    if (!set[i].test(version)) {
-      return false
-    }
-  }
-
-  if (version.prerelease.length && !options.includePrerelease) {
-    // Find the set of versions that are allowed to have prereleases
-    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-    // That should allow `1.2.3-pr.2` to pass.
-    // However, `1.2.4-alpha.notready` should NOT be allowed,
-    // even though it's within the range set by the comparators.
-    for (let i = 0; i < set.length; i++) {
-      debug(set[i].semver)
-      if (set[i].semver === Comparator.ANY) {
-        continue
-      }
-
-      if (set[i].semver.prerelease.length > 0) {
-        const allowed = set[i].semver
-        if (allowed.major === version.major &&
-            allowed.minor === version.minor &&
-            allowed.patch === version.patch) {
-          return true
-        }
-      }
-    }
-
-    // Version has a -pre, but it's not one of the ones we like.
-    return false
-  }
-
-  return true
-}
-
-
-/***/ }),
-
-/***/ 91525:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const debug = __nccwpck_require__(43089)
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = __nccwpck_require__(86935)
-const { safeRe: re, t } = __nccwpck_require__(56393)
-
-const parseOptions = __nccwpck_require__(80198)
-const { compareIdentifiers } = __nccwpck_require__(23086)
-class SemVer {
-  constructor (version, options) {
-    options = parseOptions(options)
-
-    if (version instanceof SemVer) {
-      if (version.loose === !!options.loose &&
-        version.includePrerelease === !!options.includePrerelease) {
-        return version
-      } else {
-        version = version.version
-      }
-    } else if (typeof version !== 'string') {
-      throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`)
-    }
-
-    if (version.length > MAX_LENGTH) {
-      throw new TypeError(
-        `version is longer than ${MAX_LENGTH} characters`
-      )
-    }
-
-    debug('SemVer', version, options)
-    this.options = options
-    this.loose = !!options.loose
-    // this isn't actually relevant for versions, but keep it so that we
-    // don't run into trouble passing this.options around.
-    this.includePrerelease = !!options.includePrerelease
-
-    const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
-
-    if (!m) {
-      throw new TypeError(`Invalid Version: ${version}`)
-    }
-
-    this.raw = version
-
-    // these are actually numbers
-    this.major = +m[1]
-    this.minor = +m[2]
-    this.patch = +m[3]
-
-    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-      throw new TypeError('Invalid major version')
-    }
-
-    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-      throw new TypeError('Invalid minor version')
-    }
-
-    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-      throw new TypeError('Invalid patch version')
-    }
-
-    // numberify any prerelease numeric ids
-    if (!m[4]) {
-      this.prerelease = []
-    } else {
-      this.prerelease = m[4].split('.').map((id) => {
-        if (/^[0-9]+$/.test(id)) {
-          const num = +id
-          if (num >= 0 && num < MAX_SAFE_INTEGER) {
-            return num
-          }
-        }
-        return id
-      })
-    }
-
-    this.build = m[5] ? m[5].split('.') : []
-    this.format()
-  }
-
-  format () {
-    this.version = `${this.major}.${this.minor}.${this.patch}`
-    if (this.prerelease.length) {
-      this.version += `-${this.prerelease.join('.')}`
-    }
-    return this.version
-  }
-
-  toString () {
-    return this.version
-  }
-
-  compare (other) {
-    debug('SemVer.compare', this.version, this.options, other)
-    if (!(other instanceof SemVer)) {
-      if (typeof other === 'string' && other === this.version) {
-        return 0
-      }
-      other = new SemVer(other, this.options)
-    }
-
-    if (other.version === this.version) {
-      return 0
-    }
-
-    return this.compareMain(other) || this.comparePre(other)
-  }
-
-  compareMain (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    if (this.major < other.major) {
-      return -1
-    }
-    if (this.major > other.major) {
-      return 1
-    }
-    if (this.minor < other.minor) {
-      return -1
-    }
-    if (this.minor > other.minor) {
-      return 1
-    }
-    if (this.patch < other.patch) {
-      return -1
-    }
-    if (this.patch > other.patch) {
-      return 1
-    }
-    return 0
-  }
-
-  comparePre (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    // NOT having a prerelease is > having one
-    if (this.prerelease.length && !other.prerelease.length) {
-      return -1
-    } else if (!this.prerelease.length && other.prerelease.length) {
-      return 1
-    } else if (!this.prerelease.length && !other.prerelease.length) {
-      return 0
-    }
-
-    let i = 0
-    do {
-      const a = this.prerelease[i]
-      const b = other.prerelease[i]
-      debug('prerelease compare', i, a, b)
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  }
-
-  compareBuild (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    let i = 0
-    do {
-      const a = this.build[i]
-      const b = other.build[i]
-      debug('build compare', i, a, b)
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  }
-
-  // preminor will bump the version up to the next minor release, and immediately
-  // down to pre-release. premajor and prepatch work the same way.
-  inc (release, identifier, identifierBase) {
-    if (release.startsWith('pre')) {
-      if (!identifier && identifierBase === false) {
-        throw new Error('invalid increment argument: identifier is empty')
-      }
-      // Avoid an invalid semver results
-      if (identifier) {
-        const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE])
-        if (!match || match[1] !== identifier) {
-          throw new Error(`invalid identifier: ${identifier}`)
-        }
-      }
-    }
-
-    switch (release) {
-      case 'premajor':
-        this.prerelease.length = 0
-        this.patch = 0
-        this.minor = 0
-        this.major++
-        this.inc('pre', identifier, identifierBase)
-        break
-      case 'preminor':
-        this.prerelease.length = 0
-        this.patch = 0
-        this.minor++
-        this.inc('pre', identifier, identifierBase)
-        break
-      case 'prepatch':
-        // If this is already a prerelease, it will bump to the next version
-        // drop any prereleases that might already exist, since they are not
-        // relevant at this point.
-        this.prerelease.length = 0
-        this.inc('patch', identifier, identifierBase)
-        this.inc('pre', identifier, identifierBase)
-        break
-      // If the input is a non-prerelease version, this acts the same as
-      // prepatch.
-      case 'prerelease':
-        if (this.prerelease.length === 0) {
-          this.inc('patch', identifier, identifierBase)
-        }
-        this.inc('pre', identifier, identifierBase)
-        break
-      case 'release':
-        if (this.prerelease.length === 0) {
-          throw new Error(`version ${this.raw} is not a prerelease`)
-        }
-        this.prerelease.length = 0
-        break
-
-      case 'major':
-        // If this is a pre-major version, bump up to the same major version.
-        // Otherwise increment major.
-        // 1.0.0-5 bumps to 1.0.0
-        // 1.1.0 bumps to 2.0.0
-        if (
-          this.minor !== 0 ||
-          this.patch !== 0 ||
-          this.prerelease.length === 0
-        ) {
-          this.major++
-        }
-        this.minor = 0
-        this.patch = 0
-        this.prerelease = []
-        break
-      case 'minor':
-        // If this is a pre-minor version, bump up to the same minor version.
-        // Otherwise increment minor.
-        // 1.2.0-5 bumps to 1.2.0
-        // 1.2.1 bumps to 1.3.0
-        if (this.patch !== 0 || this.prerelease.length === 0) {
-          this.minor++
-        }
-        this.patch = 0
-        this.prerelease = []
-        break
-      case 'patch':
-        // If this is not a pre-release version, it will increment the patch.
-        // If it is a pre-release it will bump up to the same patch version.
-        // 1.2.0-5 patches to 1.2.0
-        // 1.2.0 patches to 1.2.1
-        if (this.prerelease.length === 0) {
-          this.patch++
-        }
-        this.prerelease = []
-        break
-      // This probably shouldn't be used publicly.
-      // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
-      case 'pre': {
-        const base = Number(identifierBase) ? 1 : 0
-
-        if (this.prerelease.length === 0) {
-          this.prerelease = [base]
-        } else {
-          let i = this.prerelease.length
-          while (--i >= 0) {
-            if (typeof this.prerelease[i] === 'number') {
-              this.prerelease[i]++
-              i = -2
-            }
-          }
-          if (i === -1) {
-            // didn't increment anything
-            if (identifier === this.prerelease.join('.') && identifierBase === false) {
-              throw new Error('invalid increment argument: identifier already exists')
-            }
-            this.prerelease.push(base)
-          }
-        }
-        if (identifier) {
-          // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-          // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-          let prerelease = [identifier, base]
-          if (identifierBase === false) {
-            prerelease = [identifier]
-          }
-          if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
-            if (isNaN(this.prerelease[1])) {
-              this.prerelease = prerelease
-            }
-          } else {
-            this.prerelease = prerelease
-          }
-        }
-        break
-      }
-      default:
-        throw new Error(`invalid increment argument: ${release}`)
-    }
-    this.raw = this.format()
-    if (this.build.length) {
-      this.raw += `+${this.build.join('.')}`
-    }
-    return this
-  }
-}
-
-module.exports = SemVer
-
-
-/***/ }),
-
-/***/ 11033:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const parse = __nccwpck_require__(22019)
-const clean = (version, options) => {
-  const s = parse(version.trim().replace(/^[=v]+/, ''), options)
-  return s ? s.version : null
-}
-module.exports = clean
-
-
-/***/ }),
-
-/***/ 95476:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const eq = __nccwpck_require__(20976)
-const neq = __nccwpck_require__(38940)
-const gt = __nccwpck_require__(39361)
-const gte = __nccwpck_require__(91906)
-const lt = __nccwpck_require__(43390)
-const lte = __nccwpck_require__(39911)
-
-const cmp = (a, op, b, loose) => {
-  switch (op) {
-    case '===':
-      if (typeof a === 'object') {
-        a = a.version
-      }
-      if (typeof b === 'object') {
-        b = b.version
-      }
-      return a === b
-
-    case '!==':
-      if (typeof a === 'object') {
-        a = a.version
-      }
-      if (typeof b === 'object') {
-        b = b.version
-      }
-      return a !== b
-
-    case '':
-    case '=':
-    case '==':
-      return eq(a, b, loose)
-
-    case '!=':
-      return neq(a, b, loose)
-
-    case '>':
-      return gt(a, b, loose)
-
-    case '>=':
-      return gte(a, b, loose)
-
-    case '<':
-      return lt(a, b, loose)
-
-    case '<=':
-      return lte(a, b, loose)
-
-    default:
-      throw new TypeError(`Invalid operator: ${op}`)
-  }
-}
-module.exports = cmp
-
-
-/***/ }),
-
-/***/ 6799:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const parse = __nccwpck_require__(22019)
-const { safeRe: re, t } = __nccwpck_require__(56393)
-
-const coerce = (version, options) => {
-  if (version instanceof SemVer) {
-    return version
-  }
-
-  if (typeof version === 'number') {
-    version = String(version)
-  }
-
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  options = options || {}
-
-  let match = null
-  if (!options.rtl) {
-    match = version.match(options.includePrerelease ? re[t.COERCEFULL] : re[t.COERCE])
-  } else {
-    // Find the right-most coercible string that does not share
-    // a terminus with a more left-ward coercible string.
-    // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
-    // With includePrerelease option set, '1.2.3.4-rc' wants to coerce '2.3.4-rc', not '2.3.4'
-    //
-    // Walk through the string checking with a /g regexp
-    // Manually set the index so as to pick up overlapping matches.
-    // Stop when we get a match that ends at the string end, since no
-    // coercible string can be more right-ward without the same terminus.
-    const coerceRtlRegex = options.includePrerelease ? re[t.COERCERTLFULL] : re[t.COERCERTL]
-    let next
-    while ((next = coerceRtlRegex.exec(version)) &&
-        (!match || match.index + match[0].length !== version.length)
-    ) {
-      if (!match ||
-            next.index + next[0].length !== match.index + match[0].length) {
-        match = next
-      }
-      coerceRtlRegex.lastIndex = next.index + next[1].length + next[2].length
-    }
-    // leave it in a clean state
-    coerceRtlRegex.lastIndex = -1
-  }
-
-  if (match === null) {
-    return null
-  }
-
-  const major = match[2]
-  const minor = match[3] || '0'
-  const patch = match[4] || '0'
-  const prerelease = options.includePrerelease && match[5] ? `-${match[5]}` : ''
-  const build = options.includePrerelease && match[6] ? `+${match[6]}` : ''
-
-  return parse(`${major}.${minor}.${patch}${prerelease}${build}`, options)
-}
-module.exports = coerce
-
-
-/***/ }),
-
-/***/ 18266:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const compareBuild = (a, b, loose) => {
-  const versionA = new SemVer(a, loose)
-  const versionB = new SemVer(b, loose)
-  return versionA.compare(versionB) || versionA.compareBuild(versionB)
-}
-module.exports = compareBuild
-
-
-/***/ }),
-
-/***/ 40996:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const compareLoose = (a, b) => compare(a, b, true)
-module.exports = compareLoose
-
-
-/***/ }),
-
-/***/ 93963:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const compare = (a, b, loose) =>
-  new SemVer(a, loose).compare(new SemVer(b, loose))
-
-module.exports = compare
-
-
-/***/ }),
-
-/***/ 15189:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const parse = __nccwpck_require__(22019)
-
-const diff = (version1, version2) => {
-  const v1 = parse(version1, null, true)
-  const v2 = parse(version2, null, true)
-  const comparison = v1.compare(v2)
-
-  if (comparison === 0) {
-    return null
-  }
-
-  const v1Higher = comparison > 0
-  const highVersion = v1Higher ? v1 : v2
-  const lowVersion = v1Higher ? v2 : v1
-  const highHasPre = !!highVersion.prerelease.length
-  const lowHasPre = !!lowVersion.prerelease.length
-
-  if (lowHasPre && !highHasPre) {
-    // Going from prerelease -> no prerelease requires some special casing
-
-    // If the low version has only a major, then it will always be a major
-    // Some examples:
-    // 1.0.0-1 -> 1.0.0
-    // 1.0.0-1 -> 1.1.1
-    // 1.0.0-1 -> 2.0.0
-    if (!lowVersion.patch && !lowVersion.minor) {
-      return 'major'
-    }
-
-    // If the main part has no difference
-    if (lowVersion.compareMain(highVersion) === 0) {
-      if (lowVersion.minor && !lowVersion.patch) {
-        return 'minor'
-      }
-      return 'patch'
-    }
-  }
-
-  // add the `pre` prefix if we are going to a prerelease version
-  const prefix = highHasPre ? 'pre' : ''
-
-  if (v1.major !== v2.major) {
-    return prefix + 'major'
-  }
-
-  if (v1.minor !== v2.minor) {
-    return prefix + 'minor'
-  }
-
-  if (v1.patch !== v2.patch) {
-    return prefix + 'patch'
-  }
-
-  // high and low are prereleases
-  return 'prerelease'
-}
-
-module.exports = diff
-
-
-/***/ }),
-
-/***/ 20976:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const eq = (a, b, loose) => compare(a, b, loose) === 0
-module.exports = eq
-
-
-/***/ }),
-
-/***/ 39361:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const gt = (a, b, loose) => compare(a, b, loose) > 0
-module.exports = gt
-
-
-/***/ }),
-
-/***/ 91906:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const gte = (a, b, loose) => compare(a, b, loose) >= 0
-module.exports = gte
-
-
-/***/ }),
-
-/***/ 46708:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-
-const inc = (version, release, options, identifier, identifierBase) => {
-  if (typeof (options) === 'string') {
-    identifierBase = identifier
-    identifier = options
-    options = undefined
-  }
-
-  try {
-    return new SemVer(
-      version instanceof SemVer ? version.version : version,
-      options
-    ).inc(release, identifier, identifierBase).version
-  } catch (er) {
-    return null
-  }
-}
-module.exports = inc
-
-
-/***/ }),
-
-/***/ 43390:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const lt = (a, b, loose) => compare(a, b, loose) < 0
-module.exports = lt
-
-
-/***/ }),
-
-/***/ 39911:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const lte = (a, b, loose) => compare(a, b, loose) <= 0
-module.exports = lte
-
-
-/***/ }),
-
-/***/ 16141:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const major = (a, loose) => new SemVer(a, loose).major
-module.exports = major
-
-
-/***/ }),
-
-/***/ 83417:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const minor = (a, loose) => new SemVer(a, loose).minor
-module.exports = minor
-
-
-/***/ }),
-
-/***/ 38940:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const neq = (a, b, loose) => compare(a, b, loose) !== 0
-module.exports = neq
-
-
-/***/ }),
-
-/***/ 22019:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const parse = (version, options, throwErrors = false) => {
-  if (version instanceof SemVer) {
-    return version
-  }
-  try {
-    return new SemVer(version, options)
-  } catch (er) {
-    if (!throwErrors) {
-      return null
-    }
-    throw er
-  }
-}
-
-module.exports = parse
-
-
-/***/ }),
-
-/***/ 32946:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const patch = (a, loose) => new SemVer(a, loose).patch
-module.exports = patch
-
-
-/***/ }),
-
-/***/ 18388:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const parse = __nccwpck_require__(22019)
-const prerelease = (version, options) => {
-  const parsed = parse(version, options)
-  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
-}
-module.exports = prerelease
-
-
-/***/ }),
-
-/***/ 83331:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compare = __nccwpck_require__(93963)
-const rcompare = (a, b, loose) => compare(b, a, loose)
-module.exports = rcompare
-
-
-/***/ }),
-
-/***/ 64946:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compareBuild = __nccwpck_require__(18266)
-const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose))
-module.exports = rsort
-
-
-/***/ }),
-
-/***/ 76957:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const Range = __nccwpck_require__(70468)
-const satisfies = (version, range, options) => {
-  try {
-    range = new Range(range, options)
-  } catch (er) {
-    return false
-  }
-  return range.test(version)
-}
-module.exports = satisfies
-
-
-/***/ }),
-
-/***/ 40378:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const compareBuild = __nccwpck_require__(18266)
-const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose))
-module.exports = sort
-
-
-/***/ }),
-
-/***/ 13836:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const parse = __nccwpck_require__(22019)
-const constants = __nccwpck_require__(86935)
-const SemVer = __nccwpck_require__(91525)
-
-const truncate = (version, truncation, options) => {
-  if (!constants.RELEASE_TYPES.includes(truncation)) {
-    return null
-  }
-
-  const clonedVersion = cloneInputVersion(version, options)
-  return clonedVersion && doTruncation(clonedVersion, truncation)
-}
-
-const cloneInputVersion = (version, options) => {
-  const versionStringToParse = (
-    version instanceof SemVer ? version.version : version
-  )
-
-  return parse(versionStringToParse, options)
-}
-
-const doTruncation = (version, truncation) => {
-  if (isPrerelease(truncation)) {
-    return version.version
-  }
-
-  version.prerelease = []
-
-  switch (truncation) {
-    case 'major':
-      version.minor = 0
-      version.patch = 0
-      break
-    case 'minor':
-      version.patch = 0
-      break
-  }
-
-  return version.format()
-}
-
-const isPrerelease = (type) => {
-  return type.startsWith('pre')
-}
-
-module.exports = truncate
-
-
-/***/ }),
-
-/***/ 94490:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const parse = __nccwpck_require__(22019)
-const valid = (version, options) => {
-  const v = parse(version, options)
-  return v ? v.version : null
-}
-module.exports = valid
-
-
-/***/ }),
-
-/***/ 42082:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-// just pre-load all the stuff that index.js lazily exports
-const internalRe = __nccwpck_require__(56393)
-const constants = __nccwpck_require__(86935)
-const SemVer = __nccwpck_require__(91525)
-const identifiers = __nccwpck_require__(23086)
-const parse = __nccwpck_require__(22019)
-const valid = __nccwpck_require__(94490)
-const clean = __nccwpck_require__(11033)
-const inc = __nccwpck_require__(46708)
-const diff = __nccwpck_require__(15189)
-const major = __nccwpck_require__(16141)
-const minor = __nccwpck_require__(83417)
-const patch = __nccwpck_require__(32946)
-const prerelease = __nccwpck_require__(18388)
-const compare = __nccwpck_require__(93963)
-const rcompare = __nccwpck_require__(83331)
-const compareLoose = __nccwpck_require__(40996)
-const compareBuild = __nccwpck_require__(18266)
-const sort = __nccwpck_require__(40378)
-const rsort = __nccwpck_require__(64946)
-const gt = __nccwpck_require__(39361)
-const lt = __nccwpck_require__(43390)
-const eq = __nccwpck_require__(20976)
-const neq = __nccwpck_require__(38940)
-const gte = __nccwpck_require__(91906)
-const lte = __nccwpck_require__(39911)
-const cmp = __nccwpck_require__(95476)
-const coerce = __nccwpck_require__(6799)
-const truncate = __nccwpck_require__(13836)
-const Comparator = __nccwpck_require__(29645)
-const Range = __nccwpck_require__(70468)
-const satisfies = __nccwpck_require__(76957)
-const toComparators = __nccwpck_require__(86460)
-const maxSatisfying = __nccwpck_require__(92479)
-const minSatisfying = __nccwpck_require__(45533)
-const minVersion = __nccwpck_require__(94512)
-const validRange = __nccwpck_require__(81179)
-const outside = __nccwpck_require__(51942)
-const gtr = __nccwpck_require__(7034)
-const ltr = __nccwpck_require__(16991)
-const intersects = __nccwpck_require__(24895)
-const simplifyRange = __nccwpck_require__(50854)
-const subset = __nccwpck_require__(70631)
-module.exports = {
-  parse,
-  valid,
-  clean,
-  inc,
-  diff,
-  major,
-  minor,
-  patch,
-  prerelease,
-  compare,
-  rcompare,
-  compareLoose,
-  compareBuild,
-  sort,
-  rsort,
-  gt,
-  lt,
-  eq,
-  neq,
-  gte,
-  lte,
-  cmp,
-  coerce,
-  truncate,
-  Comparator,
-  Range,
-  satisfies,
-  toComparators,
-  maxSatisfying,
-  minSatisfying,
-  minVersion,
-  validRange,
-  outside,
-  gtr,
-  ltr,
-  intersects,
-  simplifyRange,
-  subset,
-  SemVer,
-  re: internalRe.re,
-  src: internalRe.src,
-  tokens: internalRe.t,
-  SEMVER_SPEC_VERSION: constants.SEMVER_SPEC_VERSION,
-  RELEASE_TYPES: constants.RELEASE_TYPES,
-  compareIdentifiers: identifiers.compareIdentifiers,
-  rcompareIdentifiers: identifiers.rcompareIdentifiers,
-}
-
-
-/***/ }),
-
-/***/ 86935:
-/***/ ((module) => {
-
-"use strict";
-
-
-// Note: this is the semver.org version of the spec that it implements
-// Not necessarily the package version of this code.
-const SEMVER_SPEC_VERSION = '2.0.0'
-
-const MAX_LENGTH = 256
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-/* istanbul ignore next */ 9007199254740991
-
-// Max safe segment length for coercion.
-const MAX_SAFE_COMPONENT_LENGTH = 16
-
-// Max safe length for a build identifier. The max length minus 6 characters for
-// the shortest version with a build 0.0.0+BUILD.
-const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
-
-const RELEASE_TYPES = [
-  'major',
-  'premajor',
-  'minor',
-  'preminor',
-  'patch',
-  'prepatch',
-  'prerelease',
-]
-
-module.exports = {
-  MAX_LENGTH,
-  MAX_SAFE_COMPONENT_LENGTH,
-  MAX_SAFE_BUILD_LENGTH,
-  MAX_SAFE_INTEGER,
-  RELEASE_TYPES,
-  SEMVER_SPEC_VERSION,
-  FLAG_INCLUDE_PRERELEASE: 0b001,
-  FLAG_LOOSE: 0b010,
-}
-
-
-/***/ }),
-
-/***/ 43089:
-/***/ ((module) => {
-
-"use strict";
-
-
-const debug = (
-  typeof process === 'object' &&
-  process.env &&
-  process.env.NODE_DEBUG &&
-  /\bsemver\b/i.test(process.env.NODE_DEBUG)
-) ? (...args) => console.error('SEMVER', ...args)
-  : () => {}
-
-module.exports = debug
-
-
-/***/ }),
-
-/***/ 23086:
-/***/ ((module) => {
-
-"use strict";
-
-
-const numeric = /^[0-9]+$/
-const compareIdentifiers = (a, b) => {
-  if (typeof a === 'number' && typeof b === 'number') {
-    return a === b ? 0 : a < b ? -1 : 1
-  }
-
-  const anum = numeric.test(a)
-  const bnum = numeric.test(b)
-
-  if (anum && bnum) {
-    a = +a
-    b = +b
-  }
-
-  return a === b ? 0
-    : (anum && !bnum) ? -1
-    : (bnum && !anum) ? 1
-    : a < b ? -1
-    : 1
-}
-
-const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a)
-
-module.exports = {
-  compareIdentifiers,
-  rcompareIdentifiers,
-}
-
-
-/***/ }),
-
-/***/ 41417:
-/***/ ((module) => {
-
-"use strict";
-
-
-class LRUCache {
-  constructor () {
-    this.max = 1000
-    this.map = new Map()
-  }
-
-  get (key) {
-    const value = this.map.get(key)
-    if (value === undefined) {
-      return undefined
-    } else {
-      // Remove the key from the map and add it to the end
-      this.map.delete(key)
-      this.map.set(key, value)
-      return value
-    }
-  }
-
-  delete (key) {
-    return this.map.delete(key)
-  }
-
-  set (key, value) {
-    const deleted = this.delete(key)
-
-    if (!deleted && value !== undefined) {
-      // If cache is full, delete the least recently used item
-      if (this.map.size >= this.max) {
-        const firstKey = this.map.keys().next().value
-        this.delete(firstKey)
-      }
-
-      this.map.set(key, value)
-    }
-
-    return this
-  }
-}
-
-module.exports = LRUCache
-
-
-/***/ }),
-
-/***/ 80198:
-/***/ ((module) => {
-
-"use strict";
-
-
-// parse out just the options we care about
-const looseOption = Object.freeze({ loose: true })
-const emptyOpts = Object.freeze({ })
-const parseOptions = options => {
-  if (!options) {
-    return emptyOpts
-  }
-
-  if (typeof options !== 'object') {
-    return looseOption
-  }
-
-  return options
-}
-module.exports = parseOptions
-
-
-/***/ }),
-
-/***/ 56393:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const {
-  MAX_SAFE_COMPONENT_LENGTH,
-  MAX_SAFE_BUILD_LENGTH,
-  MAX_LENGTH,
-} = __nccwpck_require__(86935)
-const debug = __nccwpck_require__(43089)
-exports = module.exports = {}
-
-// The actual regexps go on exports.re
-const re = exports.re = []
-const safeRe = exports.safeRe = []
-const src = exports.src = []
-const safeSrc = exports.safeSrc = []
-const t = exports.t = {}
-let R = 0
-
-const LETTERDASHNUMBER = '[a-zA-Z0-9-]'
-
-// Replace some greedy regex tokens to prevent regex dos issues. These regex are
-// used internally via the safeRe object since all inputs in this library get
-// normalized first to trim and collapse all extra whitespace. The original
-// regexes are exported for userland consumption and lower level usage. A
-// future breaking change could export the safer regex only with a note that
-// all input should have extra whitespace removed.
-const safeRegexReplacements = [
-  ['\\s', 1],
-  ['\\d', MAX_LENGTH],
-  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
-]
-
-const makeSafeRegex = (value) => {
-  for (const [token, max] of safeRegexReplacements) {
-    value = value
-      .split(`${token}*`).join(`${token}{0,${max}}`)
-      .split(`${token}+`).join(`${token}{1,${max}}`)
-  }
-  return value
-}
-
-const createToken = (name, value, isGlobal) => {
-  const safe = makeSafeRegex(value)
-  const index = R++
-  debug(name, index, value)
-  t[name] = index
-  src[index] = value
-  safeSrc[index] = safe
-  re[index] = new RegExp(value, isGlobal ? 'g' : undefined)
-  safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined)
-}
-
-// The following Regular Expressions can be used for tokenizing,
-// validating, and parsing SemVer version strings.
-
-// ## Numeric Identifier
-// A single `0`, or a non-zero digit followed by zero or more digits.
-
-createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*')
-createToken('NUMERICIDENTIFIERLOOSE', '\\d+')
-
-// ## Non-numeric Identifier
-// Zero or more digits, followed by a letter or hyphen, and then zero or
-// more letters, digits, or hyphens.
-
-createToken('NONNUMERICIDENTIFIER', `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`)
-
-// ## Main Version
-// Three dot-separated numeric identifiers.
-
-createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})`)
-
-createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`)
-
-// ## Pre-release Version Identifier
-// A numeric identifier, or a non-numeric identifier.
-// Non-numeric identifiers include numeric identifiers but can be longer.
-// Therefore non-numeric identifiers must go first.
-
-createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NONNUMERICIDENTIFIER]
-}|${src[t.NUMERICIDENTIFIER]})`)
-
-createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NONNUMERICIDENTIFIER]
-}|${src[t.NUMERICIDENTIFIERLOOSE]})`)
-
-// ## Pre-release Version
-// Hyphen, followed by one or more dot-separated pre-release version
-// identifiers.
-
-createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
-}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`)
-
-createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
-}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)
-
-// ## Build Metadata Identifier
-// Any combination of digits, letters, or hyphens.
-
-createToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`)
-
-// ## Build Metadata
-// Plus sign, followed by one or more period-separated build metadata
-// identifiers.
-
-createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
-}(?:\\.${src[t.BUILDIDENTIFIER]})*))`)
-
-// ## Full Version String
-// A main version, followed optionally by a pre-release version and
-// build metadata.
-
-// Note that the only major, minor, patch, and pre-release sections of
-// the version string are capturing groups.  The build metadata is not a
-// capturing group, because it should not ever be used in version
-// comparison.
-
-createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
-}${src[t.PRERELEASE]}?${
-  src[t.BUILD]}?`)
-
-createToken('FULL', `^${src[t.FULLPLAIN]}$`)
-
-// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-// common in the npm registry.
-createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
-}${src[t.PRERELEASELOOSE]}?${
-  src[t.BUILD]}?`)
-
-createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)
-
-createToken('GTLT', '((?:<|>)?=?)')
-
-// Something like "2.*" or "1.2.x".
-// Note that "x.x" is a valid xRange identifier, meaning "any version"
-// Only the first item is strictly required.
-createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`)
-createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`)
-
-createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:${src[t.PRERELEASE]})?${
-                     src[t.BUILD]}?` +
-                   `)?)?`)
-
-createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:${src[t.PRERELEASELOOSE]})?${
-                          src[t.BUILD]}?` +
-                        `)?)?`)
-
-createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
-createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
-
-// Coercion.
-// Extract anything that could conceivably be a part of a valid semver
-createToken('COERCEPLAIN', `${'(^|[^\\d])' +
-              '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`)
-createToken('COERCE', `${src[t.COERCEPLAIN]}(?:$|[^\\d])`)
-createToken('COERCEFULL', src[t.COERCEPLAIN] +
-              `(?:${src[t.PRERELEASE]})?` +
-              `(?:${src[t.BUILD]})?` +
-              `(?:$|[^\\d])`)
-createToken('COERCERTL', src[t.COERCE], true)
-createToken('COERCERTLFULL', src[t.COERCEFULL], true)
-
-// Tilde ranges.
-// Meaning is "reasonably at or greater than"
-createToken('LONETILDE', '(?:~>?)')
-
-createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true)
-exports.tildeTrimReplace = '$1~'
-
-createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)
-createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)
-
-// Caret ranges.
-// Meaning is "at least and backwards compatible with"
-createToken('LONECARET', '(?:\\^)')
-
-createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true)
-exports.caretTrimReplace = '$1^'
-
-createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)
-createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)
-
-// A simple gt/lt/eq thing, or just "" to indicate "any version"
-createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`)
-createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`)
-
-// An expression to strip any whitespace between the gtlt and the thing
-// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
-}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)
-exports.comparatorTrimReplace = '$1$2$3'
-
-// Something like `1.2.3 - 1.2.4`
-// Note that these all use the loose form, because they'll be
-// checked against either the strict or loose comparator form
-// later.
-createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
-                   `\\s+-\\s+` +
-                   `(${src[t.XRANGEPLAIN]})` +
-                   `\\s*$`)
-
-createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s+-\\s+` +
-                        `(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s*$`)
-
-// Star ranges basically just allow anything at all.
-createToken('STAR', '(<|>)?=?\\s*\\*')
-// >=0.0.0 is like a star
-createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$')
-createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
-
-
-/***/ }),
-
-/***/ 7034:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-// Determine if version is greater than all the versions possible in the range.
-const outside = __nccwpck_require__(51942)
-const gtr = (version, range, options) => outside(version, range, '>', options)
-module.exports = gtr
-
-
-/***/ }),
-
-/***/ 24895:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const Range = __nccwpck_require__(70468)
-const intersects = (r1, r2, options) => {
-  r1 = new Range(r1, options)
-  r2 = new Range(r2, options)
-  return r1.intersects(r2, options)
-}
-module.exports = intersects
-
-
-/***/ }),
-
-/***/ 16991:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const outside = __nccwpck_require__(51942)
-// Determine if version is less than all the versions possible in the range
-const ltr = (version, range, options) => outside(version, range, '<', options)
-module.exports = ltr
-
-
-/***/ }),
-
-/***/ 92479:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const Range = __nccwpck_require__(70468)
-
-const maxSatisfying = (versions, range, options) => {
-  let max = null
-  let maxSV = null
-  let rangeObj = null
-  try {
-    rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach((v) => {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!max || maxSV.compare(v) === -1) {
-        // compare(max, v, true)
-        max = v
-        maxSV = new SemVer(max, options)
-      }
-    }
-  })
-  return max
-}
-module.exports = maxSatisfying
-
-
-/***/ }),
-
-/***/ 45533:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const Range = __nccwpck_require__(70468)
-const minSatisfying = (versions, range, options) => {
-  let min = null
-  let minSV = null
-  let rangeObj = null
-  try {
-    rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach((v) => {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!min || minSV.compare(v) === 1) {
-        // compare(min, v, true)
-        min = v
-        minSV = new SemVer(min, options)
-      }
-    }
-  })
-  return min
-}
-module.exports = minSatisfying
-
-
-/***/ }),
-
-/***/ 94512:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const Range = __nccwpck_require__(70468)
-const gt = __nccwpck_require__(39361)
-
-const minVersion = (range, loose) => {
-  range = new Range(range, loose)
-
-  let minver = new SemVer('0.0.0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = new SemVer('0.0.0-0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = null
-  for (let i = 0; i < range.set.length; ++i) {
-    const comparators = range.set[i]
-
-    let setMin = null
-    comparators.forEach((comparator) => {
-      // Clone to avoid manipulating the comparator's semver object.
-      const compver = new SemVer(comparator.semver.version)
-      switch (comparator.operator) {
-        case '>':
-          if (compver.prerelease.length === 0) {
-            compver.patch++
-          } else {
-            compver.prerelease.push(0)
-          }
-          compver.raw = compver.format()
-          /* fallthrough */
-        case '':
-        case '>=':
-          if (!setMin || gt(compver, setMin)) {
-            setMin = compver
-          }
-          break
-        case '<':
-        case '<=':
-          /* Ignore maximum versions */
-          break
-        /* istanbul ignore next */
-        default:
-          throw new Error(`Unexpected operation: ${comparator.operator}`)
-      }
-    })
-    if (setMin && (!minver || gt(minver, setMin))) {
-      minver = setMin
-    }
-  }
-
-  if (minver && range.test(minver)) {
-    return minver
-  }
-
-  return null
-}
-module.exports = minVersion
-
-
-/***/ }),
-
-/***/ 51942:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const SemVer = __nccwpck_require__(91525)
-const Comparator = __nccwpck_require__(29645)
-const { ANY } = Comparator
-const Range = __nccwpck_require__(70468)
-const satisfies = __nccwpck_require__(76957)
-const gt = __nccwpck_require__(39361)
-const lt = __nccwpck_require__(43390)
-const lte = __nccwpck_require__(39911)
-const gte = __nccwpck_require__(91906)
-
-const outside = (version, range, hilo, options) => {
-  version = new SemVer(version, options)
-  range = new Range(range, options)
-
-  let gtfn, ltefn, ltfn, comp, ecomp
-  switch (hilo) {
-    case '>':
-      gtfn = gt
-      ltefn = lte
-      ltfn = lt
-      comp = '>'
-      ecomp = '>='
-      break
-    case '<':
-      gtfn = lt
-      ltefn = gte
-      ltfn = gt
-      comp = '<'
-      ecomp = '<='
-      break
-    default:
-      throw new TypeError('Must provide a hilo val of "<" or ">"')
-  }
-
-  // If it satisfies the range it is not outside
-  if (satisfies(version, range, options)) {
-    return false
-  }
-
-  // From now on, variable terms are as if we're in "gtr" mode.
-  // but note that everything is flipped for the "ltr" function.
-
-  for (let i = 0; i < range.set.length; ++i) {
-    const comparators = range.set[i]
-
-    let high = null
-    let low = null
-
-    comparators.forEach((comparator) => {
-      if (comparator.semver === ANY) {
-        comparator = new Comparator('>=0.0.0')
-      }
-      high = high || comparator
-      low = low || comparator
-      if (gtfn(comparator.semver, high.semver, options)) {
-        high = comparator
-      } else if (ltfn(comparator.semver, low.semver, options)) {
-        low = comparator
-      }
-    })
-
-    // If the edge version comparator has a operator then our version
-    // isn't outside it
-    if (high.operator === comp || high.operator === ecomp) {
-      return false
-    }
-
-    // If the lowest version comparator has an operator and our version
-    // is less than it then it isn't higher than the range
-    if ((!low.operator || low.operator === comp) &&
-        ltefn(version, low.semver)) {
-      return false
-    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-      return false
-    }
-  }
-  return true
-}
-
-module.exports = outside
-
-
-/***/ }),
-
-/***/ 50854:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-// given a set of versions and a range, create a "simplified" range
-// that includes the same versions that the original range does
-// If the original range is shorter than the simplified one, return that.
-const satisfies = __nccwpck_require__(76957)
-const compare = __nccwpck_require__(93963)
-module.exports = (versions, range, options) => {
-  const set = []
-  let first = null
-  let prev = null
-  const v = versions.sort((a, b) => compare(a, b, options))
-  for (const version of v) {
-    const included = satisfies(version, range, options)
-    if (included) {
-      prev = version
-      if (!first) {
-        first = version
-      }
-    } else {
-      if (prev) {
-        set.push([first, prev])
-      }
-      prev = null
-      first = null
-    }
-  }
-  if (first) {
-    set.push([first, null])
-  }
-
-  const ranges = []
-  for (const [min, max] of set) {
-    if (min === max) {
-      ranges.push(min)
-    } else if (!max && min === v[0]) {
-      ranges.push('*')
-    } else if (!max) {
-      ranges.push(`>=${min}`)
-    } else if (min === v[0]) {
-      ranges.push(`<=${max}`)
-    } else {
-      ranges.push(`${min} - ${max}`)
-    }
-  }
-  const simplified = ranges.join(' || ')
-  const original = typeof range.raw === 'string' ? range.raw : String(range)
-  return simplified.length < original.length ? simplified : range
-}
-
-
-/***/ }),
-
-/***/ 70631:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const Range = __nccwpck_require__(70468)
-const Comparator = __nccwpck_require__(29645)
-const { ANY } = Comparator
-const satisfies = __nccwpck_require__(76957)
-const compare = __nccwpck_require__(93963)
-
-// Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
-// - Every simple range `r1, r2, ...` is a null set, OR
-// - Every simple range `r1, r2, ...` which is not a null set is a subset of
-//   some `R1, R2, ...`
-//
-// Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:
-// - If c is only the ANY comparator
-//   - If C is only the ANY comparator, return true
-//   - Else if in prerelease mode, return false
-//   - else replace c with `[>=0.0.0]`
-// - If C is only the ANY comparator
-//   - if in prerelease mode, return true
-//   - else replace C with `[>=0.0.0]`
-// - Let EQ be the set of = comparators in c
-// - If EQ is more than one, return true (null set)
-// - Let GT be the highest > or >= comparator in c
-// - Let LT be the lowest < or <= comparator in c
-// - If GT and LT, and GT.semver > LT.semver, return true (null set)
-// - If any C is a = range, and GT or LT are set, return false
-// - If EQ
-//   - If GT, and EQ does not satisfy GT, return true (null set)
-//   - If LT, and EQ does not satisfy LT, return true (null set)
-//   - If EQ satisfies every C, return true
-//   - Else return false
-// - If GT
-//   - If GT.semver is lower than any > or >= comp in C, return false
-//   - If GT is >=, and GT.semver does not satisfy every C, return false
-//   - If GT.semver has a prerelease, and not in prerelease mode
-//     - If no C has a prerelease and the GT.semver tuple, return false
-// - If LT
-//   - If LT.semver is greater than any < or <= comp in C, return false
-//   - If LT is <=, and LT.semver does not satisfy every C, return false
-//   - If LT.semver has a prerelease, and not in prerelease mode
-//     - If no C has a prerelease and the LT.semver tuple, return false
-// - Else return true
-
-const subset = (sub, dom, options = {}) => {
-  if (sub === dom) {
-    return true
-  }
-
-  sub = new Range(sub, options)
-  dom = new Range(dom, options)
-  let sawNonNull = false
-
-  OUTER: for (const simpleSub of sub.set) {
-    for (const simpleDom of dom.set) {
-      const isSub = simpleSubset(simpleSub, simpleDom, options)
-      sawNonNull = sawNonNull || isSub !== null
-      if (isSub) {
-        continue OUTER
-      }
-    }
-    // the null set is a subset of everything, but null simple ranges in
-    // a complex range should be ignored.  so if we saw a non-null range,
-    // then we know this isn't a subset, but if EVERY simple range was null,
-    // then it is a subset.
-    if (sawNonNull) {
-      return false
-    }
-  }
-  return true
-}
-
-const minimumVersionWithPreRelease = [new Comparator('>=0.0.0-0')]
-const minimumVersion = [new Comparator('>=0.0.0')]
-
-const simpleSubset = (sub, dom, options) => {
-  if (sub === dom) {
-    return true
-  }
-
-  if (sub.length === 1 && sub[0].semver === ANY) {
-    if (dom.length === 1 && dom[0].semver === ANY) {
-      return true
-    } else if (options.includePrerelease) {
-      sub = minimumVersionWithPreRelease
-    } else {
-      sub = minimumVersion
-    }
-  }
-
-  if (dom.length === 1 && dom[0].semver === ANY) {
-    if (options.includePrerelease) {
-      return true
-    } else {
-      dom = minimumVersion
-    }
-  }
-
-  const eqSet = new Set()
-  let gt, lt
-  for (const c of sub) {
-    if (c.operator === '>' || c.operator === '>=') {
-      gt = higherGT(gt, c, options)
-    } else if (c.operator === '<' || c.operator === '<=') {
-      lt = lowerLT(lt, c, options)
-    } else {
-      eqSet.add(c.semver)
-    }
-  }
-
-  if (eqSet.size > 1) {
-    return null
-  }
-
-  let gtltComp
-  if (gt && lt) {
-    gtltComp = compare(gt.semver, lt.semver, options)
-    if (gtltComp > 0) {
-      return null
-    } else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<=')) {
-      return null
-    }
-  }
-
-  // will iterate one or zero times
-  for (const eq of eqSet) {
-    if (gt && !satisfies(eq, String(gt), options)) {
-      return null
-    }
-
-    if (lt && !satisfies(eq, String(lt), options)) {
-      return null
-    }
-
-    for (const c of dom) {
-      if (!satisfies(eq, String(c), options)) {
-        return false
-      }
-    }
-
-    return true
-  }
-
-  let higher, lower
-  let hasDomLT, hasDomGT
-  // if the subset has a prerelease, we need a comparator in the superset
-  // with the same tuple and a prerelease, or it's not a subset
-  let needDomLTPre = lt &&
-    !options.includePrerelease &&
-    lt.semver.prerelease.length ? lt.semver : false
-  let needDomGTPre = gt &&
-    !options.includePrerelease &&
-    gt.semver.prerelease.length ? gt.semver : false
-  // exception: <1.2.3-0 is the same as <1.2.3
-  if (needDomLTPre && needDomLTPre.prerelease.length === 1 &&
-      lt.operator === '<' && needDomLTPre.prerelease[0] === 0) {
-    needDomLTPre = false
-  }
-
-  for (const c of dom) {
-    hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='
-    hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='
-    if (gt) {
-      if (needDomGTPre) {
-        if (c.semver.prerelease && c.semver.prerelease.length &&
-            c.semver.major === needDomGTPre.major &&
-            c.semver.minor === needDomGTPre.minor &&
-            c.semver.patch === needDomGTPre.patch) {
-          needDomGTPre = false
-        }
-      }
-      if (c.operator === '>' || c.operator === '>=') {
-        higher = higherGT(gt, c, options)
-        if (higher === c && higher !== gt) {
-          return false
-        }
-      } else if (gt.operator === '>=' && !satisfies(gt.semver, String(c), options)) {
-        return false
-      }
-    }
-    if (lt) {
-      if (needDomLTPre) {
-        if (c.semver.prerelease && c.semver.prerelease.length &&
-            c.semver.major === needDomLTPre.major &&
-            c.semver.minor === needDomLTPre.minor &&
-            c.semver.patch === needDomLTPre.patch) {
-          needDomLTPre = false
-        }
-      }
-      if (c.operator === '<' || c.operator === '<=') {
-        lower = lowerLT(lt, c, options)
-        if (lower === c && lower !== lt) {
-          return false
-        }
-      } else if (lt.operator === '<=' && !satisfies(lt.semver, String(c), options)) {
-        return false
-      }
-    }
-    if (!c.operator && (lt || gt) && gtltComp !== 0) {
-      return false
-    }
-  }
-
-  // if there was a < or >, and nothing in the dom, then must be false
-  // UNLESS it was limited by another range in the other direction.
-  // Eg, >1.0.0 <1.0.1 is still a subset of <2.0.0
-  if (gt && hasDomLT && !lt && gtltComp !== 0) {
-    return false
-  }
-
-  if (lt && hasDomGT && !gt && gtltComp !== 0) {
-    return false
-  }
-
-  // we needed a prerelease range in a specific tuple, but didn't get one
-  // then this isn't a subset.  eg >=1.2.3-pre is not a subset of >=1.0.0,
-  // because it includes prereleases in the 1.2.3 tuple
-  if (needDomGTPre || needDomLTPre) {
-    return false
-  }
-
-  return true
-}
-
-// >=1.2.3 is lower than >1.2.3
-const higherGT = (a, b, options) => {
-  if (!a) {
-    return b
-  }
-  const comp = compare(a.semver, b.semver, options)
-  return comp > 0 ? a
-    : comp < 0 ? b
-    : b.operator === '>' && a.operator === '>=' ? b
-    : a
-}
-
-// <=1.2.3 is higher than <1.2.3
-const lowerLT = (a, b, options) => {
-  if (!a) {
-    return b
-  }
-  const comp = compare(a.semver, b.semver, options)
-  return comp < 0 ? a
-    : comp > 0 ? b
-    : b.operator === '<' && a.operator === '<=' ? b
-    : a
-}
-
-module.exports = subset
-
-
-/***/ }),
-
-/***/ 86460:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const Range = __nccwpck_require__(70468)
-
-// Mostly just for testing and legacy API reasons
-const toComparators = (range, options) =>
-  new Range(range, options).set
-    .map(comp => comp.map(c => c.value).join(' ').trim().split(' '))
-
-module.exports = toComparators
-
-
-/***/ }),
-
-/***/ 81179:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-const Range = __nccwpck_require__(70468)
-const validRange = (range, options) => {
-  try {
-    // Return '*' instead of '' so that truthiness works.
-    // This will throw if it's invalid anyway
-    return new Range(range, options).range || '*'
-  } catch (er) {
-    return null
-  }
-}
-module.exports = validRange
 
 
 /***/ }),
@@ -58242,7 +53592,7 @@ module.exports["default"] = stringWidth;
 
 /***/ }),
 
-/***/ 8112:
+/***/ 93243:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -58271,7 +53621,7 @@ module.exports["default"] = stringWidth;
 
 /*<replacement>*/
 
-var Buffer = (__nccwpck_require__(79253).Buffer);
+var Buffer = (__nccwpck_require__(65249).Buffer);
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -58575,145 +53925,6 @@ module.exports = string => {
 	}
 
 	return string;
-};
-
-
-/***/ }),
-
-/***/ 39823:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const os = __nccwpck_require__(70857);
-const hasFlag = __nccwpck_require__(25614);
-
-const env = process.env;
-
-let forceColor;
-if (hasFlag('no-color') ||
-	hasFlag('no-colors') ||
-	hasFlag('color=false')) {
-	forceColor = false;
-} else if (hasFlag('color') ||
-	hasFlag('colors') ||
-	hasFlag('color=true') ||
-	hasFlag('color=always')) {
-	forceColor = true;
-}
-if ('FORCE_COLOR' in env) {
-	forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
-}
-
-function translateLevel(level) {
-	if (level === 0) {
-		return false;
-	}
-
-	return {
-		level,
-		hasBasic: true,
-		has256: level >= 2,
-		has16m: level >= 3
-	};
-}
-
-function supportsColor(stream) {
-	if (forceColor === false) {
-		return 0;
-	}
-
-	if (hasFlag('color=16m') ||
-		hasFlag('color=full') ||
-		hasFlag('color=truecolor')) {
-		return 3;
-	}
-
-	if (hasFlag('color=256')) {
-		return 2;
-	}
-
-	if (stream && !stream.isTTY && forceColor !== true) {
-		return 0;
-	}
-
-	const min = forceColor ? 1 : 0;
-
-	if (process.platform === 'win32') {
-		// Node.js 7.5.0 is the first version of Node.js to include a patch to
-		// libuv that enables 256 color output on Windows. Anything earlier and it
-		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
-		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
-		// release that supports 256 colors. Windows 10 build 14931 is the first release
-		// that supports 16m/TrueColor.
-		const osRelease = os.release().split('.');
-		if (
-			Number(process.versions.node.split('.')[0]) >= 8 &&
-			Number(osRelease[0]) >= 10 &&
-			Number(osRelease[2]) >= 10586
-		) {
-			return Number(osRelease[2]) >= 14931 ? 3 : 2;
-		}
-
-		return 1;
-	}
-
-	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-			return 1;
-		}
-
-		return min;
-	}
-
-	if ('TEAMCITY_VERSION' in env) {
-		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if (env.COLORTERM === 'truecolor') {
-		return 3;
-	}
-
-	if ('TERM_PROGRAM' in env) {
-		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-		switch (env.TERM_PROGRAM) {
-			case 'iTerm.app':
-				return version >= 3 ? 3 : 2;
-			case 'Apple_Terminal':
-				return 2;
-			// No default
-		}
-	}
-
-	if (/-256(color)?$/i.test(env.TERM)) {
-		return 2;
-	}
-
-	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-		return 1;
-	}
-
-	if ('COLORTERM' in env) {
-		return 1;
-	}
-
-	if (env.TERM === 'dumb') {
-		return min;
-	}
-
-	return min;
-}
-
-function getSupportLevel(stream) {
-	const level = supportsColor(stream);
-	return translateLevel(level);
-}
-
-module.exports = {
-	supportsColor: getSupportLevel,
-	stdout: getSupportLevel(process.stdout),
-	stderr: getSupportLevel(process.stderr)
 };
 
 
@@ -59305,7 +54516,7 @@ module.exports.sync = writeFileSync
 module.exports._getTmpname = getTmpname // for testing
 module.exports._cleanupOnExit = cleanupOnExit
 
-var fs = __nccwpck_require__(17301)
+var fs = __nccwpck_require__(6768)
 var MurmurHash3 = __nccwpck_require__(5535)
 var onExit = __nccwpck_require__(97417)
 var path = __nccwpck_require__(16928)
@@ -59547,7 +54758,7 @@ function writeFileSync (filename, data, options) {
 "use strict";
 
 const path = __nccwpck_require__(16928);
-const fs = __nccwpck_require__(17301);
+const fs = __nccwpck_require__(6768);
 const writeFileAtomic = __nccwpck_require__(28482);
 const sortKeys = __nccwpck_require__(62483);
 const makeDir = __nccwpck_require__(71978);
@@ -65237,8 +60448,8 @@ class DefaultChangelogNotes {
         // (v10+) are ESM-only. This module is compiled to CommonJS and bundled by
         // ncc, so they must be pulled in with a dynamic import rather than a static
         // one (which would be emitted as a `require` and fail at runtime).
-        const { writeChangelogString } = await __nccwpck_require__.e(/* import() */ 622).then(__nccwpck_require__.bind(__nccwpck_require__, 39622));
-        const { default: createPreset } = await __nccwpck_require__.e(/* import() */ 629).then(__nccwpck_require__.bind(__nccwpck_require__, 61629));
+        const { writeChangelogString } = await __nccwpck_require__.e(/* import() */ 557).then(__nccwpck_require__.bind(__nccwpck_require__, 87557));
+        const { default: createPreset } = await __nccwpck_require__.e(/* import() */ 913).then(__nccwpck_require__.bind(__nccwpck_require__, 14913));
         const context = {
             host: options.host || DEFAULT_HOST,
             owner: options.owner,
@@ -65279,7 +60490,13 @@ class DefaultChangelogNotes {
             .map(commit => {
             const notes = commit.notes
                 .filter(note => note.title === 'BREAKING CHANGE' || note.title === 'Migration')
-                .map(note => replaceIssueLink(note, context.host, context.owner, context.repository));
+                .map(note => replaceIssueLink(
+            // A 'Migration' note is the `# Migration` section lifted out of a
+            // breaking change's body, so it belongs under the same heading.
+            // The preset used to force every note title to 'BREAKING CHANGES';
+            // since conventionalcommits v10.3 it groups notes by their own
+            // title, which would render a stray '### MIGRATION' section.
+            { ...note, title: 'BREAKING CHANGE' }, context.host, context.owner, context.repository));
             return {
                 body: '', // commit.body,
                 subject: htmlEscape(commit.bareMessage),
@@ -66352,12 +61569,12 @@ function getReleaserTypes() {
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitHub = exports.GH_GRAPHQL_URL = exports.GH_API_URL = void 0;
-const commit_and_push_1 = __nccwpck_require__(4825);
-const labels_1 = __nccwpck_require__(17522);
-const logger_1 = __nccwpck_require__(51449);
-const rest_1 = __nccwpck_require__(33799);
-const request_1 = __nccwpck_require__(31649);
-const graphql_1 = __nccwpck_require__(82674);
+const commit_and_push_1 = __nccwpck_require__(97653);
+const labels_1 = __nccwpck_require__(75478);
+const logger_1 = __nccwpck_require__(32885);
+const rest_1 = __nccwpck_require__(12381);
+const request_1 = __nccwpck_require__(50422);
+const graphql_1 = __nccwpck_require__(21795);
 const errors_1 = __nccwpck_require__(91064);
 const MAX_ISSUE_BODY_SIZE = 65536;
 const MAX_SLEEP_SECONDS = 20;
@@ -66366,11 +61583,11 @@ exports.GH_GRAPHQL_URL = 'https://api.github.com';
 const logger_2 = __nccwpck_require__(57815);
 const manifest_constants_1 = __nccwpck_require__(33301);
 const signoff_commit_message_1 = __nccwpck_require__(91733);
-const git_file_utils_1 = __nccwpck_require__(46902);
+const git_file_utils_1 = __nccwpck_require__(93866);
 const https_proxy_agent_1 = __nccwpck_require__(31475);
-const http_proxy_agent_1 = __nccwpck_require__(56883);
-const plugin_retry_1 = __nccwpck_require__(55926);
-const plugin_throttling_1 = __nccwpck_require__(72196);
+const http_proxy_agent_1 = __nccwpck_require__(87595);
+const plugin_retry_1 = __nccwpck_require__(3059);
+const plugin_throttling_1 = __nccwpck_require__(27983);
 class GitHub {
     repository;
     octokit;
@@ -68306,7 +63523,7 @@ const errors_1 = __nccwpck_require__(91064);
 const pull_request_overflow_handler_1 = __nccwpck_require__(92678);
 const signoff_commit_message_1 = __nccwpck_require__(91733);
 const commit_exclude_1 = __nccwpck_require__(27137);
-const logger_2 = __nccwpck_require__(51449);
+const logger_2 = __nccwpck_require__(32885);
 const manifest_constants_1 = __nccwpck_require__(33301);
 var manifest_constants_2 = __nccwpck_require__(33301);
 Object.defineProperty(exports, "DEFAULT_RELEASE_PLEASE_CONFIG", ({ enumerable: true, get: function () { return manifest_constants_2.DEFAULT_RELEASE_PLEASE_CONFIG; } }));
@@ -70292,7 +65509,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MavenWorkspace = void 0;
 const workspace_1 = __nccwpck_require__(76976);
 const version_1 = __nccwpck_require__(91038);
-const dom = __importStar(__nccwpck_require__(54779));
+const dom = __importStar(__nccwpck_require__(71293));
 const xpath = __importStar(__nccwpck_require__(34739));
 const node_path_1 = __nccwpck_require__(76760);
 const pom_xml_1 = __nccwpck_require__(55166);
@@ -74856,7 +70073,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BaseXml = void 0;
-const dom = __importStar(__nccwpck_require__(54779));
+const dom = __importStar(__nccwpck_require__(71293));
 /**
  * Base class for all updaters working with XML files.
  */
@@ -80685,7 +75902,232 @@ module.exports = require("worker_threads");
 
 /***/ }),
 
-/***/ 7713:
+/***/ 56523:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var picocolors = __nccwpck_require__(71019);
+var jsTokens = __nccwpck_require__(72859);
+var helperValidatorIdentifier = __nccwpck_require__(66193);
+
+function isColorSupported() {
+  return (typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors.isColorSupported
+  );
+}
+const compose = (f, g) => v => f(g(v));
+function buildDefs(colors) {
+  return {
+    keyword: colors.cyan,
+    capitalized: colors.yellow,
+    jsxIdentifier: colors.yellow,
+    punctuator: colors.yellow,
+    number: colors.magenta,
+    string: colors.green,
+    regex: colors.magenta,
+    comment: colors.gray,
+    invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
+    gutter: colors.gray,
+    marker: compose(colors.red, colors.bold),
+    message: compose(colors.red, colors.bold),
+    reset: colors.reset
+  };
+}
+const defsOn = buildDefs(picocolors.createColors(true));
+const defsOff = buildDefs(picocolors.createColors(false));
+function getDefs(enabled) {
+  return enabled ? defsOn : defsOff;
+}
+
+const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
+const NEWLINE$1 = /\r\n|[\n\r\u2028\u2029]/;
+const BRACKET = /^[()[\]{}]$/;
+let tokenize;
+const JSX_TAG = /^[a-z][\w-]*$/i;
+const getTokenType = function (token, offset, text) {
+  if (token.type === "name") {
+    const tokenValue = token.value;
+    if (helperValidatorIdentifier.isKeyword(tokenValue) || helperValidatorIdentifier.isStrictReservedWord(tokenValue, true) || sometimesKeywords.has(tokenValue)) {
+      return "keyword";
+    }
+    if (JSX_TAG.test(tokenValue) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) === "</")) {
+      return "jsxIdentifier";
+    }
+    const firstChar = String.fromCodePoint(tokenValue.codePointAt(0));
+    if (firstChar !== firstChar.toLowerCase()) {
+      return "capitalized";
+    }
+  }
+  if (token.type === "punctuator" && BRACKET.test(token.value)) {
+    return "bracket";
+  }
+  if (token.type === "invalid" && (token.value === "@" || token.value === "#")) {
+    return "punctuator";
+  }
+  return token.type;
+};
+tokenize = function* (text) {
+  let match;
+  while (match = jsTokens.default.exec(text)) {
+    const token = jsTokens.matchToToken(match);
+    yield {
+      type: getTokenType(token, match.index, text),
+      value: token.value
+    };
+  }
+};
+function highlight(text) {
+  if (text === "") return "";
+  const defs = getDefs(true);
+  let highlighted = "";
+  for (const {
+    type,
+    value
+  } of tokenize(text)) {
+    if (type in defs) {
+      highlighted += value.split(NEWLINE$1).map(str => defs[type](str)).join("\n");
+    } else {
+      highlighted += value;
+    }
+  }
+  return highlighted;
+}
+
+let deprecationWarningShown = false;
+const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+function getMarkerLines(loc, source, opts, startLineBaseZero) {
+  const startLoc = Object.assign({
+    column: 0,
+    line: -1
+  }, loc.start);
+  const endLoc = Object.assign({}, startLoc, loc.end);
+  const {
+    linesAbove = 2,
+    linesBelow = 3
+  } = opts || {};
+  const startLine = startLoc.line - startLineBaseZero;
+  const startColumn = startLoc.column;
+  const endLine = endLoc.line - startLineBaseZero;
+  const endColumn = endLoc.column;
+  let start = Math.max(startLine - (linesAbove + 1), 0);
+  let end = Math.min(source.length, endLine + linesBelow);
+  if (startLine === -1) {
+    start = 0;
+  }
+  if (endLine === -1) {
+    end = source.length;
+  }
+  const lineDiff = endLine - startLine;
+  const markerLines = {};
+  if (lineDiff) {
+    for (let i = 0; i <= lineDiff; i++) {
+      const lineNumber = i + startLine;
+      if (!startColumn) {
+        markerLines[lineNumber] = true;
+      } else if (i === 0) {
+        const sourceLength = source[lineNumber - 1].length;
+        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
+      } else if (i === lineDiff) {
+        markerLines[lineNumber] = [0, endColumn];
+      } else {
+        const sourceLength = source[lineNumber - i].length;
+        markerLines[lineNumber] = [0, sourceLength];
+      }
+    }
+  } else {
+    if (startColumn === endColumn) {
+      if (startColumn) {
+        markerLines[startLine] = [startColumn, 0];
+      } else {
+        markerLines[startLine] = true;
+      }
+    } else {
+      markerLines[startLine] = [startColumn, endColumn - startColumn];
+    }
+  }
+  return {
+    start,
+    end,
+    markerLines
+  };
+}
+function codeFrameColumns(rawLines, loc, opts = {}) {
+  const shouldHighlight = opts.forceColor || isColorSupported() && opts.highlightCode;
+  const startLineBaseZero = (opts.startLine || 1) - 1;
+  const defs = getDefs(shouldHighlight);
+  const lines = rawLines.split(NEWLINE);
+  const {
+    start,
+    end,
+    markerLines
+  } = getMarkerLines(loc, lines, opts, startLineBaseZero);
+  const hasColumns = loc.start && typeof loc.start.column === "number";
+  const numberMaxWidth = String(end + startLineBaseZero).length;
+  const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
+  let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line, index) => {
+    const number = start + 1 + index;
+    const paddedNumber = ` ${number + startLineBaseZero}`.slice(-numberMaxWidth);
+    const gutter = ` ${paddedNumber} |`;
+    const hasMarker = markerLines[number];
+    const lastMarkerLine = !markerLines[number + 1];
+    if (hasMarker) {
+      let markerLine = "";
+      if (Array.isArray(hasMarker)) {
+        const markerSpacing = line.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
+        const numberOfMarkers = hasMarker[1] || 1;
+        markerLine = ["\n ", defs.gutter(gutter.replace(/\d/g, " ")), " ", markerSpacing, defs.marker("^").repeat(numberOfMarkers)].join("");
+        if (lastMarkerLine && opts.message) {
+          markerLine += " " + defs.message(opts.message);
+        }
+      }
+      return [defs.marker(">"), defs.gutter(gutter), line.length > 0 ? ` ${line}` : "", markerLine].join("");
+    } else {
+      return ` ${defs.gutter(gutter)}${line.length > 0 ? ` ${line}` : ""}`;
+    }
+  }).join("\n");
+  if (opts.message && !hasColumns) {
+    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
+  }
+  if (shouldHighlight) {
+    return defs.reset(frame);
+  } else {
+    return frame;
+  }
+}
+function index (rawLines, lineNumber, colNumber, opts = {}) {
+  if (!deprecationWarningShown) {
+    deprecationWarningShown = true;
+    const message = "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
+    if (process.emitWarning) {
+      process.emitWarning(message, "DeprecationWarning");
+    } else {
+      const deprecationError = new Error(message);
+      deprecationError.name = "DeprecationWarning";
+      console.warn(new Error(message));
+    }
+  }
+  colNumber = Math.max(colNumber, 0);
+  const location = {
+    start: {
+      column: colNumber,
+      line: lineNumber
+    }
+  };
+  return codeFrameColumns(rawLines, location, opts);
+}
+
+exports.codeFrameColumns = codeFrameColumns;
+exports["default"] = index;
+exports.highlight = highlight;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 90970:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -80763,7 +76205,7 @@ function isIdentifierName(name) {
 
 /***/ }),
 
-/***/ 6472:
+/***/ 66193:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -80820,15 +76262,15 @@ Object.defineProperty(exports, "isStrictReservedWord", ({
     return _keyword.isStrictReservedWord;
   }
 }));
-var _identifier = __nccwpck_require__(7713);
-var _keyword = __nccwpck_require__(58027);
+var _identifier = __nccwpck_require__(90970);
+var _keyword = __nccwpck_require__(8906);
 
 //# sourceMappingURL=index.js.map
 
 
 /***/ }),
 
-/***/ 58027:
+/***/ 8906:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -80868,129 +76310,6 @@ function isKeyword(word) {
 
 //# sourceMappingURL=keyword.js.map
 
-
-/***/ }),
-
-/***/ 35564:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = highlight;
-exports.getChalk = getChalk;
-exports.shouldHighlight = shouldHighlight;
-
-var _jsTokens = __nccwpck_require__(72859);
-
-var _helperValidatorIdentifier = __nccwpck_require__(6472);
-
-var _chalk = __nccwpck_require__(57665);
-
-const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
-
-function getDefs(chalk) {
-  return {
-    keyword: chalk.cyan,
-    capitalized: chalk.yellow,
-    jsxIdentifier: chalk.yellow,
-    punctuator: chalk.yellow,
-    number: chalk.magenta,
-    string: chalk.green,
-    regex: chalk.magenta,
-    comment: chalk.grey,
-    invalid: chalk.white.bgRed.bold
-  };
-}
-
-const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
-const BRACKET = /^[()[\]{}]$/;
-let tokenize;
-{
-  const JSX_TAG = /^[a-z][\w-]*$/i;
-
-  const getTokenType = function (token, offset, text) {
-    if (token.type === "name") {
-      if ((0, _helperValidatorIdentifier.isKeyword)(token.value) || (0, _helperValidatorIdentifier.isStrictReservedWord)(token.value, true) || sometimesKeywords.has(token.value)) {
-        return "keyword";
-      }
-
-      if (JSX_TAG.test(token.value) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) == "</")) {
-        return "jsxIdentifier";
-      }
-
-      if (token.value[0] !== token.value[0].toLowerCase()) {
-        return "capitalized";
-      }
-    }
-
-    if (token.type === "punctuator" && BRACKET.test(token.value)) {
-      return "bracket";
-    }
-
-    if (token.type === "invalid" && (token.value === "@" || token.value === "#")) {
-      return "punctuator";
-    }
-
-    return token.type;
-  };
-
-  tokenize = function* (text) {
-    let match;
-
-    while (match = _jsTokens.default.exec(text)) {
-      const token = _jsTokens.matchToToken(match);
-
-      yield {
-        type: getTokenType(token, match.index, text),
-        value: token.value
-      };
-    }
-  };
-}
-
-function highlightTokens(defs, text) {
-  let highlighted = "";
-
-  for (const {
-    type,
-    value
-  } of tokenize(text)) {
-    const colorize = defs[type];
-
-    if (colorize) {
-      highlighted += value.split(NEWLINE).map(str => colorize(str)).join("\n");
-    } else {
-      highlighted += value;
-    }
-  }
-
-  return highlighted;
-}
-
-function shouldHighlight(options) {
-  return !!_chalk.supportsColor || options.forceColor;
-}
-
-function getChalk(options) {
-  return options.forceColor ? new _chalk.constructor({
-    enabled: true,
-    level: 1
-  }) : _chalk;
-}
-
-function highlight(code, options = {}) {
-  if (code !== "" && shouldHighlight(options)) {
-    const chalk = getChalk(options);
-    const defs = getDefs(chalk);
-    return highlightTokens(defs, code);
-  } else {
-    return code;
-  }
-}
 
 /***/ }),
 
@@ -81060,13 +76379,13 @@ exports.range = range;
 
 /***/ }),
 
-/***/ 14255:
+/***/ 14360:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXPANSION_MAX = void 0;
+exports.EXPANSION_MAX_LENGTH = exports.EXPANSION_MAX = void 0;
 exports.expand = expand;
 const balanced_match_1 = __nccwpck_require__(574);
 const escSlash = '\0SLASH' + Math.random() + '\0';
@@ -81085,6 +76404,17 @@ const closePattern = /\\}/g;
 const commaPattern = /\\,/g;
 const periodPattern = /\\\./g;
 exports.EXPANSION_MAX = 100_000;
+// `EXPANSION_MAX` caps the *number* of expansions, but not their length. An
+// input like `'{a,b}'.repeat(1500)` stays under that count - its output is
+// truncated to 100k results - while making every result ~1500 characters
+// long. The result set, and the intermediate arrays built while combining
+// brace sets, then grow large enough to exhaust memory and crash the process
+// (CVE-2026-14257). `EXPANSION_MAX_LENGTH` bounds the total number of
+// characters the accumulator may hold at any point, so memory stays flat no
+// matter how many brace groups are chained. The limit sits well above any
+// realistic expansion (100k results hitting `EXPANSION_MAX` measure ~1M
+// characters) so legitimate input is unaffected.
+exports.EXPANSION_MAX_LENGTH = 4_000_000;
 function numeric(str) {
     return !isNaN(str) ? parseInt(str, 10) : str.charCodeAt(0);
 }
@@ -81134,7 +76464,7 @@ function expand(str, options = {}) {
     if (!str) {
         return [];
     }
-    const { max = exports.EXPANSION_MAX } = options;
+    const { max = exports.EXPANSION_MAX, maxLength = exports.EXPANSION_MAX_LENGTH } = options;
     // I don't know why Bash 4.3 does this, but it does.
     // Anything starting with {} will have the first two bytes preserved
     // but *only* at the top level, so {},a}b will not expand to anything,
@@ -81144,7 +76474,7 @@ function expand(str, options = {}) {
     if (str.slice(0, 2) === '{}') {
         str = '\\{\\}' + str.slice(2);
     }
-    return expand_(escapeBraces(str), max, true).map(unescapeBraces);
+    return expand_(escapeBraces(str), max, maxLength, true).map(unescapeBraces);
 }
 function embrace(str) {
     return '{' + str + '}';
@@ -81158,22 +76488,117 @@ function lte(i, y) {
 function gte(i, y) {
     return i >= y;
 }
-function expand_(str, max, isTop) {
-    /** @type {string[]} */
-    const expansions = [];
-    const m = (0, balanced_match_1.balanced)('{', '}', str);
-    if (!m)
-        return [str];
-    // no need to expand pre, since it is guaranteed to be free of brace-sets
-    const pre = m.pre;
-    const post = m.post.length ? expand_(m.post, max, false) : [''];
-    if (/\$$/.test(m.pre)) {
-        for (let k = 0; k < post.length && k < max; k++) {
-            const expansion = pre + '{' + m.body + '}' + post[k];
-            expansions.push(expansion);
+// Build `{ acc[a] + pre + values[v] }` for every combination, capping the
+// number of results at `max` and the total number of characters at `maxLength`.
+// This is the one place output grows, so bounding it here keeps the single
+// accumulator - and therefore memory - flat regardless of how many brace groups
+// are combined (CVE-2026-14257).
+function combine(acc, pre, values, max, maxLength, dropEmpties) {
+    const out = [];
+    let length = 0;
+    for (let a = 0; a < acc.length; a++) {
+        for (let v = 0; v < values.length; v++) {
+            if (out.length >= max)
+                return out;
+            const expansion = acc[a] + pre + values[v];
+            // Bash drops empty results at the top level. Skip them before they count
+            // against `max`, so `max` bounds the number of *kept* results.
+            if (dropEmpties && !expansion)
+                continue;
+            if (length + expansion.length > maxLength)
+                return out;
+            out.push(expansion);
+            length += expansion.length;
         }
     }
-    else {
+    return out;
+}
+// The expansion values of a single numeric (`1..5`) or alphabetic (`a..e..2`)
+// sequence body.
+function expandSequence(body, isAlphaSequence, max, maxLength) {
+    const n = body.split(/\.\./);
+    const N = [];
+    // A sequence body always splits into two or three parts, but the compiler
+    // can't know that.
+    /* c8 ignore start */
+    if (n[0] === undefined || n[1] === undefined) {
+        return N;
+    }
+    /* c8 ignore stop */
+    const x = numeric(n[0]);
+    const y = numeric(n[1]);
+    const width = Math.max(n[0].length, n[1].length);
+    let incr = n.length === 3 && n[2] !== undefined ?
+        Math.max(Math.abs(numeric(n[2])), 1)
+        : 1;
+    let test = lte;
+    const reverse = y < x;
+    if (reverse) {
+        incr *= -1;
+        test = gte;
+    }
+    const pad = n.some(isPadded);
+    let length = 0;
+    for (let i = x; test(i, y) && N.length < max; i += incr) {
+        let c;
+        if (isAlphaSequence) {
+            c = String.fromCharCode(i);
+            if (c === '\\') {
+                c = '';
+            }
+        }
+        else {
+            c = String(i);
+            if (pad) {
+                const need = width - c.length;
+                if (need > 0) {
+                    const z = new Array(need + 1).join('0');
+                    if (i < 0) {
+                        c = '-' + z + c.slice(1);
+                    }
+                    else {
+                        c = z + c;
+                    }
+                }
+            }
+        }
+        if (length + c.length > maxLength)
+            break;
+        N.push(c);
+        length += c.length;
+    }
+    return N;
+}
+function expand_(str, max, maxLength, isTop) {
+    // Consume the string's top-level brace groups left to right, threading a
+    // running set of combined prefixes (`acc`). Expanding the tail iteratively -
+    // rather than recursing on `m.post` once per group - keeps the native stack
+    // depth constant, so deeply chained input (`'{a,b}'.repeat(3000)`) can no
+    // longer overflow the stack, and leaves a single accumulator whose size
+    // `maxLength` bounds directly (CVE-2026-14257).
+    let acc = [''];
+    // Bash drops empty results, but only when the *first* top-level group is a
+    // comma set - a sequence like `{a..\}` may legitimately yield ''. The drop
+    // is on the final strings, so it is applied to whichever `combine` produces
+    // them (the one with no brace set left in the tail).
+    let dropEmpties = false;
+    let firstGroup = true;
+    for (;;) {
+        const m = (0, balanced_match_1.balanced)('{', '}', str);
+        // No brace set left: the rest of the string is literal.
+        if (!m) {
+            return combine(acc, str, [''], max, maxLength, dropEmpties);
+        }
+        // no need to expand pre, since it is guaranteed to be free of brace-sets
+        const pre = m.pre;
+        if (/\$$/.test(pre)) {
+            acc = combine(acc, pre + '{' + m.body + '}', [''], max, maxLength, dropEmpties && !m.post.length);
+            firstGroup = false;
+            if (!m.post.length)
+                break;
+            str = m.post;
+            continue;
+        }
         const isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
         const isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
         const isSequence = isNumericSequence || isAlphaSequence;
@@ -81182,271 +76607,75 @@ function expand_(str, max, isTop) {
             // {a},b}
             if (m.post.match(/,(?!,).*\}/)) {
                 str = m.pre + '{' + m.body + escClose + m.post;
-                return expand_(str, max, true);
+                isTop = true;
+                continue;
             }
-            return [str];
+            // Nothing here expands, so the whole remaining string is literal.
+            return combine(acc, pre + '{' + m.body + '}' + m.post, [''], max, maxLength, dropEmpties);
         }
-        let n;
+        if (firstGroup) {
+            dropEmpties = isTop && !isSequence;
+            firstGroup = false;
+        }
+        let values;
         if (isSequence) {
-            n = m.body.split(/\.\./);
+            values = expandSequence(m.body, isAlphaSequence, max, maxLength);
         }
         else {
-            n = parseCommaParts(m.body);
+            let n = parseCommaParts(m.body);
             if (n.length === 1 && n[0] !== undefined) {
                 // x{{a,b}}y ==> x{a}y x{b}y
-                n = expand_(n[0], max, false).map(embrace);
+                n = expand_(n[0], max, maxLength, false).map(embrace);
                 //XXX is this necessary? Can't seem to hit it in tests.
                 /* c8 ignore start */
                 if (n.length === 1) {
-                    return post.map(p => m.pre + n[0] + p);
+                    acc = combine(acc, pre + n[0], [''], max, maxLength, dropEmpties && !m.post.length);
+                    if (!m.post.length)
+                        break;
+                    str = m.post;
+                    continue;
                 }
                 /* c8 ignore stop */
             }
-        }
-        // at this point, n is the parts, and we know it's not a comma set
-        // with a single entry.
-        let N;
-        if (isSequence && n[0] !== undefined && n[1] !== undefined) {
-            const x = numeric(n[0]);
-            const y = numeric(n[1]);
-            const width = Math.max(n[0].length, n[1].length);
-            let incr = n.length === 3 && n[2] !== undefined ?
-                Math.max(Math.abs(numeric(n[2])), 1)
-                : 1;
-            let test = lte;
-            const reverse = y < x;
-            if (reverse) {
-                incr *= -1;
-                test = gte;
+            // Values that `combine` is going to drop as empty produce no result, so
+            // they must not count against `max` - otherwise `{a,,b}` with `max: 2`
+            // would stop at `['a', '']` and yield one result instead of two. Skipping
+            // them outright keeps `values` bounded while leaving `max` a bound on
+            // *kept* results.
+            let dropsEmpties = dropEmpties && !m.post.length && !pre;
+            for (let d = 0; dropsEmpties && d < acc.length; d++) {
+                if (acc[d]) {
+                    dropsEmpties = false;
+                }
             }
-            const pad = n.some(isPadded);
-            N = [];
-            for (let i = x; test(i, y) && N.length < max; i += incr) {
-                let c;
-                if (isAlphaSequence) {
-                    c = String.fromCharCode(i);
-                    if (c === '\\') {
-                        c = '';
+            values = [];
+            let valuesLength = 0;
+            outer: for (let j = 0; j < n.length; j++) {
+                const expanded = expand_(n[j], max, maxLength, false);
+                for (let k = 0; k < expanded.length; k++) {
+                    const v = expanded[k];
+                    if (dropsEmpties && !v)
+                        continue;
+                    if (values.length >= max || valuesLength + v.length > maxLength) {
+                        break outer;
                     }
-                }
-                else {
-                    c = String(i);
-                    if (pad) {
-                        const need = width - c.length;
-                        if (need > 0) {
-                            const z = new Array(need + 1).join('0');
-                            if (i < 0) {
-                                c = '-' + z + c.slice(1);
-                            }
-                            else {
-                                c = z + c;
-                            }
-                        }
-                    }
-                }
-                N.push(c);
-            }
-        }
-        else {
-            N = [];
-            for (let j = 0; j < n.length; j++) {
-                N.push.apply(N, expand_(n[j], max, false));
-            }
-        }
-        for (let j = 0; j < N.length; j++) {
-            for (let k = 0; k < post.length && expansions.length < max; k++) {
-                const expansion = pre + N[j] + post[k];
-                if (!isTop || isSequence || expansion) {
-                    expansions.push(expansion);
+                    values.push(v);
+                    valuesLength += v.length;
                 }
             }
         }
+        acc = combine(acc, pre, values, max, maxLength, dropEmpties && !m.post.length);
+        if (!m.post.length)
+            break;
+        str = m.post;
     }
-    return expansions;
+    return acc;
 }
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 82605:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-var __webpack_unused_export__;
-
-/*!
- * content-type
- * Copyright(c) 2015 Douglas Christopher Wilson
- * MIT Licensed
- */
-__webpack_unused_export__ = ({ value: true });
-__webpack_unused_export__ = format;
-exports.qg = parse;
-const TEXT_REGEXP = /^[\u0009\u0020-\u007e\u0080-\u00ff]*$/;
-const TOKEN_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
-/**
- * RegExp to match chars that must be quoted-pair in RFC 9110 sec 5.6.4
- */
-const QUOTE_REGEXP = /[\\"]/g;
-/**
- * RegExp to match type in RFC 9110 sec 8.3.1
- *
- * media-type = type "/" subtype
- * type       = token
- * subtype    = token
- */
-const TYPE_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
-/**
- * Null object perf optimization. Faster than `Object.create(null)` and `{ __proto__: null }`.
- */
-const NullObject = /* @__PURE__ */ (() => {
-    const C = function () { };
-    C.prototype = Object.create(null);
-    return C;
-})();
-/**
- * Format an object into a `Content-Type` header.
- */
-function format(obj) {
-    const { type, parameters } = obj;
-    if (!type || !TYPE_REGEXP.test(type)) {
-        throw new TypeError(`Invalid type: ${type}`);
-    }
-    let result = type;
-    if (parameters) {
-        for (const param of Object.keys(parameters)) {
-            if (!TOKEN_REGEXP.test(param)) {
-                throw new TypeError(`Invalid parameter name: ${param}`);
-            }
-            result += `; ${param}=${qstring(parameters[param])}`;
-        }
-    }
-    return result;
-}
-/**
- * Parse a `Content-Type` header.
- */
-function parse(header, options) {
-    const len = header.length;
-    let index = skipOWS(header, 0, len);
-    const valueStart = index;
-    index = skipValue(header, index, len);
-    const valueEnd = trailingOWS(header, valueStart, index);
-    const type = header.slice(valueStart, valueEnd).toLowerCase();
-    const parameters = options?.parameters === false
-        ? new NullObject()
-        : parseParameters(header, index, len);
-    return { type, parameters };
-}
-const SP = 32; // " "
-const HTAB = 9; // "\t"
-const SEMI = 59; // ";"
-const EQ = 61; // "="
-const DQUOTE = 34; // '"'
-const BSLASH = 92; // "\\"
-/**
- * Parses the parameters of a `Content-Type` header starting at the given index.
- */
-function parseParameters(header, index, len) {
-    const parameters = new NullObject();
-    parameter: while (index < len) {
-        index = skipOWS(header, index + 1 /* Skip over ; */, len);
-        const keyStart = index;
-        while (index < len) {
-            const code = header.charCodeAt(index);
-            if (code === SEMI)
-                continue parameter;
-            if (code === EQ) {
-                const keyEnd = trailingOWS(header, keyStart, index);
-                const key = header.slice(keyStart, keyEnd).toLowerCase();
-                index = skipOWS(header, index + 1, len);
-                if (index < len && header.charCodeAt(index) === DQUOTE) {
-                    index++;
-                    let value = "";
-                    while (index < len) {
-                        const code = header.charCodeAt(index++);
-                        if (code === DQUOTE) {
-                            index = skipValue(header, index, len);
-                            if (parameters[key] === undefined)
-                                parameters[key] = value;
-                            break;
-                        }
-                        if (code === BSLASH && index < len) {
-                            value += header[index++];
-                            continue;
-                        }
-                        value += String.fromCharCode(code);
-                    }
-                    continue parameter;
-                }
-                const valueStart = index;
-                index = skipValue(header, index, len);
-                if (parameters[key] === undefined) {
-                    const valueEnd = trailingOWS(header, valueStart, index);
-                    parameters[key] = header.slice(valueStart, valueEnd);
-                }
-                continue parameter;
-            }
-            index++;
-        }
-    }
-    return parameters;
-}
-/**
- * Skip over characters until a semicolon.
- */
-function skipValue(str, index, len) {
-    while (index < len) {
-        const char = str.charCodeAt(index);
-        if (char === SEMI)
-            break;
-        index++;
-    }
-    return index;
-}
-/**
- * Skip optional whitespace (OWS) in an HTTP header value.
- *
- * OWS is defined in RFC 9110 sec 5.6.3 as SP (" ") or HTAB ("\t").
- */
-function skipOWS(header, index, len) {
-    while (index < len) {
-        const char = header.charCodeAt(index);
-        if (char !== SP && char !== HTAB)
-            break;
-        index++;
-    }
-    return index;
-}
-/**
- * Trim optional whitespace (OWS) from the end of a substring.
- *
- * OWS is defined in RFC 9110 sec 5.6.3 as SP (" ") or HTAB ("\t").
- */
-function trailingOWS(header, start, end) {
-    while (end > start) {
-        const char = header.charCodeAt(end - 1);
-        if (char !== SP && char !== HTAB)
-            break;
-        end--;
-    }
-    return end;
-}
-/**
- * Serialize a parameter value.
- */
-function qstring(str) {
-    if (TOKEN_REGEXP.test(str))
-        return str;
-    if (TEXT_REGEXP.test(str))
-        return `"${str.replace(QUOTE_REGEXP, "\\$&")}"`;
-    throw new TypeError(`Invalid parameter value: ${str}`);
-}
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 82210:
+/***/ 64799:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -81467,7 +76696,7 @@ exports.assertValidPattern = assertValidPattern;
 
 /***/ }),
 
-/***/ 7090:
+/***/ 89721:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -81476,8 +76705,8 @@ exports.assertValidPattern = assertValidPattern;
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AST = void 0;
-const brace_expressions_js_1 = __nccwpck_require__(97867);
-const unescape_js_1 = __nccwpck_require__(43148);
+const brace_expressions_js_1 = __nccwpck_require__(93576);
+const unescape_js_1 = __nccwpck_require__(12197);
 const types = new Set(['!', '?', '+', '*', '@']);
 const isExtglobType = (c) => types.has(c);
 const isExtglobAST = (c) => isExtglobType(c.type);
@@ -82319,7 +77548,7 @@ _a = AST;
 
 /***/ }),
 
-/***/ 97867:
+/***/ 93576:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -82476,7 +77705,7 @@ exports.parseClass = parseClass;
 
 /***/ }),
 
-/***/ 99971:
+/***/ 11094:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -82513,18 +77742,18 @@ exports.escape = escape;
 
 /***/ }),
 
-/***/ 5434:
+/***/ 27089:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.unescape = exports.escape = exports.AST = exports.Minimatch = exports.match = exports.makeRe = exports.braceExpand = exports.defaults = exports.filter = exports.GLOBSTAR = exports.sep = exports.minimatch = void 0;
-const brace_expansion_1 = __nccwpck_require__(14255);
-const assert_valid_pattern_js_1 = __nccwpck_require__(82210);
-const ast_js_1 = __nccwpck_require__(7090);
-const escape_js_1 = __nccwpck_require__(99971);
-const unescape_js_1 = __nccwpck_require__(43148);
+const brace_expansion_1 = __nccwpck_require__(14360);
+const assert_valid_pattern_js_1 = __nccwpck_require__(64799);
+const ast_js_1 = __nccwpck_require__(89721);
+const escape_js_1 = __nccwpck_require__(11094);
+const unescape_js_1 = __nccwpck_require__(12197);
 const minimatch = (p, pattern, options = {}) => {
     (0, assert_valid_pattern_js_1.assertValidPattern)(pattern);
     // shortcut: comments match nothing.
@@ -83632,11 +78861,11 @@ class Minimatch {
 }
 exports.Minimatch = Minimatch;
 /* c8 ignore start */
-var ast_js_2 = __nccwpck_require__(7090);
+var ast_js_2 = __nccwpck_require__(89721);
 Object.defineProperty(exports, "AST", ({ enumerable: true, get: function () { return ast_js_2.AST; } }));
-var escape_js_2 = __nccwpck_require__(99971);
+var escape_js_2 = __nccwpck_require__(11094);
 Object.defineProperty(exports, "escape", ({ enumerable: true, get: function () { return escape_js_2.escape; } }));
-var unescape_js_2 = __nccwpck_require__(43148);
+var unescape_js_2 = __nccwpck_require__(12197);
 Object.defineProperty(exports, "unescape", ({ enumerable: true, get: function () { return unescape_js_2.unescape; } }));
 /* c8 ignore stop */
 exports.minimatch.AST = ast_js_1.AST;
@@ -83647,7 +78876,7 @@ exports.minimatch.unescape = unescape_js_1.unescape;
 
 /***/ }),
 
-/***/ 43148:
+/***/ 12197:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -94532,14 +89761,552 @@ module.exports = underscoreNodeF._;
 
 /***/ }),
 
-/***/ 27321:
+/***/ 21795:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
+__nccwpck_require__.r(__webpack_exports__);
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   s: () => (/* binding */ endpoint)
+/* harmony export */   GraphqlResponseError: () => (/* binding */ GraphqlResponseError),
+/* harmony export */   graphql: () => (/* binding */ graphql2),
+/* harmony export */   withCustomRequest: () => (/* binding */ withCustomRequest)
 /* harmony export */ });
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6868);
+/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(50422);
+/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(6868);
+// pkg/dist-src/index.js
+
+
+
+// pkg/dist-src/version.js
+var VERSION = "0.0.0-development";
+
+// pkg/dist-src/with-defaults.js
+
+
+// pkg/dist-src/graphql.js
+
+
+// pkg/dist-src/error.js
+function _buildMessageForResponseErrors(data) {
+  return `Request failed due to following response errors:
+` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+}
+var GraphqlResponseError = class extends Error {
+  constructor(request2, headers, response) {
+    super(_buildMessageForResponseErrors(response));
+    this.request = request2;
+    this.headers = headers;
+    this.response = response;
+    this.errors = response.errors;
+    this.data = response.data;
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+  request;
+  headers;
+  response;
+  name = "GraphqlResponseError";
+  errors;
+  data;
+};
+
+// pkg/dist-src/graphql.js
+var NON_VARIABLE_OPTIONS = [
+  "method",
+  "baseUrl",
+  "url",
+  "headers",
+  "request",
+  "query",
+  "mediaType",
+  "operationName"
+];
+var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
+var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+function graphql(request2, query, options) {
+  if (options) {
+    if (typeof query === "string" && "query" in options) {
+      return Promise.reject(
+        new Error(`[@octokit/graphql] "query" cannot be used as variable name`)
+      );
+    }
+    for (const key in options) {
+      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
+      return Promise.reject(
+        new Error(
+          `[@octokit/graphql] "${key}" cannot be used as variable name`
+        )
+      );
+    }
+  }
+  const parsedOptions = typeof query === "string" ? Object.assign({ query }, options) : query;
+  const requestOptions = Object.keys(
+    parsedOptions
+  ).reduce((result, key) => {
+    if (NON_VARIABLE_OPTIONS.includes(key)) {
+      result[key] = parsedOptions[key];
+      return result;
+    }
+    if (!result.variables) {
+      result.variables = {};
+    }
+    result.variables[key] = parsedOptions[key];
+    return result;
+  }, {});
+  const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
+  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+  }
+  return request2(requestOptions).then((response) => {
+    if (response.data.errors) {
+      const headers = {};
+      for (const key of Object.keys(response.headers)) {
+        headers[key] = response.headers[key];
+      }
+      throw new GraphqlResponseError(
+        requestOptions,
+        headers,
+        response.data
+      );
+    }
+    return response.data.data;
+  });
+}
+
+// pkg/dist-src/with-defaults.js
+function withDefaults(request2, newDefaults) {
+  const newRequest = request2.defaults(newDefaults);
+  const newApi = (query, options) => {
+    return graphql(newRequest, query, options);
+  };
+  return Object.assign(newApi, {
+    defaults: withDefaults.bind(null, newRequest),
+    endpoint: newRequest.endpoint
+  });
+}
+
+// pkg/dist-src/index.js
+var graphql2 = withDefaults(_octokit_request__WEBPACK_IMPORTED_MODULE_0__.request, {
+  headers: {
+    "user-agent": `octokit-graphql.js/${VERSION} ${(0,universal_user_agent__WEBPACK_IMPORTED_MODULE_1__/* .getUserAgent */ .$)()}`
+  },
+  method: "POST",
+  url: "/graphql"
+});
+function withCustomRequest(customRequest) {
+  return withDefaults(customRequest, {
+    method: "POST",
+    url: "/graphql"
+  });
+}
+
+/* v8 ignore if -- @preserve */
+
+
+/***/ }),
+
+/***/ 3059:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   VERSION: () => (/* binding */ VERSION),
+/* harmony export */   retry: () => (/* binding */ retry)
+/* harmony export */ });
+/* harmony import */ var bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9900);
+/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(98969);
+// pkg/dist-src/version.js
+var VERSION = "0.0.0-development";
+
+// pkg/dist-src/error-request.js
+function isRequestError(error) {
+  return error.request !== void 0;
+}
+async function errorRequest(state, octokit, error, options) {
+  if (!isRequestError(error) || !error?.request.request) {
+    throw error;
+  }
+  if (error.status >= 400 && !state.doNotRetry.includes(error.status)) {
+    const retries = options.request.retries != null ? options.request.retries : state.retries;
+    const retryAfter = Math.pow((options.request.retryCount || 0) + 1, 2);
+    throw octokit.retry.retryRequest(error, retries, retryAfter);
+  }
+  throw error;
+}
+
+// pkg/dist-src/wrap-request.js
+
+
+async function wrapRequest(state, octokit, request, options) {
+  const limiter = new bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__();
+  limiter.on("failed", function(error, info) {
+    const maxRetries = ~~error.request.request?.retries;
+    const after = ~~error.request.request?.retryAfter;
+    options.request.retryCount = info.retryCount + 1;
+    if (maxRetries > info.retryCount) {
+      return after * state.retryAfterBaseValue;
+    }
+  });
+  return limiter.schedule(
+    requestWithGraphqlErrorHandling.bind(null, state, octokit, request),
+    options
+  );
+}
+async function requestWithGraphqlErrorHandling(state, octokit, request, options) {
+  const response = await request(options);
+  if (response.data && response.data.errors && response.data.errors.length > 0 && /Something went wrong while executing your query/.test(
+    response.data.errors[0].message
+  )) {
+    const error = new _octokit_request_error__WEBPACK_IMPORTED_MODULE_1__.RequestError(response.data.errors[0].message, 500, {
+      request: options,
+      response
+    });
+    return errorRequest(state, octokit, error, options);
+  }
+  return response;
+}
+
+// pkg/dist-src/index.js
+function retry(octokit, octokitOptions) {
+  const state = Object.assign(
+    {
+      enabled: true,
+      retryAfterBaseValue: 1e3,
+      doNotRetry: [400, 401, 403, 404, 410, 422, 451],
+      retries: 3
+    },
+    octokitOptions.retry
+  );
+  const retryPlugin = {
+    retry: {
+      retryRequest: (error, retries, retryAfter) => {
+        error.request.request = Object.assign({}, error.request.request, {
+          retries,
+          retryAfter
+        });
+        return error;
+      }
+    }
+  };
+  if (state.enabled) {
+    octokit.hook.error("request", errorRequest.bind(null, state, retryPlugin));
+    octokit.hook.wrap("request", wrapRequest.bind(null, state, retryPlugin));
+  }
+  return retryPlugin;
+}
+retry.VERSION = VERSION;
+
+
+
+/***/ }),
+
+/***/ 27983:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   throttling: () => (/* binding */ throttling)
+/* harmony export */ });
+/* harmony import */ var bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9900);
+// pkg/dist-src/index.js
+
+
+// pkg/dist-src/version.js
+var VERSION = "0.0.0-development";
+
+// pkg/dist-src/wrap-request.js
+var noop = () => Promise.resolve();
+function wrapRequest(state, request, options) {
+  return state.retryLimiter.schedule(doRequest, state, request, options);
+}
+async function doRequest(state, request, options) {
+  const { pathname } = new URL(options.url, "http://github.test");
+  const isAuth = isAuthRequest(options.method, pathname);
+  const isWrite = !isAuth && options.method !== "GET" && options.method !== "HEAD";
+  const isSearch = options.method === "GET" && pathname.startsWith("/search/");
+  const isGraphQL = pathname.startsWith("/graphql");
+  const retryCount = ~~request.retryCount;
+  const jobOptions = retryCount > 0 ? { priority: 0, weight: 0 } : {};
+  if (state.clustering) {
+    jobOptions.expiration = 1e3 * 60;
+  }
+  if (isWrite || isGraphQL) {
+    await state.write.key(state.id).schedule(jobOptions, noop);
+  }
+  if (isWrite && state.triggersNotification(pathname)) {
+    await state.notifications.key(state.id).schedule(jobOptions, noop);
+  }
+  if (isSearch) {
+    await state.search.key(state.id).schedule(jobOptions, noop);
+  }
+  const req = (isAuth ? state.auth : state.global).key(state.id).schedule(jobOptions, request, options);
+  if (isGraphQL) {
+    const res = await req;
+    if (res.data.errors != null && res.data.errors.some((error) => error.type === "RATE_LIMITED")) {
+      const error = Object.assign(new Error("GraphQL Rate Limit Exceeded"), {
+        response: res,
+        data: res.data
+      });
+      throw error;
+    }
+  }
+  return req;
+}
+function isAuthRequest(method, pathname) {
+  return method === "PATCH" && // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-scoped-access-token
+  /^\/applications\/[^/]+\/token\/scoped$/.test(pathname) || method === "POST" && // https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#reset-a-token
+  (/^\/applications\/[^/]+\/token$/.test(pathname) || // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
+  /^\/app\/installations\/[^/]+\/access_tokens$/.test(pathname) || // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+  pathname === "/login/oauth/access_token");
+}
+
+// pkg/dist-src/generated/triggers-notification-paths.js
+var triggers_notification_paths_default = [
+  "/orgs/{org}/invitations",
+  "/orgs/{org}/invitations/{invitation_id}",
+  "/orgs/{org}/teams/{team_slug}/discussions",
+  "/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
+  "/repos/{owner}/{repo}/collaborators/{username}",
+  "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
+  "/repos/{owner}/{repo}/issues",
+  "/repos/{owner}/{repo}/issues/{issue_number}/comments",
+  "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+  "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+  "/repos/{owner}/{repo}/pulls",
+  "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
+  "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
+  "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
+  "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+  "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+  "/repos/{owner}/{repo}/releases",
+  "/teams/{team_id}/discussions",
+  "/teams/{team_id}/discussions/{discussion_number}/comments"
+];
+
+// pkg/dist-src/route-matcher.js
+function routeMatcher(paths) {
+  const regexes = paths.map(
+    (path) => path.split("/").map((c) => c.startsWith("{") ? "(?:.+?)" : c).join("/")
+  );
+  const regex2 = `^(?:${regexes.map((r) => `(?:${r})`).join("|")})[^/]*$`;
+  return new RegExp(regex2, "i");
+}
+
+// pkg/dist-src/index.js
+var regex = routeMatcher(triggers_notification_paths_default);
+var triggersNotification = regex.test.bind(regex);
+var groups = {};
+var createGroups = function(Bottleneck, common) {
+  groups.global = new Bottleneck.Group({
+    id: "octokit-global",
+    maxConcurrent: 10,
+    ...common
+  });
+  groups.auth = new Bottleneck.Group({
+    id: "octokit-auth",
+    maxConcurrent: 1,
+    ...common
+  });
+  groups.search = new Bottleneck.Group({
+    id: "octokit-search",
+    maxConcurrent: 1,
+    minTime: 2e3,
+    ...common
+  });
+  groups.write = new Bottleneck.Group({
+    id: "octokit-write",
+    maxConcurrent: 1,
+    minTime: 1e3,
+    ...common
+  });
+  groups.notifications = new Bottleneck.Group({
+    id: "octokit-notifications",
+    maxConcurrent: 1,
+    minTime: 3e3,
+    ...common
+  });
+};
+function throttling(octokit, octokitOptions) {
+  const {
+    enabled = true,
+    Bottleneck = bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__,
+    id = "no-id",
+    timeout = 1e3 * 60 * 2,
+    // Redis TTL: 2 minutes
+    connection
+  } = octokitOptions.throttle || {};
+  if (!enabled) {
+    return {};
+  }
+  const common = { timeout };
+  if (typeof connection !== "undefined") {
+    common.connection = connection;
+  }
+  if (groups.global == null) {
+    createGroups(Bottleneck, common);
+  }
+  const state = Object.assign(
+    {
+      clustering: connection != null,
+      triggersNotification,
+      fallbackSecondaryRateRetryAfter: 60,
+      retryAfterBaseValue: 1e3,
+      retryLimiter: new Bottleneck(),
+      id,
+      ...groups
+    },
+    octokitOptions.throttle
+  );
+  if (typeof state.onSecondaryRateLimit !== "function" || typeof state.onRateLimit !== "function") {
+    throw new Error(`octokit/plugin-throttling error:
+        You must pass the onSecondaryRateLimit and onRateLimit error handlers.
+        See https://octokit.github.io/rest.js/#throttling
+
+        const octokit = new Octokit({
+          throttle: {
+            onSecondaryRateLimit: (retryAfter, options) => {/* ... */},
+            onRateLimit: (retryAfter, options) => {/* ... */}
+          }
+        })
+    `);
+  }
+  const events = {};
+  const emitter = new Bottleneck.Events(events);
+  events.on("secondary-limit", state.onSecondaryRateLimit);
+  events.on("rate-limit", state.onRateLimit);
+  events.on(
+    "error",
+    (e) => octokit.log.warn("Error in throttling-plugin limit handler", e)
+  );
+  state.retryLimiter.on("failed", async function(error, info) {
+    const [state2, request, options] = info.args;
+    const { pathname } = new URL(options.url, "http://github.test");
+    const shouldRetryGraphQL = pathname.startsWith("/graphql") && error.status !== 401;
+    if (!(shouldRetryGraphQL || error.status === 403 || error.status === 429)) {
+      return;
+    }
+    const retryCount = ~~request.retryCount;
+    request.retryCount = retryCount;
+    options.request.retryCount = retryCount;
+    const { wantRetry, retryAfter = 0 } = await (async function() {
+      if (/\bsecondary rate\b/i.test(error.message)) {
+        const retryAfter2 = Number(error.response.headers["retry-after"]) || state2.fallbackSecondaryRateRetryAfter;
+        const wantRetry2 = await emitter.trigger(
+          "secondary-limit",
+          retryAfter2,
+          options,
+          octokit,
+          retryCount
+        );
+        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+      }
+      if (error.response.headers != null && error.response.headers["x-ratelimit-remaining"] === "0" || (error.response.data?.errors ?? []).some(
+        (error2) => error2.type === "RATE_LIMITED"
+      )) {
+        const rateLimitReset = new Date(
+          ~~error.response.headers["x-ratelimit-reset"] * 1e3
+        ).getTime();
+        const retryAfter2 = Math.max(
+          // Add one second so we retry _after_ the reset time
+          // https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#exceeding-the-rate-limit
+          Math.ceil((rateLimitReset - Date.now()) / 1e3) + 1,
+          0
+        );
+        const wantRetry2 = await emitter.trigger(
+          "rate-limit",
+          retryAfter2,
+          options,
+          octokit,
+          retryCount
+        );
+        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+      }
+      return {};
+    })();
+    if (wantRetry) {
+      request.retryCount++;
+      return retryAfter * state2.retryAfterBaseValue;
+    }
+  });
+  octokit.hook.wrap("request", wrapRequest.bind(null, state));
+  return {};
+}
+throttling.VERSION = VERSION;
+throttling.triggersNotification = triggersNotification;
+
+
+
+/***/ }),
+
+/***/ 98969:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   RequestError: () => (/* binding */ RequestError)
+/* harmony export */ });
+class RequestError extends Error {
+  name;
+  /**
+   * http status code
+   */
+  status;
+  /**
+   * Request options that lead to the error.
+   */
+  request;
+  /**
+   * Response object if a response was received
+   */
+  response;
+  constructor(message, statusCode, options) {
+    super(message, { cause: options.cause });
+    this.name = "HttpError";
+    this.status = Number.parseInt(statusCode);
+    if (Number.isNaN(this.status)) {
+      this.status = 0;
+    }
+    /* v8 ignore else -- @preserve -- Bug with vitest coverage where it sees an else branch that doesn't exist */
+    if ("response" in options) {
+      this.response = options.response;
+    }
+    const requestCopy = Object.assign({}, options.request);
+    if (options.request.headers.authorization) {
+      requestCopy.headers = Object.assign({}, options.request.headers, {
+        authorization: options.request.headers.authorization.replace(
+          /(?<! ) .*$/,
+          " [REDACTED]"
+        )
+      });
+    }
+    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+    this.request = requestCopy;
+  }
+}
+
+
+
+/***/ }),
+
+/***/ 50422:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  request: () => (/* binding */ request)
+});
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/universal-user-agent@7.0.3/node_modules/universal-user-agent/index.js
+var universal_user_agent = __nccwpck_require__(6868);
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+endpoint@11.0.4/node_modules/@octokit/endpoint/dist-bundle/index.js
 // pkg/dist-src/defaults.js
 
 
@@ -94547,7 +90314,7 @@ module.exports = underscoreNodeF._;
 var VERSION = "0.0.0-development";
 
 // pkg/dist-src/defaults.js
-var userAgent = `octokit-endpoint.js/${VERSION} ${(0,universal_user_agent__WEBPACK_IMPORTED_MODULE_0__/* .getUserAgent */ .$)()}`;
+var userAgent = `octokit-endpoint.js/${VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`;
 var DEFAULTS = {
   method: "GET",
   baseUrl: "https://api.github.com",
@@ -94885,549 +90652,783 @@ function withDefaults(oldDefaults, newDefaults) {
 var endpoint = withDefaults(null, DEFAULTS);
 
 
-
-/***/ }),
-
-/***/ 82674:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   GraphqlResponseError: () => (/* binding */ GraphqlResponseError),
-/* harmony export */   graphql: () => (/* binding */ graphql2),
-/* harmony export */   withCustomRequest: () => (/* binding */ withCustomRequest)
-/* harmony export */ });
-/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(79856);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(6868);
-// pkg/dist-src/index.js
-
-
-
-// pkg/dist-src/version.js
-var VERSION = "0.0.0-development";
-
-// pkg/dist-src/with-defaults.js
-
-
-// pkg/dist-src/graphql.js
-
-
-// pkg/dist-src/error.js
-function _buildMessageForResponseErrors(data) {
-  return `Request failed due to following response errors:
-` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+;// CONCATENATED MODULE: ./node_modules/.pnpm/content-type@3.0.0/node_modules/content-type/dist/index.js
+/*!
+ * content-type
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+const TEXT_REGEXP = /^[\u0009\u0020-\u007e\u0080-\u00ff]*$/;
+const TOKEN_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
+/**
+ * RegExp to match chars that must be quoted-pair in RFC 9110 sec 5.6.4
+ */
+const QUOTE_REGEXP = /[\\"]/g;
+/**
+ * RegExp to match type in RFC 9110 sec 8.3.1
+ *
+ * media-type = type "/" subtype
+ * type       = token
+ * subtype    = token
+ */
+const TYPE_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
+/**
+ * Null object perf optimization. Faster than `Object.create(null)` and `{ __proto__: null }`.
+ */
+const NullObject = /* @__PURE__ */ (() => {
+    const C = function () { };
+    C.prototype = Object.create(null);
+    return C;
+})();
+/**
+ * Format an object into a `Content-Type` header.
+ */
+function format(obj) {
+    const { type, parameters } = obj;
+    if (!type || !TYPE_REGEXP.test(type)) {
+        throw new TypeError(`Invalid type: ${type}`);
+    }
+    let result = type;
+    if (parameters) {
+        for (const param of Object.keys(parameters)) {
+            if (!TOKEN_REGEXP.test(param)) {
+                throw new TypeError(`Invalid parameter name: ${param}`);
+            }
+            result += `; ${param}=${qstring(parameters[param])}`;
+        }
+    }
+    return result;
 }
-var GraphqlResponseError = class extends Error {
-  constructor(request2, headers, response) {
-    super(_buildMessageForResponseErrors(response));
-    this.request = request2;
-    this.headers = headers;
-    this.response = response;
-    this.errors = response.errors;
-    this.data = response.data;
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
+/**
+ * Parse a `Content-Type` header.
+ */
+function dist_parse(header, options) {
+    const stopChar = options?.comma === true ? COMMA : 65_536; // Sentinel for "no stop char".
+    const len = header.length;
+    let index = skipOWS(header, options?.start ?? 0, len);
+    const valueStart = index;
+    index = skipValue(header, index, len, stopChar);
+    const valueEnd = trailingOWS(header, valueStart, index);
+    const type = header.slice(valueStart, valueEnd).toLowerCase();
+    if (options?.parameters === false) {
+        return { type, index, parameters: new NullObject() };
+    }
+    return parseParameters(header, type, index, len, stopChar);
+}
+const SP = 32; // " "
+const HTAB = 9; // "\t"
+const SEMI = 59; // ";"
+const EQ = 61; // "="
+const DQUOTE = 34; // '"'
+const BSLASH = 92; // "\\"
+const COMMA = 44; // ","
+/**
+ * Parses the parameters of a `Content-Type` header starting at the given index.
+ */
+function parseParameters(header, type, index, len, stopChar) {
+    const parameters = new NullObject();
+    parameter: while (index < len) {
+        if (header.charCodeAt(index) === stopChar)
+            break;
+        index = skipOWS(header, index + 1 /* Skip over ; */, len);
+        const keyStart = index;
+        while (index < len) {
+            const code = header.charCodeAt(index);
+            if (code === stopChar)
+                break parameter;
+            if (code === SEMI)
+                continue parameter;
+            if (code === EQ) {
+                const keyEnd = trailingOWS(header, keyStart, index);
+                const key = header.slice(keyStart, keyEnd).toLowerCase();
+                index = skipOWS(header, index + 1, len);
+                if (index < len && header.charCodeAt(index) === DQUOTE) {
+                    index++;
+                    let value = "";
+                    while (index < len) {
+                        const code = header.charCodeAt(index++);
+                        if (code === DQUOTE) {
+                            index = skipValue(header, index, len, stopChar);
+                            if (parameters[key] === undefined)
+                                parameters[key] = value;
+                            break;
+                        }
+                        if (code === BSLASH && index < len) {
+                            value += header[index++];
+                            continue;
+                        }
+                        value += String.fromCharCode(code);
+                    }
+                    continue parameter;
+                }
+                const valueStart = index;
+                index = skipValue(header, index, len, stopChar);
+                if (parameters[key] === undefined) {
+                    const valueEnd = trailingOWS(header, valueStart, index);
+                    parameters[key] = header.slice(valueStart, valueEnd);
+                }
+                continue parameter;
+            }
+            index++;
+        }
+    }
+    return { type, index, parameters };
+}
+/**
+ * Skip over characters until a semicolon or other exit character.
+ */
+function skipValue(str, index, len, stopChar) {
+    while (index < len) {
+        const code = str.charCodeAt(index);
+        if (code === SEMI || code === stopChar)
+            break;
+        index++;
+    }
+    return index;
+}
+/**
+ * Skip optional whitespace (OWS) in an HTTP header value.
+ *
+ * OWS is defined in RFC 9110 sec 5.6.3 as SP (" ") or HTAB ("\t").
+ */
+function skipOWS(header, index, len) {
+    while (index < len) {
+        const char = header.charCodeAt(index);
+        if (char !== SP && char !== HTAB)
+            break;
+        index++;
+    }
+    return index;
+}
+/**
+ * Trim optional whitespace (OWS) from the end of a substring.
+ *
+ * OWS is defined in RFC 9110 sec 5.6.3 as SP (" ") or HTAB ("\t").
+ */
+function trailingOWS(header, start, end) {
+    while (end > start) {
+        const char = header.charCodeAt(end - 1);
+        if (char !== SP && char !== HTAB)
+            break;
+        end--;
+    }
+    return end;
+}
+/**
+ * Serialize a parameter value.
+ */
+function qstring(str) {
+    if (TOKEN_REGEXP.test(str))
+        return str;
+    if (TEXT_REGEXP.test(str))
+        return `"${str.replace(QUOTE_REGEXP, "\\$&")}"`;
+    throw new TypeError(`Invalid parameter value: ${str}`);
+}
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/json-with-bigint@3.5.12/node_modules/json-with-bigint/json-with-bigint.js
+const intRegex = /^-?\d+$/;
+const noiseValue = /^-?\d+n+$/; // Noise - strings that match the custom format before being converted to it
+const originalStringify = JSON.stringify;
+const originalParse = JSON.parse;
+const customFormat = /^-?\d+n$/;
+
+const bigIntsStringify = /([\[:])?"(-?\d+)n"($|\s*[,\}\]])/g;
+const noiseStringify = /([\[:])?("-?\d+n+)n("$|"\s*[,\}\]])/g;
+
+/**
+ * @typedef {(this: any, key: string | number | undefined, value: any) => any} Replacer
+ * @typedef {(key: string | number | undefined, value: any, context?: { source: string }) => any} Reviver
+ */
+
+/**
+ * Checks if a value is unstringifiable according to native JSON.stringify rules.
+ *
+ * @param {any} val The value to check.
+ * @returns {boolean} True if the value is undefined, a function, or a symbol.
+ */
+const isUnstringifiable = (val) =>
+  val === undefined || typeof val === "function" || typeof val === "symbol";
+
+/**
+ * Checks if a value is a native JSON.rawJSON object (Node.js 22+).
+ *
+ * @param {any} val The value to check.
+ * @returns {boolean} True if the value is a RawJSON instance.
+ */
+const isRawJSON = (val) =>
+  val !== null &&
+  typeof val === "object" &&
+  val.constructor &&
+  val.constructor.name === "RawJSON";
+
+/**
+ * Iteratively converts a JS value to a JSON string.
+ * Used as a fallback when the native JSON.stringify hits the Maximum Call Stack size.
+ * Fully compliant with JSON formatting (space), replacers, and toJSON behaviors.
+ *
+ * @param {any} rootValue The value to stringify.
+ * @param {Replacer | Array<string | number> | null} [replacer] User's custom replacer function.
+ * @param {string | number} [spaceParam] Indentation for pretty-printing.
+ * @returns {string | undefined} The generated JSON string.
+ */
+const stringifyIteratively = (rootValue, replacer, spaceParam) => {
+  let space = "";
+
+  if (typeof spaceParam === "number") {
+    space = " ".repeat(Math.min(10, Math.max(0, Math.floor(spaceParam))));
+  } else if (typeof spaceParam === "string") {
+    space = spaceParam.slice(0, 10);
+  }
+
+  const isFunctionReplacer = typeof replacer === "function";
+  const propertyList = Array.isArray(replacer)
+    ? new Set(replacer.map(String))
+    : null;
+
+  /**
+   * Prepares a value for stringification by resolving toJSON, handling BigInts,
+   * applying custom replacers, and unwrapping primitive objects.
+   *
+   * @param {object|Array} parent The parent object or array holding the value.
+   * @param {string} key The key associated with the value.
+   * @param {any} val The raw value to process.
+   * @returns {any} The processed value ready for stringification.
+   */
+  const prepareVal = (parent, key, val) => {
+    const isObject = val !== null && typeof val === "object";
+    const hasToJSON = isObject && typeof val.toJSON === "function";
+
+    if (hasToJSON) {
+      val = val.toJSON(key);
+    }
+
+    const isNoise = typeof val === "string" && noiseValue.test(val);
+
+    if (isNoise) return val + "n";
+
+    const isBigInt = typeof val === "bigint";
+
+    if (isBigInt) {
+      const supportsRawJSON = "rawJSON" in JSON;
+
+      if (supportsRawJSON) return JSON.rawJSON(val.toString());
+
+      return val.toString() + "n";
+    }
+
+    if (isFunctionReplacer) {
+      val = replacer.call(parent, key, val);
+    }
+
+    const isPostReplacerObject = val !== null && typeof val === "object";
+
+    if (isPostReplacerObject) {
+      const isPrimitiveWrapper =
+        val instanceof Number ||
+        val instanceof String ||
+        val instanceof Boolean;
+
+      if (isPrimitiveWrapper) {
+        val = val.valueOf();
+      }
+    }
+
+    return val;
+  };
+
+  const rootProcessed = prepareVal({ "": rootValue }, "", rootValue);
+
+  if (isUnstringifiable(rootProcessed)) {
+    return undefined;
+  }
+
+  const isRootPrimitive =
+    rootProcessed === null || typeof rootProcessed !== "object";
+  const isRootNativeRawJSON = isRawJSON(rootProcessed);
+
+  if (isRootPrimitive || isRootNativeRawJSON) {
+    return originalStringify(rootProcessed);
+  }
+
+  const chunks = [];
+  let level = 0;
+
+  const stack = [
+    {
+      parent: { "": rootProcessed },
+      key: "",
+      val: rootProcessed,
+      isArray: Array.isArray(rootProcessed),
+      keys: Array.isArray(rootProcessed) ? null : Object.keys(rootProcessed),
+      index: 0,
+      first: true,
+    },
+  ];
+
+  const visited = new WeakSet([rootProcessed]);
+
+  while (stack.length > 0) {
+    const node = stack[stack.length - 1];
+
+    if (node.index === 0) {
+      chunks.push(node.isArray ? "[" : "{");
+      level++;
+    }
+
+    let isDone = false;
+
+    if (node.isArray) {
+      if (node.index < node.val.length) {
+        if (!node.first) chunks.push(",");
+
+        if (space) chunks.push("\n" + space.repeat(level));
+
+        const childRaw = node.val[node.index];
+        const childVal = prepareVal(node.val, String(node.index), childRaw);
+
+        if (isUnstringifiable(childVal)) {
+          chunks.push("null");
+          node.first = false;
+          node.index++;
+        } else {
+          const isComplexObject =
+            childVal !== null && typeof childVal === "object";
+          const isNativeRaw = isRawJSON(childVal);
+
+          if (isComplexObject && !isNativeRaw) {
+            if (visited.has(childVal)) {
+              throw new TypeError("Converting circular structure to JSON");
+            }
+
+            visited.add(childVal);
+
+            stack.push({
+              parent: node.val,
+              key: String(node.index),
+              val: childVal,
+              isArray: Array.isArray(childVal),
+              keys: Array.isArray(childVal) ? null : Object.keys(childVal),
+              index: 0,
+              first: true,
+            });
+
+            node.first = false;
+            node.index++;
+          } else {
+            chunks.push(originalStringify(childVal));
+            node.first = false;
+            node.index++;
+          }
+        }
+      } else {
+        isDone = true;
+      }
+    } else {
+      while (node.index < node.keys.length) {
+        const k = node.keys[node.index++];
+
+        const isFilteredOutByArray = propertyList && !propertyList.has(k);
+
+        if (isFilteredOutByArray) continue;
+
+        const childRaw = node.val[k];
+        const childVal = prepareVal(node.val, k, childRaw);
+
+        if (isUnstringifiable(childVal)) continue;
+
+        if (!node.first) chunks.push(",");
+
+        if (space) {
+          chunks.push("\n" + space.repeat(level) + originalStringify(k) + ": ");
+        } else {
+          chunks.push(originalStringify(k) + ":");
+        }
+
+        const isComplexObject =
+          childVal !== null && typeof childVal === "object";
+        const isNativeRaw = isRawJSON(childVal);
+
+        if (isComplexObject && !isNativeRaw) {
+          if (visited.has(childVal)) {
+            throw new TypeError("Converting circular structure to JSON");
+          }
+
+          visited.add(childVal);
+
+          stack.push({
+            parent: node.val,
+            key: k,
+            val: childVal,
+            isArray: Array.isArray(childVal),
+            keys: Array.isArray(childVal) ? null : Object.keys(childVal),
+            index: 0,
+            first: true,
+          });
+
+          node.first = false;
+
+          break; // Stop current loop level to process the newly pushed stack node
+        } else {
+          chunks.push(originalStringify(childVal));
+          node.first = false;
+        }
+      }
+
+      const isNodeFullyProcessed =
+        node.index >= node.keys.length && stack[stack.length - 1] === node;
+
+      if (isNodeFullyProcessed) {
+        isDone = true;
+      }
+    }
+
+    if (isDone) {
+      level--;
+
+      if (!node.first && space) chunks.push("\n" + space.repeat(level));
+
+      chunks.push(node.isArray ? "]" : "}");
+      visited.delete(node.val);
+      stack.pop();
     }
   }
-  name = "GraphqlResponseError";
-  errors;
-  data;
+
+  return chunks.join("");
 };
 
-// pkg/dist-src/graphql.js
-var NON_VARIABLE_OPTIONS = [
-  "method",
-  "baseUrl",
-  "url",
-  "headers",
-  "request",
-  "query",
-  "mediaType",
-  "operationName"
-];
-var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
-var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
-function graphql(request2, query, options) {
-  if (options) {
-    if (typeof query === "string" && "query" in options) {
-      return Promise.reject(
-        new Error(`[@octokit/graphql] "query" cannot be used as variable name`)
+/**
+ * Converts a JavaScript value to a JSON string.
+ *
+ * Supports serialization of BigInt values using two strategies:
+ * 1. Custom format "123n" → "123" (universal fallback)
+ * 2. Native JSON.rawJSON() (Node.js 22+, fastest) when available
+ *
+ * All other values are serialized exactly like native JSON.stringify().
+ *
+ * @param {*} value The value to convert to a JSON string.
+ * @param {Replacer | Array<string | number> | null} [replacer]
+ * A function that alters the behavior of the stringification process,
+ * or an array of strings/numbers to indicate properties to exclude.
+ * @param {string | number} [space]
+ * A string or number to specify indentation or pretty-printing.
+ * @returns {string} The JSON string representation.
+ */
+const JSONStringify = (value, replacer, space) => {
+  try {
+    const supportsRawJSON = "rawJSON" in JSON;
+
+    if (supportsRawJSON) {
+      return originalStringify(
+        value,
+        (key, val) => {
+          if (typeof val === "bigint") return JSON.rawJSON(val.toString());
+
+          const hasFunctionReplacer = typeof replacer === "function";
+
+          if (hasFunctionReplacer) return replacer(key, val);
+
+          const isKeyInArrayReplacer =
+            Array.isArray(replacer) && replacer.includes(key);
+
+          if (isKeyInArrayReplacer) return val;
+
+          return val;
+        },
+        space,
       );
     }
-    for (const key in options) {
-      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
-      return Promise.reject(
-        new Error(
-          `[@octokit/graphql] "${key}" cannot be used as variable name`
-        )
-      );
+
+    if (!value) return originalStringify(value, replacer, space);
+
+    const convertedToCustomJSON = originalStringify(
+      value,
+      (key, val) => {
+        const isNoise = typeof val === "string" && noiseValue.test(val);
+
+        if (isNoise) return val.toString() + "n"; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
+
+        if (typeof val === "bigint") return val.toString() + "n";
+
+        const hasFunctionReplacer = typeof replacer === "function";
+
+        if (hasFunctionReplacer) return replacer(key, val);
+
+        const isKeyInArrayReplacer =
+          Array.isArray(replacer) && replacer.includes(key);
+
+        if (isKeyInArrayReplacer) return val;
+
+        return val;
+      },
+      space,
+    );
+
+    const processedJSON = convertedToCustomJSON.replace(
+      bigIntsStringify,
+      "$1$2$3",
+    ); // Delete one "n" off the end of every BigInt value
+
+    const denoisedJSON = processedJSON.replace(noiseStringify, "$1$2$3"); // Remove one "n" off the end of every noisy string
+
+    return denoisedJSON;
+  } catch (error) {
+    if (error instanceof RangeError) {
+      const convertedJSON = stringifyIteratively(value, replacer, space);
+
+      if (convertedJSON === undefined) return undefined;
+
+      const supportsRawJSON = "rawJSON" in JSON;
+
+      if (supportsRawJSON) return convertedJSON;
+
+      const processedJSON = convertedJSON.replace(bigIntsStringify, "$1$2$3");
+
+      return processedJSON.replace(noiseStringify, "$1$2$3");
     }
-  }
-  const parsedOptions = typeof query === "string" ? Object.assign({ query }, options) : query;
-  const requestOptions = Object.keys(
-    parsedOptions
-  ).reduce((result, key) => {
-    if (NON_VARIABLE_OPTIONS.includes(key)) {
-      result[key] = parsedOptions[key];
-      return result;
-    }
-    if (!result.variables) {
-      result.variables = {};
-    }
-    result.variables[key] = parsedOptions[key];
-    return result;
-  }, {});
-  const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
-  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
-    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
-  }
-  return request2(requestOptions).then((response) => {
-    if (response.data.errors) {
-      const headers = {};
-      for (const key of Object.keys(response.headers)) {
-        headers[key] = response.headers[key];
-      }
-      throw new GraphqlResponseError(
-        requestOptions,
-        headers,
-        response.data
-      );
-    }
-    return response.data.data;
-  });
-}
 
-// pkg/dist-src/with-defaults.js
-function withDefaults(request2, newDefaults) {
-  const newRequest = request2.defaults(newDefaults);
-  const newApi = (query, options) => {
-    return graphql(newRequest, query, options);
-  };
-  return Object.assign(newApi, {
-    defaults: withDefaults.bind(null, newRequest),
-    endpoint: newRequest.endpoint
-  });
-}
-
-// pkg/dist-src/index.js
-var graphql2 = withDefaults(_octokit_request__WEBPACK_IMPORTED_MODULE_0__/* .request */ .E, {
-  headers: {
-    "user-agent": `octokit-graphql.js/${VERSION} ${(0,universal_user_agent__WEBPACK_IMPORTED_MODULE_1__/* .getUserAgent */ .$)()}`
-  },
-  method: "POST",
-  url: "/graphql"
-});
-function withCustomRequest(customRequest) {
-  return withDefaults(customRequest, {
-    method: "POST",
-    url: "/graphql"
-  });
-}
-
-
-
-/***/ }),
-
-/***/ 55926:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   VERSION: () => (/* binding */ VERSION),
-/* harmony export */   retry: () => (/* binding */ retry)
-/* harmony export */ });
-/* harmony import */ var bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9900);
-/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(54128);
-// pkg/dist-src/version.js
-var VERSION = "0.0.0-development";
-
-// pkg/dist-src/error-request.js
-function isRequestError(error) {
-  return error.request !== void 0;
-}
-async function errorRequest(state, octokit, error, options) {
-  if (!isRequestError(error) || !error?.request.request) {
     throw error;
   }
-  if (error.status >= 400 && !state.doNotRetry.includes(error.status)) {
-    const retries = options.request.retries != null ? options.request.retries : state.retries;
-    const retryAfter = Math.pow((options.request.retryCount || 0) + 1, 2);
-    throw octokit.retry.retryRequest(error, retries, retryAfter);
+};
+
+const featureCache = new Map();
+
+/**
+ * Detects if the current JSON.parse implementation supports the context.source feature.
+ *
+ * Uses toString() fingerprinting to cache results and automatically detect runtime
+ * replacements of JSON.parse (polyfills, mocks, etc.).
+ *
+ * @returns {boolean} true if context.source is supported, false otherwise.
+ */
+const isContextSourceSupported = () => {
+  const parseFingerprint = JSON.parse.toString();
+
+  if (featureCache.has(parseFingerprint)) {
+    return featureCache.get(parseFingerprint);
   }
-  throw error;
-}
 
-// pkg/dist-src/wrap-request.js
+  try {
+    const result = JSON.parse(
+      "1",
+      (_, __, context) => !!context?.source && context.source === "1",
+    );
+    featureCache.set(parseFingerprint, result);
 
+    return result;
+  } catch {
+    featureCache.set(parseFingerprint, false);
 
-async function wrapRequest(state, octokit, request, options) {
-  const limiter = new bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__();
-  limiter.on("failed", function(error, info) {
-    const maxRetries = ~~error.request.request?.retries;
-    const after = ~~error.request.request?.retryAfter;
-    options.request.retryCount = info.retryCount + 1;
-    if (maxRetries > info.retryCount) {
-      return after * state.retryAfterBaseValue;
-    }
-  });
-  return limiter.schedule(
-    requestWithGraphqlErrorHandling.bind(null, state, octokit, request),
-    options
-  );
-}
-async function requestWithGraphqlErrorHandling(state, octokit, request, options) {
-  const response = await request(options);
-  if (response.data && response.data.errors && response.data.errors.length > 0 && /Something went wrong while executing your query/.test(
-    response.data.errors[0].message
-  )) {
-    const error = new _octokit_request_error__WEBPACK_IMPORTED_MODULE_1__.RequestError(response.data.errors[0].message, 500, {
-      request: options,
-      response
-    });
-    return errorRequest(state, octokit, error, options);
+    return false;
   }
-  return response;
-}
+};
 
-// pkg/dist-src/index.js
-function retry(octokit, octokitOptions) {
-  const state = Object.assign(
-    {
-      enabled: true,
-      retryAfterBaseValue: 1e3,
-      doNotRetry: [400, 401, 403, 404, 410, 422, 451],
-      retries: 3
-    },
-    octokitOptions.retry
-  );
-  const retryPlugin = {
-    retry: {
-      retryRequest: (error, retries, retryAfter) => {
-        error.request.request = Object.assign({}, error.request.request, {
-          retries,
-          retryAfter
-        });
-        return error;
-      }
-    }
-  };
-  if (state.enabled) {
-    octokit.hook.error("request", errorRequest.bind(null, state, retryPlugin));
-    octokit.hook.wrap("request", wrapRequest.bind(null, state, retryPlugin));
-  }
-  return retryPlugin;
-}
-retry.VERSION = VERSION;
+/**
+ * Reviver function that converts custom-format BigInt strings back to BigInt values.
+ * Also handles "noise" strings that accidentally match the BigInt format.
+ *
+ * @param {string | number | undefined} key The object key.
+ * @param {*} value The value being parsed.
+ * @param {object} [context] Parse context (if supported by JSON.parse).
+ * @param {Reviver} [userReviver] User's custom reviver function.
+ * @returns {any} The transformed value.
+ */
+const convertMarkedBigIntsReviver = (key, value, context, userReviver) => {
+  const isCustomFormatBigInt =
+    typeof value === "string" && customFormat.test(value);
 
+  if (isCustomFormatBigInt) return BigInt(value.slice(0, -1));
 
+  const isNoiseValue = typeof value === "string" && noiseValue.test(value);
+  if (isNoiseValue) return value.slice(0, -1);
 
-/***/ }),
+  const hasUserReviver = typeof userReviver === "function";
 
-/***/ 72196:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+  if (!hasUserReviver) return value;
 
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   throttling: () => (/* binding */ throttling)
-/* harmony export */ });
-/* harmony import */ var bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9900);
-// pkg/dist-src/index.js
+  return userReviver(key, value, context);
+};
 
+/**
+ * Fast JSON.parse implementation (~2x faster than classic fallback).
+ * Uses JSON.parse's context.source feature to detect integers and convert
+ * large numbers directly to BigInt without string manipulation.
+ *
+ * Does not support legacy custom format from v1 of this library.
+ *
+ * @param {string} text JSON string to parse.
+ * @param {Reviver} [reviver] Transform function to apply to each value.
+ * @returns {any} Parsed JavaScript value.
+ */
+const JSONParseV2 = (text, reviver) => {
+  return JSON.parse(text, (key, value, context) => {
+    const isNumber = typeof value === "number";
+    const isOutOfBounds =
+      value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER;
+    const isBigNumber = isNumber && isOutOfBounds;
+    const isInt = context && intRegex.test(context.source);
+    const isBigInt = isBigNumber && isInt;
 
-// pkg/dist-src/version.js
-var VERSION = "0.0.0-development";
+    if (isBigInt) return BigInt(context.source);
 
-// pkg/dist-src/wrap-request.js
-var noop = () => Promise.resolve();
-function wrapRequest(state, request, options) {
-  return state.retryLimiter.schedule(doRequest, state, request, options);
-}
-async function doRequest(state, request, options) {
-  const { pathname } = new URL(options.url, "http://github.test");
-  const isAuth = isAuthRequest(options.method, pathname);
-  const isWrite = !isAuth && options.method !== "GET" && options.method !== "HEAD";
-  const isSearch = options.method === "GET" && pathname.startsWith("/search/");
-  const isGraphQL = pathname.startsWith("/graphql");
-  const retryCount = ~~request.retryCount;
-  const jobOptions = retryCount > 0 ? { priority: 0, weight: 0 } : {};
-  if (state.clustering) {
-    jobOptions.expiration = 1e3 * 60;
-  }
-  if (isWrite || isGraphQL) {
-    await state.write.key(state.id).schedule(jobOptions, noop);
-  }
-  if (isWrite && state.triggersNotification(pathname)) {
-    await state.notifications.key(state.id).schedule(jobOptions, noop);
-  }
-  if (isSearch) {
-    await state.search.key(state.id).schedule(jobOptions, noop);
-  }
-  const req = (isAuth ? state.auth : state.global).key(state.id).schedule(jobOptions, request, options);
-  if (isGraphQL) {
-    const res = await req;
-    if (res.data.errors != null && res.data.errors.some((error) => error.type === "RATE_LIMITED")) {
-      const error = Object.assign(new Error("GraphQL Rate Limit Exceeded"), {
-        response: res,
-        data: res.data
-      });
-      throw error;
-    }
-  }
-  return req;
-}
-function isAuthRequest(method, pathname) {
-  return method === "PATCH" && // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-scoped-access-token
-  /^\/applications\/[^/]+\/token\/scoped$/.test(pathname) || method === "POST" && // https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#reset-a-token
-  (/^\/applications\/[^/]+\/token$/.test(pathname) || // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
-  /^\/app\/installations\/[^/]+\/access_tokens$/.test(pathname) || // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
-  pathname === "/login/oauth/access_token");
-}
+    const hasCustomReviver = typeof reviver === "function";
 
-// pkg/dist-src/generated/triggers-notification-paths.js
-var triggers_notification_paths_default = [
-  "/orgs/{org}/invitations",
-  "/orgs/{org}/invitations/{invitation_id}",
-  "/orgs/{org}/teams/{team_slug}/discussions",
-  "/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
-  "/repos/{owner}/{repo}/collaborators/{username}",
-  "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
-  "/repos/{owner}/{repo}/issues",
-  "/repos/{owner}/{repo}/issues/{issue_number}/comments",
-  "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
-  "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
-  "/repos/{owner}/{repo}/pulls",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
-  "/repos/{owner}/{repo}/releases",
-  "/teams/{team_id}/discussions",
-  "/teams/{team_id}/discussions/{discussion_number}/comments"
-];
+    if (!hasCustomReviver) return value;
 
-// pkg/dist-src/route-matcher.js
-function routeMatcher(paths) {
-  const regexes = paths.map(
-    (path) => path.split("/").map((c) => c.startsWith("{") ? "(?:.+?)" : c).join("/")
-  );
-  const regex2 = `^(?:${regexes.map((r) => `(?:${r})`).join("|")})[^/]*$`;
-  return new RegExp(regex2, "i");
-}
-
-// pkg/dist-src/index.js
-var regex = routeMatcher(triggers_notification_paths_default);
-var triggersNotification = regex.test.bind(regex);
-var groups = {};
-var createGroups = function(Bottleneck, common) {
-  groups.global = new Bottleneck.Group({
-    id: "octokit-global",
-    maxConcurrent: 10,
-    ...common
-  });
-  groups.auth = new Bottleneck.Group({
-    id: "octokit-auth",
-    maxConcurrent: 1,
-    ...common
-  });
-  groups.search = new Bottleneck.Group({
-    id: "octokit-search",
-    maxConcurrent: 1,
-    minTime: 2e3,
-    ...common
-  });
-  groups.write = new Bottleneck.Group({
-    id: "octokit-write",
-    maxConcurrent: 1,
-    minTime: 1e3,
-    ...common
-  });
-  groups.notifications = new Bottleneck.Group({
-    id: "octokit-notifications",
-    maxConcurrent: 1,
-    minTime: 3e3,
-    ...common
+    return reviver(key, value, context);
   });
 };
-function throttling(octokit, octokitOptions) {
-  const {
-    enabled = true,
-    Bottleneck = bottleneck_light_js__WEBPACK_IMPORTED_MODULE_0__,
-    id = "no-id",
-    timeout = 1e3 * 60 * 2,
-    // Redis TTL: 2 minutes
-    connection
-  } = octokitOptions.throttle || {};
-  if (!enabled) {
-    return {};
+
+const MAX_INT = Number.MAX_SAFE_INTEGER.toString();
+const MAX_DIGITS = MAX_INT.length;
+const stringsOrLargeNumbers =
+  /"(?:[^"\\]|\\.)*"|-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?/g;
+const noiseValueWithQuotes = /^"-?\d+n+"$/; // Noise - strings that match the custom format before being converted to it
+
+/**
+ * Iteratively traverses the parsed object bottom-up (post-order),
+ * emulating the native JSON.parse reviver behavior.
+ * This avoids Call Stack overflows (RangeError) on deeply nested structures.
+ *
+ * @param {any} parsed The natively parsed JSON object.
+ * @param {Reviver} [userReviver] User's custom reviver function.
+ * @returns {any} The fully processed object.
+ */
+const applyReviverIteratively = (parsed, userReviver) => {
+  const rootHolder = { "": parsed };
+  const stack = [{ parent: rootHolder, key: "", visited: false }];
+
+  while (stack.length > 0) {
+    const node = stack[stack.length - 1];
+
+    if (!node.visited) {
+      node.visited = true;
+
+      const value = node.parent[node.key];
+      const isComplexObject = value !== null && typeof value === "object";
+
+      if (isComplexObject) {
+        const keys = Object.keys(value);
+
+        for (let i = keys.length - 1; i >= 0; i--) {
+          stack.push({ parent: value, key: keys[i], visited: false });
+        }
+      }
+    } else {
+      const { parent, key } = node;
+      let value = parent[key];
+
+      if (typeof value === "string") {
+        const isCustomFormatBigInt = customFormat.test(value);
+
+        if (isCustomFormatBigInt) {
+          value = BigInt(value.slice(0, -1));
+        } else {
+          const isNoise = noiseValue.test(value);
+
+          if (isNoise) value = value.slice(0, -1);
+        }
+      }
+
+      const hasUserReviver = typeof userReviver === "function";
+
+      if (hasUserReviver) {
+        value = userReviver.call(parent, key, value);
+      }
+
+      const isDeleted = value === undefined;
+
+      if (isDeleted) {
+        delete parent[key];
+      } else {
+        parent[key] = value;
+      }
+
+      stack.pop();
+    }
   }
-  const common = { timeout };
-  if (typeof connection !== "undefined") {
-    common.connection = connection;
-  }
-  if (groups.global == null) {
-    createGroups(Bottleneck, common);
-  }
-  const state = Object.assign(
-    {
-      clustering: connection != null,
-      triggersNotification,
-      fallbackSecondaryRateRetryAfter: 60,
-      retryAfterBaseValue: 1e3,
-      retryLimiter: new Bottleneck(),
-      id,
-      ...groups
+
+  return rootHolder[""];
+};
+
+/**
+ * Pre-processes the JSON string to mark large numbers with an 'n' suffix.
+ *
+ * @param {string} text The raw JSON string.
+ * @returns {string} The serialized string with marked BigInts.
+ */
+const serializeBigInts = (text) => {
+  return text.replace(
+    stringsOrLargeNumbers,
+    (match, digits, fractional, exponential) => {
+      const isString = match[0] === '"';
+      const isNoise = isString && noiseValueWithQuotes.test(match);
+
+      if (isNoise) return match.substring(0, match.length - 1) + 'n"'; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
+
+      const hasFractionalOrExponential = fractional || exponential;
+
+      // With a fixed number of digits, we can correctly use lexicographical comparison to do a numeric comparison
+      const isLessThanMaxSafeInt =
+        digits &&
+        (digits.length < MAX_DIGITS ||
+          (digits.length === MAX_DIGITS && digits <= MAX_INT));
+
+      const isStandardValue =
+        isString || hasFractionalOrExponential || isLessThanMaxSafeInt;
+
+      if (isStandardValue) return match;
+
+      return '"' + match + 'n"';
     },
-    octokitOptions.throttle
   );
-  if (typeof state.onSecondaryRateLimit !== "function" || typeof state.onRateLimit !== "function") {
-    throw new Error(`octokit/plugin-throttling error:
-        You must pass the onSecondaryRateLimit and onRateLimit error handlers.
-        See https://octokit.github.io/rest.js/#throttling
+};
 
-        const octokit = new Octokit({
-          throttle: {
-            onSecondaryRateLimit: (retryAfter, options) => {/* ... */},
-            onRateLimit: (retryAfter, options) => {/* ... */}
-          }
-        })
-    `);
+/**
+ * Converts a JSON string into a JavaScript value.
+ *
+ * Supports parsing of large integers using two strategies:
+ * 1. Classic fallback: Marks large numbers with "123n" format, then converts to BigInt
+ * 2. Fast path (JSONParseV2): Uses context.source feature (~2x faster) when available
+ *
+ * All other JSON values are parsed exactly like native JSON.parse().
+ *
+ * @param {string} text A valid JSON string.
+ * @param {Reviver} [reviver]
+ * A function that transforms the results. This function is called for each member
+ * of the object. If a member contains nested objects, the nested objects are
+ * transformed before the parent object is.
+ * @returns {any} The parsed JavaScript value.
+ * @throws {SyntaxError} If text is not valid JSON.
+ */
+const JSONParse = (text, reviver) => {
+  if (!text) return originalParse(text, reviver);
+
+  try {
+    if (isContextSourceSupported()) return JSONParseV2(text, reviver); // Shortcut to a faster (2x) and simpler version
+
+    // Find and mark big numbers with "n"
+    const serializedData = serializeBigInts(text);
+
+    return originalParse(serializedData, (key, value, context) =>
+      convertMarkedBigIntsReviver(key, value, context, reviver),
+    );
+  } catch (error) {
+    if (error instanceof RangeError) {
+      const serializedData = serializeBigInts(text);
+      const parsed = originalParse(serializedData);
+
+      return applyReviverIteratively(parsed, reviver);
+    }
+
+    throw error;
   }
-  const events = {};
-  const emitter = new Bottleneck.Events(events);
-  events.on("secondary-limit", state.onSecondaryRateLimit);
-  events.on("rate-limit", state.onRateLimit);
-  events.on(
-    "error",
-    (e) => octokit.log.warn("Error in throttling-plugin limit handler", e)
-  );
-  state.retryLimiter.on("failed", async function(error, info) {
-    const [state2, request, options] = info.args;
-    const { pathname } = new URL(options.url, "http://github.test");
-    const shouldRetryGraphQL = pathname.startsWith("/graphql") && error.status !== 401;
-    if (!(shouldRetryGraphQL || error.status === 403 || error.status === 429)) {
-      return;
-    }
-    const retryCount = ~~request.retryCount;
-    request.retryCount = retryCount;
-    options.request.retryCount = retryCount;
-    const { wantRetry, retryAfter = 0 } = await (async function() {
-      if (/\bsecondary rate\b/i.test(error.message)) {
-        const retryAfter2 = Number(error.response.headers["retry-after"]) || state2.fallbackSecondaryRateRetryAfter;
-        const wantRetry2 = await emitter.trigger(
-          "secondary-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
-      }
-      if (error.response.headers != null && error.response.headers["x-ratelimit-remaining"] === "0" || (error.response.data?.errors ?? []).some(
-        (error2) => error2.type === "RATE_LIMITED"
-      )) {
-        const rateLimitReset = new Date(
-          ~~error.response.headers["x-ratelimit-reset"] * 1e3
-        ).getTime();
-        const retryAfter2 = Math.max(
-          // Add one second so we retry _after_ the reset time
-          // https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#exceeding-the-rate-limit
-          Math.ceil((rateLimitReset - Date.now()) / 1e3) + 1,
-          0
-        );
-        const wantRetry2 = await emitter.trigger(
-          "rate-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
-      }
-      return {};
-    })();
-    if (wantRetry) {
-      request.retryCount++;
-      return retryAfter * state2.retryAfterBaseValue;
-    }
-  });
-  octokit.hook.wrap("request", wrapRequest.bind(null, state));
-  return {};
-}
-throttling.VERSION = VERSION;
-throttling.triggersNotification = triggersNotification;
+};
 
 
 
-/***/ }),
-
-/***/ 54128:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   RequestError: () => (/* binding */ RequestError)
-/* harmony export */ });
-class RequestError extends Error {
-  name;
-  /**
-   * http status code
-   */
-  status;
-  /**
-   * Request options that lead to the error.
-   */
-  request;
-  /**
-   * Response object if a response was received
-   */
-  response;
-  constructor(message, statusCode, options) {
-    super(message, { cause: options.cause });
-    this.name = "HttpError";
-    this.status = Number.parseInt(statusCode);
-    if (Number.isNaN(this.status)) {
-      this.status = 0;
-    }
-    /* v8 ignore else -- @preserve -- Bug with vitest coverage where it sees an else branch that doesn't exist */
-    if ("response" in options) {
-      this.response = options.response;
-    }
-    const requestCopy = Object.assign({}, options.request);
-    if (options.request.headers.authorization) {
-      requestCopy.headers = Object.assign({}, options.request.headers, {
-        authorization: options.request.headers.authorization.replace(
-          /(?<! ) .*$/,
-          " [REDACTED]"
-        )
-      });
-    }
-    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
-    this.request = requestCopy;
-  }
-}
-
-
-
-/***/ }),
-
-/***/ 31649:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   request: () => (/* binding */ request)
-/* harmony export */ });
-/* harmony import */ var _octokit_endpoint__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(27321);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6868);
-/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(82605);
-/* harmony import */ var json_with_bigint__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(93567);
-/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(54128);
+// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+request-error@7.1.1/node_modules/@octokit/request-error/dist-src/index.js
+var dist_src = __nccwpck_require__(98969);
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+request@10.0.15/node_modules/@octokit/request/dist-bundle/index.js
 // pkg/dist-src/index.js
 
 
@@ -95435,12 +91436,12 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 // pkg/dist-src/version.js
-var VERSION = "10.0.11";
+var dist_bundle_VERSION = "10.0.15";
 
 // pkg/dist-src/defaults.js
 var defaults_default = {
   headers: {
-    "user-agent": `octokit-request.js/${VERSION} ${(0,universal_user_agent__WEBPACK_IMPORTED_MODULE_0__/* .getUserAgent */ .$)()}`
+    "user-agent": `octokit-request.js/${dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
   }
 };
 
@@ -95449,7 +91450,7 @@ var defaults_default = {
 
 
 // pkg/dist-src/is-plain-object.js
-function isPlainObject(value) {
+function dist_bundle_isPlainObject(value) {
   if (typeof value !== "object" || value === null) return false;
   if (Object.prototype.toString.call(value) !== "[object Object]") return false;
   const proto = Object.getPrototypeOf(value);
@@ -95470,7 +91471,7 @@ async function fetchWrapper(requestOptions) {
   }
   const log = requestOptions.request?.log || console;
   const parseSuccessResponseBody = requestOptions.request?.parseSuccessResponseBody !== false;
-  const body = isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? (0,json_with_bigint__WEBPACK_IMPORTED_MODULE_2__/* .JSONStringify */ .i)(requestOptions.body) : requestOptions.body;
+  const body = dist_bundle_isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? JSONStringify(requestOptions.body) : requestOptions.body;
   const requestHeaders = Object.fromEntries(
     Object.entries(requestOptions.headers).map(([name, value]) => [
       name,
@@ -95505,7 +91506,7 @@ async function fetchWrapper(requestOptions) {
         }
       }
     }
-    const requestError = new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(message, 500, {
+    const requestError = new dist_src.RequestError(message, 500, {
       request: requestOptions
     });
     requestError.cause = error;
@@ -95537,21 +91538,21 @@ async function fetchWrapper(requestOptions) {
     if (status < 400) {
       return octokitResponse;
     }
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(fetchResponse.statusText, status, {
+    throw new dist_src.RequestError(fetchResponse.statusText, status, {
       response: octokitResponse,
       request: requestOptions
     });
   }
   if (status === 304) {
     octokitResponse.data = await getResponseData(fetchResponse);
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError("Not modified", status, {
+    throw new dist_src.RequestError("Not modified", status, {
       response: octokitResponse,
       request: requestOptions
     });
   }
   if (status >= 400) {
     octokitResponse.data = await getResponseData(fetchResponse);
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(toErrorMessage(octokitResponse.data), status, {
+    throw new dist_src.RequestError(toErrorMessage(octokitResponse.data), status, {
       response: octokitResponse,
       request: requestOptions
     });
@@ -95564,16 +91565,19 @@ async function getResponseData(response) {
   if (!contentType) {
     return response.text().catch(noop);
   }
-  const mimetype = (0,content_type__WEBPACK_IMPORTED_MODULE_1__/* .parse */ .qg)(contentType);
+  const mimetype = dist_parse(contentType);
   if (isJSONResponse(mimetype)) {
     let text = "";
     try {
       text = await response.text();
-      return (0,json_with_bigint__WEBPACK_IMPORTED_MODULE_2__/* .JSONParse */ .Q)(text);
+      return JSONParse(text);
     } catch (err) {
       return text;
     }
-  } else if (mimetype.type.startsWith("text/") || mimetype.parameters.charset?.toLowerCase() === "utf-8") {
+  } else if (mimetype.type.startsWith("text/") || // `application/octet-stream` is the canonical "arbitrary binary" type
+  // (RFC 2046) and must never be decoded as text, even when the response
+  // carries a (misleading) `charset=utf-8` parameter — see #751.
+  mimetype.parameters.charset?.toLowerCase() === "utf-8" && mimetype.type !== "application/octet-stream") {
     return response.text().catch(noop);
   } else {
     return response.arrayBuffer().catch(
@@ -95601,7 +91605,7 @@ function toErrorMessage(data) {
 }
 
 // pkg/dist-src/with-defaults.js
-function withDefaults(oldEndpoint, newDefaults) {
+function dist_bundle_withDefaults(oldEndpoint, newDefaults) {
   const endpoint2 = oldEndpoint.defaults(newDefaults);
   const newApi = function(route, parameters) {
     const endpointOptions = endpoint2.merge(route, parameters);
@@ -95615,18 +91619,18 @@ function withDefaults(oldEndpoint, newDefaults) {
     };
     Object.assign(request2, {
       endpoint: endpoint2,
-      defaults: withDefaults.bind(null, endpoint2)
+      defaults: dist_bundle_withDefaults.bind(null, endpoint2)
     });
     return endpointOptions.request.hook(request2, endpointOptions);
   };
   return Object.assign(newApi, {
     endpoint: endpoint2,
-    defaults: withDefaults.bind(null, endpoint2)
+    defaults: dist_bundle_withDefaults.bind(null, endpoint2)
   });
 }
 
 // pkg/dist-src/index.js
-var request = withDefaults(_octokit_endpoint__WEBPACK_IMPORTED_MODULE_4__/* .endpoint */ .s, defaults_default);
+var request = dist_bundle_withDefaults(endpoint, defaults_default);
 
 /* v8 ignore next -- @preserve */
 /* v8 ignore else -- @preserve */
@@ -95634,224 +91638,7 @@ var request = withDefaults(_octokit_endpoint__WEBPACK_IMPORTED_MODULE_4__/* .end
 
 /***/ }),
 
-/***/ 79856:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   E: () => (/* binding */ request)
-/* harmony export */ });
-/* harmony import */ var _octokit_endpoint__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(27321);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6868);
-/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(82605);
-/* harmony import */ var json_with_bigint__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(93567);
-/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(54128);
-// pkg/dist-src/index.js
-
-
-// pkg/dist-src/defaults.js
-
-
-// pkg/dist-src/version.js
-var VERSION = "10.0.9";
-
-// pkg/dist-src/defaults.js
-var defaults_default = {
-  headers: {
-    "user-agent": `octokit-request.js/${VERSION} ${(0,universal_user_agent__WEBPACK_IMPORTED_MODULE_0__/* .getUserAgent */ .$)()}`
-  }
-};
-
-// pkg/dist-src/fetch-wrapper.js
-
-
-
-// pkg/dist-src/is-plain-object.js
-function isPlainObject(value) {
-  if (typeof value !== "object" || value === null) return false;
-  if (Object.prototype.toString.call(value) !== "[object Object]") return false;
-  const proto = Object.getPrototypeOf(value);
-  if (proto === null) return true;
-  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
-  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
-}
-
-// pkg/dist-src/fetch-wrapper.js
-
-var noop = () => "";
-async function fetchWrapper(requestOptions) {
-  const fetch = requestOptions.request?.fetch || globalThis.fetch;
-  if (!fetch) {
-    throw new Error(
-      "fetch is not set. Please pass a fetch implementation as new Octokit({ request: { fetch }}). Learn more at https://github.com/octokit/octokit.js/#fetch-missing"
-    );
-  }
-  const log = requestOptions.request?.log || console;
-  const parseSuccessResponseBody = requestOptions.request?.parseSuccessResponseBody !== false;
-  const body = isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? (0,json_with_bigint__WEBPACK_IMPORTED_MODULE_2__/* .JSONStringify */ .i)(requestOptions.body) : requestOptions.body;
-  const requestHeaders = Object.fromEntries(
-    Object.entries(requestOptions.headers).map(([name, value]) => [
-      name,
-      String(value)
-    ])
-  );
-  let fetchResponse;
-  try {
-    fetchResponse = await fetch(requestOptions.url, {
-      method: requestOptions.method,
-      body,
-      redirect: requestOptions.request?.redirect,
-      headers: requestHeaders,
-      signal: requestOptions.request?.signal,
-      // duplex must be set if request.body is ReadableStream or Async Iterables.
-      // See https://fetch.spec.whatwg.org/#dom-requestinit-duplex.
-      ...requestOptions.body && { duplex: "half" }
-    });
-  } catch (error) {
-    let message = "Unknown Error";
-    if (error instanceof Error) {
-      if (error.name === "AbortError") {
-        error.status = 500;
-        throw error;
-      }
-      message = error.message;
-      if (error.name === "TypeError" && "cause" in error) {
-        if (error.cause instanceof Error) {
-          message = error.cause.message;
-        } else if (typeof error.cause === "string") {
-          message = error.cause;
-        }
-      }
-    }
-    const requestError = new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(message, 500, {
-      request: requestOptions
-    });
-    requestError.cause = error;
-    throw requestError;
-  }
-  const status = fetchResponse.status;
-  const url = fetchResponse.url;
-  const responseHeaders = {};
-  for (const [key, value] of fetchResponse.headers) {
-    responseHeaders[key] = value;
-  }
-  const octokitResponse = {
-    url,
-    status,
-    headers: responseHeaders,
-    data: ""
-  };
-  if ("deprecation" in responseHeaders) {
-    const matches = responseHeaders.link && responseHeaders.link.match(/<([^<>]+)>; rel="deprecation"/);
-    const deprecationLink = matches && matches.pop();
-    log.warn(
-      `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${responseHeaders.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
-    );
-  }
-  if (status === 204 || status === 205) {
-    return octokitResponse;
-  }
-  if (requestOptions.method === "HEAD") {
-    if (status < 400) {
-      return octokitResponse;
-    }
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(fetchResponse.statusText, status, {
-      response: octokitResponse,
-      request: requestOptions
-    });
-  }
-  if (status === 304) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError("Not modified", status, {
-      response: octokitResponse,
-      request: requestOptions
-    });
-  }
-  if (status >= 400) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new _octokit_request_error__WEBPACK_IMPORTED_MODULE_3__.RequestError(toErrorMessage(octokitResponse.data), status, {
-      response: octokitResponse,
-      request: requestOptions
-    });
-  }
-  octokitResponse.data = parseSuccessResponseBody ? await getResponseData(fetchResponse) : fetchResponse.body;
-  return octokitResponse;
-}
-async function getResponseData(response) {
-  const contentType = response.headers.get("content-type");
-  if (!contentType) {
-    return response.text().catch(noop);
-  }
-  const mimetype = (0,content_type__WEBPACK_IMPORTED_MODULE_1__/* .parse */ .qg)(contentType);
-  if (isJSONResponse(mimetype)) {
-    let text = "";
-    try {
-      text = await response.text();
-      return (0,json_with_bigint__WEBPACK_IMPORTED_MODULE_2__/* .JSONParse */ .Q)(text);
-    } catch (err) {
-      return text;
-    }
-  } else if (mimetype.type.startsWith("text/") || mimetype.parameters.charset?.toLowerCase() === "utf-8") {
-    return response.text().catch(noop);
-  } else {
-    return response.arrayBuffer().catch(
-      /* v8 ignore next -- @preserve */
-      () => new ArrayBuffer(0)
-    );
-  }
-}
-function isJSONResponse(mimetype) {
-  return mimetype.type === "application/json" || mimetype.type === "application/scim+json";
-}
-function toErrorMessage(data) {
-  if (typeof data === "string") {
-    return data;
-  }
-  if (data instanceof ArrayBuffer) {
-    return "Unknown error";
-  }
-  if ("message" in data) {
-    const suffix = "documentation_url" in data ? ` - ${data.documentation_url}` : "";
-    return Array.isArray(data.errors) ? `${data.message}: ${data.errors.map((v) => JSON.stringify(v)).join(", ")}${suffix}` : `${data.message}${suffix}`;
-  }
-  return `Unknown error: ${JSON.stringify(data)}`;
-}
-
-// pkg/dist-src/with-defaults.js
-function withDefaults(oldEndpoint, newDefaults) {
-  const endpoint2 = oldEndpoint.defaults(newDefaults);
-  const newApi = function(route, parameters) {
-    const endpointOptions = endpoint2.merge(route, parameters);
-    if (!endpointOptions.request || !endpointOptions.request.hook) {
-      return fetchWrapper(endpoint2.parse(endpointOptions));
-    }
-    const request2 = (route2, parameters2) => {
-      return fetchWrapper(
-        endpoint2.parse(endpoint2.merge(route2, parameters2))
-      );
-    };
-    Object.assign(request2, {
-      endpoint: endpoint2,
-      defaults: withDefaults.bind(null, endpoint2)
-    });
-    return endpointOptions.request.hook(request2, endpointOptions);
-  };
-  return Object.assign(newApi, {
-    endpoint: endpoint2,
-    defaults: withDefaults.bind(null, endpoint2)
-  });
-}
-
-// pkg/dist-src/index.js
-var request = withDefaults(_octokit_endpoint__WEBPACK_IMPORTED_MODULE_4__/* .endpoint */ .s, defaults_default);
-
-/* v8 ignore next -- @preserve */
-/* v8 ignore else -- @preserve */
-
-
-/***/ }),
-
-/***/ 33799:
+/***/ 12381:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -96010,10 +91797,10 @@ function Collection() {
 
 /* harmony default export */ const before_after_hook = ({ Singular, Collection });
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+request@10.0.9/node_modules/@octokit/request/dist-bundle/index.js
-var dist_bundle = __nccwpck_require__(79856);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+graphql@9.0.3/node_modules/@octokit/graphql/dist-bundle/index.js
-var graphql_dist_bundle = __nccwpck_require__(82674);
+// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+request@10.0.15/node_modules/@octokit/request/dist-bundle/index.js + 3 modules
+var dist_bundle = __nccwpck_require__(50422);
+// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+graphql@9.0.4/node_modules/@octokit/graphql/dist-bundle/index.js
+var graphql_dist_bundle = __nccwpck_require__(21795);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+auth-token@6.0.0/node_modules/@octokit/auth-token/dist-bundle/index.js
 // pkg/dist-src/is-jwt.js
 var b64url = "(?:[a-zA-Z0-9_-]+)";
@@ -96069,11 +91856,11 @@ var createTokenAuth = function createTokenAuth2(token) {
 };
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.6/node_modules/@octokit/core/dist-src/version.js
-const VERSION = "7.0.6";
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.7/node_modules/@octokit/core/dist-src/version.js
+const VERSION = "7.0.7";
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.6/node_modules/@octokit/core/dist-src/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.7/node_modules/@octokit/core/dist-src/index.js
 
 
 
@@ -96143,7 +91930,7 @@ class Octokit {
   constructor(options = {}) {
     const hook = new before_after_hook.Collection();
     const requestDefaults = {
-      baseUrl: dist_bundle/* request */.E.endpoint.DEFAULTS.baseUrl,
+      baseUrl: dist_bundle.request.endpoint.DEFAULTS.baseUrl,
       headers: {},
       request: Object.assign({}, options.request, {
         // @ts-ignore internal usage only, no need to type
@@ -96164,7 +91951,7 @@ class Octokit {
     if (options.timeZone) {
       requestDefaults.headers["time-zone"] = options.timeZone;
     }
-    this.request = dist_bundle/* request */.E.defaults(requestDefaults);
+    this.request = dist_bundle.request.defaults(requestDefaults);
     this.graphql = (0,graphql_dist_bundle.withCustomRequest)(this.request).defaults(requestDefaults);
     this.log = createLogger(options.log);
     this.hook = hook;
@@ -96214,11 +92001,11 @@ class Octokit {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-request-log@6.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-request-log/dist-src/version.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-request-log@6.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-request-log/dist-src/version.js
 const version_VERSION = "6.0.0";
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-request-log@6.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-request-log/dist-src/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-request-log@6.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-request-log/dist-src/index.js
 
 function requestLog(octokit) {
   octokit.hook.wrap("request", (request, options) => {
@@ -96244,7 +92031,7 @@ function requestLog(octokit) {
 requestLog.VERSION = version_VERSION;
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@14.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@14.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
 // pkg/dist-src/version.js
 var dist_bundle_VERSION = "0.0.0-development";
 
@@ -96656,12 +92443,12 @@ function paginateRest(octokit) {
 paginateRest.VERSION = dist_bundle_VERSION;
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/version.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/version.js
 const dist_src_version_VERSION = "17.0.0";
 
 //# sourceMappingURL=version.js.map
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/generated/endpoints.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/generated/endpoints.js
 const Endpoints = {
   actions: {
     addCustomLabelsToSelfHostedRunnerForOrg: [
@@ -98955,7 +94742,7 @@ var endpoints_default = Endpoints;
 
 //# sourceMappingURL=endpoints.js.map
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/endpoints-to-methods.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/endpoints-to-methods.js
 
 const endpointMethodsMap = /* @__PURE__ */ new Map();
 for (const [scope, endpoints] of Object.entries(endpoints_default)) {
@@ -99081,7 +94868,7 @@ function decorate(octokit, scope, methodName, defaults, decorations) {
 
 //# sourceMappingURL=endpoints-to-methods.js.map
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.7/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/index.js
 
 
 function restEndpointMethods(octokit) {
@@ -99122,7 +94909,7 @@ const dist_src_Octokit = Octokit.plugin(requestLog, legacyRestEndpointMethods, p
 
 /***/ }),
 
-/***/ 56883:
+/***/ 87595:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -99138,8 +94925,8 @@ __nccwpck_require__.d(__webpack_exports__, {
 var external_net_ = __nccwpck_require__(69278);
 // EXTERNAL MODULE: external "tls"
 var external_tls_ = __nccwpck_require__(64756);
-// EXTERNAL MODULE: ./node_modules/.pnpm/debug@4.3.4/node_modules/debug/src/index.js
-var src = __nccwpck_require__(55099);
+// EXTERNAL MODULE: ./node_modules/.pnpm/debug@4.4.3/node_modules/debug/src/index.js
+var src = __nccwpck_require__(18263);
 // EXTERNAL MODULE: external "events"
 var external_events_ = __nccwpck_require__(24434);
 // EXTERNAL MODULE: external "http"
@@ -99333,7 +95120,44 @@ class Agent extends external_http_.Agent {
 //# sourceMappingURL=index.js.map
 // EXTERNAL MODULE: external "url"
 var external_url_ = __nccwpck_require__(87016);
-;// CONCATENATED MODULE: ./node_modules/.pnpm/http-proxy-agent@9.0.0/node_modules/http-proxy-agent/dist/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/proxy-agent-negotiate@1.1.0/node_modules/proxy-agent-negotiate/dist/index.js
+function createNegotiateAuth() {
+    return async ({ response, scheme }) => {
+        if (scheme.toLowerCase() !== 'negotiate') {
+            throw new Error(`Expected Negotiate scheme but got "${scheme}"`);
+        }
+        let kerberos;
+        try {
+            kerberos = await __nccwpck_require__.e(/* import() */ 309).then(__nccwpck_require__.t.bind(__nccwpck_require__, 59309, 19));
+        }
+        catch {
+            throw new Error('The "kerberos" package is required for Negotiate proxy authentication. ' +
+                'Install it with: npm install kerberos');
+        }
+        const proxyAuthenticate = response.headers['proxy-authenticate'] || '';
+        const challengeHeader = Array.isArray(proxyAuthenticate)
+            ? proxyAuthenticate[0]
+            : proxyAuthenticate;
+        const serverToken = typeof challengeHeader === 'string' && challengeHeader.includes(' ')
+            ? challengeHeader.split(' ').slice(1).join(' ')
+            : undefined;
+        const client = await kerberos.initializeClient('HTTP@proxy', {
+            mechOID: kerberos.GSS_MECH_OID_SPNEGO,
+        });
+        const token = await client.step(serverToken || '');
+        if (!token) {
+            throw new Error('Kerberos client.step() returned no token');
+        }
+        return {
+            headers: {
+                'Proxy-Authorization': `Negotiate ${token}`,
+            },
+        };
+    };
+}
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/http-proxy-agent@9.1.0/node_modules/http-proxy-agent/dist/index.js
+
 
 
 
@@ -99351,6 +95175,12 @@ class HttpProxyAgent extends Agent {
         this.proxy = typeof proxy === 'string' ? new external_url_.URL(proxy) : proxy;
         this.proxyHeaders = opts?.headers ?? {};
         debug('Creating new HttpProxyAgent instance: %o', this.proxy.href);
+        if (opts?.negotiate) {
+            this.onProxyAuth = createNegotiateAuth();
+        }
+        else if (opts?.onProxyAuth) {
+            this.onProxyAuth = opts.onProxyAuth;
+        }
         // Trim off the brackets from IPv6 addresses
         const host = (this.proxy.hostname || this.proxy.host).replace(/^\[|\]$/g, '');
         const port = this.proxy.port
@@ -99359,7 +95189,9 @@ class HttpProxyAgent extends Agent {
                 ? 443
                 : 80;
         this.connectOpts = {
-            ...(opts ? omit(opts, 'headers') : null),
+            ...(opts
+                ? omit(opts, 'headers', 'onProxyAuth', 'negotiate')
+                : null),
             host,
             port,
         };
@@ -99437,6 +95269,11 @@ class HttpProxyAgent extends Agent {
         // important for i.e. `PacProxyAgent` which determines a failed proxy
         // connection via the `callback()` function throwing.
         await (0,external_events_.once)(socket, 'connect');
+        // Emit the 'proxyConnect' event for parity with https-proxy-agent
+        const connect = { socket };
+        req.emit('proxyConnect', connect);
+        this.emit('proxyConnect', connect, req);
+        req.emit('proxy', { proxy: this.proxy.href, socket });
         return socket;
     }
 }
@@ -99452,233 +95289,6 @@ function omit(obj, ...keys) {
     return ret;
 }
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 93567:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   Q: () => (/* binding */ JSONParse),
-/* harmony export */   i: () => (/* binding */ JSONStringify)
-/* harmony export */ });
-const intRegex = /^-?\d+$/;
-const noiseValue = /^-?\d+n+$/; // Noise - strings that match the custom format before being converted to it
-const originalStringify = JSON.stringify;
-const originalParse = JSON.parse;
-const customFormat = /^-?\d+n$/;
-
-const bigIntsStringify = /([\[:])?"(-?\d+)n"($|([\\n]|\s)*(\s|[\\n])*[,\}\]])/g;
-const noiseStringify =
-  /([\[:])?("-?\d+n+)n("$|"([\\n]|\s)*(\s|[\\n])*[,\}\]])/g;
-
-/**
- * @typedef {(this: any, key: string | number | undefined, value: any) => any} Replacer
- * @typedef {(key: string | number | undefined, value: any, context?: { source: string }) => any} Reviver
- */
-
-/**
- * Converts a JavaScript value to a JSON string.
- *
- * Supports serialization of BigInt values using two strategies:
- * 1. Custom format "123n" → "123" (universal fallback)
- * 2. Native JSON.rawJSON() (Node.js 22+, fastest) when available
- *
- * All other values are serialized exactly like native JSON.stringify().
- *
- * @param {*} value The value to convert to a JSON string.
- * @param {Replacer | Array<string | number> | null} [replacer]
- *   A function that alters the behavior of the stringification process,
- *   or an array of strings/numbers to indicate properties to exclude.
- * @param {string | number} [space]
- *   A string or number to specify indentation or pretty-printing.
- * @returns {string} The JSON string representation.
- */
-const JSONStringify = (value, replacer, space) => {
-  if ("rawJSON" in JSON) {
-    return originalStringify(
-      value,
-      (key, value) => {
-        if (typeof value === "bigint") return JSON.rawJSON(value.toString());
-
-        if (typeof replacer === "function") return replacer(key, value);
-
-        if (Array.isArray(replacer) && replacer.includes(key)) return value;
-
-        return value;
-      },
-      space,
-    );
-  }
-
-  if (!value) return originalStringify(value, replacer, space);
-
-  const convertedToCustomJSON = originalStringify(
-    value,
-    (key, value) => {
-      const isNoise = typeof value === "string" && noiseValue.test(value);
-
-      if (isNoise) return value.toString() + "n"; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
-
-      if (typeof value === "bigint") return value.toString() + "n";
-
-      if (typeof replacer === "function") return replacer(key, value);
-
-      if (Array.isArray(replacer) && replacer.includes(key)) return value;
-
-      return value;
-    },
-    space,
-  );
-  const processedJSON = convertedToCustomJSON.replace(
-    bigIntsStringify,
-    "$1$2$3",
-  ); // Delete one "n" off the end of every BigInt value
-  const denoisedJSON = processedJSON.replace(noiseStringify, "$1$2$3"); // Remove one "n" off the end of every noisy string
-
-  return denoisedJSON;
-};
-
-const featureCache = new Map();
-
-/**
- * Detects if the current JSON.parse implementation supports the context.source feature.
- *
- * Uses toString() fingerprinting to cache results and automatically detect runtime
- * replacements of JSON.parse (polyfills, mocks, etc.).
- *
- * @returns {boolean} true if context.source is supported, false otherwise.
- */
-const isContextSourceSupported = () => {
-  const parseFingerprint = JSON.parse.toString();
-
-  if (featureCache.has(parseFingerprint)) {
-    return featureCache.get(parseFingerprint);
-  }
-
-  try {
-    const result = JSON.parse(
-      "1",
-      (_, __, context) => !!context?.source && context.source === "1",
-    );
-    featureCache.set(parseFingerprint, result);
-
-    return result;
-  } catch {
-    featureCache.set(parseFingerprint, false);
-
-    return false;
-  }
-};
-
-/**
- * Reviver function that converts custom-format BigInt strings back to BigInt values.
- * Also handles "noise" strings that accidentally match the BigInt format.
- *
- * @param {string | number | undefined} key The object key.
- * @param {*} value The value being parsed.
- * @param {object} [context] Parse context (if supported by JSON.parse).
- * @param {Reviver} [userReviver] User's custom reviver function.
- * @returns {any} The transformed value.
- */
-const convertMarkedBigIntsReviver = (key, value, context, userReviver) => {
-  const isCustomFormatBigInt =
-    typeof value === "string" && customFormat.test(value);
-  if (isCustomFormatBigInt) return BigInt(value.slice(0, -1));
-
-  const isNoiseValue = typeof value === "string" && noiseValue.test(value);
-  if (isNoiseValue) return value.slice(0, -1);
-
-  if (typeof userReviver !== "function") return value;
-
-  return userReviver(key, value, context);
-};
-
-/**
- * Fast JSON.parse implementation (~2x faster than classic fallback).
- * Uses JSON.parse's context.source feature to detect integers and convert
- * large numbers directly to BigInt without string manipulation.
- *
- * Does not support legacy custom format from v1 of this library.
- *
- * @param {string} text JSON string to parse.
- * @param {Reviver} [reviver] Transform function to apply to each value.
- * @returns {any} Parsed JavaScript value.
- */
-const JSONParseV2 = (text, reviver) => {
-  return JSON.parse(text, (key, value, context) => {
-    const isBigNumber =
-      typeof value === "number" &&
-      (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER);
-    const isInt = context && intRegex.test(context.source);
-    const isBigInt = isBigNumber && isInt;
-
-    if (isBigInt) return BigInt(context.source);
-
-    if (typeof reviver !== "function") return value;
-
-    return reviver(key, value, context);
-  });
-};
-
-const MAX_INT = Number.MAX_SAFE_INTEGER.toString();
-const MAX_DIGITS = MAX_INT.length;
-const stringsOrLargeNumbers =
-  /"(?:\\.|[^"])*"|-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?/g;
-const noiseValueWithQuotes = /^"-?\d+n+"$/; // Noise - strings that match the custom format before being converted to it
-
-/**
- * Converts a JSON string into a JavaScript value.
- *
- * Supports parsing of large integers using two strategies:
- * 1. Classic fallback: Marks large numbers with "123n" format, then converts to BigInt
- * 2. Fast path (JSONParseV2): Uses context.source feature (~2x faster) when available
- *
- * All other JSON values are parsed exactly like native JSON.parse().
- *
- * @param {string} text A valid JSON string.
- * @param {Reviver} [reviver]
- *   A function that transforms the results. This function is called for each member
- *   of the object. If a member contains nested objects, the nested objects are
- *   transformed before the parent object is.
- * @returns {any} The parsed JavaScript value.
- * @throws {SyntaxError} If text is not valid JSON.
- */
-const JSONParse = (text, reviver) => {
-  if (!text) return originalParse(text, reviver);
-
-  if (isContextSourceSupported()) return JSONParseV2(text, reviver); // Shortcut to a faster (2x) and simpler version
-
-  // Find and mark big numbers with "n"
-  const serializedData = text.replace(
-    stringsOrLargeNumbers,
-    (text, digits, fractional, exponential) => {
-      const isString = text[0] === '"';
-      const isNoise = isString && noiseValueWithQuotes.test(text);
-
-      if (isNoise) return text.substring(0, text.length - 1) + 'n"'; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
-
-      const isFractionalOrExponential = fractional || exponential;
-      const isLessThanMaxSafeInt =
-        digits &&
-        (digits.length < MAX_DIGITS ||
-          (digits.length === MAX_DIGITS && digits <= MAX_INT)); // With a fixed number of digits, we can correctly use lexicographical comparison to do a numeric comparison
-
-      if (isString || isFractionalOrExponential || isLessThanMaxSafeInt)
-        return text;
-
-      return '"' + text + 'n"';
-    },
-  );
-
-  return originalParse(serializedData, (key, value, context) =>
-    convertMarkedBigIntsReviver(key, value, context, reviver),
-  );
-};
-
-
-
 
 /***/ }),
 

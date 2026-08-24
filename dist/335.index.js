@@ -283,35 +283,35 @@ __webpack_unused_export__ = debug; // for test
 
 /***/ }),
 
-/***/ 79522:
+/***/ 51445:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 var __webpack_unused_export__;
 
 
-const Client = __webpack_require__(23275)
-const Dispatcher = __webpack_require__(23805)
-const Pool = __webpack_require__(23906)
-const BalancedPool = __webpack_require__(34107)
-const Agent = __webpack_require__(48951)
-const ProxyAgent = __webpack_require__(73490)
-const EnvHttpProxyAgent = __webpack_require__(79551)
-const RetryAgent = __webpack_require__(9412)
-const errors = __webpack_require__(62229)
-const util = __webpack_require__(91702)
+const Client = __webpack_require__(95548)
+const Dispatcher = __webpack_require__(82414)
+const Pool = __webpack_require__(67185)
+const BalancedPool = __webpack_require__(35078)
+const Agent = __webpack_require__(90754)
+const ProxyAgent = __webpack_require__(58491)
+const EnvHttpProxyAgent = __webpack_require__(97760)
+const RetryAgent = __webpack_require__(94969)
+const errors = __webpack_require__(61366)
+const util = __webpack_require__(93865)
 const { InvalidArgumentError } = errors
-const api = __webpack_require__(94333)
-const buildConnector = __webpack_require__(32230)
-const MockClient = __webpack_require__(7435)
-const MockAgent = __webpack_require__(6583)
-const MockPool = __webpack_require__(63074)
-const mockErrors = __webpack_require__(93863)
-const RetryHandler = __webpack_require__(54962)
-const { getGlobalDispatcher, setGlobalDispatcher } = __webpack_require__(12603)
-const DecoratorHandler = __webpack_require__(10457)
-const RedirectHandler = __webpack_require__(33188)
-const createRedirectInterceptor = __webpack_require__(66318)
+const api = __webpack_require__(32390)
+const buildConnector = __webpack_require__(70255)
+const MockClient = __webpack_require__(15938)
+const MockAgent = __webpack_require__(38292)
+const MockPool = __webpack_require__(17695)
+const mockErrors = __webpack_require__(86270)
+const RetryHandler = __webpack_require__(67197)
+const { getGlobalDispatcher, setGlobalDispatcher } = __webpack_require__(64010)
+const DecoratorHandler = __webpack_require__(76006)
+const RedirectHandler = __webpack_require__(75853)
+const createRedirectInterceptor = __webpack_require__(2087)
 
 Object.assign(Dispatcher.prototype, api)
 
@@ -329,10 +329,10 @@ __webpack_unused_export__ = DecoratorHandler
 __webpack_unused_export__ = RedirectHandler
 __webpack_unused_export__ = createRedirectInterceptor
 __webpack_unused_export__ = {
-  redirect: __webpack_require__(63528),
-  retry: __webpack_require__(16824),
-  dump: __webpack_require__(83134),
-  dns: __webpack_require__(90601)
+  redirect: __webpack_require__(42969),
+  retry: __webpack_require__(83695),
+  dump: __webpack_require__(14743),
+  dns: __webpack_require__(22726)
 }
 
 __webpack_unused_export__ = buildConnector
@@ -394,7 +394,7 @@ function makeDispatcher (fn) {
 __webpack_unused_export__ = setGlobalDispatcher
 __webpack_unused_export__ = getGlobalDispatcher
 
-const fetchImpl = (__webpack_require__(49640).fetch)
+const fetchImpl = (__webpack_require__(4543).fetch)
 __webpack_unused_export__ = async function fetch (init, options = undefined) {
   try {
     return await fetchImpl(init, options)
@@ -406,39 +406,39 @@ __webpack_unused_export__ = async function fetch (init, options = undefined) {
     throw err
   }
 }
-/* unused reexport */ __webpack_require__(63210).Headers
-/* unused reexport */ __webpack_require__(63009).Response
-/* unused reexport */ __webpack_require__(83045).Request
-/* unused reexport */ __webpack_require__(22044).FormData
+/* unused reexport */ __webpack_require__(65841).Headers
+/* unused reexport */ __webpack_require__(26424).Response
+/* unused reexport */ __webpack_require__(55830).Request
+/* unused reexport */ __webpack_require__(25069).FormData
 __webpack_unused_export__ = globalThis.File ?? (__webpack_require__(4573).File)
-/* unused reexport */ __webpack_require__(63453).FileReader
+/* unused reexport */ __webpack_require__(95732).FileReader
 
-const { setGlobalOrigin, getGlobalOrigin } = __webpack_require__(80561)
+const { setGlobalOrigin, getGlobalOrigin } = __webpack_require__(68320)
 
 __webpack_unused_export__ = setGlobalOrigin
 __webpack_unused_export__ = getGlobalOrigin
 
-const { CacheStorage } = __webpack_require__(77535)
-const { kConstruct } = __webpack_require__(82619)
+const { CacheStorage } = __webpack_require__(76734)
+const { kConstruct } = __webpack_require__(93276)
 
 // Cache & CacheStorage are tightly coupled with fetch. Even if it may run
 // in an older version of Node, it doesn't have any use without fetch.
 __webpack_unused_export__ = new CacheStorage(kConstruct)
 
-const { deleteCookie, getCookies, getSetCookies, setCookie } = __webpack_require__(57707)
+const { deleteCookie, getCookies, getSetCookies, setCookie } = __webpack_require__(2724)
 
 __webpack_unused_export__ = deleteCookie
 __webpack_unused_export__ = getCookies
 __webpack_unused_export__ = getSetCookies
 __webpack_unused_export__ = setCookie
 
-const { parseMIMEType, serializeAMimeType } = __webpack_require__(40258)
+const { parseMIMEType, serializeAMimeType } = __webpack_require__(25859)
 
 __webpack_unused_export__ = parseMIMEType
 __webpack_unused_export__ = serializeAMimeType
 
-const { CloseEvent, ErrorEvent, MessageEvent } = __webpack_require__(19858)
-/* unused reexport */ __webpack_require__(53380).WebSocket
+const { CloseEvent, ErrorEvent, MessageEvent } = __webpack_require__(19643)
+/* unused reexport */ __webpack_require__(9031).WebSocket
 __webpack_unused_export__ = CloseEvent
 __webpack_unused_export__ = ErrorEvent
 __webpack_unused_export__ = MessageEvent
@@ -454,18 +454,18 @@ __webpack_unused_export__ = MockPool
 __webpack_unused_export__ = MockAgent
 __webpack_unused_export__ = mockErrors
 
-const { EventSource } = __webpack_require__(48612)
+const { EventSource } = __webpack_require__(86559)
 
 __webpack_unused_export__ = EventSource
 
 
 /***/ }),
 
-/***/ 58268:
+/***/ 109:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const { addAbortListener } = __webpack_require__(91702)
-const { RequestAbortedError } = __webpack_require__(62229)
+const { addAbortListener } = __webpack_require__(93865)
+const { RequestAbortedError } = __webpack_require__(61366)
 
 const kListener = Symbol('kListener')
 const kSignal = Symbol('kSignal')
@@ -525,7 +525,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 43106:
+/***/ 25985:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -533,9 +533,9 @@ module.exports = {
 
 const assert = __webpack_require__(34589)
 const { AsyncResource } = __webpack_require__(16698)
-const { InvalidArgumentError, SocketError } = __webpack_require__(62229)
-const util = __webpack_require__(91702)
-const { addSignal, removeSignal } = __webpack_require__(58268)
+const { InvalidArgumentError, SocketError } = __webpack_require__(61366)
+const util = __webpack_require__(93865)
+const { addSignal, removeSignal } = __webpack_require__(109)
 
 class ConnectHandler extends AsyncResource {
   constructor (opts, callback) {
@@ -641,7 +641,7 @@ module.exports = connect
 
 /***/ }),
 
-/***/ 16952:
+/***/ 81161:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -656,10 +656,10 @@ const {
   InvalidArgumentError,
   InvalidReturnValueError,
   RequestAbortedError
-} = __webpack_require__(62229)
-const util = __webpack_require__(91702)
+} = __webpack_require__(61366)
+const util = __webpack_require__(93865)
 const { AsyncResource } = __webpack_require__(16698)
-const { addSignal, removeSignal } = __webpack_require__(58268)
+const { addSignal, removeSignal } = __webpack_require__(109)
 const assert = __webpack_require__(34589)
 
 const kResume = Symbol('resume')
@@ -900,17 +900,17 @@ module.exports = pipeline
 
 /***/ }),
 
-/***/ 83117:
+/***/ 45170:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const assert = __webpack_require__(34589)
-const { Readable } = __webpack_require__(60405)
-const { InvalidArgumentError, RequestAbortedError } = __webpack_require__(62229)
-const util = __webpack_require__(91702)
-const { getResolveErrorBodyCallback } = __webpack_require__(75373)
+const { Readable } = __webpack_require__(54860)
+const { InvalidArgumentError, RequestAbortedError } = __webpack_require__(61366)
+const util = __webpack_require__(93865)
+const { getResolveErrorBodyCallback } = __webpack_require__(43352)
 const { AsyncResource } = __webpack_require__(16698)
 
 class RequestHandler extends AsyncResource {
@@ -1122,7 +1122,7 @@ module.exports.RequestHandler = RequestHandler
 
 /***/ }),
 
-/***/ 64318:
+/***/ 81591:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1130,11 +1130,11 @@ module.exports.RequestHandler = RequestHandler
 
 const assert = __webpack_require__(34589)
 const { finished, PassThrough } = __webpack_require__(57075)
-const { InvalidArgumentError, InvalidReturnValueError } = __webpack_require__(62229)
-const util = __webpack_require__(91702)
-const { getResolveErrorBodyCallback } = __webpack_require__(75373)
+const { InvalidArgumentError, InvalidReturnValueError } = __webpack_require__(61366)
+const util = __webpack_require__(93865)
+const { getResolveErrorBodyCallback } = __webpack_require__(43352)
 const { AsyncResource } = __webpack_require__(16698)
-const { addSignal, removeSignal } = __webpack_require__(58268)
+const { addSignal, removeSignal } = __webpack_require__(109)
 
 class StreamHandler extends AsyncResource {
   constructor (opts, factory, callback) {
@@ -1350,16 +1350,16 @@ module.exports = stream
 
 /***/ }),
 
-/***/ 23836:
+/***/ 61291:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { InvalidArgumentError, SocketError } = __webpack_require__(62229)
+const { InvalidArgumentError, SocketError } = __webpack_require__(61366)
 const { AsyncResource } = __webpack_require__(16698)
-const util = __webpack_require__(91702)
-const { addSignal, removeSignal } = __webpack_require__(58268)
+const util = __webpack_require__(93865)
+const { addSignal, removeSignal } = __webpack_require__(109)
 const assert = __webpack_require__(34589)
 
 class UpgradeHandler extends AsyncResource {
@@ -1466,22 +1466,22 @@ module.exports = upgrade
 
 /***/ }),
 
-/***/ 94333:
+/***/ 32390:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-module.exports.request = __webpack_require__(83117)
-module.exports.stream = __webpack_require__(64318)
-module.exports.pipeline = __webpack_require__(16952)
-module.exports.upgrade = __webpack_require__(23836)
-module.exports.connect = __webpack_require__(43106)
+module.exports.request = __webpack_require__(45170)
+module.exports.stream = __webpack_require__(81591)
+module.exports.pipeline = __webpack_require__(81161)
+module.exports.upgrade = __webpack_require__(61291)
+module.exports.connect = __webpack_require__(25985)
 
 
 /***/ }),
 
-/***/ 60405:
+/***/ 54860:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1491,9 +1491,9 @@ module.exports.connect = __webpack_require__(43106)
 
 const assert = __webpack_require__(34589)
 const { Readable } = __webpack_require__(57075)
-const { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = __webpack_require__(62229)
-const util = __webpack_require__(91702)
-const { ReadableStreamFrom } = __webpack_require__(91702)
+const { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = __webpack_require__(61366)
+const util = __webpack_require__(93865)
+const { ReadableStreamFrom } = __webpack_require__(93865)
 
 const kConsume = Symbol('kConsume')
 const kReading = Symbol('kReading')
@@ -1874,15 +1874,15 @@ module.exports = { Readable: BodyReadable, chunksDecode }
 
 /***/ }),
 
-/***/ 75373:
+/***/ 43352:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const assert = __webpack_require__(34589)
 const {
   ResponseStatusCodeError
-} = __webpack_require__(62229)
+} = __webpack_require__(61366)
 
-const { chunksDecode } = __webpack_require__(60405)
+const { chunksDecode } = __webpack_require__(54860)
 const CHUNK_LIMIT = 128 * 1024
 
 async function getResolveErrorBodyCallback ({ callback, body, contentType, statusCode, statusMessage, headers }) {
@@ -1974,7 +1974,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 32230:
+/***/ 70255:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1982,9 +1982,9 @@ module.exports = {
 
 const net = __webpack_require__(77030)
 const assert = __webpack_require__(34589)
-const util = __webpack_require__(91702)
-const { InvalidArgumentError, ConnectTimeoutError } = __webpack_require__(62229)
-const timers = __webpack_require__(89645)
+const util = __webpack_require__(93865)
+const { InvalidArgumentError, ConnectTimeoutError } = __webpack_require__(61366)
+const timers = __webpack_require__(42366)
 
 function noop () {}
 
@@ -2222,7 +2222,7 @@ module.exports = buildConnector
 
 /***/ }),
 
-/***/ 51225:
+/***/ 48808:
 /***/ ((module) => {
 
 "use strict";
@@ -2348,7 +2348,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 69304:
+/***/ 75997:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2558,7 +2558,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 62229:
+/***/ 61366:
 /***/ ((module) => {
 
 "use strict";
@@ -2991,7 +2991,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 99481:
+/***/ 82468:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -3000,7 +3000,7 @@ module.exports = {
 const {
   InvalidArgumentError,
   NotSupportedError
-} = __webpack_require__(62229)
+} = __webpack_require__(61366)
 const assert = __webpack_require__(34589)
 const {
   isValidHTTPToken,
@@ -3015,9 +3015,9 @@ const {
   validateHandler,
   getServerName,
   normalizedMethodRecords
-} = __webpack_require__(91702)
-const { channels } = __webpack_require__(69304)
-const { headerNameLowerCasedRecord } = __webpack_require__(51225)
+} = __webpack_require__(93865)
+const { channels } = __webpack_require__(75997)
+const { headerNameLowerCasedRecord } = __webpack_require__(48808)
 
 // Verifies that a given path is valid does not contain control chars \x00 to \x20
 const invalidPathRegex = /[^\u0021-\u00ff]/
@@ -3347,7 +3347,13 @@ function processHeader (request, key, val) {
       } else if (typeof val[i] === 'object') {
         throw new InvalidArgumentError(`invalid ${key} header`)
       } else {
-        arr.push(`${val[i]}`)
+        // Coerce primitives (and reject unsafe coercions such as functions
+        // with a crafted toString/Symbol.toPrimitive).
+        const str = `${val[i]}`
+        if (!isValidHeaderValue(str)) {
+          throw new InvalidArgumentError(`invalid ${key} header`)
+        }
+        arr.push(str)
       }
     }
     val = arr
@@ -3358,7 +3364,12 @@ function processHeader (request, key, val) {
   } else if (val === null) {
     val = ''
   } else {
+    // Coerce primitives (and reject unsafe coercions such as functions
+    // with a crafted toString/Symbol.toPrimitive).
     val = `${val}`
+    if (!isValidHeaderValue(val)) {
+      throw new InvalidArgumentError(`invalid ${key} header`)
+    }
   }
 
   if (headerName === 'host') {
@@ -3404,7 +3415,7 @@ module.exports = Request
 
 /***/ }),
 
-/***/ 44469:
+/***/ 77528:
 /***/ ((module) => {
 
 module.exports = {
@@ -3478,7 +3489,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 67626:
+/***/ 92705:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -3487,7 +3498,7 @@ module.exports = {
 const {
   wellknownHeaderNames,
   headerNameLowerCasedRecord
-} = __webpack_require__(51225)
+} = __webpack_require__(48808)
 
 class TstNode {
   /** @type {any} */
@@ -3638,14 +3649,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 91702:
+/***/ 93865:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const assert = __webpack_require__(34589)
-const { kDestroyed, kBodyUsed, kListeners, kBody } = __webpack_require__(44469)
+const { kDestroyed, kBodyUsed, kListeners, kBody } = __webpack_require__(77528)
 const { IncomingMessage } = __webpack_require__(37067)
 const stream = __webpack_require__(57075)
 const net = __webpack_require__(77030)
@@ -3653,9 +3664,9 @@ const { Blob } = __webpack_require__(4573)
 const nodeUtil = __webpack_require__(57975)
 const { stringify } = __webpack_require__(41792)
 const { EventEmitter: EE } = __webpack_require__(78474)
-const { InvalidArgumentError } = __webpack_require__(62229)
-const { headerNameLowerCasedRecord } = __webpack_require__(51225)
-const { tree } = __webpack_require__(67626)
+const { InvalidArgumentError } = __webpack_require__(61366)
+const { headerNameLowerCasedRecord } = __webpack_require__(48808)
+const { tree } = __webpack_require__(92705)
 
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(v => Number(v))
 
@@ -4365,19 +4376,19 @@ module.exports = {
 
 /***/ }),
 
-/***/ 48951:
+/***/ 90754:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { InvalidArgumentError } = __webpack_require__(62229)
-const { kClients, kRunning, kClose, kDestroy, kDispatch, kInterceptors } = __webpack_require__(44469)
-const DispatcherBase = __webpack_require__(79471)
-const Pool = __webpack_require__(23906)
-const Client = __webpack_require__(23275)
-const util = __webpack_require__(91702)
-const createRedirectInterceptor = __webpack_require__(66318)
+const { InvalidArgumentError } = __webpack_require__(61366)
+const { kClients, kRunning, kClose, kDestroy, kDispatch, kInterceptors } = __webpack_require__(77528)
+const DispatcherBase = __webpack_require__(37758)
+const Pool = __webpack_require__(67185)
+const Client = __webpack_require__(95548)
+const util = __webpack_require__(93865)
+const createRedirectInterceptor = __webpack_require__(2087)
 
 const kOnConnect = Symbol('onConnect')
 const kOnDisconnect = Symbol('onDisconnect')
@@ -4395,7 +4406,6 @@ function defaultFactory (origin, opts) {
 
 class Agent extends DispatcherBase {
   constructor ({ factory = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
-
     if (typeof factory !== 'function') {
       throw new InvalidArgumentError('factory must be a function.')
     }
@@ -4503,7 +4513,7 @@ module.exports = Agent
 
 /***/ }),
 
-/***/ 34107:
+/***/ 35078:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4512,7 +4522,7 @@ module.exports = Agent
 const {
   BalancedPoolMissingUpstreamError,
   InvalidArgumentError
-} = __webpack_require__(62229)
+} = __webpack_require__(61366)
 const {
   PoolBase,
   kClients,
@@ -4520,10 +4530,10 @@ const {
   kAddClient,
   kRemoveClient,
   kGetDispatcher
-} = __webpack_require__(11994)
-const Pool = __webpack_require__(23906)
-const { kUrl, kInterceptors } = __webpack_require__(44469)
-const { parseOrigin } = __webpack_require__(91702)
+} = __webpack_require__(11512)
+const Pool = __webpack_require__(67185)
+const { kUrl, kInterceptors } = __webpack_require__(77528)
+const { parseOrigin } = __webpack_require__(93865)
 const kFactory = Symbol('factory')
 
 const kOptions = Symbol('options')
@@ -4720,7 +4730,7 @@ module.exports = BalancedPool
 
 /***/ }),
 
-/***/ 14935:
+/***/ 75018:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4729,13 +4739,14 @@ module.exports = BalancedPool
 /* global WebAssembly */
 
 const assert = __webpack_require__(34589)
-const util = __webpack_require__(91702)
-const { channels } = __webpack_require__(69304)
-const timers = __webpack_require__(89645)
+const util = __webpack_require__(93865)
+const { channels } = __webpack_require__(75997)
+const timers = __webpack_require__(42366)
 const {
   RequestContentLengthMismatchError,
   ResponseContentLengthMismatchError,
   RequestAbortedError,
+  InvalidArgumentError,
   HeadersTimeoutError,
   HeadersOverflowError,
   SocketError,
@@ -4743,7 +4754,7 @@ const {
   BodyTimeoutError,
   HTTPParserError,
   ResponseExceededMaxSizeError
-} = __webpack_require__(62229)
+} = __webpack_require__(61366)
 const {
   kUrl,
   kReset,
@@ -4776,22 +4787,25 @@ const {
   kOnError,
   kResume,
   kHTTPContext
-} = __webpack_require__(44469)
+} = __webpack_require__(77528)
 
-const constants = __webpack_require__(20886)
+const constants = __webpack_require__(30195)
 const EMPTY_BUF = Buffer.alloc(0)
 const FastBuffer = Buffer[Symbol.species]
 const addListener = util.addListener
 const removeAllListeners = util.removeAllListeners
+const kIdleSocketValidation = Symbol('kIdleSocketValidation')
+const kIdleSocketValidationTimeout = Symbol('kIdleSocketValidationTimeout')
+const kSocketUsed = Symbol('kSocketUsed')
 
 let extractBody
 
 async function lazyllhttp () {
-  const llhttpWasmData = process.env.JEST_WORKER_ID ? __webpack_require__(52668) : undefined
+  const llhttpWasmData = process.env.JEST_WORKER_ID ? __webpack_require__(84717) : undefined
 
   let mod
   try {
-    mod = await WebAssembly.compile(__webpack_require__(51252))
+    mod = await WebAssembly.compile(__webpack_require__(71807))
   } catch (e) {
     /* istanbul ignore next */
 
@@ -4799,7 +4813,7 @@ async function lazyllhttp () {
     // being enabled, but the occurring of this other error
     // * https://github.com/emscripten-core/emscripten/issues/11495
     // got me to remove that check to avoid breaking Node 12.
-    mod = await WebAssembly.compile(llhttpWasmData || __webpack_require__(52668))
+    mod = await WebAssembly.compile(llhttpWasmData || __webpack_require__(84717))
   }
 
   return await WebAssembly.instantiate(mod, {
@@ -5005,27 +5019,69 @@ class Parser {
 
       const offset = llhttp.llhttp_get_error_pos(this.ptr) - currentBufferPtr
 
-      if (ret === constants.ERROR.PAUSED_UPGRADE) {
-        this.onUpgrade(data.slice(offset))
-      } else if (ret === constants.ERROR.PAUSED) {
-        this.paused = true
-        socket.unshift(data.slice(offset))
-      } else if (ret !== constants.ERROR.OK) {
-        const ptr = llhttp.llhttp_get_error_reason(this.ptr)
-        let message = ''
-        /* istanbul ignore else: difficult to make a test case for */
-        if (ptr) {
-          const len = new Uint8Array(llhttp.memory.buffer, ptr).indexOf(0)
-          message =
-            'Response does not match the HTTP/1.1 protocol (' +
-            Buffer.from(llhttp.memory.buffer, ptr, len).toString() +
-            ')'
+      if (ret !== constants.ERROR.OK) {
+        const body = data.subarray(offset)
+
+        if (ret === constants.ERROR.PAUSED_UPGRADE) {
+          this.onUpgrade(body)
+        } else if (ret === constants.ERROR.PAUSED) {
+          this.paused = true
+          socket.unshift(body)
+        } else {
+          throw this.createError(ret, body)
         }
-        throw new HTTPParserError(message, constants.ERROR[ret], data.slice(offset))
       }
     } catch (err) {
       util.destroy(socket, err)
     }
+  }
+
+  finish () {
+    assert(currentParser === null)
+    assert(this.ptr != null)
+    assert(!this.paused)
+
+    const { llhttp } = this
+
+    let ret
+
+    try {
+      currentParser = this
+      ret = llhttp.llhttp_finish(this.ptr)
+    } finally {
+      currentParser = null
+    }
+
+    if (ret === constants.ERROR.OK) {
+      return null
+    }
+
+    if (ret === constants.ERROR.PAUSED || ret === constants.ERROR.PAUSED_UPGRADE) {
+      this.paused = true
+      return null
+    }
+
+    return this.createError(ret, EMPTY_BUF)
+  }
+
+  createError (ret, data) {
+    const { llhttp, contentLength, bytesRead } = this
+
+    if (contentLength && bytesRead !== parseInt(contentLength, 10)) {
+      return new ResponseContentLengthMismatchError()
+    }
+
+    const ptr = llhttp.llhttp_get_error_reason(this.ptr)
+    let message = ''
+    if (ptr) {
+      const len = new Uint8Array(llhttp.memory.buffer, ptr).indexOf(0)
+      message =
+        'Response does not match the HTTP/1.1 protocol (' +
+        Buffer.from(llhttp.memory.buffer, ptr, len).toString() +
+        ')'
+    }
+
+    return new HTTPParserError(message, constants.ERROR[ret], data)
   }
 
   destroy () {
@@ -5052,6 +5108,11 @@ class Parser {
 
     /* istanbul ignore next: difficult to make a test case for */
     if (socket.destroyed) {
+      return -1
+    }
+
+    if (client[kRunning] === 0) {
+      util.destroy(socket, new SocketError('bad response', util.getSocketInfo(socket)))
       return -1
     }
 
@@ -5155,6 +5216,11 @@ class Parser {
 
     /* istanbul ignore next: difficult to make a test case for */
     if (socket.destroyed) {
+      return -1
+    }
+
+    if (client[kRunning] === 0) {
+      util.destroy(socket, new SocketError('bad response', util.getSocketInfo(socket)))
       return -1
     }
 
@@ -5331,6 +5397,7 @@ class Parser {
     request.onComplete(headers)
 
     client[kQueue][client[kRunningIdx]++] = null
+    socket[kSocketUsed] = true
 
     if (socket[kWriting]) {
       assert(client[kRunning] === 0)
@@ -5389,6 +5456,9 @@ async function connectH1 (client, socket) {
   socket[kWriting] = false
   socket[kReset] = false
   socket[kBlocking] = false
+  socket[kIdleSocketValidation] = 0
+  socket[kIdleSocketValidationTimeout] = null
+  socket[kSocketUsed] = false
   socket[kParser] = new Parser(client, socket, llhttpInstance)
 
   addListener(socket, 'error', function (err) {
@@ -5399,8 +5469,11 @@ async function connectH1 (client, socket) {
     // On Mac OS, we get an ECONNRESET even if there is a full body to be forwarded
     // to the user.
     if (err.code === 'ECONNRESET' && parser.statusCode && !parser.shouldKeepAlive) {
-      // We treat all incoming data so for as a valid response.
-      parser.onMessageComplete()
+      const parserErr = parser.finish()
+      if (parserErr) {
+        this[kError] = parserErr
+        this[kClient][kOnError](parserErr)
+      }
       return
     }
 
@@ -5419,8 +5492,10 @@ async function connectH1 (client, socket) {
     const parser = this[kParser]
 
     if (parser.statusCode && !parser.shouldKeepAlive) {
-      // We treat all incoming data so far as a valid response.
-      parser.onMessageComplete()
+      const parserErr = parser.finish()
+      if (parserErr) {
+        util.destroy(this, parserErr)
+      }
       return
     }
 
@@ -5430,10 +5505,11 @@ async function connectH1 (client, socket) {
     const client = this[kClient]
     const parser = this[kParser]
 
+    clearIdleSocketValidation(this)
+
     if (parser) {
       if (!this[kError] && parser.statusCode && !parser.shouldKeepAlive) {
-        // We treat all incoming data so far as a valid response.
-        parser.onMessageComplete()
+        this[kError] = parser.finish() || this[kError]
       }
 
       this[kParser].destroy()
@@ -5496,7 +5572,7 @@ async function connectH1 (client, socket) {
       return socket.destroyed
     },
     busy (request) {
-      if (socket[kWriting] || socket[kReset] || socket[kBlocking]) {
+      if (socket[kWriting] || socket[kReset] || socket[kBlocking] || socket[kIdleSocketValidation] === 1) {
         return true
       }
 
@@ -5534,6 +5610,31 @@ async function connectH1 (client, socket) {
   }
 }
 
+function clearIdleSocketValidation (socket) {
+  if (socket[kIdleSocketValidationTimeout]) {
+    clearTimeout(socket[kIdleSocketValidationTimeout])
+    socket[kIdleSocketValidationTimeout] = null
+  }
+
+  socket[kIdleSocketValidation] = 0
+}
+
+function scheduleIdleSocketValidation (client, socket) {
+  socket[kIdleSocketValidation] = 1
+  socket[kIdleSocketValidationTimeout] = setTimeout(() => {
+    socket[kIdleSocketValidationTimeout] = null
+    socket[kIdleSocketValidation] = 2
+
+    if (client[kSocket] === socket && !socket.destroyed) {
+      client[kResume]()
+    }
+  }, 0)
+  socket[kIdleSocketValidationTimeout].unref?.()
+}
+
+/**
+ * @param {import('./client.js')} client
+ */
 function resumeH1 (client) {
   const socket = client[kSocket]
 
@@ -5546,6 +5647,32 @@ function resumeH1 (client) {
     } else if (socket[kNoRef] && socket.ref) {
       socket.ref()
       socket[kNoRef] = false
+    }
+
+    if (client[kRunning] === 0 && client[kPending] > 0 && socket[kSocketUsed]) {
+      if (socket[kIdleSocketValidation] === 0) {
+        scheduleIdleSocketValidation(client, socket)
+        socket[kParser].readMore()
+        if (socket.destroyed) {
+          return
+        }
+        return
+      }
+
+      if (socket[kIdleSocketValidation] === 1) {
+        socket[kParser].readMore()
+        if (socket.destroyed) {
+          return
+        }
+        return
+      }
+    }
+
+    if (client[kRunning] === 0) {
+      socket[kParser].readMore()
+      if (socket.destroyed) {
+        return
+      }
     }
 
     if (client[kSize] === 0) {
@@ -5594,7 +5721,7 @@ function writeH1 (client, request) {
 
   if (util.isFormDataLike(body)) {
     if (!extractBody) {
-      extractBody = (__webpack_require__(86110).extractBody)
+      extractBody = (__webpack_require__(36847).extractBody)
     }
 
     const [bodyStream, contentType] = extractBody(body)
@@ -5603,8 +5730,16 @@ function writeH1 (client, request) {
     }
     body = bodyStream.stream
     contentLength = bodyStream.length
-  } else if (util.isBlobLike(body) && request.contentType == null && body.type) {
-    headers.push('content-type', body.type)
+  } else if (util.isBlobLike(body) && request.contentType == null) {
+    const contentType = body.type
+    if (contentType) {
+      const contentTypeValue = `${contentType}`
+      if (!util.isValidHeaderValue(contentTypeValue)) {
+        util.errorRequest(client, request, new InvalidArgumentError('invalid content-type header'))
+        return false
+      }
+      headers.push('content-type', contentTypeValue)
+    }
   }
 
   if (body && typeof body.read === 'function') {
@@ -5641,6 +5776,7 @@ function writeH1 (client, request) {
   }
 
   const socket = client[kSocket]
+  clearIdleSocketValidation(socket)
 
   const abort = (err) => {
     if (request.aborted || request.completed) {
@@ -6098,7 +6234,7 @@ module.exports = connectH1
 
 /***/ }),
 
-/***/ 29834:
+/***/ 52279:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -6106,13 +6242,13 @@ module.exports = connectH1
 
 const assert = __webpack_require__(34589)
 const { pipeline } = __webpack_require__(57075)
-const util = __webpack_require__(91702)
+const util = __webpack_require__(93865)
 const {
   RequestContentLengthMismatchError,
   RequestAbortedError,
   SocketError,
   InformationalError
-} = __webpack_require__(62229)
+} = __webpack_require__(61366)
 const {
   kUrl,
   kReset,
@@ -6131,7 +6267,7 @@ const {
   kResume,
   kSize,
   kHTTPContext
-} = __webpack_require__(44469)
+} = __webpack_require__(77528)
 
 const kOpenStreams = Symbol('open streams')
 
@@ -6490,7 +6626,7 @@ function writeH2 (client, request) {
   let contentLength = util.bodyLength(body)
 
   if (util.isFormDataLike(body)) {
-    extractBody ??= (__webpack_require__(86110).extractBody)
+    extractBody ??= (__webpack_require__(36847).extractBody)
 
     const [bodyStream, contentType] = extractBody(body)
     headers['content-type'] = contentType
@@ -6850,7 +6986,7 @@ module.exports = connectH2
 
 /***/ }),
 
-/***/ 23275:
+/***/ 95548:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -6861,16 +6997,16 @@ module.exports = connectH2
 const assert = __webpack_require__(34589)
 const net = __webpack_require__(77030)
 const http = __webpack_require__(37067)
-const util = __webpack_require__(91702)
-const { channels } = __webpack_require__(69304)
-const Request = __webpack_require__(99481)
-const DispatcherBase = __webpack_require__(79471)
+const util = __webpack_require__(93865)
+const { channels } = __webpack_require__(75997)
+const Request = __webpack_require__(82468)
+const DispatcherBase = __webpack_require__(37758)
 const {
   InvalidArgumentError,
   InformationalError,
   ClientDestroyedError
-} = __webpack_require__(62229)
-const buildConnector = __webpack_require__(32230)
+} = __webpack_require__(61366)
+const buildConnector = __webpack_require__(70255)
 const {
   kUrl,
   kServerName,
@@ -6912,9 +7048,9 @@ const {
   kHTTPContext,
   kMaxConcurrentStreams,
   kResume
-} = __webpack_require__(44469)
-const connectH1 = __webpack_require__(14935)
-const connectH2 = __webpack_require__(29834)
+} = __webpack_require__(77528)
+const connectH1 = __webpack_require__(75018)
+const connectH2 = __webpack_require__(52279)
 let deprecatedInterceptorWarned = false
 
 const kClosedResolve = Symbol('kClosedResolve')
@@ -7221,7 +7357,7 @@ class Client extends DispatcherBase {
   }
 }
 
-const createRedirectInterceptor = __webpack_require__(66318)
+const createRedirectInterceptor = __webpack_require__(2087)
 
 function onError (client, err) {
   if (
@@ -7481,19 +7617,19 @@ module.exports = Client
 
 /***/ }),
 
-/***/ 79471:
+/***/ 37758:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const Dispatcher = __webpack_require__(23805)
+const Dispatcher = __webpack_require__(82414)
 const {
   ClientDestroyedError,
   ClientClosedError,
   InvalidArgumentError
-} = __webpack_require__(62229)
-const { kDestroy, kClose, kClosed, kDestroyed, kDispatch, kInterceptors } = __webpack_require__(44469)
+} = __webpack_require__(61366)
+const { kDestroy, kClose, kClosed, kDestroyed, kDispatch, kInterceptors } = __webpack_require__(77528)
 
 const kOnDestroyed = Symbol('onDestroyed')
 const kOnClosed = Symbol('onClosed')
@@ -7513,6 +7649,7 @@ class DispatcherBase extends Dispatcher {
 
   get webSocketOptions () {
     return {
+      maxFragments: this[kWebSocketOptions].maxFragments ?? 131072,
       maxPayloadSize: this[kWebSocketOptions].maxPayloadSize ?? 128 * 1024 * 1024
     }
   }
@@ -7687,7 +7824,7 @@ module.exports = DispatcherBase
 
 /***/ }),
 
-/***/ 23805:
+/***/ 82414:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -7760,16 +7897,16 @@ module.exports = Dispatcher
 
 /***/ }),
 
-/***/ 79551:
+/***/ 97760:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const DispatcherBase = __webpack_require__(79471)
-const { kClose, kDestroy, kClosed, kDestroyed, kDispatch, kNoProxyAgent, kHttpProxyAgent, kHttpsProxyAgent } = __webpack_require__(44469)
-const ProxyAgent = __webpack_require__(73490)
-const Agent = __webpack_require__(48951)
+const DispatcherBase = __webpack_require__(37758)
+const { kClose, kDestroy, kClosed, kDestroyed, kDispatch, kNoProxyAgent, kHttpProxyAgent, kHttpsProxyAgent } = __webpack_require__(77528)
+const ProxyAgent = __webpack_require__(58491)
+const Agent = __webpack_require__(90754)
 
 const DEFAULT_PORTS = {
   'http:': 80,
@@ -7928,7 +8065,7 @@ module.exports = EnvHttpProxyAgent
 
 /***/ }),
 
-/***/ 50:
+/***/ 57711:
 /***/ ((module) => {
 
 "use strict";
@@ -8053,16 +8190,16 @@ module.exports = class FixedQueue {
 
 /***/ }),
 
-/***/ 11994:
+/***/ 11512:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const DispatcherBase = __webpack_require__(79471)
-const FixedQueue = __webpack_require__(50)
-const { kConnected, kSize, kRunning, kPending, kQueued, kBusy, kFree, kUrl, kClose, kDestroy, kDispatch } = __webpack_require__(44469)
-const PoolStats = __webpack_require__(57132)
+const DispatcherBase = __webpack_require__(37758)
+const FixedQueue = __webpack_require__(57711)
+const { kConnected, kSize, kRunning, kPending, kQueued, kBusy, kFree, kUrl, kClose, kDestroy, kDispatch } = __webpack_require__(77528)
+const PoolStats = __webpack_require__(94951)
 
 const kClients = Symbol('clients')
 const kNeedDrain = Symbol('needDrain')
@@ -8255,10 +8392,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 57132:
+/***/ 94951:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const { kFree, kConnected, kPending, kQueued, kRunning, kSize } = __webpack_require__(44469)
+const { kFree, kConnected, kPending, kQueued, kRunning, kSize } = __webpack_require__(77528)
 const kPool = Symbol('pool')
 
 class PoolStats {
@@ -8296,7 +8433,7 @@ module.exports = PoolStats
 
 /***/ }),
 
-/***/ 23906:
+/***/ 67185:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -8308,14 +8445,14 @@ const {
   kNeedDrain,
   kAddClient,
   kGetDispatcher
-} = __webpack_require__(11994)
-const Client = __webpack_require__(23275)
+} = __webpack_require__(11512)
+const Client = __webpack_require__(95548)
 const {
   InvalidArgumentError
-} = __webpack_require__(62229)
-const util = __webpack_require__(91702)
-const { kUrl, kInterceptors } = __webpack_require__(44469)
-const buildConnector = __webpack_require__(32230)
+} = __webpack_require__(61366)
+const util = __webpack_require__(93865)
+const { kUrl, kInterceptors } = __webpack_require__(77528)
+const buildConnector = __webpack_require__(70255)
 
 const kOptions = Symbol('options')
 const kConnections = Symbol('connections')
@@ -8411,20 +8548,20 @@ module.exports = Pool
 
 /***/ }),
 
-/***/ 73490:
+/***/ 58491:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kProxy, kClose, kDestroy, kDispatch, kInterceptors } = __webpack_require__(44469)
+const { kProxy, kClose, kDestroy, kDispatch, kInterceptors } = __webpack_require__(77528)
 const { URL } = __webpack_require__(73136)
-const Agent = __webpack_require__(48951)
-const Pool = __webpack_require__(23906)
-const DispatcherBase = __webpack_require__(79471)
-const { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = __webpack_require__(62229)
-const buildConnector = __webpack_require__(32230)
-const Client = __webpack_require__(23275)
+const Agent = __webpack_require__(90754)
+const Pool = __webpack_require__(67185)
+const DispatcherBase = __webpack_require__(37758)
+const { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = __webpack_require__(61366)
+const buildConnector = __webpack_require__(70255)
+const Client = __webpack_require__(95548)
 
 const kAgent = Symbol('proxy agent')
 const kClient = Symbol('proxy client')
@@ -8693,14 +8830,14 @@ module.exports = ProxyAgent
 
 /***/ }),
 
-/***/ 9412:
+/***/ 94969:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const Dispatcher = __webpack_require__(23805)
-const RetryHandler = __webpack_require__(54962)
+const Dispatcher = __webpack_require__(82414)
+const RetryHandler = __webpack_require__(67197)
 
 class RetryAgent extends Dispatcher {
   #agent = null
@@ -8736,7 +8873,7 @@ module.exports = RetryAgent
 
 /***/ }),
 
-/***/ 12603:
+/***/ 64010:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -8745,8 +8882,8 @@ module.exports = RetryAgent
 // We include a version number for the Dispatcher API. In case of breaking changes,
 // this version number must be increased to avoid conflicts.
 const globalDispatcher = Symbol.for('undici.globalDispatcher.1')
-const { InvalidArgumentError } = __webpack_require__(62229)
-const Agent = __webpack_require__(48951)
+const { InvalidArgumentError } = __webpack_require__(61366)
+const Agent = __webpack_require__(90754)
 
 if (getGlobalDispatcher() === undefined) {
   setGlobalDispatcher(new Agent())
@@ -8776,7 +8913,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 10457:
+/***/ 76006:
 /***/ ((module) => {
 
 "use strict";
@@ -8828,16 +8965,16 @@ module.exports = class DecoratorHandler {
 
 /***/ }),
 
-/***/ 33188:
+/***/ 75853:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const util = __webpack_require__(91702)
-const { kBodyUsed } = __webpack_require__(44469)
+const util = __webpack_require__(93865)
+const { kBodyUsed } = __webpack_require__(77528)
 const assert = __webpack_require__(34589)
-const { InvalidArgumentError } = __webpack_require__(62229)
+const { InvalidArgumentError } = __webpack_require__(61366)
 const EE = __webpack_require__(78474)
 
 const redirectableStatusCodes = [300, 301, 302, 303, 307, 308]
@@ -9068,25 +9205,47 @@ module.exports = RedirectHandler
 
 /***/ }),
 
-/***/ 54962:
+/***/ 67197:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 const assert = __webpack_require__(34589)
 
-const { kRetryHandlerDefaultRetry } = __webpack_require__(44469)
-const { RequestRetryError } = __webpack_require__(62229)
+const { kRetryHandlerDefaultRetry } = __webpack_require__(77528)
+const { RequestRetryError } = __webpack_require__(61366)
 const {
   isDisturbed,
   parseHeaders,
   parseRangeHeader,
   wrapRequestBody
-} = __webpack_require__(91702)
+} = __webpack_require__(93865)
 
 function calculateRetryAfterHeader (retryAfter) {
   const current = Date.now()
   return new Date(retryAfter).getTime() - current
+}
+
+function validatePartialResponseContentLength (headers, range, statusCode, retryCount) {
+  const contentLength = headers['content-length']
+  if (contentLength == null) {
+    return null
+  }
+
+  if (!Number.isFinite(range.start) || !Number.isFinite(range.end)) {
+    return null
+  }
+
+  const length = Number(contentLength)
+  const expectedLength = range.end - range.start + 1
+  if (!Number.isFinite(length) || length !== expectedLength) {
+    return new RequestRetryError('Content-Length mismatch', statusCode, {
+      headers,
+      data: { count: retryCount }
+    })
+  }
+
+  return null
 }
 
 class RetryHandler {
@@ -9303,6 +9462,12 @@ class RetryHandler {
         return false
       }
 
+      const contentLengthError = validatePartialResponseContentLength(headers, contentRange, statusCode, this.retryCount)
+      if (contentLengthError != null) {
+        this.abort(contentLengthError)
+        return false
+      }
+
       const { start, size, end = size - 1 } = contentRange
 
       assert(this.start === start, 'content-range mismatch')
@@ -9324,6 +9489,12 @@ class RetryHandler {
             resume,
             statusMessage
           )
+        }
+
+        const contentLengthError = validatePartialResponseContentLength(headers, range, statusCode, this.retryCount)
+        if (contentLengthError != null) {
+          this.abort(contentLengthError)
+          return false
         }
 
         const { start, size, end = size - 1 } = range
@@ -9450,15 +9621,15 @@ module.exports = RetryHandler
 
 /***/ }),
 
-/***/ 90601:
+/***/ 22726:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 const { isIP } = __webpack_require__(77030)
 const { lookup } = __webpack_require__(40610)
-const DecoratorHandler = __webpack_require__(10457)
-const { InvalidArgumentError, InformationalError } = __webpack_require__(62229)
+const DecoratorHandler = __webpack_require__(76006)
+const { InvalidArgumentError, InformationalError } = __webpack_require__(61366)
 const maxInt = Math.pow(2, 31) - 1
 
 class DNSInstance {
@@ -9833,15 +10004,15 @@ module.exports = interceptorOpts => {
 
 /***/ }),
 
-/***/ 83134:
+/***/ 14743:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const util = __webpack_require__(91702)
-const { InvalidArgumentError, RequestAbortedError } = __webpack_require__(62229)
-const DecoratorHandler = __webpack_require__(10457)
+const util = __webpack_require__(93865)
+const { InvalidArgumentError, RequestAbortedError } = __webpack_require__(61366)
+const DecoratorHandler = __webpack_require__(76006)
 
 class DumpHandler extends DecoratorHandler {
   #maxSize = 1024 * 1024
@@ -9964,13 +10135,13 @@ module.exports = createDumpInterceptor
 
 /***/ }),
 
-/***/ 66318:
+/***/ 2087:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const RedirectHandler = __webpack_require__(33188)
+const RedirectHandler = __webpack_require__(75853)
 
 function createRedirectInterceptor ({ maxRedirections: defaultMaxRedirections }) {
   return (dispatch) => {
@@ -9993,12 +10164,12 @@ module.exports = createRedirectInterceptor
 
 /***/ }),
 
-/***/ 63528:
+/***/ 42969:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-const RedirectHandler = __webpack_require__(33188)
+const RedirectHandler = __webpack_require__(75853)
 
 module.exports = opts => {
   const globalMaxRedirections = opts?.maxRedirections
@@ -10025,12 +10196,12 @@ module.exports = opts => {
 
 /***/ }),
 
-/***/ 16824:
+/***/ 83695:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-const RetryHandler = __webpack_require__(54962)
+const RetryHandler = __webpack_require__(67197)
 
 module.exports = globalOpts => {
   return dispatch => {
@@ -10052,14 +10223,14 @@ module.exports = globalOpts => {
 
 /***/ }),
 
-/***/ 20886:
+/***/ 30195:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SPECIAL_HEADERS = exports.HEADER_STATE = exports.MINOR = exports.MAJOR = exports.CONNECTION_TOKEN_CHARS = exports.HEADER_CHARS = exports.TOKEN = exports.STRICT_TOKEN = exports.HEX = exports.URL_CHAR = exports.STRICT_URL_CHAR = exports.USERINFO_CHARS = exports.MARK = exports.ALPHANUM = exports.NUM = exports.HEX_MAP = exports.NUM_MAP = exports.ALPHA = exports.FINISH = exports.H_METHOD_MAP = exports.METHOD_MAP = exports.METHODS_RTSP = exports.METHODS_ICE = exports.METHODS_HTTP = exports.METHODS = exports.LENIENT_FLAGS = exports.FLAGS = exports.TYPE = exports.ERROR = void 0;
-const utils_1 = __webpack_require__(68270);
+const utils_1 = __webpack_require__(53443);
 // C headers
 var ERROR;
 (function (ERROR) {
@@ -10337,7 +10508,7 @@ exports.SPECIAL_HEADERS = {
 
 /***/ }),
 
-/***/ 52668:
+/***/ 84717:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -10350,7 +10521,7 @@ module.exports = Buffer.from('AGFzbQEAAAABJwdgAX8Bf2ADf39/AX9gAX8AYAJ/fwBgBH9/f3
 
 /***/ }),
 
-/***/ 51252:
+/***/ 71807:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -10363,7 +10534,7 @@ module.exports = Buffer.from('AGFzbQEAAAABJwdgAX8Bf2ADf39/AX9gAX8AYAJ/fwBgBH9/f3
 
 /***/ }),
 
-/***/ 68270:
+/***/ 53443:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -10385,14 +10556,14 @@ exports.enumToMap = enumToMap;
 
 /***/ }),
 
-/***/ 6583:
+/***/ 38292:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kClients } = __webpack_require__(44469)
-const Agent = __webpack_require__(48951)
+const { kClients } = __webpack_require__(77528)
+const Agent = __webpack_require__(90754)
 const {
   kAgent,
   kMockAgentSet,
@@ -10403,14 +10574,14 @@ const {
   kGetNetConnect,
   kOptions,
   kFactory
-} = __webpack_require__(44703)
-const MockClient = __webpack_require__(7435)
-const MockPool = __webpack_require__(63074)
-const { matchValue, buildMockOptions } = __webpack_require__(91923)
-const { InvalidArgumentError, UndiciError } = __webpack_require__(62229)
-const Dispatcher = __webpack_require__(23805)
-const Pluralizer = __webpack_require__(23195)
-const PendingInterceptorsFormatter = __webpack_require__(71808)
+} = __webpack_require__(80832)
+const MockClient = __webpack_require__(15938)
+const MockPool = __webpack_require__(17695)
+const { matchValue, buildMockOptions } = __webpack_require__(72276)
+const { InvalidArgumentError, UndiciError } = __webpack_require__(61366)
+const Dispatcher = __webpack_require__(82414)
+const Pluralizer = __webpack_require__(78820)
+const PendingInterceptorsFormatter = __webpack_require__(62595)
 
 class MockAgent extends Dispatcher {
   constructor (opts) {
@@ -10553,15 +10724,15 @@ module.exports = MockAgent
 
 /***/ }),
 
-/***/ 7435:
+/***/ 15938:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { promisify } = __webpack_require__(57975)
-const Client = __webpack_require__(23275)
-const { buildMockDispatch } = __webpack_require__(91923)
+const Client = __webpack_require__(95548)
+const { buildMockDispatch } = __webpack_require__(72276)
 const {
   kDispatches,
   kMockAgent,
@@ -10570,10 +10741,10 @@ const {
   kOrigin,
   kOriginalDispatch,
   kConnected
-} = __webpack_require__(44703)
-const { MockInterceptor } = __webpack_require__(71949)
-const Symbols = __webpack_require__(44469)
-const { InvalidArgumentError } = __webpack_require__(62229)
+} = __webpack_require__(80832)
+const { MockInterceptor } = __webpack_require__(37118)
+const Symbols = __webpack_require__(77528)
+const { InvalidArgumentError } = __webpack_require__(61366)
 
 /**
  * MockClient provides an API that extends the Client to influence the mockDispatches.
@@ -10620,13 +10791,13 @@ module.exports = MockClient
 
 /***/ }),
 
-/***/ 93863:
+/***/ 86270:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { UndiciError } = __webpack_require__(62229)
+const { UndiciError } = __webpack_require__(61366)
 
 const kMockNotMatchedError = Symbol.for('undici.error.UND_MOCK_ERR_MOCK_NOT_MATCHED')
 
@@ -10656,13 +10827,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 71949:
+/***/ 37118:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { getResponseData, buildKey, addMockDispatch } = __webpack_require__(91923)
+const { getResponseData, buildKey, addMockDispatch } = __webpack_require__(72276)
 const {
   kDispatches,
   kDispatchKey,
@@ -10670,9 +10841,9 @@ const {
   kDefaultTrailers,
   kContentLength,
   kMockDispatch
-} = __webpack_require__(44703)
-const { InvalidArgumentError } = __webpack_require__(62229)
-const { buildURL } = __webpack_require__(91702)
+} = __webpack_require__(80832)
+const { InvalidArgumentError } = __webpack_require__(61366)
+const { buildURL } = __webpack_require__(93865)
 
 /**
  * Defines the scope API for an interceptor reply
@@ -10871,15 +11042,15 @@ module.exports.MockScope = MockScope
 
 /***/ }),
 
-/***/ 63074:
+/***/ 17695:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { promisify } = __webpack_require__(57975)
-const Pool = __webpack_require__(23906)
-const { buildMockDispatch } = __webpack_require__(91923)
+const Pool = __webpack_require__(67185)
+const { buildMockDispatch } = __webpack_require__(72276)
 const {
   kDispatches,
   kMockAgent,
@@ -10888,10 +11059,10 @@ const {
   kOrigin,
   kOriginalDispatch,
   kConnected
-} = __webpack_require__(44703)
-const { MockInterceptor } = __webpack_require__(71949)
-const Symbols = __webpack_require__(44469)
-const { InvalidArgumentError } = __webpack_require__(62229)
+} = __webpack_require__(80832)
+const { MockInterceptor } = __webpack_require__(37118)
+const Symbols = __webpack_require__(77528)
+const { InvalidArgumentError } = __webpack_require__(61366)
 
 /**
  * MockPool provides an API that extends the Pool to influence the mockDispatches.
@@ -10938,7 +11109,7 @@ module.exports = MockPool
 
 /***/ }),
 
-/***/ 44703:
+/***/ 80832:
 /***/ ((module) => {
 
 "use strict";
@@ -10969,21 +11140,21 @@ module.exports = {
 
 /***/ }),
 
-/***/ 91923:
+/***/ 72276:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { MockNotMatchedError } = __webpack_require__(93863)
+const { MockNotMatchedError } = __webpack_require__(86270)
 const {
   kDispatches,
   kMockAgent,
   kOriginalDispatch,
   kOrigin,
   kGetNetConnect
-} = __webpack_require__(44703)
-const { buildURL } = __webpack_require__(91702)
+} = __webpack_require__(80832)
+const { buildURL } = __webpack_require__(93865)
 const { STATUS_CODES } = __webpack_require__(37067)
 const {
   types: {
@@ -11344,7 +11515,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 71808:
+/***/ 62595:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -11395,7 +11566,7 @@ module.exports = class PendingInterceptorsFormatter {
 
 /***/ }),
 
-/***/ 23195:
+/***/ 78820:
 /***/ ((module) => {
 
 "use strict";
@@ -11432,7 +11603,7 @@ module.exports = class Pluralizer {
 
 /***/ }),
 
-/***/ 89645:
+/***/ 42366:
 /***/ ((module) => {
 
 "use strict";
@@ -11863,21 +12034,21 @@ module.exports = {
 
 /***/ }),
 
-/***/ 84448:
+/***/ 5779:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kConstruct } = __webpack_require__(82619)
-const { urlEquals, getFieldValues } = __webpack_require__(88592)
-const { kEnumerableProperty, isDisturbed } = __webpack_require__(91702)
-const { webidl } = __webpack_require__(78431)
-const { Response, cloneResponse, fromInnerResponse } = __webpack_require__(63009)
-const { Request, fromInnerRequest } = __webpack_require__(83045)
-const { kState } = __webpack_require__(96601)
-const { fetching } = __webpack_require__(49640)
-const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = __webpack_require__(62546)
+const { kConstruct } = __webpack_require__(93276)
+const { urlEquals, getFieldValues } = __webpack_require__(21269)
+const { kEnumerableProperty, isDisturbed } = __webpack_require__(93865)
+const { webidl } = __webpack_require__(8834)
+const { Response, cloneResponse, fromInnerResponse } = __webpack_require__(26424)
+const { Request, fromInnerRequest } = __webpack_require__(55830)
+const { kState } = __webpack_require__(84162)
+const { fetching } = __webpack_require__(4543)
+const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = __webpack_require__(14783)
 const assert = __webpack_require__(34589)
 
 /**
@@ -12730,16 +12901,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 77535:
+/***/ 76734:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kConstruct } = __webpack_require__(82619)
-const { Cache } = __webpack_require__(84448)
-const { webidl } = __webpack_require__(78431)
-const { kEnumerableProperty } = __webpack_require__(91702)
+const { kConstruct } = __webpack_require__(93276)
+const { Cache } = __webpack_require__(5779)
+const { webidl } = __webpack_require__(8834)
+const { kEnumerableProperty } = __webpack_require__(93865)
 
 class CacheStorage {
   /**
@@ -12890,28 +13061,28 @@ module.exports = {
 
 /***/ }),
 
-/***/ 82619:
+/***/ 93276:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 module.exports = {
-  kConstruct: (__webpack_require__(44469).kConstruct)
+  kConstruct: (__webpack_require__(77528).kConstruct)
 }
 
 
 /***/ }),
 
-/***/ 88592:
+/***/ 21269:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const assert = __webpack_require__(34589)
-const { URLSerializer } = __webpack_require__(40258)
-const { isValidHeaderName } = __webpack_require__(62546)
+const { URLSerializer } = __webpack_require__(25859)
+const { isValidHeaderName } = __webpack_require__(14783)
 
 /**
  * @see https://url.spec.whatwg.org/#concept-url-equals
@@ -12956,7 +13127,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 18382:
+/***/ 59881:
 /***/ ((module) => {
 
 "use strict";
@@ -12976,16 +13147,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 57707:
+/***/ 2724:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { parseSetCookie } = __webpack_require__(51220)
-const { stringify } = __webpack_require__(7059)
-const { webidl } = __webpack_require__(78431)
-const { Headers } = __webpack_require__(63210)
+const { parseSetCookie } = __webpack_require__(61895)
+const { stringify } = __webpack_require__(6630)
+const { webidl } = __webpack_require__(8834)
+const { Headers } = __webpack_require__(65841)
 
 /**
  * @typedef {Object} Cookie
@@ -13168,15 +13339,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 51220:
+/***/ 61895:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { maxNameValuePairSize, maxAttributeValueSize } = __webpack_require__(18382)
-const { isCTLExcludingHtab } = __webpack_require__(7059)
-const { collectASequenceOfCodePointsFast } = __webpack_require__(40258)
+const { maxNameValuePairSize, maxAttributeValueSize } = __webpack_require__(59881)
+const { isCTLExcludingHtab } = __webpack_require__(6630)
+const { collectASequenceOfCodePointsFast } = __webpack_require__(25859)
 const assert = __webpack_require__(34589)
 
 /**
@@ -13449,32 +13620,25 @@ function parseUnparsedAttributes (unparsedAttributes, cookieAttributeList = {}) 
     // If the attribute-name case-insensitively matches the string
     // "SameSite", the user agent MUST process the cookie-av as follows:
 
-    // 1. Let enforcement be "Default".
-    let enforcement = 'Default'
-
     const attributeValueLowercase = attributeValue.toLowerCase()
-    // 2. If cookie-av's attribute-value is a case-insensitive match for
-    //    "None", set enforcement to "None".
-    if (attributeValueLowercase.includes('none')) {
-      enforcement = 'None'
-    }
 
-    // 3. If cookie-av's attribute-value is a case-insensitive match for
-    //    "Strict", set enforcement to "Strict".
-    if (attributeValueLowercase.includes('strict')) {
-      enforcement = 'Strict'
+    // 1. If cookie-av's attribute-value is a case-insensitive match for
+    //    "None", append an attribute to the cookie-attribute-list with an
+    //    attribute-name of "SameSite" and an attribute-value of "None".
+    if (attributeValueLowercase === 'none') {
+      cookieAttributeList.sameSite = 'None'
+    } else if (attributeValueLowercase === 'strict') {
+      // 2. If cookie-av's attribute-value is a case-insensitive match for
+      //    "Strict", append an attribute to the cookie-attribute-list with
+      //    an attribute-name of "SameSite" and an attribute-value of
+      //    "Strict".
+      cookieAttributeList.sameSite = 'Strict'
+    } else if (attributeValueLowercase === 'lax') {
+      // 3. If cookie-av's attribute-value is a case-insensitive match for
+      //    "Lax", append an attribute to the cookie-attribute-list with an
+      //    attribute-name of "SameSite" and an attribute-value of "Lax".
+      cookieAttributeList.sameSite = 'Lax'
     }
-
-    // 4. If cookie-av's attribute-value is a case-insensitive match for
-    //    "Lax", set enforcement to "Lax".
-    if (attributeValueLowercase.includes('lax')) {
-      enforcement = 'Lax'
-    }
-
-    // 5. Append an attribute to the cookie-attribute-list with an
-    //    attribute-name of "SameSite" and an attribute-value of
-    //    enforcement.
-    cookieAttributeList.sameSite = enforcement
   } else {
     cookieAttributeList.unparsed ??= []
 
@@ -13493,7 +13657,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7059:
+/***/ 6630:
 /***/ ((module) => {
 
 "use strict";
@@ -13604,7 +13768,7 @@ function validateCookiePath (path) {
 
     if (
       code < 0x20 || // exclude CTLs (0-31)
-      code === 0x7F || // DEL
+      code > 0x7E || // exclude DEL and non-ascii
       code === 0x3B // ;
     ) {
       throw new Error('Invalid cookie path')
@@ -13613,16 +13777,80 @@ function validateCookiePath (path) {
 }
 
 /**
- * I have no idea why these values aren't allowed to be honest,
- * but Deno tests these. - Khafra
+ * <let-dig> ::= <letter> | <digit>
+ *
+ * <letter> ::= any one of the 52 alphabetic characters A through Z in
+ * upper case and a through z in lower case
+ *
+ * <digit> ::= any one of the ten digits 0 through 9r
+ *
+ * @see https://www.rfc-editor.org/rfc/rfc1034#section-3.5
+ * @param {number} code
+ */
+function isLetterOrDigit (code) {
+  return (
+    (code >= 0x30 && code <= 0x39) || // 0-9
+    (code >= 0x41 && code <= 0x5A) || // A-Z
+    (code >= 0x61 && code <= 0x7A) // a-z
+  )
+}
+
+/**
+ * Validates a cookie domain against the "preferred name syntax".
+ *
+ * <domain>      ::= <subdomain> | " "
+ * <subdomain>   ::= <label> | <subdomain> "." <label>
+ * <label>       ::= <let-dig> [ [ <ldh-str> ] <let-dig> ]
+ * <ldh-str>     ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+ * <let-dig-hyp> ::= <let-dig> | "-"
+ *
+ * @see https://www.rfc-editor.org/rfc/rfc1034#section-3.5
+ * @see https://www.rfc-editor.org/rfc/rfc1123#section-2.1
+ * @see https://www.rfc-editor.org/rfc/rfc1035#section-2.3.4
  * @param {string} domain
  */
 function validateCookieDomain (domain) {
-  if (
-    domain.startsWith('-') ||
-    domain.endsWith('.') ||
-    domain.endsWith('-')
-  ) {
+  // <domain> ::= <subdomain> | " "
+  if (domain === ' ') {
+    return
+  }
+
+  if (domain.length > 255) {
+    throw new Error('Invalid cookie domain')
+  }
+
+  let labelLength = 0
+
+  for (let i = 0; i < domain.length; ++i) {
+    const code = domain.charCodeAt(i)
+
+    if (code === 0x2E) {
+      if (labelLength === 0) {
+        throw new Error('Invalid cookie domain')
+      }
+
+      if (domain.charCodeAt(i - 1) === 0x2D) { // "-"
+        throw new Error('Invalid cookie domain')
+      }
+
+      labelLength = 0
+      continue
+    }
+
+    if (labelLength === 0 && !isLetterOrDigit(code)) {
+      throw new Error('Invalid cookie domain')
+    }
+
+    if (!isLetterOrDigit(code) && code !== 0x2D) { // "-"
+      throw new Error('Invalid cookie domain')
+    }
+
+    if (++labelLength > 63) {
+      throw new Error('Invalid cookie domain')
+    }
+  }
+
+  if (labelLength === 0 || domain.charCodeAt(domain.length - 1) === 0x2D) { // "-"
     throw new Error('Invalid cookie domain')
   }
 }
@@ -13765,7 +13993,13 @@ function stringify (cookie) {
 
     const [key, ...value] = part.split('=')
 
-    out.push(`${key.trim()}=${value.join('=')}`)
+    const trimmedKey = key.trim()
+    const joinedValue = value.join('=')
+
+    validateCookieName(trimmedKey)
+    validateCookieValue(joinedValue)
+
+    out.push(`${trimmedKey}=${joinedValue}`)
   }
 
   return out.join('; ')
@@ -13783,13 +14017,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 50465:
+/***/ 23132:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 const { Transform } = __webpack_require__(57075)
-const { isASCIINumber, isValidLastEventId } = __webpack_require__(77869)
+const { isASCIINumber, isValidLastEventId } = __webpack_require__(11312)
 
 /**
  * @type {number[]} BOM
@@ -14189,23 +14423,23 @@ module.exports = {
 
 /***/ }),
 
-/***/ 48612:
+/***/ 86559:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { pipeline } = __webpack_require__(57075)
-const { fetching } = __webpack_require__(49640)
-const { makeRequest } = __webpack_require__(83045)
-const { webidl } = __webpack_require__(78431)
-const { EventSourceStream } = __webpack_require__(50465)
-const { parseMIMEType } = __webpack_require__(40258)
-const { createFastMessageEvent } = __webpack_require__(19858)
-const { isNetworkError } = __webpack_require__(63009)
-const { delay } = __webpack_require__(77869)
-const { kEnumerableProperty } = __webpack_require__(91702)
-const { environmentSettingsObject } = __webpack_require__(62546)
+const { fetching } = __webpack_require__(4543)
+const { makeRequest } = __webpack_require__(55830)
+const { webidl } = __webpack_require__(8834)
+const { EventSourceStream } = __webpack_require__(23132)
+const { parseMIMEType } = __webpack_require__(25859)
+const { createFastMessageEvent } = __webpack_require__(19643)
+const { isNetworkError } = __webpack_require__(26424)
+const { delay } = __webpack_require__(11312)
+const { kEnumerableProperty } = __webpack_require__(93865)
+const { environmentSettingsObject } = __webpack_require__(14783)
 
 let experimentalWarned = false
 
@@ -14677,7 +14911,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 77869:
+/***/ 11312:
 /***/ ((module) => {
 
 "use strict";
@@ -14722,13 +14956,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 86110:
+/***/ 36847:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const util = __webpack_require__(91702)
+const util = __webpack_require__(93865)
 const {
   ReadableStreamFrom,
   isBlobLike,
@@ -14738,16 +14972,16 @@ const {
   fullyReadBody,
   extractMimeType,
   utf8DecodeBytes
-} = __webpack_require__(62546)
-const { FormData } = __webpack_require__(22044)
-const { kState } = __webpack_require__(96601)
-const { webidl } = __webpack_require__(78431)
+} = __webpack_require__(14783)
+const { FormData } = __webpack_require__(25069)
+const { kState } = __webpack_require__(84162)
+const { webidl } = __webpack_require__(8834)
 const { Blob } = __webpack_require__(4573)
 const assert = __webpack_require__(34589)
 const { isErrored, isDisturbed } = __webpack_require__(57075)
 const { isArrayBuffer } = __webpack_require__(73429)
-const { serializeAMimeType } = __webpack_require__(40258)
-const { multipartFormDataParser } = __webpack_require__(37570)
+const { serializeAMimeType } = __webpack_require__(25859)
+const { multipartFormDataParser } = __webpack_require__(31045)
 let random
 
 try {
@@ -15259,7 +15493,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 381:
+/***/ 15106:
 /***/ ((module) => {
 
 "use strict";
@@ -15391,7 +15625,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 40258:
+/***/ 25859:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -16143,13 +16377,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 93699:
+/***/ 74346:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kConnected, kSize } = __webpack_require__(44469)
+const { kConnected, kSize } = __webpack_require__(77528)
 
 class CompatWeakRef {
   constructor (value) {
@@ -16197,15 +16431,15 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ 23288:
+/***/ 28253:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { Blob, File } = __webpack_require__(4573)
-const { kState } = __webpack_require__(96601)
-const { webidl } = __webpack_require__(78431)
+const { kState } = __webpack_require__(84162)
+const { webidl } = __webpack_require__(8834)
 
 // TODO(@KhafraDev): remove
 class FileLike {
@@ -16331,17 +16565,17 @@ module.exports = { FileLike, isFileLike }
 
 /***/ }),
 
-/***/ 37570:
+/***/ 31045:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { isUSVString, bufferToLowerCasedHeaderName } = __webpack_require__(91702)
-const { utf8DecodeBytes } = __webpack_require__(62546)
-const { HTTP_TOKEN_CODEPOINTS, isomorphicDecode } = __webpack_require__(40258)
-const { isFileLike } = __webpack_require__(23288)
-const { makeEntry } = __webpack_require__(22044)
+const { isUSVString, bufferToLowerCasedHeaderName } = __webpack_require__(93865)
+const { utf8DecodeBytes } = __webpack_require__(14783)
+const { HTTP_TOKEN_CODEPOINTS, isomorphicDecode } = __webpack_require__(25859)
+const { isFileLike } = __webpack_require__(28253)
+const { makeEntry } = __webpack_require__(25069)
 const assert = __webpack_require__(34589)
 const { File: NodeFile } = __webpack_require__(4573)
 
@@ -16813,17 +17047,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ 22044:
+/***/ 25069:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { isBlobLike, iteratorMixin } = __webpack_require__(62546)
-const { kState } = __webpack_require__(96601)
-const { kEnumerableProperty } = __webpack_require__(91702)
-const { FileLike, isFileLike } = __webpack_require__(23288)
-const { webidl } = __webpack_require__(78431)
+const { isBlobLike, iteratorMixin } = __webpack_require__(14783)
+const { kState } = __webpack_require__(84162)
+const { kEnumerableProperty } = __webpack_require__(93865)
+const { FileLike, isFileLike } = __webpack_require__(28253)
+const { webidl } = __webpack_require__(8834)
 const { File: NativeFile } = __webpack_require__(4573)
 const nodeUtil = __webpack_require__(57975)
 
@@ -17073,7 +17307,7 @@ module.exports = { FormData, makeEntry }
 
 /***/ }),
 
-/***/ 80561:
+/***/ 68320:
 /***/ ((module) => {
 
 "use strict";
@@ -17121,7 +17355,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 63210:
+/***/ 65841:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -17129,14 +17363,14 @@ module.exports = {
 
 
 
-const { kConstruct } = __webpack_require__(44469)
-const { kEnumerableProperty } = __webpack_require__(91702)
+const { kConstruct } = __webpack_require__(77528)
+const { kEnumerableProperty } = __webpack_require__(93865)
 const {
   iteratorMixin,
   isValidHeaderName,
   isValidHeaderValue
-} = __webpack_require__(62546)
-const { webidl } = __webpack_require__(78431)
+} = __webpack_require__(14783)
+const { webidl } = __webpack_require__(8834)
 const assert = __webpack_require__(34589)
 const util = __webpack_require__(57975)
 
@@ -17816,7 +18050,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 49640:
+/***/ 4543:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -17830,9 +18064,9 @@ const {
   filterResponse,
   makeResponse,
   fromInnerResponse
-} = __webpack_require__(63009)
-const { HeadersList } = __webpack_require__(63210)
-const { Request, cloneRequest } = __webpack_require__(83045)
+} = __webpack_require__(26424)
+const { HeadersList } = __webpack_require__(65841)
+const { Request, cloneRequest } = __webpack_require__(55830)
 const zlib = __webpack_require__(38522)
 const {
   bytesMatch,
@@ -17868,23 +18102,23 @@ const {
   buildContentRange,
   createInflate,
   extractMimeType
-} = __webpack_require__(62546)
-const { kState, kDispatcher } = __webpack_require__(96601)
+} = __webpack_require__(14783)
+const { kState, kDispatcher } = __webpack_require__(84162)
 const assert = __webpack_require__(34589)
-const { safelyExtractBody, extractBody } = __webpack_require__(86110)
+const { safelyExtractBody, extractBody } = __webpack_require__(36847)
 const {
   redirectStatusSet,
   nullBodyStatus,
   safeMethodsSet,
   requestBodyHeader,
   subresourceSet
-} = __webpack_require__(381)
+} = __webpack_require__(15106)
 const EE = __webpack_require__(78474)
 const { Readable, pipeline, finished } = __webpack_require__(57075)
-const { addAbortListener, isErrored, isReadable, bufferToLowerCasedHeaderName } = __webpack_require__(91702)
-const { dataURLProcessor, serializeAMimeType, minimizeSupportedMimeType } = __webpack_require__(40258)
-const { getGlobalDispatcher } = __webpack_require__(12603)
-const { webidl } = __webpack_require__(78431)
+const { addAbortListener, isErrored, isReadable, bufferToLowerCasedHeaderName } = __webpack_require__(93865)
+const { dataURLProcessor, serializeAMimeType, minimizeSupportedMimeType } = __webpack_require__(25859)
+const { getGlobalDispatcher } = __webpack_require__(64010)
+const { webidl } = __webpack_require__(8834)
 const { STATUS_CODES } = __webpack_require__(37067)
 const GET_OR_HEAD = ['GET', 'HEAD']
 
@@ -20096,7 +20330,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 83045:
+/***/ 55830:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -20104,16 +20338,16 @@ module.exports = {
 
 
 
-const { extractBody, mixinBody, cloneBody, bodyUnusable } = __webpack_require__(86110)
-const { Headers, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = __webpack_require__(63210)
-const { FinalizationRegistry } = __webpack_require__(93699)()
-const util = __webpack_require__(91702)
+const { extractBody, mixinBody, cloneBody, bodyUnusable } = __webpack_require__(36847)
+const { Headers, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = __webpack_require__(65841)
+const { FinalizationRegistry } = __webpack_require__(74346)()
+const util = __webpack_require__(93865)
 const nodeUtil = __webpack_require__(57975)
 const {
   isValidHTTPToken,
   sameOrigin,
   environmentSettingsObject
-} = __webpack_require__(62546)
+} = __webpack_require__(14783)
 const {
   forbiddenMethodsSet,
   corsSafeListedMethodsSet,
@@ -20123,12 +20357,12 @@ const {
   requestCredentials,
   requestCache,
   requestDuplex
-} = __webpack_require__(381)
+} = __webpack_require__(15106)
 const { kEnumerableProperty, normalizedMethodRecordsBase, normalizedMethodRecords } = util
-const { kHeaders, kSignal, kState, kDispatcher } = __webpack_require__(96601)
-const { webidl } = __webpack_require__(78431)
-const { URLSerializer } = __webpack_require__(40258)
-const { kConstruct } = __webpack_require__(44469)
+const { kHeaders, kSignal, kState, kDispatcher } = __webpack_require__(84162)
+const { webidl } = __webpack_require__(8834)
+const { URLSerializer } = __webpack_require__(25859)
+const { kConstruct } = __webpack_require__(77528)
 const assert = __webpack_require__(34589)
 const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = __webpack_require__(78474)
 
@@ -21141,15 +21375,15 @@ module.exports = { Request, makeRequest, fromInnerRequest, cloneRequest }
 
 /***/ }),
 
-/***/ 63009:
+/***/ 26424:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { Headers, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = __webpack_require__(63210)
-const { extractBody, cloneBody, mixinBody, hasFinalizationRegistry, streamRegistry, bodyUnusable } = __webpack_require__(86110)
-const util = __webpack_require__(91702)
+const { Headers, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = __webpack_require__(65841)
+const { extractBody, cloneBody, mixinBody, hasFinalizationRegistry, streamRegistry, bodyUnusable } = __webpack_require__(36847)
+const util = __webpack_require__(93865)
 const nodeUtil = __webpack_require__(57975)
 const { kEnumerableProperty } = util
 const {
@@ -21161,16 +21395,16 @@ const {
   isErrorLike,
   isomorphicEncode,
   environmentSettingsObject: relevantRealm
-} = __webpack_require__(62546)
+} = __webpack_require__(14783)
 const {
   redirectStatusSet,
   nullBodyStatus
-} = __webpack_require__(381)
-const { kState, kHeaders } = __webpack_require__(96601)
-const { webidl } = __webpack_require__(78431)
-const { FormData } = __webpack_require__(22044)
-const { URLSerializer } = __webpack_require__(40258)
-const { kConstruct } = __webpack_require__(44469)
+} = __webpack_require__(15106)
+const { kState, kHeaders } = __webpack_require__(84162)
+const { webidl } = __webpack_require__(8834)
+const { FormData } = __webpack_require__(25069)
+const { URLSerializer } = __webpack_require__(25859)
+const { kConstruct } = __webpack_require__(77528)
 const assert = __webpack_require__(34589)
 const { types } = __webpack_require__(57975)
 
@@ -21759,7 +21993,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 96601:
+/***/ 84162:
 /***/ ((module) => {
 
 "use strict";
@@ -21776,7 +22010,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 62546:
+/***/ 14783:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -21784,14 +22018,14 @@ module.exports = {
 
 const { Transform } = __webpack_require__(57075)
 const zlib = __webpack_require__(38522)
-const { redirectStatusSet, referrerPolicySet: referrerPolicyTokens, badPortsSet } = __webpack_require__(381)
-const { getGlobalOrigin } = __webpack_require__(80561)
-const { collectASequenceOfCodePoints, collectAnHTTPQuotedString, removeChars, parseMIMEType } = __webpack_require__(40258)
+const { redirectStatusSet, referrerPolicySet: referrerPolicyTokens, badPortsSet } = __webpack_require__(15106)
+const { getGlobalOrigin } = __webpack_require__(68320)
+const { collectASequenceOfCodePoints, collectAnHTTPQuotedString, removeChars, parseMIMEType } = __webpack_require__(25859)
 const { performance } = __webpack_require__(643)
-const { isBlobLike, ReadableStreamFrom, isValidHTTPToken, normalizedMethodRecordsBase } = __webpack_require__(91702)
+const { isBlobLike, ReadableStreamFrom, isValidHTTPToken, normalizedMethodRecordsBase } = __webpack_require__(93865)
 const assert = __webpack_require__(34589)
 const { isUint8Array } = __webpack_require__(73429)
-const { webidl } = __webpack_require__(78431)
+const { webidl } = __webpack_require__(8834)
 
 let supportedHashes = []
 
@@ -23416,7 +23650,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 78431:
+/***/ 8834:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -23424,7 +23658,7 @@ module.exports = {
 
 const { types, inspect } = __webpack_require__(57975)
 const { markAsUncloneable } = __webpack_require__(75919)
-const { toUSVString } = __webpack_require__(91702)
+const { toUSVString } = __webpack_require__(93865)
 
 /** @type {import('../../../types/webidl').Webidl} */
 const webidl = {}
@@ -24119,7 +24353,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 88249:
+/***/ 96304:
 /***/ ((module) => {
 
 "use strict";
@@ -24417,7 +24651,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 63453:
+/***/ 95732:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -24427,16 +24661,16 @@ const {
   staticPropertyDescriptors,
   readOperation,
   fireAProgressEvent
-} = __webpack_require__(39176)
+} = __webpack_require__(35505)
 const {
   kState,
   kError,
   kResult,
   kEvents,
   kAborted
-} = __webpack_require__(83747)
-const { webidl } = __webpack_require__(78431)
-const { kEnumerableProperty } = __webpack_require__(91702)
+} = __webpack_require__(54192)
+const { webidl } = __webpack_require__(8834)
+const { kEnumerableProperty } = __webpack_require__(93865)
 
 class FileReader extends EventTarget {
   constructor () {
@@ -24769,13 +25003,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 19759:
+/***/ 50644:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { webidl } = __webpack_require__(78431)
+const { webidl } = __webpack_require__(8834)
 
 const kState = Symbol('ProgressEvent state')
 
@@ -24855,7 +25089,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 83747:
+/***/ 54192:
 /***/ ((module) => {
 
 "use strict";
@@ -24873,7 +25107,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 39176:
+/***/ 35505:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -24885,10 +25119,10 @@ const {
   kResult,
   kAborted,
   kLastProgressEventFired
-} = __webpack_require__(83747)
-const { ProgressEvent } = __webpack_require__(19759)
-const { getEncoding } = __webpack_require__(88249)
-const { serializeAMimeType, parseMIMEType } = __webpack_require__(40258)
+} = __webpack_require__(54192)
+const { ProgressEvent } = __webpack_require__(50644)
+const { getEncoding } = __webpack_require__(96304)
+const { serializeAMimeType, parseMIMEType } = __webpack_require__(25859)
 const { types } = __webpack_require__(57975)
 const { StringDecoder } = __webpack_require__(13193)
 const { btoa } = __webpack_require__(4573)
@@ -25272,28 +25506,28 @@ module.exports = {
 
 /***/ }),
 
-/***/ 49471:
+/***/ 12930:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { uid, states, sentCloseFrameState, emptyBuffer, opcodes } = __webpack_require__(15958)
+const { uid, states, sentCloseFrameState, emptyBuffer, opcodes } = __webpack_require__(38989)
 const {
   kReadyState,
   kSentClose,
   kByteParser,
   kReceivedClose,
   kResponse
-} = __webpack_require__(88982)
-const { fireEvent, failWebsocketConnection, isClosing, isClosed, isEstablished, parseExtensions } = __webpack_require__(9083)
-const { channels } = __webpack_require__(69304)
-const { CloseEvent } = __webpack_require__(19858)
-const { makeRequest } = __webpack_require__(83045)
-const { fetching } = __webpack_require__(49640)
-const { Headers, getHeadersList } = __webpack_require__(63210)
-const { getDecodeSplit } = __webpack_require__(62546)
-const { WebsocketFrameSend } = __webpack_require__(77854)
+} = __webpack_require__(39081)
+const { fireEvent, failWebsocketConnection, isClosing, isClosed, isEstablished, parseExtensions } = __webpack_require__(34530)
+const { channels } = __webpack_require__(75997)
+const { CloseEvent } = __webpack_require__(19643)
+const { makeRequest } = __webpack_require__(55830)
+const { fetching } = __webpack_require__(4543)
+const { Headers, getHeadersList } = __webpack_require__(65841)
+const { getDecodeSplit } = __webpack_require__(14783)
+const { WebsocketFrameSend } = __webpack_require__(69177)
 
 /** @type {import('crypto')} */
 let crypto
@@ -25651,7 +25885,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 15958:
+/***/ 38989:
 /***/ ((module) => {
 
 "use strict";
@@ -25725,15 +25959,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 19858:
+/***/ 19643:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { webidl } = __webpack_require__(78431)
-const { kEnumerableProperty } = __webpack_require__(91702)
-const { kConstruct } = __webpack_require__(44469)
+const { webidl } = __webpack_require__(8834)
+const { kEnumerableProperty } = __webpack_require__(93865)
+const { kConstruct } = __webpack_require__(77528)
 const { MessagePort } = __webpack_require__(75919)
 
 /**
@@ -26062,13 +26296,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 77854:
+/***/ 69177:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { maxUnsigned16Bit } = __webpack_require__(15958)
+const { maxUnsigned16Bit } = __webpack_require__(38989)
 
 const BUFFER_SIZE = 16386
 
@@ -26166,15 +26400,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 21547:
+/***/ 50958:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { createInflateRaw, Z_DEFAULT_WINDOWBITS } = __webpack_require__(38522)
-const { isValidClientWindowBits } = __webpack_require__(9083)
-const { MessageSizeExceededError } = __webpack_require__(62229)
+const { isValidClientWindowBits } = __webpack_require__(34530)
+const { MessageSizeExceededError } = __webpack_require__(61366)
 
 const tail = Buffer.from([0x00, 0x00, 0xff, 0xff])
 const kBuffer = Symbol('kBuffer')
@@ -26274,7 +26508,7 @@ module.exports = { PerMessageDeflate }
 
 /***/ }),
 
-/***/ 83838:
+/***/ 5623:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -26282,9 +26516,9 @@ module.exports = { PerMessageDeflate }
 
 const { Writable } = __webpack_require__(57075)
 const assert = __webpack_require__(34589)
-const { parserStates, opcodes, states, emptyBuffer, sentCloseFrameState } = __webpack_require__(15958)
-const { kReadyState, kSentClose, kResponse, kReceivedClose } = __webpack_require__(88982)
-const { channels } = __webpack_require__(69304)
+const { parserStates, opcodes, states, emptyBuffer, sentCloseFrameState } = __webpack_require__(38989)
+const { kReadyState, kSentClose, kResponse, kReceivedClose } = __webpack_require__(39081)
+const { channels } = __webpack_require__(75997)
 const {
   isValidStatusCode,
   isValidOpcode,
@@ -26294,11 +26528,16 @@ const {
   isControlFrame,
   isTextBinaryFrame,
   isContinuationFrame
-} = __webpack_require__(9083)
-const { WebsocketFrameSend } = __webpack_require__(77854)
-const { closeWebSocketConnection } = __webpack_require__(49471)
-const { PerMessageDeflate } = __webpack_require__(21547)
-const { MessageSizeExceededError } = __webpack_require__(62229)
+} = __webpack_require__(34530)
+const { WebsocketFrameSend } = __webpack_require__(69177)
+const { closeWebSocketConnection } = __webpack_require__(12930)
+const { PerMessageDeflate } = __webpack_require__(50958)
+const { MessageSizeExceededError } = __webpack_require__(61366)
+
+function failWebsocketConnectionWithCode (ws, code, reason) {
+  closeWebSocketConnection(ws, code, reason, Buffer.byteLength(reason))
+  failWebsocketConnection(ws, reason)
+}
 
 // This code was influenced by ws released under the MIT license.
 // Copyright (c) 2011 Einar Otto Stangvik <einaros@gmail.com>
@@ -26320,18 +26559,22 @@ class ByteParser extends Writable {
   #extensions
 
   /** @type {number} */
+  #maxFragments
+
+  /** @type {number} */
   #maxPayloadSize
 
   /**
    * @param {import('./websocket').WebSocket} ws
    * @param {Map<string, string>|null} extensions
-   * @param {{ maxPayloadSize?: number }} [options]
+   * @param {{ maxFragments?: number, maxPayloadSize?: number }} [options]
    */
   constructor (ws, extensions, options = {}) {
     super()
 
     this.ws = ws
     this.#extensions = extensions == null ? new Map() : extensions
+    this.#maxFragments = options.maxFragments ?? 0
     this.#maxPayloadSize = options.maxPayloadSize ?? 0
 
     if (this.#extensions.has('permessage-deflate')) {
@@ -26355,9 +26598,9 @@ class ByteParser extends Writable {
     if (
       this.#maxPayloadSize > 0 &&
       !isControlFrame(this.#info.opcode) &&
-      this.#info.payloadLength > this.#maxPayloadSize
+      this.#info.payloadLength + this.#fragmentsBytes > this.#maxPayloadSize
     ) {
-      failWebsocketConnection(this.ws, 'Payload size exceeds maximum allowed size')
+      failWebsocketConnectionWithCode(this.ws, 1009, 'Payload size exceeds maximum allowed size')
       return false
     }
 
@@ -26522,10 +26765,12 @@ class ByteParser extends Writable {
           this.#state = parserStates.INFO
         } else {
           if (!this.#info.compressed) {
-            this.writeFragments(body)
+            if (!this.writeFragments(body)) {
+              return
+            }
 
             if (this.#maxPayloadSize > 0 && this.#fragmentsBytes > this.#maxPayloadSize) {
-              failWebsocketConnection(this.ws, new MessageSizeExceededError().message)
+              failWebsocketConnectionWithCode(this.ws, 1009, new MessageSizeExceededError().message)
               return
             }
 
@@ -26544,14 +26789,17 @@ class ByteParser extends Writable {
               this.#info.fin,
               (error, data) => {
                 if (error) {
-                  failWebsocketConnection(this.ws, error.message)
+                  const code = error instanceof MessageSizeExceededError ? 1009 : 1007
+                  failWebsocketConnectionWithCode(this.ws, code, error.message)
                   return
                 }
 
-                this.writeFragments(data)
+                if (!this.writeFragments(data)) {
+                  return
+                }
 
                 if (this.#maxPayloadSize > 0 && this.#fragmentsBytes > this.#maxPayloadSize) {
-                  failWebsocketConnection(this.ws, new MessageSizeExceededError().message)
+                  failWebsocketConnectionWithCode(this.ws, 1009, new MessageSizeExceededError().message)
                   return
                 }
 
@@ -26621,8 +26869,17 @@ class ByteParser extends Writable {
   }
 
   writeFragments (fragment) {
+    if (
+      this.#maxFragments > 0 &&
+      this.#fragments.length === this.#maxFragments
+    ) {
+      failWebsocketConnectionWithCode(this.ws, 1008, 'Too many message fragments')
+      return false
+    }
+
     this.#fragmentsBytes += fragment.length
     this.#fragments.push(fragment)
+    return true
   }
 
   consumeFragments () {
@@ -26772,15 +27029,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 92354:
+/***/ 54848:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { WebsocketFrameSend } = __webpack_require__(77854)
-const { opcodes, sendHints } = __webpack_require__(15958)
-const FixedQueue = __webpack_require__(50)
+const { WebsocketFrameSend } = __webpack_require__(69177)
+const { opcodes, sendHints } = __webpack_require__(38989)
+const FixedQueue = __webpack_require__(57711)
 
 /** @type {typeof Uint8Array} */
 const FastBuffer = Buffer[Symbol.species]
@@ -26884,7 +27141,7 @@ module.exports = { SendQueue }
 
 /***/ }),
 
-/***/ 88982:
+/***/ 39081:
 /***/ ((module) => {
 
 "use strict";
@@ -26904,17 +27161,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9083:
+/***/ 34530:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { kReadyState, kController, kResponse, kBinaryType, kWebSocketURL } = __webpack_require__(88982)
-const { states, opcodes } = __webpack_require__(15958)
-const { ErrorEvent, createFastMessageEvent } = __webpack_require__(19858)
+const { kReadyState, kController, kResponse, kBinaryType, kWebSocketURL } = __webpack_require__(39081)
+const { states, opcodes } = __webpack_require__(38989)
+const { ErrorEvent, createFastMessageEvent } = __webpack_require__(19643)
 const { isUtf8 } = __webpack_require__(4573)
-const { collectASequenceOfCodePointsFast, removeHTTPWhitespace } = __webpack_require__(40258)
+const { collectASequenceOfCodePointsFast, removeHTTPWhitespace } = __webpack_require__(25859)
 
 /* globals Blob */
 
@@ -27234,16 +27491,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 53380:
+/***/ 9031:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { webidl } = __webpack_require__(78431)
-const { URLSerializer } = __webpack_require__(40258)
-const { environmentSettingsObject } = __webpack_require__(62546)
-const { staticPropertyDescriptors, states, sentCloseFrameState, sendHints } = __webpack_require__(15958)
+const { webidl } = __webpack_require__(8834)
+const { URLSerializer } = __webpack_require__(25859)
+const { environmentSettingsObject } = __webpack_require__(14783)
+const { staticPropertyDescriptors, states, sentCloseFrameState, sendHints } = __webpack_require__(38989)
 const {
   kWebSocketURL,
   kReadyState,
@@ -27252,21 +27509,21 @@ const {
   kResponse,
   kSentClose,
   kByteParser
-} = __webpack_require__(88982)
+} = __webpack_require__(39081)
 const {
   isConnecting,
   isEstablished,
   isClosing,
   isValidSubprotocol,
   fireEvent
-} = __webpack_require__(9083)
-const { establishWebSocketConnection, closeWebSocketConnection } = __webpack_require__(49471)
-const { ByteParser } = __webpack_require__(83838)
-const { kEnumerableProperty, isBlobLike } = __webpack_require__(91702)
-const { getGlobalDispatcher } = __webpack_require__(12603)
+} = __webpack_require__(34530)
+const { establishWebSocketConnection, closeWebSocketConnection } = __webpack_require__(12930)
+const { ByteParser } = __webpack_require__(5623)
+const { kEnumerableProperty, isBlobLike } = __webpack_require__(93865)
+const { getGlobalDispatcher } = __webpack_require__(64010)
 const { types } = __webpack_require__(57975)
-const { ErrorEvent, CloseEvent } = __webpack_require__(19858)
-const { SendQueue } = __webpack_require__(92354)
+const { ErrorEvent, CloseEvent } = __webpack_require__(19643)
+const { SendQueue } = __webpack_require__(54848)
 
 // https://websockets.spec.whatwg.org/#interface-definition
 class WebSocket extends EventTarget {
@@ -27675,9 +27932,12 @@ class WebSocket extends EventTarget {
     // once this happens, the connection is open
     this[kResponse] = response
 
-    const maxPayloadSize = this[kController]?.dispatcher?.webSocketOptions?.maxPayloadSize
+    const webSocketOptions = this[kController]?.dispatcher?.webSocketOptions
+    const maxFragments = webSocketOptions?.maxFragments
+    const maxPayloadSize = webSocketOptions?.maxPayloadSize
 
     const parser = new ByteParser(this, parsedExtensions, {
+      maxFragments,
       maxPayloadSize
     })
     parser.on('drain', onParserDrain)
@@ -28155,8 +28415,8 @@ class DecodedURL extends URL {
 //# sourceMappingURL=proxy.js.map
 // EXTERNAL MODULE: ./node_modules/.pnpm/tunnel@0.0.6/node_modules/tunnel/index.js
 var tunnel = __webpack_require__(30329);
-// EXTERNAL MODULE: ./node_modules/.pnpm/undici@6.25.0/node_modules/undici/index.js
-var undici = __webpack_require__(79522);
+// EXTERNAL MODULE: ./node_modules/.pnpm/undici@6.28.0/node_modules/undici/index.js
+var undici = __webpack_require__(51445);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+http-client@4.0.1/node_modules/@actions/http-client/lib/index.js
 /* eslint-disable @typescript-eslint/no-explicit-any */
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
