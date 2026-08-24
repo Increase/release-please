@@ -8,10 +8,13 @@ allowBuilds:
 # specific advisory and can be dropped once the parent package ships a fix.
 overrides:
   handlebars: ^4.7.9
-  brace-expansion@<1.1.13: ^1.1.13
-  brace-expansion@>=2.0.0 <2.0.3: ^2.0.3
-  undici@<6.24.0: ^6.24.0
+  brace-expansion@<1.1.18: ^1.1.18
+  brace-expansion@>=2.0.0 <5.0.9: ^5.0.9
+  undici@<6.28.0: ^6.28.0
   '@tootallnate/once': ^3.0.1
+  # `vitest` accepts `vite@^6 || ^7 || ^8`, so a plain resolve stays on a
+  # vulnerable 8.0.x; force the patched line.
+  vite@<8.0.16: ^8.0.16
   # `code-suggester` and `@lerna/*` pin older diff/minimatch/cross-spawn with
   # known ReDoS advisories; force patched lines that stay API-compatible.
   diff@<5.2.2: ^5.2.2
