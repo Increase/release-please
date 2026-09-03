@@ -1,6 +1,6 @@
 {
   "name": "@increase/release-please",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Generate release PRs based on the conventionalcommits.org spec",
   "main": "./build/src/index.js",
