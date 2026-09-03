@@ -25,8 +25,8 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1
       '@google-automations/git-file-utils':
-        specifier: ^3.0.1
-        version: 3.1.0
+        specifier: ^3.2.0
+        version: 3.2.0
       '@iarna/toml':
         specifier: ^3.0.0
         version: 3.0.0
@@ -267,8 +267,8 @@ packages:
   '@conventional-commits/parser@0.4.1':
     resolution: {integrity: sha512-H2ZmUVt6q+KBccXfMBhbBF14NlANeqHTXL4qCL6QGbMzrc4HDXyzWuxPxPNbz71f/5UkR5DrycP5VO9u7crahg==}
 
-  '@google-automations/git-file-utils@3.1.0':
-    resolution: {integrity: sha512-WITzh+nsH7ugjTIXnx8H9pqCh58ulYippEpa6+ioN8q8F1iUaoQfINMzWci1aYLsZU78yeO90S8zB4QTqCBYbw==}
+  '@google-automations/git-file-utils@3.2.0':
+    resolution: {integrity: sha512-EtQD1DX17kGpckDNCdI0jvMdF98EWR/TM9uogQtnhK0ODv8z5tPSPMICv2lk54c/9ucUgbfdLDrRdDyx56Sznw==}
     engines: {node: '>= 22'}
 
   '@iarna/toml@3.0.0':
@@ -1691,7 +1691,7 @@ snapshots:
       unist-util-visit: 2.0.3
       unist-util-visit-parents: 3.1.1
 
-  '@google-automations/git-file-utils@3.1.0':
+  '@google-automations/git-file-utils@3.2.0':
     dependencies:
       '@octokit/rest': 20.1.2
       minimatch: 10.2.6
