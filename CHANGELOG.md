@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.3](https://github.com/Increase/release-please/compare/v1.0.2...v1.0.3) (2026-09-03)
+
+### Chores
+
+* **deps-dev:** bump @types/node from 26.2.0 to 26.4.0 ([#104](https://github.com/Increase/release-please/issues/104)) ([78024a6](https://github.com/Increase/release-please/commit/78024a68acd22fed0bc914fef96c92356d2f1f10))
+* **deps-dev:** bump @vercel/ncc from 0.38.4 to 0.45.0 ([#98](https://github.com/Increase/release-please/issues/98)) ([b42c01b](https://github.com/Increase/release-please/commit/b42c01b614a3950700430ac9d134b2fa2b6f4e31))
+* **deps:** bump @google-automations/git-file-utils from 3.1.0 to 3.2.0 ([#107](https://github.com/Increase/release-please/issues/107)) ([2dcc559](https://github.com/Increase/release-please/commit/2dcc55984f75cafd50f01235bd21497fa3eefb6b))
+* **deps:** bump the octokit group with 3 updates ([#97](https://github.com/Increase/release-please/issues/97)) ([a4d6538](https://github.com/Increase/release-please/commit/a4d6538d2b16889d63bf4cb1729da721a6cf1ab2))
+
 ## [1.0.2](https://github.com/Increase/release-please/compare/v1.0.1...v1.0.2) (2026-08-24)
 
 ### ⚠ BREAKING CHANGES
