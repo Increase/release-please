@@ -43,11 +43,11 @@ importers:
         specifier: ^9.0.3
         version: 9.0.4
       '@octokit/plugin-retry':
-        specifier: 8.1.0
-        version: 8.1.0(@octokit/core@7.0.7)
+        specifier: 8.1.1
+        version: 8.1.1(@octokit/core@7.0.7)
       '@octokit/plugin-throttling':
-        specifier: 11.0.3
-        version: 11.0.3(@octokit/core@7.0.7)
+        specifier: 11.0.5
+        version: 11.0.5(@octokit/core@7.0.7)
       '@octokit/request':
         specifier: ^10.0.14
         version: 10.0.15
@@ -119,8 +119,8 @@ importers:
         specifier: ^2.5.2
         version: 2.5.10
       '@octokit/types':
-        specifier: ^16.0.0
-        version: 16.0.0
+        specifier: ^17.0.0
+        version: 17.0.0
       '@types/diff':
         specifier: ^5.0.2
         version: 5.2.3
@@ -420,14 +420,14 @@ packages:
     peerDependencies:
       '@octokit/core': '>=6'
 
-  '@octokit/plugin-retry@8.1.0':
-    resolution: {integrity: sha512-O1FZgXeiGb2sowEr/hYTr6YunGdSAFWnr2fyW39Ah85H8O33ELASQxcvOFF5LE6Tjekcyu2ms4qAzJVhSaJxTw==}
+  '@octokit/plugin-retry@8.1.1':
+    resolution: {integrity: sha512-VCVvZ/R1+u3WuiBWpNavZ0mY4aaJNAsENrpBP9aLSR2QyOpQgd7DhM5j4AW7z4MQpnJYgwBPf0XqPQoNBRdQwg==}
     engines: {node: '>= 20'}
     peerDependencies:
       '@octokit/core': '>=7'
 
-  '@octokit/plugin-throttling@11.0.3':
-    resolution: {integrity: sha512-34eE0RkFCKycLl2D2kq7W+LovheM/ex3AwZCYN8udpi6bxsyjZidb2McXs69hZhLmJlDqTSP8cH+jSRpiaijBg==}
+  '@octokit/plugin-throttling@11.0.5':
+    resolution: {integrity: sha512-LIdrkrUv+DWbKeg/49rGuFJ3SU0d3hUS+B4MhNZLepBoNUFXms8Ic9edJjrlx+zycqJHjrMRudVpVb/bAXM2Lw==}
     engines: {node: '>= 20'}
     peerDependencies:
       '@octokit/core': ^7.0.0
@@ -1255,6 +1255,10 @@ packages:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.7:
+    resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
+    engines: {node: '>=12'}
+
   pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
@@ -1841,17 +1845,17 @@ snapshots:
       '@octokit/core': 7.0.7
       '@octokit/types': 16.0.0
 
-  '@octokit/plugin-retry@8.1.0(@octokit/core@7.0.7)':
+  '@octokit/plugin-retry@8.1.1(@octokit/core@7.0.7)':
     dependencies:
       '@octokit/core': 7.0.7
       '@octokit/request-error': 7.1.1
-      '@octokit/types': 16.0.0
+      '@octokit/types': 17.0.0
       bottleneck: 2.19.5
 
-  '@octokit/plugin-throttling@11.0.3(@octokit/core@7.0.7)':
+  '@octokit/plugin-throttling@11.0.5(@octokit/core@7.0.7)':
     dependencies:
       '@octokit/core': 7.0.7
-      '@octokit/types': 16.0.0
+      '@octokit/types': 17.0.0
       bottleneck: 2.19.5
 
   '@octokit/request-error@5.1.1':
@@ -2600,6 +2604,8 @@ snapshots:
 
   picomatch@4.0.5: {}
 
+  picomatch@4.0.7: {}
+
   pify@4.0.1: {}
 
   postcss@8.5.26:
@@ -2773,7 +2779,7 @@ snapshots:
   vite@8.2.2(@types/node@26.2.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
-      picomatch: 4.0.5
+      picomatch: 4.0.7
       postcss: 8.5.26
       rolldown: 1.2.5
       tinyglobby: 0.2.17
