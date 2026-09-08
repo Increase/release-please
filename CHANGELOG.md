@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.3](https://github.com/Increase/release-please/compare/v1.0.2...v1.0.3) (2026-09-08)
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.10 to 2.5.11 ([#105](https://github.com/Increase/release-please/issues/105)) ([9cc7727](https://github.com/Increase/release-please/commit/9cc7727b0679c38627ca4f6ccc62656d9ea5fc68))
+* **deps-dev:** bump @types/node from 26.2.0 to 26.4.0 ([#104](https://github.com/Increase/release-please/issues/104)) ([78024a6](https://github.com/Increase/release-please/commit/78024a68acd22fed0bc914fef96c92356d2f1f10))
+* **deps-dev:** bump @vercel/ncc from 0.38.4 to 0.45.0 ([#98](https://github.com/Increase/release-please/issues/98)) ([b42c01b](https://github.com/Increase/release-please/commit/b42c01b614a3950700430ac9d134b2fa2b6f4e31))
+* **deps:** bump @google-automations/git-file-utils from 3.1.0 to 3.2.0 ([#107](https://github.com/Increase/release-please/issues/107)) ([2dcc559](https://github.com/Increase/release-please/commit/2dcc55984f75cafd50f01235bd21497fa3eefb6b))
+* **deps:** bump diff from 5.2.2 to 9.0.0 ([#102](https://github.com/Increase/release-please/issues/102)) ([feb81e2](https://github.com/Increase/release-please/commit/feb81e212a9cb341890ba7eb67ed6e99f58adb5f))
+* **deps:** bump https-proxy-agent from 7.0.6 to 9.1.0 ([#99](https://github.com/Increase/release-please/issues/99)) ([d32b9b7](https://github.com/Increase/release-please/commit/d32b9b75072b136eb81273ee94eaf4d72b2fdd4c))
+* **deps:** bump node-html-parser from 6.1.13 to 9.0.2 ([#106](https://github.com/Increase/release-please/issues/106)) ([069e273](https://github.com/Increase/release-please/commit/069e273785cc58260d14b59f0d2de67e85412758))
+* **deps:** bump the octokit group with 3 updates ([#97](https://github.com/Increase/release-please/issues/97)) ([a4d6538](https://github.com/Increase/release-please/commit/a4d6538d2b16889d63bf4cb1729da721a6cf1ab2))
+* **deps:** bump yargs from 17.7.3 to 18.1.0 ([#103](https://github.com/Increase/release-please/issues/103)) ([df30236](https://github.com/Increase/release-please/commit/df302362daa7942f34a89e6e1ce0f3b206985ae8))
+
 ## [1.0.2](https://github.com/Increase/release-please/compare/v1.0.1...v1.0.2) (2026-08-24)
 
 ### ⚠ BREAKING CHANGES
