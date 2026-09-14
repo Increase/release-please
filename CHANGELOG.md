@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4](https://github.com/Increase/release-please/compare/v1.0.3...v1.0.4) (2026-09-14)
+
+### Chores
+
+* **deps-dev:** bump @biomejs/biome from 2.5.11 to 2.5.13 ([#112](https://github.com/Increase/release-please/issues/112)) ([586e5c4](https://github.com/Increase/release-please/commit/586e5c4d46cf79690d888ab8f990b533aa8aa11b))
+* **deps-dev:** bump @types/node from 26.4.0 to 26.4.1 ([#113](https://github.com/Increase/release-please/issues/113)) ([7133bdb](https://github.com/Increase/release-please/commit/7133bdbd55f2e8e252ece2a337796eb24601d721))
+* **deps:** bump the octokit group with 5 updates ([#109](https://github.com/Increase/release-please/issues/109)) ([021fd5e](https://github.com/Increase/release-please/commit/021fd5e23235bff3f3a999d802c051d95291a687))
+* **deps:** bump type-fest from 5.8.0 to 5.9.0 ([#111](https://github.com/Increase/release-please/issues/111)) ([f453d63](https://github.com/Increase/release-please/commit/f453d63e1a334854211dfefaeeb03144678fe3a1))
+
 ## [1.0.3](https://github.com/Increase/release-please/compare/v1.0.2...v1.0.3) (2026-09-08)
 
 ### Chores
